@@ -17,8 +17,8 @@
                 <MenuItem Header="Edit Document"/>
             </MenuItem>
         </Menu>
-        <ScrollViewer Width="150" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="scrollViewer1"  DockPanel.Dock="Left">
-            <TreeView Name="DocumentExplorer" FontSize="12" FontWeight="Bold" MouseRightButtonDown="DocumentExplorer_MouseRightButtonDown">
+        <ScrollViewer Width="170" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="scrollViewer1"  DockPanel.Dock="Left">
+            <TreeView Name="DocumentExplorer" FontSize="12" FontWeight="DemiBold" MouseRightButtonDown="DocumentExplorer_MouseRightButtonDown">
                 <TreeViewItem Header="My Project" Tag="project" IsSelected="True">
                     <TreeViewItem Header="Work" Tag="folder"/>
                     <TreeViewItem Header="School" Tag="folder">
