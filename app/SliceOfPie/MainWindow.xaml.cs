@@ -17,31 +17,42 @@ namespace SliceOfPie {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+        private ContextMenu projectContextMenu;
+        private ContextMenu folderContextMenu;
+        private ContextMenu documentContextMenu;
         public MainWindow() {
             InitializeComponent();
-            //RefreshDocumentExplorer();
+            //Setup Project Context Menu for the Document Explorer
+            projectContextMenu = new ContextMenu();
+            projectContextMenu.Items.Add(new MenuItem() { Header = "Share project" });
+            projectContextMenu.Items.Add(new MenuItem() { Header = "Add folder" });
+            projectContextMenu.Items.Add(new MenuItem() { Header = "Add document" });
+
+            //Setup Folder Context Menu for the Document Explorer
+            folderContextMenu = new ContextMenu();
+            folderContextMenu.Items.Add(new MenuItem() { Header = "Add folder" });
+            folderContextMenu.Items.Add(new MenuItem() { Header = "Add document" });
+
+            //Setup Document Context Menu for the Document Explorer
+            documentContextMenu = new ContextMenu();
+            documentContextMenu.Items.Add(new MenuItem() { Header = "Edit document" });
         }
 
         /// <summary>
         /// This generates and shows a context menu for the document explorer at runtime
         /// </summary>
         /// <param name="item">The item which was clicked on the document explorer</param>
-        private void generateFolderContextMenu(TreeViewItem item) {
-            ContextMenu c = new ContextMenu();
+        private void generateContextMenu(TreeViewItem item) {
             string itemType = (string)item.Tag;
             if (itemType.Equals("project")) {
-                c.Items.Add(new MenuItem() { Header = "Share project" });
-                c.Items.Add(new MenuItem() { Header = "Add folder" });
-                c.Items.Add(new MenuItem() { Header = "Add document" });
+                DocumentExplorer.ContextMenu = projectContextMenu;
             }
             else if (itemType.Equals("folder")) {
-                c.Items.Add(new MenuItem() { Header = "Add folder" });
-                c.Items.Add(new MenuItem() { Header = "Add document" });
+                DocumentExplorer.ContextMenu = folderContextMenu;
             }
             else {
-                c.Items.Add(new MenuItem() { Header = "Edit document" });
+                DocumentExplorer.ContextMenu = documentContextMenu;
             }
-            DocumentExplorer.ContextMenu = c;
             DocumentExplorer.ContextMenu.IsOpen = true;
         }
 
@@ -54,7 +65,7 @@ namespace SliceOfPie {
             TreeViewItem item = e.Source as TreeViewItem;
             if (item != null) {
                 item.IsSelected = true;
-                generateFolderContextMenu(item);
+                generateContextMenu(item);
                 e.Handled = true;
             }
         }
