@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SliceOfPie {
     public class LocalFileModel : FileModel {
-        public static List<Project> GetProjects(int userId) {
+        public static IEnumerable<Project> GetProjects(int userId) {
             List<Project> projects = new List<Project>();
 
             foreach (Project project in projects) {
