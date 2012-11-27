@@ -8,7 +8,9 @@ namespace SliceOfPie {
         public static List<Project> GetProjects(int userId) {
             List<Project> projects = new List<Project>();
 
-            return projects;
+            foreach (Project project in projects) {
+                yield return project;
+            }
         }
 
         public static IEnumerable<Item> ListProject(Project project) {
@@ -17,7 +19,9 @@ namespace SliceOfPie {
             items.Add(new Folder());
             items.Add(new Document());
 
-            return items;
+            foreach (Item item in items) {
+                yield return item;
+            }
         }
 
         public static IEnumerable<Item> ListFolder(Folder folder) {
@@ -26,7 +30,9 @@ namespace SliceOfPie {
             items.Add(new Folder());
             items.Add(new Document());
 
-            return items;
+            foreach (Item item in items) {
+                yield return item;
+            }
         }
 
         public static void SaveDocument(Document doc) {
