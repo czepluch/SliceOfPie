@@ -7,6 +7,8 @@ namespace SliceOfPie {
     public class Controller {
         private static Controller _instance = null;
 
+        private FileModel fileModel = new LocalFileModel();
+
         private Controller() {
         }
 
@@ -15,8 +17,8 @@ namespace SliceOfPie {
         /// (defaults to User.Local as a convenience for the local client)
         /// </summary>
         /// <returns>returns project related to user.</returns>
-        public IEnumerable<Project> GetProjects(int userId = User.Local.Id) {
-            foreach (Project p in FileModel.GetProjects(userId)) {
+        public IEnumerable<Project> GetProjects(int userId = 0) {
+            foreach (Project p in fileModel.GetProjects(userId)) {
                 yield return p;
             }
         }

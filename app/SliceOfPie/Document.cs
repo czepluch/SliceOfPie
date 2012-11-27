@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace SliceOfPie {
-    partial class Document:Item {
+    public partial class Document:Item {
 
     }
 }

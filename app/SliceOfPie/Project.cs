@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace SliceOfPie {
-    partial class Project:ItemContainer {
+    public partial class Project:ItemContainer {
         public IEnumerable<Item> ListItems() {
             List<Item> items = new List<Item>();
 

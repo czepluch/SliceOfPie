@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SliceOfPie {
     public class LocalFileModel : FileModel {
-        public static IEnumerable<Project> GetProjects(int userId) {
+        public override IEnumerable<Project> GetProjects(int userId) {
             List<Project> projects = new List<Project>();
 
             foreach (Project project in projects) {
@@ -13,16 +13,16 @@ namespace SliceOfPie {
             }
         }
 
-        public static void SaveDocument(Document doc) {
-            throw new NotImplementedException();
+        public override void SaveDocument(Document doc) {
+            
         }
 
-        public static Document LoadDocument(int docId) {
-            throw new NotImplementedException();
+        public override Document LoadDocument(int docId) {
+            return new Document();
         }
 
-        public static void Main(string[] args) {
-            Console.WriteLine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
-        }
+        //public static void Main(string[] args) {
+        //    Console.WriteLine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData));
+        //}
     }
 }

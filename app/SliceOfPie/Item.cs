@@ -4,6 +4,6 @@ using System.Linq;
 using System.Text;
 
 namespace SliceOfPie {
-    interface Item {
+    public interface Item {
     }
 }

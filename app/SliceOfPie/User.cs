@@ -4,18 +4,13 @@ using System.Linq;
 using System.Text;
 
 namespace SliceOfPie {
-    partial class User {
-
-        public User(string mail) {
-            this.Mail = mail;
-        }
-
+    public partial class User {
         public string Mail{
             get;
             set;
         }
 
-        private static User _local = new User("x@x.com");
+        private static User _local = new User();
         public static User Local {
             get {
                 return _local;

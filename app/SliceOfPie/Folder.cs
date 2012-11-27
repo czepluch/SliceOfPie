@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace SliceOfPie {
-    partial class Folder : Item, ItemContainer {
+    public partial class Folder : Item, ItemContainer {
         public IEnumerable<Item> ListItems() {
             List<Item> items = new List<Item>();
 
