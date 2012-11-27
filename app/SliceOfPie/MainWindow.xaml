@@ -6,11 +6,7 @@
         <Menu Height="23" Name="TopMenu" DockPanel.Dock="Top">
             <MenuItem Header="Menu">
                 <MenuItem Header="Create">
-                    <MenuItem Header="Create New Project">
-                        <MenuItem.Icon>
-                            <Image Source="/SliceOfPie;component/Icons/doc-icon.png" />
-                        </MenuItem.Icon>
-                    </MenuItem>
+                    <MenuItem Header="Create New Project"/>
                     <MenuItem Header="Create Document"/>
                 </MenuItem>
                 <MenuItem Header="Share Project"></MenuItem>
@@ -18,7 +14,7 @@
             </MenuItem>
         </Menu>
         <ScrollViewer Width="170" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="scrollViewer1"  DockPanel.Dock="Left">
-            <TreeView Name="DocumentExplorer" FontSize="12" FontWeight="DemiBold" MouseRightButtonDown="DocumentExplorer_MouseRightButtonDown">
+            <TreeView Name="DocumentExplorer" FontSize="13" FontWeight="DemiBold" MouseRightButtonDown="DocumentExplorer_MouseRightButtonDown">
                 <TreeViewItem Header="My Project" Tag="project" IsSelected="True">
                     <TreeViewItem Header="Work" Tag="folder"/>
                     <TreeViewItem Header="School" Tag="folder">

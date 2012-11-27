@@ -118,7 +118,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icons\doc-icon.png" />
+    <Resource Include="Icons\document-icon.bmp" />
+    <Resource Include="Icons\folder-icon.bmp" />
+    <Resource Include="Icons\project-icon.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
