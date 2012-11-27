@@ -23,8 +23,8 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("sliceofpieModel", "r_documentId", "document", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(SliceOfPie.Document), "revision", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SliceOfPie.Revision), true)]
 [assembly: EdmRelationshipAttribute("sliceofpieModel", "f_folderId", "folder", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(SliceOfPie.Folder), "folder1", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SliceOfPie.Folder), true)]
 [assembly: EdmRelationshipAttribute("sliceofpieModel", "f_projectId", "project", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(SliceOfPie.Project), "folder", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SliceOfPie.Folder), true)]
-[assembly: EdmRelationshipAttribute("sliceofpieModel", "pu_projectId", "project", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(SliceOfPie.Project), "project_users", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SliceOfPie.ProjectUsers), true)]
-[assembly: EdmRelationshipAttribute("sliceofpieModel", "pu_userId", "user", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(SliceOfPie.User), "project_users", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SliceOfPie.ProjectUsers), true)]
+[assembly: EdmRelationshipAttribute("sliceofpieModel", "pu_projectId", "project", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(SliceOfPie.Project), "project_users", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SliceOfPie.ProjectUser), true)]
+[assembly: EdmRelationshipAttribute("sliceofpieModel", "pu_userId", "user", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(SliceOfPie.User), "project_users", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SliceOfPie.ProjectUser), true)]
 
 #endregion
 
@@ -127,6 +127,22 @@ namespace SliceOfPie
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
+        public ObjectSet<ProjectUser> ProjectUsers1
+        {
+            get
+            {
+                if ((_ProjectUsers1 == null))
+                {
+                    _ProjectUsers1 = base.CreateObjectSet<ProjectUser>("ProjectUsers1");
+                }
+                return _ProjectUsers1;
+            }
+        }
+        private ObjectSet<ProjectUser> _ProjectUsers1;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
         public ObjectSet<Revision> Revisions1
         {
             get
@@ -155,22 +171,6 @@ namespace SliceOfPie
             }
         }
         private ObjectSet<User> _Users1;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<ProjectUsers> ProjectUsers
-        {
-            get
-            {
-                if ((_ProjectUsers == null))
-                {
-                    _ProjectUsers = base.CreateObjectSet<ProjectUsers>("ProjectUsers");
-                }
-                return _ProjectUsers;
-            }
-        }
-        private ObjectSet<ProjectUsers> _ProjectUsers;
 
         #endregion
         #region AddTo Methods
@@ -200,6 +200,14 @@ namespace SliceOfPie
         }
     
         /// <summary>
+        /// Deprecated Method for adding a new object to the ProjectUsers1 EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToProjectUsers1(ProjectUser projectUser)
+        {
+            base.AddObject("ProjectUsers1", projectUser);
+        }
+    
+        /// <summary>
         /// Deprecated Method for adding a new object to the Revisions1 EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToRevisions1(Revision revision)
@@ -213,14 +221,6 @@ namespace SliceOfPie
         public void AddToUsers1(User user)
         {
             base.AddObject("Users1", user);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the ProjectUsers EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToProjectUsers(ProjectUsers projectUsers)
-        {
-            base.AddObject("ProjectUsers", projectUsers);
         }
 
         #endregion
@@ -839,17 +839,17 @@ namespace SliceOfPie
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "pu_projectId", "project_users")]
-        public EntityCollection<ProjectUsers> project_users
+        public EntityCollection<ProjectUser> project_users
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ProjectUsers>("sliceofpieModel.pu_projectId", "project_users");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ProjectUser>("sliceofpieModel.pu_projectId", "project_users");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ProjectUsers>("sliceofpieModel.pu_projectId", "project_users", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ProjectUser>("sliceofpieModel.pu_projectId", "project_users", value);
                 }
             }
         }
@@ -860,22 +860,22 @@ namespace SliceOfPie
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="sliceofpieModel", Name="ProjectUsers")]
+    [EdmEntityTypeAttribute(NamespaceName="sliceofpieModel", Name="ProjectUser")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class ProjectUsers : EntityObject
+    public partial class ProjectUser : EntityObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new ProjectUsers object.
+        /// Create a new ProjectUser object.
         /// </summary>
         /// <param name="id">Initial value of the id property.</param>
-        public static ProjectUsers CreateProjectUsers(global::System.Int32 id)
+        public static ProjectUser CreateProjectUser(global::System.Int32 id)
         {
-            ProjectUsers projectUsers = new ProjectUsers();
-            projectUsers.id = id;
-            return projectUsers;
+            ProjectUser projectUser = new ProjectUser();
+            projectUser.id = id;
+            return projectUser;
         }
 
         #endregion
@@ -1317,17 +1317,17 @@ namespace SliceOfPie
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "pu_userId", "project_users")]
-        public EntityCollection<ProjectUsers> project_users
+        public EntityCollection<ProjectUser> project_users
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ProjectUsers>("sliceofpieModel.pu_userId", "project_users");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ProjectUser>("sliceofpieModel.pu_userId", "project_users");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ProjectUsers>("sliceofpieModel.pu_userId", "project_users", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ProjectUser>("sliceofpieModel.pu_userId", "project_users", value);
                 }
             }
         }
