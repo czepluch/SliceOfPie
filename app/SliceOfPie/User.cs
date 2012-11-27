@@ -15,8 +15,8 @@ namespace SliceOfPie {
             set;
         }
 
-        private static User _local = new User();
-        public User Local {
+        private static User _local = new User("x@x.com");
+        public static User Local {
             get {
                 return _local;
             }

@@ -58,11 +58,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Document.cs" />
+    <Compile Include="Folder.cs" />
+    <Compile Include="Item.cs" />
+    <Compile Include="ItemContainer.cs" />
     <Compile Include="MySQLModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MySQLModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Project.cs" />
     <Compile Include="WebFileModel.cs" />
     <Compile Include="LocalFileModel.cs" />
     <Compile Include="UserModel.cs" />
