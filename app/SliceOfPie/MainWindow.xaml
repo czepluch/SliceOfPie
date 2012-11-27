@@ -14,19 +14,7 @@
             </MenuItem>
         </Menu>
         <ScrollViewer Width="170" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="scrollViewer1"  DockPanel.Dock="Left">
-            <TreeView Name="DocumentExplorer" FontSize="13" FontWeight="DemiBold" MouseRightButtonDown="DocumentExplorer_MouseRightButtonDown">
-                <TreeViewItem Header="My Project" Tag="project" IsSelected="True">
-                    <TreeViewItem Header="Work" Tag="folder"/>
-                    <TreeViewItem Header="School" Tag="folder">
-                        <TreeViewItem Header="BDSA_project" Tag="document"/>
-                    </TreeViewItem>
-                </TreeViewItem>
-                <TreeViewItem Header="Fight Club" Tag="project">
-                    <TreeViewItem Header="About" Tag="folder">
-                        <TreeViewItem Header="Rules" Tag="document"/>
-                    </TreeViewItem>
-                </TreeViewItem>
-            </TreeView>
+            <TreeView Name="DocumentExplorer" FontSize="13" FontWeight="DemiBold" MouseRightButtonDown="DocumentExplorer_MouseRightButtonDown"/>
         </ScrollViewer>
         <Grid>
             <Grid.RowDefinitions>

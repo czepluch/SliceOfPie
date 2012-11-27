@@ -129,10 +129,18 @@ namespace SliceOfPie {
         /// It exists as a placeholder and testing method untill the model/controller allows local file traversal.
         /// </summary>
         private void RefreshDocumentExplorer() {
-            TreeViewItem t = createDocumentExplorerItem("test project", "project");
-            t.Items.Add(createDocumentExplorerItem("test folder", "folder"));
-            t.Items.Add(createDocumentExplorerItem("test document", "document"));
+            TreeViewItem t = createDocumentExplorerItem("My Project", "project");
+            t.Items.Add(createDocumentExplorerItem("Work", "folder"));
+            TreeViewItem schoolFolder = createDocumentExplorerItem("School", "folder");
+            schoolFolder.Items.Add(createDocumentExplorerItem("BDSA_Report", "document"));
+            t.Items.Add(schoolFolder);            
+
+            TreeViewItem t2 = createDocumentExplorerItem("Other Project", "project");
+            t2.Items.Add(createDocumentExplorerItem("Recipes", "folder"));
+            t2.Items.Add(createDocumentExplorerItem("Tomato_soup", "document"));
+
             DocumentExplorer.Items.Add(t);
+            DocumentExplorer.Items.Add(t2);
 
         //    //var projects = Controller.getprojects();
         //    DocumentExplorer.Items.Clear();
