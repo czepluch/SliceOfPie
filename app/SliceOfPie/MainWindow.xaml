@@ -1,7 +1,7 @@
 ﻿<Window x:Class="SliceOfPie.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Slice of Pie" Height="500" Width="800" Loaded="Window_Loaded" WindowState="Maximized">
+        Title="Slice of Pie" Height="500" Width="800" WindowState="Maximized">
     <DockPanel LastChildFill="True">    
         <Menu Height="23" Name="TopMenu" DockPanel.Dock="Top">
             <MenuItem Header="Menu">
@@ -18,16 +18,16 @@
             </MenuItem>
         </Menu>
         <ScrollViewer Width="150" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="scrollViewer1"  DockPanel.Dock="Left">
-            <TreeView Name="DocumentExplorer" FontSize="12" FontWeight="Bold">
-                <TreeViewItem Header="My Project" IsSelected="True">
-                    <TreeViewItem Header="Work"/>
-                    <TreeViewItem Header="School">
-                        <TreeViewItem Header="BDSA_project"/>
+            <TreeView Name="DocumentExplorer" FontSize="12" FontWeight="Bold" MouseRightButtonDown="DocumentExplorer_MouseRightButtonDown">
+                <TreeViewItem Header="My Project" Tag="project" IsSelected="True">
+                    <TreeViewItem Header="Work" Tag="folder"/>
+                    <TreeViewItem Header="School" Tag="folder">
+                        <TreeViewItem Header="BDSA_project" Tag="document"/>
                     </TreeViewItem>
                 </TreeViewItem>
-                <TreeViewItem Header="Fight Club">
-                    <TreeViewItem Header="About">
-                        <TreeViewItem Header="Rules"/>
+                <TreeViewItem Header="Fight Club" Tag="project">
+                    <TreeViewItem Header="About" Tag="folder">
+                        <TreeViewItem Header="Rules" Tag="document"/>
                     </TreeViewItem>
                 </TreeViewItem>
             </TreeView>
