@@ -1,0 +1,470 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="sliceofpieModel.Store" Alias="Self" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.1" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="sliceofpieModelStoreContainer">
+          <EntitySet Name="document" EntityType="sliceofpieModel.Store.document" store:Type="Tables" Schema="sliceofpie" />
+          <EntitySet Name="folder" EntityType="sliceofpieModel.Store.folder" store:Type="Tables" Schema="sliceofpie" />
+          <EntitySet Name="project" EntityType="sliceofpieModel.Store.project" store:Type="Tables" Schema="sliceofpie" />
+          <EntitySet Name="project_users" EntityType="sliceofpieModel.Store.project_users" store:Type="Tables" Schema="sliceofpie" />
+          <EntitySet Name="revision" EntityType="sliceofpieModel.Store.revision" store:Type="Tables" Schema="sliceofpie" />
+          <EntitySet Name="user" EntityType="sliceofpieModel.Store.user" store:Type="Tables" Schema="sliceofpie" />
+          <AssociationSet Name="d_folderId" Association="sliceofpieModel.Store.d_folderId">
+            <End Role="folder" EntitySet="folder" />
+            <End Role="document" EntitySet="document" />
+          </AssociationSet>
+          <AssociationSet Name="d_projectId" Association="sliceofpieModel.Store.d_projectId">
+            <End Role="project" EntitySet="project" />
+            <End Role="document" EntitySet="document" />
+          </AssociationSet>
+          <AssociationSet Name="f_folderId" Association="sliceofpieModel.Store.f_folderId">
+            <End Role="folder" EntitySet="folder" />
+            <End Role="folder1" EntitySet="folder" />
+          </AssociationSet>
+          <AssociationSet Name="f_projectId" Association="sliceofpieModel.Store.f_projectId">
+            <End Role="project" EntitySet="project" />
+            <End Role="folder" EntitySet="folder" />
+          </AssociationSet>
+          <AssociationSet Name="pu_projectId" Association="sliceofpieModel.Store.pu_projectId">
+            <End Role="project" EntitySet="project" />
+            <End Role="project_users" EntitySet="project_users" />
+          </AssociationSet>
+          <AssociationSet Name="pu_userId" Association="sliceofpieModel.Store.pu_userId">
+            <End Role="user" EntitySet="user" />
+            <End Role="project_users" EntitySet="project_users" />
+          </AssociationSet>
+          <AssociationSet Name="r_documentId" Association="sliceofpieModel.Store.r_documentId">
+            <End Role="document" EntitySet="document" />
+            <End Role="revision" EntitySet="revision" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="document">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="folderId" Type="int" />
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="projectId" Type="int" />
+          <Property Name="title" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="folder">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="folderId" Type="int" />
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="projectId" Type="int" />
+          <Property Name="title" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="project">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="title" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="project_users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="projectId" Type="int" />
+          <Property Name="userId" Type="int" />
+        </EntityType>
+        <EntityType Name="revision">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="content" Type="longtext" />
+          <Property Name="contentHash" Type="int" />
+          <Property Name="documentId" Type="int" />
+          <Property Name="id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="email" Type="varchar" MaxLength="100" />
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="100" />
+        </EntityType>
+        <Association Name="d_folderId">
+          <End Role="folder" Type="sliceofpieModel.Store.folder" Multiplicity="0..1" />
+          <End Role="document" Type="sliceofpieModel.Store.document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="folder">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="document">
+              <PropertyRef Name="folderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="d_projectId">
+          <End Role="project" Type="sliceofpieModel.Store.project" Multiplicity="0..1" />
+          <End Role="document" Type="sliceofpieModel.Store.document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="document">
+              <PropertyRef Name="projectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="f_folderId">
+          <End Role="folder" Type="sliceofpieModel.Store.folder" Multiplicity="0..1" />
+          <End Role="folder1" Type="sliceofpieModel.Store.folder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="folder">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="folder1">
+              <PropertyRef Name="folderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="f_projectId">
+          <End Role="project" Type="sliceofpieModel.Store.project" Multiplicity="0..1" />
+          <End Role="folder" Type="sliceofpieModel.Store.folder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="folder">
+              <PropertyRef Name="projectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="pu_projectId">
+          <End Role="project" Type="sliceofpieModel.Store.project" Multiplicity="0..1" />
+          <End Role="project_users" Type="sliceofpieModel.Store.project_users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="project_users">
+              <PropertyRef Name="projectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="pu_userId">
+          <End Role="user" Type="sliceofpieModel.Store.user" Multiplicity="0..1" />
+          <End Role="project_users" Type="sliceofpieModel.Store.project_users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="project_users">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="r_documentId">
+          <End Role="document" Type="sliceofpieModel.Store.document" Multiplicity="0..1" />
+          <End Role="revision" Type="sliceofpieModel.Store.revision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="document">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="revision">
+              <PropertyRef Name="documentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="sliceofpieModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="sliceofpieEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Documents1" EntityType="sliceofpieModel.Document" />
+          <EntitySet Name="Folders1" EntityType="sliceofpieModel.Folder" />
+          <EntitySet Name="Projects1" EntityType="sliceofpieModel.Project" />
+          <EntitySet Name="ProjectUsers1" EntityType="sliceofpieModel.ProjectUser" />
+          <EntitySet Name="Revisions1" EntityType="sliceofpieModel.Revision" />
+          <EntitySet Name="Users1" EntityType="sliceofpieModel.User" />
+          <AssociationSet Name="d_folderId" Association="sliceofpieModel.d_folderId">
+            <End Role="folder" EntitySet="Folders1" />
+            <End Role="document" EntitySet="Documents1" />
+          </AssociationSet>
+          <AssociationSet Name="d_projectId" Association="sliceofpieModel.d_projectId">
+            <End Role="project" EntitySet="Projects1" />
+            <End Role="document" EntitySet="Documents1" />
+          </AssociationSet>
+          <AssociationSet Name="r_documentId" Association="sliceofpieModel.r_documentId">
+            <End Role="document" EntitySet="Documents1" />
+            <End Role="revision" EntitySet="Revisions1" />
+          </AssociationSet>
+          <AssociationSet Name="f_folderId" Association="sliceofpieModel.f_folderId">
+            <End Role="folder" EntitySet="Folders1" />
+            <End Role="folder1" EntitySet="Folders1" />
+          </AssociationSet>
+          <AssociationSet Name="f_projectId" Association="sliceofpieModel.f_projectId">
+            <End Role="project" EntitySet="Projects1" />
+            <End Role="folder" EntitySet="Folders1" />
+          </AssociationSet>
+          <AssociationSet Name="pu_projectId" Association="sliceofpieModel.pu_projectId">
+            <End Role="project" EntitySet="Projects1" />
+            <End Role="project_users" EntitySet="ProjectUsers1" />
+          </AssociationSet>
+          <AssociationSet Name="pu_userId" Association="sliceofpieModel.pu_userId">
+            <End Role="user" EntitySet="Users1" />
+            <End Role="project_users" EntitySet="ProjectUsers1" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Document">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="folderId" Type="Int32" />
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="projectId" Type="Int32" />
+          <Property Name="title" Type="String" />
+          <NavigationProperty Name="folder" Relationship="sliceofpieModel.d_folderId" FromRole="document" ToRole="folder" />
+          <NavigationProperty Name="project" Relationship="sliceofpieModel.d_projectId" FromRole="document" ToRole="project" />
+          <NavigationProperty Name="revisions" Relationship="sliceofpieModel.r_documentId" FromRole="document" ToRole="revision" />
+        </EntityType>
+        <EntityType Name="Folder">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="folderId" Type="Int32" />
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="projectId" Type="Int32" />
+          <Property Name="title" Type="String" />
+          <NavigationProperty Name="documents" Relationship="sliceofpieModel.d_folderId" FromRole="folder" ToRole="document" />
+          <NavigationProperty Name="folder1" Relationship="sliceofpieModel.f_folderId" FromRole="folder" ToRole="folder1" />
+          <NavigationProperty Name="folder2" Relationship="sliceofpieModel.f_folderId" FromRole="folder1" ToRole="folder" />
+          <NavigationProperty Name="project" Relationship="sliceofpieModel.f_projectId" FromRole="folder" ToRole="project" />
+        </EntityType>
+        <EntityType Name="Project">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="title" Type="String" />
+          <NavigationProperty Name="documents" Relationship="sliceofpieModel.d_projectId" FromRole="project" ToRole="document" />
+          <NavigationProperty Name="folders" Relationship="sliceofpieModel.f_projectId" FromRole="project" ToRole="folder" />
+          <NavigationProperty Name="project_users" Relationship="sliceofpieModel.pu_projectId" FromRole="project" ToRole="project_users" />
+        </EntityType>
+        <EntityType Name="ProjectUser">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="projectId" Type="Int32" />
+          <Property Name="userId" Type="Int32" />
+          <NavigationProperty Name="project" Relationship="sliceofpieModel.pu_projectId" FromRole="project_users" ToRole="project" />
+          <NavigationProperty Name="user" Relationship="sliceofpieModel.pu_userId" FromRole="project_users" ToRole="user" />
+        </EntityType>
+        <EntityType Name="Revision">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="content" Type="String" />
+          <Property Name="contentHash" Type="Int32" />
+          <Property Name="documentId" Type="Int32" />
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="document" Relationship="sliceofpieModel.r_documentId" FromRole="revision" ToRole="document" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="email" Type="String" />
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="password" Type="String" />
+          <NavigationProperty Name="project_users" Relationship="sliceofpieModel.pu_userId" FromRole="user" ToRole="project_users" />
+        </EntityType>
+        <Association Name="d_folderId">
+          <End Role="folder" Type="sliceofpieModel.Folder" Multiplicity="0..1" />
+          <End Role="document" Type="sliceofpieModel.Document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="folder">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="document">
+              <PropertyRef Name="folderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="d_projectId">
+          <End Role="project" Type="sliceofpieModel.Project" Multiplicity="0..1" />
+          <End Role="document" Type="sliceofpieModel.Document" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="document">
+              <PropertyRef Name="projectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="r_documentId">
+          <End Role="document" Type="sliceofpieModel.Document" Multiplicity="0..1" />
+          <End Role="revision" Type="sliceofpieModel.Revision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="document">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="revision">
+              <PropertyRef Name="documentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="f_folderId">
+          <End Role="folder" Type="sliceofpieModel.Folder" Multiplicity="0..1" />
+          <End Role="folder1" Type="sliceofpieModel.Folder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="folder">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="folder1">
+              <PropertyRef Name="folderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="f_projectId">
+          <End Role="project" Type="sliceofpieModel.Project" Multiplicity="0..1" />
+          <End Role="folder" Type="sliceofpieModel.Folder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="folder">
+              <PropertyRef Name="projectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="pu_projectId">
+          <End Role="project" Type="sliceofpieModel.Project" Multiplicity="0..1" />
+          <End Role="project_users" Type="sliceofpieModel.ProjectUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="project">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="project_users">
+              <PropertyRef Name="projectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="pu_userId">
+          <End Role="user" Type="sliceofpieModel.User" Multiplicity="0..1" />
+          <End Role="project_users" Type="sliceofpieModel.ProjectUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="user">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="project_users">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="sliceofpieModelStoreContainer" CdmEntityContainer="sliceofpieEntities">
+          <EntitySetMapping Name="Documents1"><EntityTypeMapping TypeName="sliceofpieModel.Document"><MappingFragment StoreEntitySet="document">
+            <ScalarProperty Name="folderId" ColumnName="folderId" />
+            <ScalarProperty Name="id" ColumnName="id" />
+            <ScalarProperty Name="projectId" ColumnName="projectId" />
+            <ScalarProperty Name="title" ColumnName="title" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Folders1"><EntityTypeMapping TypeName="sliceofpieModel.Folder"><MappingFragment StoreEntitySet="folder">
+            <ScalarProperty Name="folderId" ColumnName="folderId" />
+            <ScalarProperty Name="id" ColumnName="id" />
+            <ScalarProperty Name="projectId" ColumnName="projectId" />
+            <ScalarProperty Name="title" ColumnName="title" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Projects1"><EntityTypeMapping TypeName="sliceofpieModel.Project"><MappingFragment StoreEntitySet="project">
+            <ScalarProperty Name="id" ColumnName="id" />
+            <ScalarProperty Name="title" ColumnName="title" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="ProjectUsers1"><EntityTypeMapping TypeName="sliceofpieModel.ProjectUser"><MappingFragment StoreEntitySet="project_users">
+            <ScalarProperty Name="id" ColumnName="id" />
+            <ScalarProperty Name="projectId" ColumnName="projectId" />
+            <ScalarProperty Name="userId" ColumnName="userId" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Revisions1"><EntityTypeMapping TypeName="sliceofpieModel.Revision"><MappingFragment StoreEntitySet="revision">
+            <ScalarProperty Name="content" ColumnName="content" />
+            <ScalarProperty Name="contentHash" ColumnName="contentHash" />
+            <ScalarProperty Name="documentId" ColumnName="documentId" />
+            <ScalarProperty Name="id" ColumnName="id" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="Users1"><EntityTypeMapping TypeName="sliceofpieModel.User"><MappingFragment StoreEntitySet="user">
+            <ScalarProperty Name="email" ColumnName="email" />
+            <ScalarProperty Name="id" ColumnName="id" />
+            <ScalarProperty Name="password" ColumnName="password" />
+          </MappingFragment></EntityTypeMapping></EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="MySQLModel">
+        <EntityTypeShape EntityType="sliceofpieModel.Document" Width="1.5" PointX="5.25" PointY="6" Height="2.3648893229166674" IsExpanded="true" />
+        <EntityTypeShape EntityType="sliceofpieModel.Folder" Width="1.5" PointX="3" PointY="7.25" Height="2.5571907552083317" IsExpanded="true" />
+        <EntityTypeShape EntityType="sliceofpieModel.Project" Width="1.5" PointX="0.75" PointY="4.5" Height="1.9802864583333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="sliceofpieModel.ProjectUser" Width="1.5" PointX="3" PointY="4.5" Height="1.9802864583333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="sliceofpieModel.Revision" Width="1.5" PointX="7.5" PointY="6.125" Height="1.9802864583333344" IsExpanded="true" />
+        <EntityTypeShape EntityType="sliceofpieModel.User" Width="1.5" PointX="0.75" PointY="1.5" Height="1.7879850260416665" IsExpanded="true" />
+        <AssociationConnector Association="sliceofpieModel.d_folderId" ManuallyRouted="false">
+          <ConnectorPoint PointX="4.5" PointY="7.8074446614583337" />
+          <ConnectorPoint PointX="5.25" PointY="7.8074446614583337" />
+        </AssociationConnector>
+        <AssociationConnector Association="sliceofpieModel.d_projectId" ManuallyRouted="false">
+          <ConnectorPoint PointX="1.5" PointY="6.4802864583333335" />
+          <ConnectorPoint PointX="1.5" PointY="6.8338937291666664" />
+          <ConnectorPoint PointX="1.8229191666666667" PointY="6.8338937291666655" />
+          <ConnectorPoint PointX="1.9895858333333332" PointY="6.8338937291666664" />
+          <ConnectorPoint PointX="5.25" PointY="6.8338937291666664" />
+        </AssociationConnector>
+        <AssociationConnector Association="sliceofpieModel.r_documentId" ManuallyRouted="false">
+          <ConnectorPoint PointX="6.75" PointY="7.1151432291666676" />
+          <ConnectorPoint PointX="7.5" PointY="7.1151432291666676" />
+        </AssociationConnector>
+        <AssociationConnector Association="sliceofpieModel.f_folderId" ManuallyRouted="false">
+          <ConnectorPoint PointX="3.5319230769230767" PointY="9.8071907552083317" />
+          <ConnectorPoint PointX="3.5319230769230767" PointY="10.057190755208332" />
+          <ConnectorPoint PointX="3.9784615384615383" PointY="10.057190755208332" />
+          <ConnectorPoint PointX="3.9784615384615383" PointY="9.8071907552083317" />
+        </AssociationConnector>
+        <AssociationConnector Association="sliceofpieModel.f_projectId" ManuallyRouted="false">
+          <ConnectorPoint PointX="1.9062525" PointY="6.4802864583333335" />
+          <ConnectorPoint PointX="1.9062525" PointY="8.5285953776041659" />
+          <ConnectorPoint PointX="3" PointY="8.5285953776041659" />
+        </AssociationConnector>
+        <AssociationConnector Association="sliceofpieModel.pu_projectId" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="5.4901432291666667" />
+          <ConnectorPoint PointX="3" PointY="5.4901432291666667" />
+        </AssociationConnector>
+        <AssociationConnector Association="sliceofpieModel.pu_userId" ManuallyRouted="false">
+          <ConnectorPoint PointX="2.25" PointY="2.3939925130208333" />
+          <ConnectorPoint PointX="3.75" PointY="2.3939925130208333" />
+          <ConnectorPoint PointX="3.75" PointY="4.5" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
