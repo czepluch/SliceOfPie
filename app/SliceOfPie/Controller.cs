@@ -17,7 +17,7 @@ namespace SliceOfPie {
         /// (defaults to User.Local as a convenience for the local client)
         /// </summary>
         /// <returns>returns project related to user.</returns>
-        public IEnumerable<Project> GetProjects(int userId = 0) {
+        public IEnumerable<Project> GetProjects(int userId = 42) {
             foreach (Project p in fileModel.GetProjects(userId)) {
                 yield return p;
             }
