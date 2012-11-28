@@ -60,7 +60,11 @@ namespace SliceOfPie {
 
             //Setup Document Context Menu for the Document Explorer
             documentContextMenu = new ContextMenu();
-            documentContextMenu.Items.Add(new MenuItem() { Header = "Edit document" });
+            MenuItem documentMenuItem1 = new MenuItem() { Header = "Edit document" };
+            documentMenuItem1.Click += (object sender, RoutedEventArgs e) => { //lambda click handler
+                    generateContent(DocumentExplorer.SelectedItem as TreeViewItem); //Opens the text editor for the document
+                };
+            documentContextMenu.Items.Add(documentMenuItem1);
         }
 
         /// <summary>
@@ -194,6 +198,10 @@ namespace SliceOfPie {
                   item.IsSelected = true;
                   generateContent(item);
               }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e) {
+
         }
     }
 
