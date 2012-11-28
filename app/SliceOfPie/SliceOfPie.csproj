@@ -68,7 +68,13 @@
       <DependentUpon>MySQLModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Project.cs" />
+    <Compile Include="TextEditor.xaml.cs">
+      <DependentUpon>TextEditor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="User.cs" />
+    <Compile Include="FolderContentView.xaml.cs">
+      <DependentUpon>FolderContentView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WebFileModel.cs" />
     <Compile Include="LocalFileModel.cs" />
     <Compile Include="UserModel.cs" />
@@ -86,6 +92,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="TextEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FolderContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

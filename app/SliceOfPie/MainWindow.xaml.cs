@@ -24,8 +24,12 @@ namespace SliceOfPie {
             InitializeComponent();
             InitializeDocumentExplorer();
             RefreshDocumentExplorer();
+            generateContent(DocumentExplorer.Items[0] as TreeViewItem); //Note there's always at least one project
         }
 
+        /// <summary>
+        /// Sets up the DocumentExplorer's icons and context menus
+        /// </summary>
         private void InitializeDocumentExplorer() {
             //Setup icons
             projectIcon = new BitmapImage();
@@ -75,20 +79,6 @@ namespace SliceOfPie {
                 DocumentExplorer.ContextMenu = documentContextMenu;
             }
             DocumentExplorer.ContextMenu.IsOpen = true;
-        }
-
-        /// <summary>
-        /// This makes right click select an item in the Document Explorer and show the appropiate context menu for the item.
-        /// </summary>
-        /// <param name="sender">The object that send the event</param>
-        /// <param name="e">The MouseButtonEventArgs for the event</param>
-        private void DocumentExplorer_MouseRightButtonDown(object sender, MouseButtonEventArgs e) {
-            TreeViewItem item = e.Source as TreeViewItem;
-            if (item != null) {
-                item.IsSelected = true;
-                generateContextMenu(item);
-                e.Handled = true;
-            }
         }
 
         /// <summary>
@@ -150,6 +140,51 @@ namespace SliceOfPie {
         //        TreeViewItem project = new TreeViewItem() { Header=p.title, Tag="project" //Project node
         //        DocumentExplorer.Items.Add(TreeViewItem);
         //    }
+        }
+
+        /// <summary>
+        /// Fills the MainContent with useful information for the specific item
+        /// </summary>
+        /// <param name="item">The item which mainContent will use as a context</param>
+        private void generateContent(TreeViewItem item) {
+            string itemType = (string)item.Tag;
+            if (itemType.Equals("project")) {
+                MainContent.Content = new FolderContentView();
+            }
+            else if (itemType.Equals("folder")) {
+                MainContent.Content = new FolderContentView();
+            }
+            else {
+                MainContent.Content = new TextEditor();
+            }
+            
+        }
+
+
+        /// <summary>
+        /// This makes right click select an item in the Document Explorer and show the appropiate context menu for the item.
+        /// </summary>
+        /// <param name="sender">The object that send the event</param>
+        /// <param name="e">The MouseButtonEventArgs for the event</param>
+        private void DocumentExplorer_MouseRightButtonDown(object sender, MouseButtonEventArgs e) {
+            TreeViewItem item = e.Source as TreeViewItem;
+            if (item != null) {
+                item.IsSelected = true;
+                generateContextMenu(item);
+            }
+        }
+
+        /// <summary>
+        /// This makes the main content in the main window change upon double-click on an item
+        /// </summary>
+        /// <param name="sender">The sender of the event</param>
+        /// <param name="e">MouseButtonEventArgs</param>
+        private void DocumentExplorer_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            TreeViewItem item = ((TreeView)sender).SelectedItem as TreeViewItem;
+              if (item != null) {
+                  item.IsSelected = true;
+                  generateContent(item);
+              }
         }
     }
 
