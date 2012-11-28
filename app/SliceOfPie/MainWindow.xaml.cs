@@ -148,11 +148,20 @@ namespace SliceOfPie {
         /// <param name="item">The item which mainContent will use as a context</param>
         private void generateContent(TreeViewItem item) {
             string itemType = (string)item.Tag;
-            if (itemType.Equals("project")) {
-                MainContent.Content = new FolderContentView();
-            }
-            else if (itemType.Equals("folder")) {
-                MainContent.Content = new FolderContentView();
+            if (itemType.Equals("project") || itemType.Equals("folder")) {
+                FolderContentView f = new FolderContentView();
+
+                for (int i = 0; i < 10; i++) {
+                    StackPanel sp = new StackPanel() { Width = 50, Height = 50,  Orientation = Orientation.Vertical };
+                    Image img = new Image() { Source = folderIcon, Width = 24, Height = 24 };
+                    TextBlock label = new TextBlock() { Text = "Label", MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center };
+                    sp.Children.Add(img);
+                    sp.Children.Add(label);
+                    ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
+                    listViewItem.Content = sp;
+                    f.FolderListView.Items.Add(listViewItem);
+                }
+                MainContent.Content = f;
             }
             else {
                 MainContent.Content = new TextEditor();
