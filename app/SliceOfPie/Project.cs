@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 
 namespace SliceOfPie {
-    public partial class Project:ItemContainer {
+    public partial class Project:ItemContainer, ListableItem {
         public string ProjectPath {
             get;
             set;

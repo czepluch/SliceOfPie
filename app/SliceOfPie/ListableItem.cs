@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 
 namespace SliceOfPie {
-    public partial class Document:Item, ListableItem {
-
+    interface ListableItem {
     }
 }
