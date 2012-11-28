@@ -5,11 +5,12 @@ using System.Text;
 
 namespace SliceOfPie {
     public class Controller {
-        private static Controller _instance = null;
+        private static Controller _instance;
 
-        private FileModel fileModel = new LocalFileModel();
+        private FileModel fileModel;
 
-        private Controller() {
+        public Controller() {
+            fileModel = new LocalFileModel();
         }
 
         /// <summary>

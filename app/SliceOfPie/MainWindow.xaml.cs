@@ -19,8 +19,11 @@ namespace SliceOfPie {
     public partial class MainWindow : Window {
         private ContextMenu projectContextMenu, folderContextMenu, documentContextMenu;
         private BitmapImage projectIcon, folderIcon, documentIcon;
+        private Controller controller;
 
         public MainWindow() {
+            controller = new Controller();
+
             InitializeComponent();
             InitializeDocumentExplorer();
             RefreshDocumentExplorer();
