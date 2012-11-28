@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,11 +19,8 @@ namespace SliceOfPie {
     public partial class MainWindow : Window {
         private ContextMenu projectContextMenu, folderContextMenu, documentContextMenu;
         private BitmapImage projectIcon, folderIcon, documentIcon;
-        private Controller controller;
 
         public MainWindow() {
-            controller = new Controller();
-
             InitializeComponent();
             InitializeDocumentExplorer();
             RefreshDocumentExplorer();
@@ -63,7 +60,11 @@ namespace SliceOfPie {
 
             //Setup Document Context Menu for the Document Explorer
             documentContextMenu = new ContextMenu();
-            documentContextMenu.Items.Add(new MenuItem() { Header = "Edit document" });
+            MenuItem documentMenuItem1 = new MenuItem() { Header = "Edit document" };
+            documentMenuItem1.Click += (object sender, RoutedEventArgs e) => { //lambda click handler
+                generateContent(DocumentExplorer.SelectedItem as TreeViewItem); //Opens the text editor for the document
+            };
+            documentContextMenu.Items.Add(documentMenuItem1);
         }
 
         /// <summary>
@@ -74,11 +75,9 @@ namespace SliceOfPie {
             string itemType = (string)item.Tag;
             if (itemType.Equals("project")) {
                 DocumentExplorer.ContextMenu = projectContextMenu;
-            }
-            else if (itemType.Equals("folder")) {
+            } else if (itemType.Equals("folder")) {
                 DocumentExplorer.ContextMenu = folderContextMenu;
-            }
-            else {
+            } else {
                 DocumentExplorer.ContextMenu = documentContextMenu;
             }
             DocumentExplorer.ContextMenu.IsOpen = true;
@@ -91,18 +90,16 @@ namespace SliceOfPie {
         /// <param name="itemType">The type of the item. Can be either "project", "folder", or "document"</param>
         /// <returns></returns>
         private TreeViewItem createDocumentExplorerItem(string text, string itemType) {
-            TreeViewItem item = new TreeViewItem() {Tag = itemType };
+            TreeViewItem item = new TreeViewItem() { Tag = itemType };
             //StackPanel for image and text block
             StackPanel sp = new StackPanel() { Orientation = Orientation.Horizontal };
             //Create the image
             BitmapImage icon;
             if (itemType.Equals("project")) {
                 icon = projectIcon;
-            }
-            else if (itemType.Equals("folder")) {
+            } else if (itemType.Equals("folder")) {
                 icon = folderIcon;
-            }
-            else {
+            } else {
                 icon = documentIcon;
             }
             Image image = new Image() { Source = icon, Height = 15, Width = 15, IsHitTestVisible = false }; /* note that IsHitTestVisible=false disables event handling for this element -
@@ -126,7 +123,7 @@ namespace SliceOfPie {
             t.Items.Add(createDocumentExplorerItem("Work", "folder"));
             TreeViewItem schoolFolder = createDocumentExplorerItem("School", "folder");
             schoolFolder.Items.Add(createDocumentExplorerItem("BDSA_Report", "document"));
-            t.Items.Add(schoolFolder);            
+            t.Items.Add(schoolFolder);
 
             TreeViewItem t2 = createDocumentExplorerItem("Other Project", "project");
             t2.Items.Add(createDocumentExplorerItem("Recipes", "folder"));
@@ -135,14 +132,14 @@ namespace SliceOfPie {
             DocumentExplorer.Items.Add(t);
             DocumentExplorer.Items.Add(t2);
 
-        //    //var projects = Controller.getprojects();
-        //    DocumentExplorer.Items.Clear();
-        //    foreach (Project p in projects) {
+            //    //var projects = Controller.getprojects();
+            //    DocumentExplorer.Items.Clear();
+            //    foreach (Project p in projects) {
 
-        //item.Tag = "project";
-        //        TreeViewItem project = new TreeViewItem() { Header=p.title, Tag="project" //Project node
-        //        DocumentExplorer.Items.Add(TreeViewItem);
-        //    }
+            //item.Tag = "project";
+            //        TreeViewItem project = new TreeViewItem() { Header=p.title, Tag="project" //Project node
+            //        DocumentExplorer.Items.Add(TreeViewItem);
+            //    }
         }
 
         /// <summary>
@@ -151,16 +148,24 @@ namespace SliceOfPie {
         /// <param name="item">The item which mainContent will use as a context</param>
         private void generateContent(TreeViewItem item) {
             string itemType = (string)item.Tag;
-            if (itemType.Equals("project")) {
-                MainContent.Content = new FolderContentView();
-            }
-            else if (itemType.Equals("folder")) {
-                MainContent.Content = new FolderContentView();
-            }
-            else {
+            if (itemType.Equals("project") || itemType.Equals("folder")) {
+                FolderContentView f = new FolderContentView();
+
+                for (int i = 0; i < 10; i++) {
+                    StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical };
+                    Image img = new Image() { Source = folderIcon, Width = 24, Height = 24 };
+                    TextBlock label = new TextBlock() { Text = "Label", MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center };
+                    sp.Children.Add(img);
+                    sp.Children.Add(label);
+                    ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
+                    listViewItem.Content = sp;
+                    f.FolderListView.Items.Add(listViewItem);
+                }
+                MainContent.Content = f;
+            } else {
                 MainContent.Content = new TextEditor();
             }
-            
+
         }
 
 
@@ -184,10 +189,14 @@ namespace SliceOfPie {
         /// <param name="e">MouseButtonEventArgs</param>
         private void DocumentExplorer_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
             TreeViewItem item = ((TreeView)sender).SelectedItem as TreeViewItem;
-              if (item != null) {
-                  item.IsSelected = true;
-                  generateContent(item);
-              }
+            if (item != null) {
+                item.IsSelected = true;
+                generateContent(item);
+            }
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e) {
+
         }
     }
 
