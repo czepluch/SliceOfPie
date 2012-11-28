@@ -24,7 +24,7 @@ namespace SliceOfPie {
             InitializeComponent();
             InitializeDocumentExplorer();
             RefreshDocumentExplorer();
-            generateContent(DocumentExplorer.Items[0] as TreeViewItem); //Note there's always at least one project
+            generateContent(DocumentExplorer.Items[0] as ListableItem); //Note there's always at least one project
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace SliceOfPie {
             documentContextMenu = new ContextMenu();
             MenuItem documentMenuItem1 = new MenuItem() { Header = "Edit document" };
             documentMenuItem1.Click += (object sender, RoutedEventArgs e) => { //lambda click handler
-                generateContent(DocumentExplorer.SelectedItem as TreeViewItem); //Opens the text editor for the document
+                generateContent(DocumentExplorer.SelectedItem as ListableItem); //Opens the text editor for the document
             };
             documentContextMenu.Items.Add(documentMenuItem1);
         }
@@ -71,11 +71,10 @@ namespace SliceOfPie {
         /// This generates and shows a context menu for the document explorer at runtime
         /// </summary>
         /// <param name="item">The item which was clicked on the document explorer</param>
-        private void generateContextMenu(TreeViewItem item) {
-            string itemType = (string)item.Tag;
-            if (itemType.Equals("project")) {
+        private void generateContextMenu(ListableItem item) {
+            if (item is Project) {
                 DocumentExplorer.ContextMenu = projectContextMenu;
-            } else if (itemType.Equals("folder")) {
+            } else if (item is Folder) {
                 DocumentExplorer.ContextMenu = folderContextMenu;
             } else {
                 DocumentExplorer.ContextMenu = documentContextMenu;
@@ -87,20 +86,24 @@ namespace SliceOfPie {
         /// This is a helper method for creating an item in the document explorer.
         /// </summary>
         /// <param name="text">The text to be shown in the item</param>
-        /// <param name="itemType">The type of the item. Can be either "project", "folder", or "document"</param>
+        /// <param name="item">The type of the item. Can be either "project", "folder", or "document"</param>
         /// <returns></returns>
-        private TreeViewItem createDocumentExplorerItem(string text, string itemType) {
-            TreeViewItem item = new TreeViewItem() { Tag = itemType };
+        private TreeViewItem createDocumentExplorerItem(ListableItem item) {
+            TreeViewItem treeViewItem = new TreeViewItem() { Tag = item };
             //StackPanel for image and text block
             StackPanel sp = new StackPanel() { Orientation = Orientation.Horizontal };
             //Create the image
             BitmapImage icon;
-            if (itemType.Equals("project")) {
+            string text;
+            if (item is Project) {
                 icon = projectIcon;
-            } else if (itemType.Equals("folder")) {
+                text = (item as Project).title;
+            } else if (item is Folder) {
                 icon = folderIcon;
+                text = (item as Folder).title;
             } else {
                 icon = documentIcon;
+                text = (item as Document).title;
             }
             Image image = new Image() { Source = icon, Height = 15, Width = 15, IsHitTestVisible = false }; /* note that IsHitTestVisible=false disables event handling for this element -
                                                                                                              * fallback on the general treeview handling (rightclick for the context menu).
@@ -109,9 +112,9 @@ namespace SliceOfPie {
             //Create the text block
             TextBlock itemText = new TextBlock() { Text = text, Margin = new Thickness(5, 0, 0, 0), IsHitTestVisible = false };
             sp.Children.Add(itemText);
-            item.Header = sp;
+            treeViewItem.Header = sp;
 
-            return item;
+            return treeViewItem;
         }
 
         /// <summary>
@@ -119,15 +122,16 @@ namespace SliceOfPie {
         /// It exists as a placeholder and testing method untill the model/controller allows local file traversal.
         /// </summary>
         private void RefreshDocumentExplorer() {
-            TreeViewItem t = createDocumentExplorerItem("My Project", "project");
-            t.Items.Add(createDocumentExplorerItem("Work", "folder"));
-            TreeViewItem schoolFolder = createDocumentExplorerItem("School", "folder");
-            schoolFolder.Items.Add(createDocumentExplorerItem("BDSA_Report", "document"));
+            TreeViewItem t = createDocumentExplorerItem(new Project() { title = "My Project" });
+            t.Items.Add(createDocumentExplorerItem(new Folder() { title = "Work" }));
+
+            TreeViewItem schoolFolder = createDocumentExplorerItem(new Folder() { title = "School" });
+            schoolFolder.Items.Add(createDocumentExplorerItem(new Document() { title = "BDSA_Report" }));
             t.Items.Add(schoolFolder);
 
-            TreeViewItem t2 = createDocumentExplorerItem("Other Project", "project");
-            t2.Items.Add(createDocumentExplorerItem("Recipes", "folder"));
-            t2.Items.Add(createDocumentExplorerItem("Tomato_soup", "document"));
+            TreeViewItem t2 = createDocumentExplorerItem(new Project() { title = "Other Project" });
+            t2.Items.Add(createDocumentExplorerItem(new Folder() { title = "Recipes" }));
+            t2.Items.Add(createDocumentExplorerItem(new Document() { title = "Tomato_soup" }));
 
             DocumentExplorer.Items.Add(t);
             DocumentExplorer.Items.Add(t2);
@@ -141,14 +145,13 @@ namespace SliceOfPie {
             //        DocumentExplorer.Items.Add(TreeViewItem);
             //    }
         }
-
+        
         /// <summary>
         /// Fills the MainContent with useful information for the specific item
         /// </summary>
         /// <param name="item">The item which mainContent will use as a context</param>
-        private void generateContent(TreeViewItem item) {
-            string itemType = (string)item.Tag;
-            if (itemType.Equals("project") || itemType.Equals("folder")) {
+        private void generateContent(ListableItem item) {
+            if (item is Project || item is Folder) {
                 FolderContentView f = new FolderContentView();
 
                 for (int i = 0; i < 10; i++) {
@@ -178,7 +181,7 @@ namespace SliceOfPie {
             TreeViewItem item = e.Source as TreeViewItem;
             if (item != null) {
                 item.IsSelected = true;
-                generateContextMenu(item);
+                generateContextMenu(item.Tag as ListableItem);
             }
         }
 
@@ -191,7 +194,7 @@ namespace SliceOfPie {
             TreeViewItem item = ((TreeView)sender).SelectedItem as TreeViewItem;
             if (item != null) {
                 item.IsSelected = true;
-                generateContent(item);
+                generateContent(item.Tag as ListableItem);
             }
         }
     }
