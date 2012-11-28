@@ -62,13 +62,8 @@ namespace SliceOfPie {
             documentContextMenu = new ContextMenu();
             MenuItem documentMenuItem1 = new MenuItem() { Header = "Edit document" };
             documentMenuItem1.Click += (object sender, RoutedEventArgs e) => { //lambda click handler
-<<<<<<< HEAD
                 generateContent(DocumentExplorer.SelectedItem as TreeViewItem); //Opens the text editor for the document
             };
-=======
-                    generateContent(DocumentExplorer.SelectedItem as TreeViewItem); //Opens the text editor for the document
-                };
->>>>>>> ccf3b02176ecc0c98bad0599d3bcb0033460b71a
             documentContextMenu.Items.Add(documentMenuItem1);
         }
 
@@ -157,11 +152,7 @@ namespace SliceOfPie {
                 FolderContentView f = new FolderContentView();
 
                 for (int i = 0; i < 10; i++) {
-<<<<<<< HEAD
                     StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical };
-=======
-                    StackPanel sp = new StackPanel() { Width = 50, Height = 50,  Orientation = Orientation.Vertical };
->>>>>>> ccf3b02176ecc0c98bad0599d3bcb0033460b71a
                     Image img = new Image() { Source = folderIcon, Width = 24, Height = 24 };
                     TextBlock label = new TextBlock() { Text = "Label", MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center };
                     sp.Children.Add(img);
@@ -171,12 +162,7 @@ namespace SliceOfPie {
                     f.FolderListView.Items.Add(listViewItem);
                 }
                 MainContent.Content = f;
-<<<<<<< HEAD
             } else {
-=======
-            }
-            else {
->>>>>>> ccf3b02176ecc0c98bad0599d3bcb0033460b71a
                 MainContent.Content = new TextEditor();
             }
 
@@ -207,10 +193,6 @@ namespace SliceOfPie {
                 item.IsSelected = true;
                 generateContent(item);
             }
-        }
-
-        private void MenuItem_Click(object sender, RoutedEventArgs e) {
-
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e) {
