@@ -17,14 +17,14 @@ namespace SliceOfPie {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        private ContextMenu projectContextMenu, folderContextMenu, documentContextMenu;
-        private BitmapImage projectIcon, folderIcon, documentIcon;
+        private static ContextMenu projectContextMenu, folderContextMenu, documentContextMenu;
+        private static BitmapImage projectIcon, folderIcon, documentIcon;
 
         public MainWindow() {
             InitializeComponent();
             InitializeDocumentExplorer();
             RefreshDocumentExplorer();
-            generateContent(DocumentExplorer.Items[0] as ListableItem); //Note there's always at least one project
+            GenerateContent((DocumentExplorer.Items[0] as TreeViewItem).Tag as ListableItem); //Note there's always at least one project
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace SliceOfPie {
             documentContextMenu = new ContextMenu();
             MenuItem documentMenuItem1 = new MenuItem() { Header = "Edit document" };
             documentMenuItem1.Click += (object sender, RoutedEventArgs e) => { //lambda click handler
-                generateContent(DocumentExplorer.SelectedItem as ListableItem); //Opens the text editor for the document
+                GenerateContent((DocumentExplorer.SelectedItem as TreeViewItem).Tag as ListableItem); //Opens the text editor for the document
             };
             documentContextMenu.Items.Add(documentMenuItem1);
         }
@@ -82,13 +82,81 @@ namespace SliceOfPie {
             DocumentExplorer.ContextMenu.IsOpen = true;
         }
 
+      
+
+        /// <summary>
+        /// This method is supposed to refresh the document explorer.
+        /// It exists as a placeholder and testing method untill the model/controller allows local file traversal.
+        /// </summary>
+        private void RefreshDocumentExplorer() {
+            TreeViewItem myProject = createDocumentExplorerItem(new Project() { title = "My Project" });
+            TreeViewItem work = createDocumentExplorerItem(new Folder() { title = "Work" });
+            TreeViewItem school = createDocumentExplorerItem(new Folder() { title = "School" });
+            TreeViewItem bdsa = createDocumentExplorerItem(new Document() { title = "BDSA_Report" });
+
+            AddProjectToDocExplorer(myProject);
+            AddSubItemToDocExplorer(myProject, work);
+            AddSiblingItemToDocExplorer(work, school);
+            AddSubItemToDocExplorer(school, bdsa);
+
+
+            TreeViewItem otherProject = createDocumentExplorerItem(new Project() { title = "Other Project" });
+            TreeViewItem recipes = createDocumentExplorerItem(new Folder() { title = "Recipes" });
+            TreeViewItem tomatoSoup = createDocumentExplorerItem(new Document() { title = "Tomato_soup" });
+
+            AddProjectToDocExplorer(otherProject);
+            AddSubItemToDocExplorer(otherProject, recipes);
+            AddSubItemToDocExplorer(recipes, tomatoSoup);
+
+            //    //var projects = Controller.getprojects();
+            //    DocumentExplorer.Items.Clear();
+            //    foreach (Project p in projects) {
+
+            //item.Tag = "project";
+            //        TreeViewItem project = new TreeViewItem() { Header=p.title, Tag="project" //Project node
+            //        DocumentExplorer.Items.Add(TreeViewItem);
+            //    }
+        }
+
+        #region Helper methods for the Document Explorer
+
+        /// <summary>
+        /// Adds a new project to the root of the document explorer
+        /// </summary>
+        /// <param name="project">The project to add</param>
+        private void AddProjectToDocExplorer(TreeViewItem project) {
+            DocumentExplorer.Items.Add(project);
+        }
+
+        /// <summary>
+        /// Adds a subitem to the existing item
+        /// </summary>
+        /// <param name="existingItem">The existing item</param>
+        /// <param name="subItem">The subitem to add</param>
+        private void AddSubItemToDocExplorer(TreeViewItem existingItem, TreeViewItem subItem) {
+            existingItem.Items.Add(subItem);
+        }
+
+        /// <summary>
+        /// Adds a "sibling" (item at the same level) to the existing item
+        /// </summary>
+        /// <param name="existingItem">The existing item</param>
+        /// <param name="sibling">The sibling item to add</param>
+        private void AddSiblingItemToDocExplorer(TreeViewItem existingItem, TreeViewItem sibling) {
+            if (existingItem.Parent is TreeViewItem) {
+                (existingItem.Parent as TreeViewItem).Items.Add(sibling);
+            } else { //must be at root
+                documentContextMenu.Items.Add(sibling);
+            }
+        }
+
         /// <summary>
         /// This is a helper method for creating an item in the document explorer.
         /// </summary>
         /// <param name="text">The text to be shown in the item</param>
         /// <param name="item">The type of the item. Can be either "project", "folder", or "document"</param>
         /// <returns></returns>
-        private TreeViewItem createDocumentExplorerItem(ListableItem item) {
+        private static TreeViewItem createDocumentExplorerItem(ListableItem item) {
             TreeViewItem treeViewItem = new TreeViewItem() { Tag = item };
             //StackPanel for image and text block
             StackPanel sp = new StackPanel() { Orientation = Orientation.Horizontal };
@@ -98,10 +166,12 @@ namespace SliceOfPie {
             if (item is Project) {
                 icon = projectIcon;
                 text = (item as Project).title;
-            } else if (item is Folder) {
+            }
+            else if (item is Folder) {
                 icon = folderIcon;
                 text = (item as Folder).title;
-            } else {
+            }
+            else {
                 icon = documentIcon;
                 text = (item as Document).title;
             }
@@ -117,43 +187,15 @@ namespace SliceOfPie {
             return treeViewItem;
         }
 
-        /// <summary>
-        /// This method is supposed to refresh the document explorer.
-        /// It exists as a placeholder and testing method untill the model/controller allows local file traversal.
-        /// </summary>
-        private void RefreshDocumentExplorer() {
-            TreeViewItem t = createDocumentExplorerItem(new Project() { title = "My Project" });
-            t.Items.Add(createDocumentExplorerItem(new Folder() { title = "Work" }));
+        #endregion
 
-            TreeViewItem schoolFolder = createDocumentExplorerItem(new Folder() { title = "School" });
-            schoolFolder.Items.Add(createDocumentExplorerItem(new Document() { title = "BDSA_Report" }));
-            t.Items.Add(schoolFolder);
-
-            TreeViewItem t2 = createDocumentExplorerItem(new Project() { title = "Other Project" });
-            t2.Items.Add(createDocumentExplorerItem(new Folder() { title = "Recipes" }));
-            t2.Items.Add(createDocumentExplorerItem(new Document() { title = "Tomato_soup" }));
-
-            DocumentExplorer.Items.Add(t);
-            DocumentExplorer.Items.Add(t2);
-
-            //    //var projects = Controller.getprojects();
-            //    DocumentExplorer.Items.Clear();
-            //    foreach (Project p in projects) {
-
-            //item.Tag = "project";
-            //        TreeViewItem project = new TreeViewItem() { Header=p.title, Tag="project" //Project node
-            //        DocumentExplorer.Items.Add(TreeViewItem);
-            //    }
-        }
-        
         /// <summary>
         /// Fills the MainContent with useful information for the specific item
         /// </summary>
         /// <param name="item">The item which mainContent will use as a context</param>
-        private void generateContent(ListableItem item) {
+        private void GenerateContent(ListableItem item) {
             if (item is Project || item is Folder) {
                 FolderContentView f = new FolderContentView();
-
                 for (int i = 0; i < 10; i++) {
                     StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical };
                     Image img = new Image() { Source = folderIcon, Width = 24, Height = 24 };
@@ -166,9 +208,11 @@ namespace SliceOfPie {
                 }
                 MainContent.Content = f;
             } else {
-                MainContent.Content = new TextEditor();
+                TextEditor t = new TextEditor();
+                //I'm currently using Title as a placeholder - Document.content is not implemented yet.
+                t.TextField.Text = "This is the text editor for:\n" + (item as Document).title;
+                MainContent.Content = t;
             }
-
         }
 
 
@@ -194,7 +238,7 @@ namespace SliceOfPie {
             TreeViewItem item = ((TreeView)sender).SelectedItem as TreeViewItem;
             if (item != null) {
                 item.IsSelected = true;
-                generateContent(item.Tag as ListableItem);
+                GenerateContent(item.Tag as ListableItem);
             }
         }
     }
