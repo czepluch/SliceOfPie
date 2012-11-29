@@ -20,5 +20,9 @@ namespace SliceOfPie {
                 yield return document;
             }
         }
+
+        public string GetPath() {
+            return Path.Combine(AppPath, Title);
+        }
     }
 }

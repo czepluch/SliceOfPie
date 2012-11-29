@@ -8,7 +8,7 @@ namespace SliceOfPie {
     public class LocalFileModel : IFileModel {
         private string AppPath;
         private string DefaultProjectPath;
-        private List<Project> projects = new List<Project>();
+        private List<Project> Projects = new List<Project>();
 
         public LocalFileModel() {
             CreateStructure();
@@ -24,7 +24,7 @@ namespace SliceOfPie {
             Project project = new Project();
             project.Title = title;
             project.AppPath = AppPath;
-            projects.Add(project);
+            Projects.Add(project);
             return project;
         }
 
@@ -38,13 +38,13 @@ namespace SliceOfPie {
         }
 
         public override IEnumerable<Project> GetProjects(int userId) {
-            foreach (Project project in projects) {
+            foreach (Project project in Projects) {
                 yield return project;
             }
         }
 
         public Folder AddFolder(IItemContainer parent, string title) {
-            string folderPath = Path.Combine(GetPath("", parent), title);
+            string folderPath = Path.Combine(parent.GetPath(), title);
             if (Directory.Exists(folderPath)) {
                 throw new ArgumentException("Project/folder name is already in use (" + folderPath + ")");
             }
@@ -57,16 +57,16 @@ namespace SliceOfPie {
         }
 
         public void RenameFolder(Folder folder, string title) {
-            string folderPath = Path.Combine(GetPath("", folder.Parent), title);
+            string folderPath = Path.Combine(folder.Parent.GetPath(), title);
             if (Directory.Exists(folderPath)) {
                 throw new ArgumentException("Project/folder name is already in use (" + folderPath + ")");
             }
-            Directory.Move(GetPath("", folder), folderPath);
+            Directory.Move(folder.GetPath(), folderPath);
             folder.Title = title;
         }
 
         public Document AddDocument(IItemContainer parent, string title) {
-            string documentPath = Path.Combine(GetPath("", parent), title);
+            string documentPath = Path.Combine(parent.GetPath(), title);
             if (File.Exists(documentPath)) {
                 throw new ArgumentException("File name is already in use (" + documentPath + ")");
             }
@@ -79,11 +79,11 @@ namespace SliceOfPie {
         }
 
         public void RenameDocument(Document document, string title) {
-            string documentPath = Path.Combine(GetPath("", document.Parent), title);
+            string documentPath = Path.Combine(document.Parent.GetPath(), title);
             if (File.Exists(documentPath)) {
                 throw new ArgumentException("File name is already in use(" + documentPath + ")");
             }
-            File.Move(Path.Combine(GetPath("", document.Parent), document.Title), documentPath);
+            File.Move(Path.Combine(document.Parent.GetPath(), document.Title), documentPath);
             document.Title = title;
         }
 
@@ -108,19 +108,22 @@ namespace SliceOfPie {
         }
 
         public void FindProjects() {
+            Projects = new List<Project>();
+
             string[] folders = Directory.GetDirectories(AppPath);
             foreach (string folderName in folders) {
                 Project project = new Project();
                 project.Title = Path.GetFileName(folderName);
                 project.AppPath = AppPath;
-                projects.Add(project);
+                Projects.Add(project);
 
                 FindFolders(project);
+                FindDocuments(project);
             }
         }
 
         public void FindFolders(IItemContainer parent) {
-            string[] folders = Directory.GetDirectories(GetPath("", parent));
+            string[] folders = Directory.GetDirectories(parent.GetPath());
             foreach (string folderName in folders) {
                 Folder folder = new Folder();
                 folder.Title = Path.GetFileName(folderName);
@@ -128,24 +131,18 @@ namespace SliceOfPie {
                 parent.Folders.Add(folder);
 
                 FindFolders(folder);
+                FindDocuments(folder);
             }
         }
 
         public void FindDocuments(IItemContainer parent) {
-            string[] documentPaths = Directory.GetFiles(GetPath("", parent));
+            string[] documentPaths = Directory.GetFiles(parent.GetPath());
             foreach (string documentName in documentPaths) {
                 Document document = new Document();
                 document.Title = Path.GetFileName(documentName);
                 document.Parent = parent;
                 parent.Documents.Add(document);
             }
-        }
-
-        public string GetPath(string path, IItemContainer container) {
-            if (Directory.Exists(container.AppPath)) {
-                return Path.Combine(container.AppPath, Path.Combine(container.Title, path));
-            }
-            return GetPath(Path.Combine(container.Title, path), container.Parent);
         }
     }
 }

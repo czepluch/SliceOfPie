@@ -14,5 +14,6 @@ namespace SliceOfPie {
 
         IEnumerable<Folder> GetFolders();
         IEnumerable<Document> GetDocuments();
+        string GetPath();
     }
 }
