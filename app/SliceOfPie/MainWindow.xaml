@@ -10,9 +10,6 @@
                 <TreeView Name="DocumentExplorer" FontSize="13" FontWeight="DemiBold" MouseRightButtonDown="DocumentExplorer_MouseRightButtonDown" MouseDoubleClick="DocumentExplorer_MouseDoubleClick" KeyDown="DocumentExplorer_KeyDown" MouseDown="DocumentExplorer_MouseDown" />
             </ScrollViewer>
         </DockPanel>
-        <DockPanel>
-            <ContentControl DockPanel.Dock="Top" Name="TopMenu"/>
             <ContentControl Name="MainContent"/>
-        </DockPanel>
     </DockPanel>
 </Window>

@@ -223,13 +223,11 @@ namespace SliceOfPie {
                 } 
                 
                 MainContent.Content = folderContentView;
-                TopMenu.Content = new FolderTopMenu();
             } else {
                 TextEditor t = new TextEditor();
                 //I'm currently using Title as a placeholder - Document.content is not implemented yet.
                 t.TextField.Text = "This is the text editor for:\n" + (item as Document).Title;
                 MainContent.Content = t;
-                TopMenu.Content = new DocumentTopMenu();
             }
         }
 
