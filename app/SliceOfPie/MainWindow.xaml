@@ -11,21 +11,8 @@
             </ScrollViewer>
         </DockPanel>
         <DockPanel>
-            <WrapPanel DockPanel.Dock="Top" Height="50" Background="#FFDDDDDD">
-                <Button Margin="10,0,10,0">
-                    <StackPanel Orientation="Vertical">
-                        <Image Width="30" Source="Icons/document-icon.bmp"/>
-                        <TextBlock>Create document</TextBlock>
-                    </StackPanel>
-                </Button>
-                <Button Margin="10,0,10,0">
-                    <StackPanel Orientation="Vertical">
-                        <Image Width="30" Source="Icons/folder-icon.bmp"/>
-                        <TextBlock>Create folder</TextBlock>
-                    </StackPanel>
-                </Button>
-            </WrapPanel>
-            <ContentControl Grid.Column="0" Name="MainContent"/>
+            <ContentControl DockPanel.Dock="Top" Name="TopMenu"/>
+            <ContentControl Name="MainContent"/>
         </DockPanel>
     </DockPanel>
 </Window>
