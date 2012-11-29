@@ -14,11 +14,39 @@ using System.Windows.Shapes;
 
 namespace SliceOfPie {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for FolderContentView.xaml
     /// </summary>
     public partial class FolderContentView : UserControl {
-        public FolderContentView() {
+
+        /// <summary>
+        /// This UserControl shows a list of subfolders in a specified parent container.
+        /// </summary>
+        /// <param name="parentContainer">The parent whose subfolders will be shown</param>
+        /// <param name="doubleClickAction">The MouseDoubleClick handler for each subfolder</param>
+        public FolderContentView(IItemContainer parentContainer, MouseButtonEventHandler doubleClickAction) {
             InitializeComponent();
+            //Add items in the provied parent containeer to the list and attach MouseDoubleClick handler.
+
+            foreach (Folder folder in parentContainer.GetFolders()) { //Add folders first
+                StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical, IsHitTestVisible = false };
+                sp.Children.Add(new Image() { Source = IconFactory.FolderIcon, Width = 24, Height = 24 });
+                sp.Children.Add(new TextBlock() { Text = folder.Title, MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center });
+                ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
+                listViewItem.Content = sp;
+                listViewItem.Tag = folder;
+                listViewItem.MouseDoubleClick += doubleClickAction;
+                FolderListView.Items.Add(listViewItem);
+            }
+            foreach (Document document in parentContainer.GetDocuments()) { //Then documents
+                StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical };
+                sp.Children.Add(new Image() { Source = IconFactory.DocumentIcon, Width = 24, Height = 24 });
+                sp.Children.Add(new TextBlock() { Text = document.Title, MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center });
+                ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
+                listViewItem.Content = sp;
+                listViewItem.Tag = document;
+                listViewItem.MouseDoubleClick += doubleClickAction;
+                FolderListView.Items.Add(listViewItem);
+            } 
         }
     }
 }
