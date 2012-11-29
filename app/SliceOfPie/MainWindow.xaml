@@ -5,9 +5,9 @@
         Title="Slice of Pie" Height="500" Width="800" MinHeight="300" MinWidth="400">
     <DockPanel LastChildFill="True">
         <DockPanel DockPanel.Dock="Left">
-            <Button Height="70" DockPanel.Dock="Bottom">Create new padsdadssadsaroject</Button>
+            <Button Height="70" DockPanel.Dock="Bottom">Create new project</Button>
             <ScrollViewer  Width="170" Height="auto" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="scrollViewer1">
-                <TreeView Name="DocumentExplorer" FontSize="13" FontWeight="DemiBold" MouseRightButtonDown="DocumentExplorer_MouseRightButtonDown" MouseDoubleClick="DocumentExplorer_MouseDoubleClick" KeyDown="DocumentExplorer_KeyDown" />
+                <TreeView Name="DocumentExplorer" FontSize="13" FontWeight="DemiBold" MouseRightButtonDown="DocumentExplorer_MouseRightButtonDown" MouseDoubleClick="DocumentExplorer_MouseDoubleClick" KeyDown="DocumentExplorer_KeyDown" MouseDown="DocumentExplorer_MouseDown" />
             </ScrollViewer>
         </DockPanel>
         <DockPanel>

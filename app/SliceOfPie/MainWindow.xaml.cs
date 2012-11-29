@@ -53,22 +53,37 @@ namespace SliceOfPie {
             //Setup Project Context Menu for the Document Explorer
             projectContextMenu = new ContextMenu();
             projectContextMenu.Items.Add(new MenuItem() { Header = "Share project" });
+            MenuItem projectMenuItem1 = new MenuItem() { Header = "Open project folder" };
+            projectMenuItem1.Click += new RoutedEventHandler(generateContentClickEvent);
+            projectContextMenu.Items.Add(projectMenuItem1);
             projectContextMenu.Items.Add(new MenuItem() { Header = "Add folder" });
             projectContextMenu.Items.Add(new MenuItem() { Header = "Add document" });
 
             //Setup Folder Context Menu for the Document Explorer
             folderContextMenu = new ContextMenu();
+            MenuItem folderMenuItem1 = new MenuItem() { Header = "Open project folder" };
+            folderMenuItem1.Click += new RoutedEventHandler(generateContentClickEvent);
+            folderContextMenu.Items.Add(folderMenuItem1);
             folderContextMenu.Items.Add(new MenuItem() { Header = "Add folder" });
             folderContextMenu.Items.Add(new MenuItem() { Header = "Add document" });
 
             //Setup Document Context Menu for the Document Explorer
             documentContextMenu = new ContextMenu();
             MenuItem documentMenuItem1 = new MenuItem() { Header = "Edit document" };
-            documentMenuItem1.Click += (object sender, RoutedEventArgs e) => { //lambda click handler
-                GenerateContent((DocumentExplorer.SelectedItem as TreeViewItem).Tag as ListableItem); //Opens the text editor for the document
-            };
+            documentMenuItem1.Click += new RoutedEventHandler(generateContentClickEvent);
             documentContextMenu.Items.Add(documentMenuItem1);
         }
+
+        /// <summary>
+        /// A default event handler for changing the main content due to a click
+        /// </summary>
+        /// <param name="sender">The sender object</param>
+        /// <param name="e">The RoutedEventArgs</param>
+        private void generateContentClickEvent(object sender, RoutedEventArgs e) {
+            GenerateContent((DocumentExplorer.SelectedItem as TreeViewItem).Tag as ListableItem);
+        }
+
+        
 
         /// <summary>
         /// This generates and shows a context menu for the document explorer at runtime
@@ -187,12 +202,13 @@ namespace SliceOfPie {
             if (item is IItemContainer) {
                 FolderContentView folderContentView = new FolderContentView();
                 foreach(Folder folder in (item as IItemContainer).GetFolders()) {
-                    StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical };
+                    StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical, IsHitTestVisible=false };
                     sp.Children.Add(new Image() { Source = folderIcon, Width = 24, Height = 24 });
                     sp.Children.Add(new TextBlock() { Text = folder.Title, MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center });
                     ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
                     listViewItem.Content = sp;
-                    listViewItem.Tag = item;
+                    listViewItem.Tag = folder;
+                    listViewItem.MouseDoubleClick += new MouseButtonEventHandler(FolderContentView_DoubleClick);
                     folderContentView.FolderListView.Items.Add(listViewItem);
                 }
                 foreach (Document document in (item as IItemContainer).GetDocuments()) {
@@ -201,7 +217,8 @@ namespace SliceOfPie {
                     sp.Children.Add(new TextBlock() { Text = document.Title, MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center });
                     ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
                     listViewItem.Content = sp;
-                    listViewItem.Tag = item;
+                    listViewItem.Tag = document;
+                    listViewItem.MouseDoubleClick += new MouseButtonEventHandler(FolderContentView_DoubleClick);
                     folderContentView.FolderListView.Items.Add(listViewItem);
                 } 
                 
@@ -214,6 +231,10 @@ namespace SliceOfPie {
                 MainContent.Content = t;
                 TopMenu.Content = new DocumentTopMenu();
             }
+        }
+
+        private void FolderContentView_DoubleClick(object sender, MouseButtonEventArgs e) {
+            GenerateContent((sender as ListViewItem).Tag as ListableItem);
         }
 
 
@@ -252,6 +273,10 @@ namespace SliceOfPie {
                     GenerateContent(item.Tag as ListableItem);
                 }
             }
+        }
+
+        private void DocumentExplorer_MouseDown(object sender, MouseButtonEventArgs e) {
+
         }
     }
 
