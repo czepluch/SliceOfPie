@@ -13,7 +13,7 @@ namespace SliceOfPie {
             }
         }
 
-        private FileModel fileModel;
+        private IFileModel fileModel;
 
         private Controller() {
             fileModel = new LocalFileModel();

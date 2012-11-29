@@ -66,8 +66,8 @@
     <Compile Include="FolderTopMenu.xaml.cs">
       <DependentUpon>FolderTopMenu.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Item.cs" />
-    <Compile Include="ItemContainer.cs" />
+    <Compile Include="IItem.cs" />
+    <Compile Include="IItemContainer.cs" />
     <Compile Include="ListableItem.cs" />
     <Compile Include="MySQLModel.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -102,7 +102,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controller.cs" />
-    <Compile Include="FileModel.cs" />
+    <Compile Include="IFileModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace SliceOfPie {
-    public class WebFileModel : FileModel {
+    public class WebFileModel : IFileModel {
         public override IEnumerable<Project> GetProjects(int userId) {
             List<Project> projects = new List<Project>();
 

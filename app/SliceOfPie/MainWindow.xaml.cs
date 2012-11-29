@@ -182,13 +182,13 @@ namespace SliceOfPie {
             thisTreeViewItem.Header = sp;
 
             //recursive traversal of structure for Item Containers
-            if (item is ItemContainer) {
+            if (item is IItemContainer) {
                 //First add folders
-                foreach(Folder folder in (item as ItemContainer).GetFolders()) {
+                foreach(Folder folder in (item as IItemContainer).GetFolders()) {
                     AddSubItemToDocExplorer(thisTreeViewItem, createDocumentExplorerItem(folder));
                 }
                 //then documents
-                foreach (Document document in (item as ItemContainer).GetDocuments()) {
+                foreach (Document document in (item as IItemContainer).GetDocuments()) {
                     AddSubItemToDocExplorer(thisTreeViewItem, createDocumentExplorerItem(document));
                 }
             }
@@ -202,7 +202,7 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="item">The item which mainContent will use as a context</param>
         private void GenerateContent(ListableItem item) {
-            if (item is ItemContainer) {
+            if (item is IItemContainer) {
                 FolderContentView f = new FolderContentView();
                 for (int i = 0; i < 10; i++) {
                     StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical };
