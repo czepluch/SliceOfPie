@@ -28,7 +28,7 @@ namespace SliceOfPie {
             foreach (string documentName in docmentPaths) {
                 Document document = new Document();
                 document.Title = documentName;
-                document.DocumentPath = Path.Combine(ThisPath, documentName);
+                document.ThisPath = Path.Combine(ThisPath, documentName);
                 Documents.Add(document);
             }
         }
@@ -63,6 +63,8 @@ namespace SliceOfPie {
             Directory.CreateDirectory(folderPath);
             Folder folder = new Folder();
             folder.Title = name;
+            folder.ProjectPath = ThisPath;
+            folder.ThisPath = Path.Combine(ThisPath, folderPath);
             Folders.Add(folder);
         }
 
@@ -74,6 +76,8 @@ namespace SliceOfPie {
             File.Create(documentPath);
             Document document = new Document();
             document.Title = name;
+            document.FolderPath = ThisPath;
+            document.ThisPath = Path.Combine(ThisPath, documentPath);
             Documents.Add(document);
         }
     }
