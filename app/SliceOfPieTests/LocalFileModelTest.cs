@@ -62,6 +62,28 @@ namespace SliceOfPieTests {
         }
 
         [TestMethod]
+        public void TestSaveDocument() {
+            IEnumerable<Project> projects = Model.GetProjects(0);
+            Assert.AreEqual(1, projects.Count());
+            Project project = projects.First();
+
+            Document document = Model.AddDocument(project, "TestDocument");
+            document.CurrentRevision = "This is a test!";
+            Model.SaveDocument(document);
+
+            FileStream fileStream = new FileStream(document.GetPath(), FileMode.Open, FileAccess.Read);
+            StreamReader streamReader = new StreamReader(fileStream);
+            string contents = "";
+            while (streamReader.Peek() >= 0) {
+                contents += streamReader.ReadLine() + "\n";
+            }
+            streamReader.Close();
+            fileStream.Close();
+
+            Assert.AreEqual("This is a test!\n", contents);
+        }
+
+        [TestMethod]
         public void TestFindProjects() {
             string projectPath = Path.Combine(AppPath, "TestProject");
             Directory.CreateDirectory(projectPath);
@@ -107,7 +129,8 @@ namespace SliceOfPieTests {
             string folderPath = Path.Combine(Path.Combine(AppPath, "default"), "TestFolder");
             Directory.CreateDirectory(folderPath);
             string documentPath = Path.Combine(Path.Combine(Path.Combine(AppPath, "default"), "TestFolder"), "TestFile");
-            File.Create(documentPath);
+            FileStream fileStream = File.Create(documentPath);
+            fileStream.Close();
             Assert.AreEqual(true, File.Exists(documentPath));
 
             Model.FindProjects();
@@ -134,7 +157,7 @@ namespace SliceOfPieTests {
 
         [TestCleanup]
         public void Cleanup() {
-            //ClearFolder(AppPath);
+            ClearFolder(AppPath);
         }
 
         private void ClearFolder(string path) {
