@@ -19,6 +19,15 @@ namespace SliceOfPie {
             fileModel = new LocalFileModel();
         }
 
+        public CreateProject(String name, String userMail) {
+            return new Project();
+        }
+
+        public boolean SaveProject(Project p) {
+            return true;
+        }
+
+        
         /// <summary>
         /// Get An IEnumerable of the project associated with the user denoted by userId
         /// (defaults to User.Local as a convenience for the local client)
