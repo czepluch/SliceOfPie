@@ -16,7 +16,7 @@ namespace SliceOfPie {
         }
 
         public Project() {
-            if (AppPath.Length > 0) {
+            if (Directory.Exists(ThisPath)) {
                 string[] folderPaths = Directory.GetDirectories(ThisPath);
                 foreach (string folderName in folderPaths) {
                     Folder folder = new Folder();
