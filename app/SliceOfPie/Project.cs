@@ -11,6 +11,24 @@ namespace SliceOfPie {
             set;
         }
 
+        public Project() {
+            string[] folderPaths = Directory.GetDirectories(ProjectPath);
+            foreach (string folderName in folderPaths) {
+                Folder folder = new Folder();
+                folder.Title = folderName;
+                folder.FolderPath = Path.Combine(ProjectPath, folderName);
+                Folders.Add(folder);
+            }
+
+            string[] docmentPaths = Directory.GetFiles(ProjectPath);
+            foreach (string documentName in docmentPaths) {
+                Document document = new Document();
+                document.Title = documentName;
+                document.DocumentPath = Path.Combine(ProjectPath, documentName);
+                Documents.Add(document);
+            }
+        }
+
         public IEnumerable<Item> ListItems() {
             List<Item> items = new List<Item>();
 
@@ -27,6 +45,10 @@ namespace SliceOfPie {
             if (!Directory.Exists(folderName)) {
                 Directory.CreateDirectory(folderName);
             }
+        }
+
+        public void CreateDocument(string name) {
+
         }
     }
 }

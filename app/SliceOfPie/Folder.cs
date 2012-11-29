@@ -5,6 +5,11 @@ using System.Text;
 
 namespace SliceOfPie {
     public partial class Folder : Item, ItemContainer, ListableItem {
+        public string FolderPath {
+            get;
+            set;
+        }
+
         public IEnumerable<Item> ListItems() {
             List<Item> items = new List<Item>();
 

@@ -5,6 +5,9 @@ using System.Text;
 
 namespace SliceOfPie {
     public partial class Document:Item, ListableItem {
-
+        public string DocumentPath {
+            get;
+            set;
+        }
     }
 }
