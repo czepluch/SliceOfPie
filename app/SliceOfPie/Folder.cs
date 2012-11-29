@@ -16,20 +16,22 @@ namespace SliceOfPie {
         }
 
         public Folder() {
-            string[] folderPaths = Directory.GetDirectories(ThisPath);
-            foreach (string folderName in folderPaths) {
-                Folder folder = new Folder();
-                folder.Title = folderName;
-                folder.ThisPath = Path.Combine(ThisPath, folderName);
-                Folders.Add(folder);
-            }
+            if (Directory.Exists(ThisPath)) {
+                string[] folderPaths = Directory.GetDirectories(ThisPath);
+                foreach (string folderName in folderPaths) {
+                    Folder folder = new Folder();
+                    folder.Title = folderName;
+                    folder.ThisPath = Path.Combine(ThisPath, folderName);
+                    Folders.Add(folder);
+                }
 
-            string[] docmentPaths = Directory.GetFiles(ThisPath);
-            foreach (string documentName in docmentPaths) {
-                Document document = new Document();
-                document.Title = documentName;
-                document.DocumentPath = Path.Combine(ThisPath, documentName);
-                Documents.Add(document);
+                string[] docmentPaths = Directory.GetFiles(ThisPath);
+                foreach (string documentName in docmentPaths) {
+                    Document document = new Document();
+                    document.Title = documentName;
+                    document.ThisPath = Path.Combine(ThisPath, documentName);
+                    Documents.Add(document);
+                }
             }
         }
 
@@ -55,7 +57,7 @@ namespace SliceOfPie {
             }
         }
 
-        public void CreateFolder(string name) {
+        public Folder CreateFolder(string name) {
             string folderPath = Path.Combine(ThisPath, name);
             if (Directory.Exists(folderPath)) {
                 throw new ArgumentException("Folder name is already in use");
@@ -63,10 +65,13 @@ namespace SliceOfPie {
             Directory.CreateDirectory(folderPath);
             Folder folder = new Folder();
             folder.Title = name;
+            folder.ProjectPath = ThisPath;
+            folder.ThisPath = Path.Combine(ThisPath, folderPath);
             Folders.Add(folder);
+            return folder;
         }
 
-        public void CreateDocument(string name) {
+        public Document CreateDocument(string name) {
             string documentPath = Path.Combine(ThisPath, name);
             if (File.Exists(documentPath)) {
                 throw new ArgumentException("Document name is already in use");
@@ -74,7 +79,10 @@ namespace SliceOfPie {
             File.Create(documentPath);
             Document document = new Document();
             document.Title = name;
+            document.FolderPath = ThisPath;
+            document.ThisPath = Path.Combine(ThisPath, documentPath);
             Documents.Add(document);
+            return document;
         }
     }
 }
