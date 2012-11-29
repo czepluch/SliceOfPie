@@ -89,10 +89,10 @@ namespace SliceOfPie {
         /// It exists as a placeholder and testing method untill the model/controller allows local file traversal.
         /// </summary>
         private void RefreshDocumentExplorer() {
-            TreeViewItem myProject = createDocumentExplorerItem(new Project() { title = "My Project" });
-            TreeViewItem work = createDocumentExplorerItem(new Folder() { title = "Work" });
-            TreeViewItem school = createDocumentExplorerItem(new Folder() { title = "School" });
-            TreeViewItem bdsa = createDocumentExplorerItem(new Document() { title = "BDSA_Report" });
+            TreeViewItem myProject = createDocumentExplorerItem(new Project() { Title = "My Project" });
+            TreeViewItem work = createDocumentExplorerItem(new Folder() { Title = "Work" });
+            TreeViewItem school = createDocumentExplorerItem(new Folder() { Title = "School" });
+            TreeViewItem bdsa = createDocumentExplorerItem(new Document() { Title = "BDSA_Report" });
 
             AddProjectToDocExplorer(myProject);
             AddSubItemToDocExplorer(myProject, work);
@@ -100,9 +100,9 @@ namespace SliceOfPie {
             AddSubItemToDocExplorer(school, bdsa);
 
 
-            TreeViewItem otherProject = createDocumentExplorerItem(new Project() { title = "Other Project" });
-            TreeViewItem recipes = createDocumentExplorerItem(new Folder() { title = "Recipes" });
-            TreeViewItem tomatoSoup = createDocumentExplorerItem(new Document() { title = "Tomato_soup" });
+            TreeViewItem otherProject = createDocumentExplorerItem(new Project() { Title = "Other Project" });
+            TreeViewItem recipes = createDocumentExplorerItem(new Folder() { Title = "Recipes" });
+            TreeViewItem tomatoSoup = createDocumentExplorerItem(new Document() { Title = "Tomato_soup" });
 
             AddProjectToDocExplorer(otherProject);
             AddSubItemToDocExplorer(otherProject, recipes);
@@ -165,15 +165,15 @@ namespace SliceOfPie {
             string text;
             if (item is Project) {
                 icon = projectIcon;
-                text = (item as Project).title;
+                text = (item as Project).Title;
             }
             else if (item is Folder) {
                 icon = folderIcon;
-                text = (item as Folder).title;
+                text = (item as Folder).Title;
             }
             else {
                 icon = documentIcon;
-                text = (item as Document).title;
+                text = (item as Document).Title;
             }
             Image image = new Image() { Source = icon, Height = 15, Width = 15, IsHitTestVisible = false }; /* note that IsHitTestVisible=false disables event handling for this element -
                                                                                                              * fallback on the general treeview handling (rightclick for the context menu).
@@ -211,7 +211,7 @@ namespace SliceOfPie {
             } else {
                 TextEditor t = new TextEditor();
                 //I'm currently using Title as a placeholder - Document.content is not implemented yet.
-                t.TextField.Text = "This is the text editor for:\n" + (item as Document).title;
+                t.TextField.Text = "This is the text editor for:\n" + (item as Document).Title;
                 MainContent.Content = t;
                 TopMenu.Content = new DocumentTopMenu();
             }
