@@ -30,7 +30,7 @@ namespace SliceOfPie {
             string[] folders = Directory.GetDirectories(AppPath);
             foreach (string folderName in folders) {
                 Project project = new Project();
-                project.Title = Path.GetDirectoryName(folderName);
+                project.Title = Path.GetFileName(folderName);
                 project.AppPath = AppPath;
                 project.ThisPath = Path.Combine(AppPath, folderName);
                 projects.Add(project);
