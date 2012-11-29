@@ -19,12 +19,16 @@ namespace SliceOfPie {
             fileModel = new LocalFileModel();
         }
 
-        public CreateProject(String name, String userMail) {
+        public Project CreateProject(String name, String userMail) {
             return new Project();
         }
 
-        public boolean SaveProject(Project p) {
+        public Boolean SaveProject(Project p) {
             return true;
+        }
+
+        public Project GetProject (String userMail) {
+            return new Project();
         }
 
         
