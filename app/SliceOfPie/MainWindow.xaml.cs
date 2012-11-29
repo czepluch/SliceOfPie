@@ -95,23 +95,6 @@ namespace SliceOfPie {
             foreach (Project project in controller.GetProjects()) {
                 TreeViewItem myProject = createDocumentExplorerItem(project);
                 AddProjectToDocExplorer(myProject);
-
-                try {
-                    Folder work = project.CreateFolder("Work");
-                    TreeViewItem workItem = createDocumentExplorerItem(work);
-                    AddSubItemToDocExplorer(myProject, workItem);
-
-                    Folder school = project.CreateFolder("School");
-                    TreeViewItem schoolItem = createDocumentExplorerItem(school);
-                    AddSiblingItemToDocExplorer(workItem, schoolItem);
-
-                    Document bdsa = school.CreateDocument("BDSA_Report");
-                    TreeViewItem bdsaItem = createDocumentExplorerItem(bdsa);
-                    AddSubItemToDocExplorer(schoolItem, bdsaItem);
-                }
-                catch (ArgumentException e) {
-                    //
-                }
             }
 
 
@@ -171,8 +154,8 @@ namespace SliceOfPie {
         /// <param name="text">The text to be shown in the item</param>
         /// <param name="item">The type of the item. Can be either "project", "folder", or "document"</param>
         /// <returns></returns>
-        private static TreeViewItem createDocumentExplorerItem(ListableItem item) {
-            TreeViewItem treeViewItem = new TreeViewItem() { Tag = item };
+        private TreeViewItem createDocumentExplorerItem(ListableItem item) {
+            TreeViewItem thisTreeViewItem = new TreeViewItem() { Tag = item };
             //StackPanel for image and text block
             StackPanel sp = new StackPanel() { Orientation = Orientation.Horizontal };
             //Create the image
@@ -191,15 +174,25 @@ namespace SliceOfPie {
                 text = (item as Document).Title;
             }
             Image image = new Image() { Source = icon, Height = 15, Width = 15, IsHitTestVisible = false }; /* note that IsHitTestVisible=false disables event handling for this element -
-                                                                                                             * fallback on the general treeview handling (rightclick for the context menu).
-                                                                                                             */
+                                                                                                             * fallback on the general treeview handling (rightclick for the context menu).                                                                                                */
             sp.Children.Add(image);
             //Create the text block
             TextBlock itemText = new TextBlock() { Text = text, Margin = new Thickness(5, 0, 0, 0), IsHitTestVisible = false };
             sp.Children.Add(itemText);
-            treeViewItem.Header = sp;
+            thisTreeViewItem.Header = sp;
 
-            return treeViewItem;
+            //recursive traversal of structure for Item Containers
+            if (item is ItemContainer) {
+                //First add folders
+                foreach(Folder folder in (item as ItemContainer).GetFolders()) {
+                    AddSubItemToDocExplorer(thisTreeViewItem, createDocumentExplorerItem(folder));
+                }
+                //then documents
+                foreach (Document document in (item as ItemContainer).GetDocuments()) {
+                    AddSubItemToDocExplorer(thisTreeViewItem, createDocumentExplorerItem(document));
+                }
+            }
+            return thisTreeViewItem;
         }
 
         #endregion
@@ -209,7 +202,7 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="item">The item which mainContent will use as a context</param>
         private void GenerateContent(ListableItem item) {
-            if (item is Project || item is Folder) {
+            if (item is ItemContainer) {
                 FolderContentView f = new FolderContentView();
                 for (int i = 0; i < 10; i++) {
                     StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical };
