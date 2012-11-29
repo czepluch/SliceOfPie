@@ -241,6 +241,17 @@ namespace SliceOfPie {
                 GenerateContent(item.Tag as ListableItem);
             }
         }
+
+        private void DocumentExplorer_KeyDown(object sender, KeyEventArgs e) {
+            if (e.Key.Equals(System.Windows.Input.Key.Enter)) {
+                TreeViewItem item = e.Source as TreeViewItem;
+                if (item != null) {
+                    item.IsSelected = true;
+                    item.IsExpanded = !item.IsExpanded;
+                    GenerateContent(item.Tag as ListableItem);
+                }
+            }
+        }
     }
 
 }
