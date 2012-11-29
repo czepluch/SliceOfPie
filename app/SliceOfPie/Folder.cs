@@ -16,20 +16,22 @@ namespace SliceOfPie {
         }
 
         public Folder() {
-            string[] folderPaths = Directory.GetDirectories(ThisPath);
-            foreach (string folderName in folderPaths) {
-                Folder folder = new Folder();
-                folder.Title = folderName;
-                folder.ThisPath = Path.Combine(ThisPath, folderName);
-                Folders.Add(folder);
-            }
+            if (Directory.Exists(ThisPath)) {
+                string[] folderPaths = Directory.GetDirectories(ThisPath);
+                foreach (string folderName in folderPaths) {
+                    Folder folder = new Folder();
+                    folder.Title = folderName;
+                    folder.ThisPath = Path.Combine(ThisPath, folderName);
+                    Folders.Add(folder);
+                }
 
-            string[] docmentPaths = Directory.GetFiles(ThisPath);
-            foreach (string documentName in docmentPaths) {
-                Document document = new Document();
-                document.Title = documentName;
-                document.ThisPath = Path.Combine(ThisPath, documentName);
-                Documents.Add(document);
+                string[] docmentPaths = Directory.GetFiles(ThisPath);
+                foreach (string documentName in docmentPaths) {
+                    Document document = new Document();
+                    document.Title = documentName;
+                    document.ThisPath = Path.Combine(ThisPath, documentName);
+                    Documents.Add(document);
+                }
             }
         }
 
