@@ -21,7 +21,7 @@ namespace SliceOfPie {
             }
 
             foreach (Project p in GetProjects(0)) {
-                Console.WriteLine(p.title);
+                Console.WriteLine(p.Title);
             }
         }
 
@@ -30,7 +30,7 @@ namespace SliceOfPie {
             string[] folders = Directory.GetDirectories(AppPath);
             foreach (string folderName in folders) {
                 Project project = new Project();
-                project.title = folderName;
+                project.Title = folderName;
                 project.ProjectPath = Path.Combine(AppPath, folderName);
                 projects.Add(project);
             }
