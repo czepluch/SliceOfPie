@@ -31,7 +31,8 @@ namespace SliceOfPie {
             foreach (string folderName in folders) {
                 Project project = new Project();
                 project.Title = folderName;
-                project.ProjectPath = Path.Combine(AppPath, folderName);
+                project.AppPath = AppPath;
+                project.ThisPath = Path.Combine(AppPath, folderName);
                 projects.Add(project);
             }
 
