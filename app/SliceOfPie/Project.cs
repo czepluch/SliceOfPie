@@ -30,7 +30,7 @@ namespace SliceOfPie {
                 Document document = new Document();
                 document.Title = documentName;
                 document.FolderPath = ThisPath;
-                document.DocumentPath = Path.Combine(ThisPath, documentName);
+                document.ThisPath = Path.Combine(ThisPath, documentName);
                 Documents.Add(document);
             }
         }
@@ -79,7 +79,7 @@ namespace SliceOfPie {
             Document document = new Document();
             document.Title = name;
             document.FolderPath = ThisPath;
-            document.DocumentPath = Path.Combine(ThisPath, documentPath);
+            document.ThisPath = Path.Combine(ThisPath, documentPath);
             Documents.Add(document);
         }
     }
