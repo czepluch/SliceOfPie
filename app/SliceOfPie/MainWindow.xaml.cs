@@ -96,24 +96,6 @@ namespace SliceOfPie {
                 TreeViewItem myProject = createDocumentExplorerItem(project);
                 AddProjectToDocExplorer(myProject);
             }
-
-
-            //TreeViewItem otherProject = createDocumentExplorerItem(new Project() { Title = "Other Project", ThisPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie") });
-            //TreeViewItem recipes = createDocumentExplorerItem(new Folder() { Title = "Recipes", ThisPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie") });
-            //TreeViewItem tomatoSoup = createDocumentExplorerItem(new Document() { Title = "Tomato_soup" });
-
-            //AddProjectToDocExplorer(otherProject);
-            //AddSubItemToDocExplorer(otherProject, recipes);
-            //AddSubItemToDocExplorer(recipes, tomatoSoup);
-
-            //    //var projects = Controller.getprojects();
-            //    DocumentExplorer.Items.Clear();
-            //    foreach (Project p in projects) {
-
-            //item.Tag = "project";
-            //        TreeViewItem project = new TreeViewItem() { Header=p.title, Tag="project" //Project node
-            //        DocumentExplorer.Items.Add(TreeViewItem);
-            //    }
         }
 
         #region Helper methods for the Document Explorer
@@ -203,18 +185,27 @@ namespace SliceOfPie {
         /// <param name="item">The item which mainContent will use as a context</param>
         private void GenerateContent(ListableItem item) {
             if (item is IItemContainer) {
-                FolderContentView f = new FolderContentView();
-                for (int i = 0; i < 10; i++) {
+                FolderContentView folderContentView = new FolderContentView();
+                foreach(Folder folder in (item as IItemContainer).GetFolders()) {
                     StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical };
-                    Image img = new Image() { Source = folderIcon, Width = 24, Height = 24 };
-                    TextBlock label = new TextBlock() { Text = "Label", MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center };
-                    sp.Children.Add(img);
-                    sp.Children.Add(label);
+                    sp.Children.Add(new Image() { Source = folderIcon, Width = 24, Height = 24 });
+                    sp.Children.Add(new TextBlock() { Text = folder.Title, MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center });
                     ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
                     listViewItem.Content = sp;
-                    f.FolderListView.Items.Add(listViewItem);
+                    listViewItem.Tag = item;
+                    folderContentView.FolderListView.Items.Add(listViewItem);
                 }
-                MainContent.Content = f;
+                foreach (Document document in (item as IItemContainer).GetDocuments()) {
+                    StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical };
+                    sp.Children.Add(new Image() { Source = documentIcon, Width = 24, Height = 24 });
+                    sp.Children.Add(new TextBlock() { Text = document.Title, MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center });
+                    ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
+                    listViewItem.Content = sp;
+                    listViewItem.Tag = item;
+                    folderContentView.FolderListView.Items.Add(listViewItem);
+                } 
+                
+                MainContent.Content = folderContentView;
                 TopMenu.Content = new FolderTopMenu();
             } else {
                 TextEditor t = new TextEditor();
