@@ -61,7 +61,7 @@ namespace SliceOfPie {
 
             //Setup Folder Context Menu for the Document Explorer
             folderContextMenu = new ContextMenu();
-            MenuItem folderMenuItem1 = new MenuItem() { Header = "Open project folder" };
+            MenuItem folderMenuItem1 = new MenuItem() { Header = "Open folder" };
             folderMenuItem1.Click += new RoutedEventHandler(generateContentClickEvent);
             folderContextMenu.Items.Add(folderMenuItem1);
             folderContextMenu.Items.Add(new MenuItem() { Header = "Add folder" });

@@ -59,13 +59,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Document.cs" />
-    <Compile Include="DocumentTopMenu.xaml.cs">
-      <DependentUpon>DocumentTopMenu.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Folder.cs" />
-    <Compile Include="FolderTopMenu.xaml.cs">
-      <DependentUpon>FolderTopMenu.xaml</DependentUpon>
-    </Compile>
     <Compile Include="IItem.cs" />
     <Compile Include="IItemContainer.cs" />
     <Compile Include="ListableItem.cs" />
@@ -85,14 +79,6 @@
     <Compile Include="WebFileModel.cs" />
     <Compile Include="LocalFileModel.cs" />
     <Compile Include="UserModel.cs" />
-    <Page Include="DocumentTopMenu.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="FolderTopMenu.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
