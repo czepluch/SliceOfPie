@@ -13,12 +13,8 @@ namespace SliceOfPie {
             }
         }
 
-        public override void SaveDocument(Document doc) {
+        public override void SaveDocument(Document document) {
             
-        }
-
-        public override Document LoadDocument(int docId) {
-            return new Document();
         }
     }
 }

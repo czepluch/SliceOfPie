@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace SliceOfPie {
     public class LocalFileModel : IFileModel {
@@ -70,7 +71,8 @@ namespace SliceOfPie {
             if (File.Exists(documentPath)) {
                 throw new ArgumentException("File name is already in use (" + documentPath + ")");
             }
-            File.Create(documentPath);
+            FileStream fileStream = File.Create(documentPath);
+            fileStream.Close();
             Document document = new Document();
             document.Title = title;
             document.Parent = parent;
@@ -79,20 +81,23 @@ namespace SliceOfPie {
         }
 
         public void RenameDocument(Document document, string title) {
-            string documentPath = Path.Combine(document.Parent.GetPath(), title);
-            if (File.Exists(documentPath)) {
-                throw new ArgumentException("File name is already in use(" + documentPath + ")");
+            if (File.Exists(document.GetPath())) {
+                throw new ArgumentException("File name is already in use(" + document.GetPath() + ")");
             }
-            File.Move(Path.Combine(document.Parent.GetPath(), document.Title), documentPath);
+            File.Move(Path.Combine(document.Parent.GetPath(), document.Title), document.GetPath());
             document.Title = title;
         }
 
-        public override void SaveDocument(Document doc) {
-            
-        }
-
-        public override Document LoadDocument(int docId) {
-            return new Document();
+        public override void SaveDocument(Document document) {
+            if (!File.Exists(document.GetPath())) {
+                throw new ArgumentException("File does not exist (" + document.GetPath() + ")");
+            }
+            FileStream fileStream = new FileStream(document.GetPath(), FileMode.Open, FileAccess.Write);
+            StreamWriter streamWriter = new StreamWriter(fileStream);
+            streamWriter.Write(document.CurrentRevision);
+            streamWriter.Flush();
+            streamWriter.Close();
+            fileStream.Close();
         }
 
         public void CreateStructure() {
