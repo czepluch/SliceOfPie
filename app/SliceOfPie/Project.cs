@@ -57,7 +57,7 @@ namespace SliceOfPie {
             }
         }
 
-        public void CreateFolder(string name) {
+        public Folder CreateFolder(string name) {
             string folderPath = Path.Combine(ThisPath, name);
             if (Directory.Exists(folderPath)) {
                 throw new ArgumentException("Folder name is already in use");
@@ -68,9 +68,10 @@ namespace SliceOfPie {
             folder.ProjectPath = ThisPath;
             folder.ThisPath = Path.Combine(ThisPath, folderPath);
             Folders.Add(folder);
+            return folder;
         }
 
-        public void CreateDocument(string name) {
+        public Document CreateDocument(string name) {
             string documentPath = Path.Combine(ThisPath, name);
             if (File.Exists(documentPath)) {
                 throw new ArgumentException("Document name is already in use");
@@ -81,6 +82,7 @@ namespace SliceOfPie {
             document.FolderPath = ThisPath;
             document.ThisPath = Path.Combine(ThisPath, documentPath);
             Documents.Add(document);
+            return document;
         }
     }
 }
