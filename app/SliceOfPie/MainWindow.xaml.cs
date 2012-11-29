@@ -19,8 +19,11 @@ namespace SliceOfPie {
     public partial class MainWindow : Window {
         private static ContextMenu projectContextMenu, folderContextMenu, documentContextMenu;
         private static BitmapImage projectIcon, folderIcon, documentIcon;
+        private static Controller controller;
 
         public MainWindow() {
+            controller = Controller.Instance;
+
             InitializeComponent();
             InitializeDocumentExplorer();
             RefreshDocumentExplorer();
@@ -89,24 +92,36 @@ namespace SliceOfPie {
         /// It exists as a placeholder and testing method untill the model/controller allows local file traversal.
         /// </summary>
         private void RefreshDocumentExplorer() {
-            TreeViewItem myProject = createDocumentExplorerItem(new Project() { Title = "My Project" });
-            TreeViewItem work = createDocumentExplorerItem(new Folder() { Title = "Work" });
-            TreeViewItem school = createDocumentExplorerItem(new Folder() { Title = "School" });
-            TreeViewItem bdsa = createDocumentExplorerItem(new Document() { Title = "BDSA_Report" });
+            foreach (Project project in controller.GetProjects()) {
+                TreeViewItem myProject = createDocumentExplorerItem(project);
+                AddProjectToDocExplorer(myProject);
 
-            AddProjectToDocExplorer(myProject);
-            AddSubItemToDocExplorer(myProject, work);
-            AddSiblingItemToDocExplorer(work, school);
-            AddSubItemToDocExplorer(school, bdsa);
+                try {
+                    Folder work = project.CreateFolder("Work");
+                    TreeViewItem workItem = createDocumentExplorerItem(work);
+                    AddSubItemToDocExplorer(myProject, workItem);
+
+                    Folder school = project.CreateFolder("School");
+                    TreeViewItem schoolItem = createDocumentExplorerItem(school);
+                    AddSiblingItemToDocExplorer(workItem, schoolItem);
+
+                    Document bdsa = school.CreateDocument("BDSA_Report");
+                    TreeViewItem bdsaItem = createDocumentExplorerItem(bdsa);
+                    AddSubItemToDocExplorer(schoolItem, bdsaItem);
+                }
+                catch (ArgumentException e) {
+                    //
+                }
+            }
 
 
-            TreeViewItem otherProject = createDocumentExplorerItem(new Project() { Title = "Other Project" });
-            TreeViewItem recipes = createDocumentExplorerItem(new Folder() { Title = "Recipes" });
-            TreeViewItem tomatoSoup = createDocumentExplorerItem(new Document() { Title = "Tomato_soup" });
+            //TreeViewItem otherProject = createDocumentExplorerItem(new Project() { Title = "Other Project", ThisPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie") });
+            //TreeViewItem recipes = createDocumentExplorerItem(new Folder() { Title = "Recipes", ThisPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie") });
+            //TreeViewItem tomatoSoup = createDocumentExplorerItem(new Document() { Title = "Tomato_soup" });
 
-            AddProjectToDocExplorer(otherProject);
-            AddSubItemToDocExplorer(otherProject, recipes);
-            AddSubItemToDocExplorer(recipes, tomatoSoup);
+            //AddProjectToDocExplorer(otherProject);
+            //AddSubItemToDocExplorer(otherProject, recipes);
+            //AddSubItemToDocExplorer(recipes, tomatoSoup);
 
             //    //var projects = Controller.getprojects();
             //    DocumentExplorer.Items.Clear();
