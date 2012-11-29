@@ -31,6 +31,10 @@ namespace SliceOfPie {
             return new Project();
         }
 
+        public void SaveDocument(Document document) {
+            fileModel.SaveDocument(document);
+        }
+
         
         /// <summary>
         /// Get An IEnumerable of the project associated with the user denoted by userId
