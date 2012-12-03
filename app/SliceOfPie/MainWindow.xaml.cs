@@ -38,19 +38,34 @@ namespace SliceOfPie {
             //Setup Project Context Menu for the Document Explorer
             projectContextMenu = new ContextMenu();
             projectContextMenu.Items.Add(new MenuItem() { Header = "Share project" });
+            
             MenuItem projectMenuItem1 = new MenuItem() { Header = "Open project folder" };
             projectMenuItem1.Click += new RoutedEventHandler(generateContentContextMenu_Click);
             projectContextMenu.Items.Add(projectMenuItem1);
-            projectContextMenu.Items.Add(new MenuItem() { Header = "Add folder" });
-            projectContextMenu.Items.Add(new MenuItem() { Header = "Add document" });
+
+            MenuItem projectMenuItem2 = new MenuItem() { Header = "Add folder" };
+            projectMenuItem1.Click += new RoutedEventHandler(openCreateFolderWindow);
+            projectContextMenu.Items.Add(projectMenuItem2);
+
+
+            MenuItem projectMenuItem3 = new MenuItem() { Header = "Add document" };
+            projectMenuItem3.Click += new RoutedEventHandler(openCreateDocumentWindow);
+            projectContextMenu.Items.Add(projectMenuItem3);
 
             //Setup Folder Context Menu for the Document Explorer
             folderContextMenu = new ContextMenu();
+            
             MenuItem folderMenuItem1 = new MenuItem() { Header = "Open folder" };
             folderMenuItem1.Click += new RoutedEventHandler(generateContentContextMenu_Click);
             folderContextMenu.Items.Add(folderMenuItem1);
-            folderContextMenu.Items.Add(new MenuItem() { Header = "Add folder" });
-            folderContextMenu.Items.Add(new MenuItem() { Header = "Add document" });
+            
+            MenuItem folderMenuItem2 = new MenuItem() { Header = "Add folder" };
+            folderMenuItem2.Click += new RoutedEventHandler(openCreateFolderWindow);
+            folderContextMenu.Items.Add(folderMenuItem2);
+
+            MenuItem folderMenuItem3 = new MenuItem() { Header = "Add document" };
+            folderMenuItem3.Click += new RoutedEventHandler(openCreateDocumentWindow);
+            folderContextMenu.Items.Add(folderMenuItem3);
 
             //Setup Document Context Menu for the Document Explorer
             documentContextMenu = new ContextMenu();
@@ -92,6 +107,7 @@ namespace SliceOfPie {
         /// It exists as a placeholder and testing method untill the model/controller allows local file traversal.
         /// </summary>
         private void RefreshDocumentExplorer() {
+            DocumentExplorer.Items.Clear();
             foreach (Project project in controller.GetProjects()) {
                 TreeViewItem myProject = createDocumentExplorerItem(project);
                 AddProjectToDocExplorer(myProject);
@@ -186,32 +202,24 @@ namespace SliceOfPie {
         private void GenerateContent(ListableItem item) {
             if (item is IItemContainer) {
                 FolderContentView folderContentView = new FolderContentView(item as IItemContainer, new MouseButtonEventHandler(FolderContentView_DoubleClick));
+                folderContentView.setCreateFolderHandler(new RoutedEventHandler(openCreateFolderWindow));
+                folderContentView.setCreateDocumentHandler(new RoutedEventHandler(openCreateDocumentWindow));
                 MainContent.Content = folderContentView;
             } else {
                 MainContent.Content = new TextEditor(item as Document);
             }
         }
 
-        /// <summary>
-        /// This method is sent as a mouseeventhandler to the FolderContentView class.
-        /// Adds custom behaviour to that class.
-        /// </summary>
-        /// <param name="sender">The sender of the event</param>
-        /// <param name="e">The event arguments</param>
-        private void FolderContentView_DoubleClick(object sender, MouseButtonEventArgs e) {
-            ListableItem itemClicked = (sender as ListViewItem).Tag as ListableItem;
-            //Find the corresponding item in the document explorer and fold out tree, so it is visible
-            TreeViewItem treeViewParent = DocumentExplorer.SelectedItem as TreeViewItem;
-            if (treeViewParent.IsExpanded == false) { //Expand parentfolder of the clicked item if it's not expanded
-                treeViewParent.IsExpanded = true;
-            }
-            foreach(TreeViewItem item in treeViewParent.Items) {
-                if (itemClicked.Equals(item.Tag)) {
-                    item.IsSelected = true;
-                    item.IsExpanded = true;
-                }
-            }
-            GenerateContent(itemClicked);
+        #region EventHandlers
+
+        private void openCreateFolderWindow(object sender, RoutedEventArgs e) {
+            //note that the textbox is cleared when the popups were last closed
+            CreateFolder.IsOpen = true;
+        }
+
+        private void openCreateDocumentWindow(object sender, RoutedEventArgs e) {
+            //note that the textbox is cleared when the popups were last closed
+            CreateDocument.IsOpen = true;
         }
 
         /// <summary>
@@ -252,9 +260,70 @@ namespace SliceOfPie {
             }
         }
 
-        private void DocumentExplorer_MouseDown(object sender, MouseButtonEventArgs e) {
-
+        private void CreateProjectCancelButton_Click(object sender, RoutedEventArgs e) {
+            CreateProject.IsOpen = false;
+            CreateProjectTextBox.Clear();
         }
+
+        private void CreateProjectCreateButton_Click(object sender, RoutedEventArgs e) {
+            //Call to controller creates project
+            CreateProject.IsOpen = false;
+            CreateProjectTextBox.Clear();
+            RefreshDocumentExplorer();
+        }
+
+        private void CreateFolderCancelButton_Click(object sender, RoutedEventArgs e) {
+            CreateFolder.IsOpen = false;
+            CreateFolderTextBox.Clear();
+        }
+
+        private void CreateFolderCreateButton_Click(object sender, RoutedEventArgs e) {
+            //Call to controller creates folder. Get parent from DocumentExplorer
+            CreateFolder.IsOpen = false;
+            CreateFolderTextBox.Clear();
+            RefreshDocumentExplorer();
+        }
+
+        private void CreateDocumentCancelButton_Click(object sender, RoutedEventArgs e) {
+            CreateDocument.IsOpen = false;
+            CreateDocumentTextBox.Clear();
+        }
+
+        private void CreateDocumentCreateButton_Click(object sender, RoutedEventArgs e) {
+            //Call to controller creates document. Get parent from DocumentExplorer
+            CreateDocument.IsOpen = false;
+            CreateDocumentTextBox.Clear();
+            RefreshDocumentExplorer();
+        }
+
+        private void CreateProjectButton_Click(object sender, RoutedEventArgs e) {
+            CreateProject.IsOpen = true;
+        }
+
+
+        /// <summary>
+        /// This method is sent as a mouseeventhandler to the FolderContentView class.
+        /// Adds custom behaviour to that class.
+        /// </summary>
+        /// <param name="sender">The sender of the event</param>
+        /// <param name="e">The event arguments</param>
+        private void FolderContentView_DoubleClick(object sender, MouseButtonEventArgs e) {
+            ListableItem itemClicked = (sender as ListViewItem).Tag as ListableItem;
+            //Find the corresponding item in the document explorer and fold out tree, so it is visible
+            TreeViewItem treeViewParent = DocumentExplorer.SelectedItem as TreeViewItem;
+            if (treeViewParent.IsExpanded == false) { //Expand parentfolder of the clicked item if it's not expanded
+                treeViewParent.IsExpanded = true;
+            }
+            foreach (TreeViewItem item in treeViewParent.Items) {
+                if (itemClicked.Equals(item.Tag)) {
+                    item.IsSelected = true;
+                    item.IsExpanded = true;
+                }
+            }
+            GenerateContent(itemClicked);
+        }
+
+        #endregion
     }
 
 }

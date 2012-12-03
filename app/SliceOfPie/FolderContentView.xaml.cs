@@ -48,5 +48,13 @@ namespace SliceOfPie {
                 FolderListView.Items.Add(listViewItem);
             } 
         }
+
+        public void setCreateDocumentHandler(RoutedEventHandler handler) {
+            CreateDocumentButton.Click+=new RoutedEventHandler(handler);
+        }
+
+        public void setCreateFolderHandler(RoutedEventHandler handler) {
+            CreateFolderButton.Click += new RoutedEventHandler(handler);
+        }
     }
 }
