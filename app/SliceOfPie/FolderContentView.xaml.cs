@@ -14,7 +14,8 @@ using System.Windows.Shapes;
 
 namespace SliceOfPie {
     /// <summary>
-    /// Interaction logic for FolderContentView.xaml
+    /// Interaction logic for FolderContentView.xaml.
+    /// This is a template/encapsulating class. Event handling need to be set by the initatiator.
     /// </summary>
     public partial class FolderContentView : UserControl {
 
@@ -49,10 +50,18 @@ namespace SliceOfPie {
             } 
         }
 
+        /// <summary>
+        /// This methods adds an event handler to the Create Document Button
+        /// </summary>
+        /// <param name="handler">The event handler to add</param>
         public void setCreateDocumentHandler(RoutedEventHandler handler) {
             CreateDocumentButton.Click+=new RoutedEventHandler(handler);
         }
 
+        /// <summary>
+        /// This methods adds an event handler to the Create Folder Button
+        /// </summary>
+        /// <param name="handler">The event handler to add</param>
         public void setCreateFolderHandler(RoutedEventHandler handler) {
             CreateFolderButton.Click += new RoutedEventHandler(handler);
         }

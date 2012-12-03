@@ -44,8 +44,8 @@
         <Popup Name="ShareProject" Height="200" Width="500" Placement="Center" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
             <DockPanel Background="#FF949494">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-                    <Button Padding="5" Margin="5,2,5,2">Share Project</Button>
-                    <Button Padding="5" Margin="5,2,5,2">Cancel</Button>
+                    <Button Padding="5" Margin="5,2,5,2" Click="ShareProjectShareButton_Click">Share Project</Button>
+                    <Button Padding="5" Margin="5,2,5,2" Click="ShareProjectCancelButton_Click">Cancel</Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label>List emails to invite</Label>
@@ -56,7 +56,7 @@
 
         <DockPanel LastChildFill="True">
             <DockPanel DockPanel.Dock="Left">
-                <Button Height="70" DockPanel.Dock="Bottom" Click="CreateProjectButton_Click">Create new project</Button>
+                <Button Height="70" DockPanel.Dock="Bottom" Click="openCreateProjectWindow">Create new project</Button>
                 <ScrollViewer  Width="170" Height="auto" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="scrollViewer1">
                     <TreeView Name="DocumentExplorer" FontSize="13" FontWeight="DemiBold" MouseRightButtonDown="DocumentExplorer_MouseRightButtonDown" MouseDoubleClick="DocumentExplorer_MouseDoubleClick" KeyDown="DocumentExplorer_KeyDown" />
                 </ScrollViewer>

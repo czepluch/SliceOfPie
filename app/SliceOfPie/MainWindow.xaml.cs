@@ -37,41 +37,46 @@ namespace SliceOfPie {
         private void InitializeDocumentExplorer() {
             //Setup Project Context Menu for the Document Explorer
             projectContextMenu = new ContextMenu();
-            projectContextMenu.Items.Add(new MenuItem() { Header = "Share project" });
-            
-            MenuItem projectMenuItem1 = new MenuItem() { Header = "Open project folder" };
-            projectMenuItem1.Click += new RoutedEventHandler(generateContentContextMenu_Click);
-            projectContextMenu.Items.Add(projectMenuItem1);
-
-            MenuItem projectMenuItem2 = new MenuItem() { Header = "Add folder" };
-            projectMenuItem1.Click += new RoutedEventHandler(openCreateFolderWindow);
-            projectContextMenu.Items.Add(projectMenuItem2);
-
-
-            MenuItem projectMenuItem3 = new MenuItem() { Header = "Add document" };
-            projectMenuItem3.Click += new RoutedEventHandler(openCreateDocumentWindow);
-            projectContextMenu.Items.Add(projectMenuItem3);
-
-            //Setup Folder Context Menu for the Document Explorer
             folderContextMenu = new ContextMenu();
-            
-            MenuItem folderMenuItem1 = new MenuItem() { Header = "Open folder" };
-            folderMenuItem1.Click += new RoutedEventHandler(generateContentContextMenu_Click);
-            folderContextMenu.Items.Add(folderMenuItem1);
-            
-            MenuItem folderMenuItem2 = new MenuItem() { Header = "Add folder" };
-            folderMenuItem2.Click += new RoutedEventHandler(openCreateFolderWindow);
-            folderContextMenu.Items.Add(folderMenuItem2);
-
-            MenuItem folderMenuItem3 = new MenuItem() { Header = "Add document" };
-            folderMenuItem3.Click += new RoutedEventHandler(openCreateDocumentWindow);
-            folderContextMenu.Items.Add(folderMenuItem3);
-
-            //Setup Document Context Menu for the Document Explorer
             documentContextMenu = new ContextMenu();
-            MenuItem documentMenuItem1 = new MenuItem() { Header = "Edit document" };
-            documentMenuItem1.Click += new RoutedEventHandler(generateContentContextMenu_Click);
-            documentContextMenu.Items.Add(documentMenuItem1);
+
+            //create the project context menu
+            MenuItem shareProjectProjectContext = new MenuItem() { Header = "Share project" };
+            shareProjectProjectContext.Click += new RoutedEventHandler(openShareProjectWindow);
+
+            MenuItem openProjectFolderProjectContext = new MenuItem() { Header = "Open project folder" };
+            openProjectFolderProjectContext.Click += new RoutedEventHandler(generateContentContextMenu_Click);
+
+            MenuItem addFolderProjectContext = new MenuItem() { Header = "Add folder" };
+            addFolderProjectContext.Click += new RoutedEventHandler(openCreateFolderWindow);
+
+            MenuItem addDocumentProjectContext = new MenuItem() { Header = "Add document" };
+            addDocumentProjectContext.Click += new RoutedEventHandler(openCreateDocumentWindow);
+
+            projectContextMenu.Items.Add(shareProjectProjectContext);
+            projectContextMenu.Items.Add(openProjectFolderProjectContext);
+            projectContextMenu.Items.Add(addFolderProjectContext);
+            projectContextMenu.Items.Add(addDocumentProjectContext);
+
+            //create the folder context menu
+            MenuItem openFolderFolderContext = new MenuItem() { Header = "Open folder" };
+            openFolderFolderContext.Click += new RoutedEventHandler(generateContentContextMenu_Click);
+
+            MenuItem addFolderFolderContext = new MenuItem() { Header = "Add folder" };
+            addFolderFolderContext.Click += new RoutedEventHandler(openCreateFolderWindow);
+
+            MenuItem addDocumentFolderContext = new MenuItem() { Header = "Add document" };
+            addDocumentFolderContext.Click += new RoutedEventHandler(openCreateDocumentWindow);
+
+            folderContextMenu.Items.Add(openFolderFolderContext);
+            folderContextMenu.Items.Add(addFolderFolderContext);
+            folderContextMenu.Items.Add(addDocumentFolderContext);
+
+            //create the document context men
+            MenuItem editDocumentDocumentContext = new MenuItem() { Header = "Edit document" };
+            editDocumentDocumentContext.Click += new RoutedEventHandler(generateContentContextMenu_Click);
+
+            documentContextMenu.Items.Add(editDocumentDocumentContext);  
         }
 
         /// <summary>
@@ -212,11 +217,40 @@ namespace SliceOfPie {
 
         #region EventHandlers
 
+        /// <summary>
+        /// This event handler opens the CreateProject pop-up window
+        /// </summary>
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">The event arguments</param>
+        private void openCreateProjectWindow(object sender, RoutedEventArgs e) {
+            CreateProject.IsOpen = true;
+        }
+
+        /// <summary>
+        /// This event handler opens the ShareProject pop-up window
+        /// </summary>
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">The event arguments</param>
+        private void openShareProjectWindow(object sender, RoutedEventArgs e) {
+            //note that the textbox is cleared when the popups were last closed
+            ShareProject.IsOpen = true;
+        }
+
+        /// <summary>
+        /// This event handler opens the CreateFolder pop-up window
+        /// </summary>
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">The event arguments</param>
         private void openCreateFolderWindow(object sender, RoutedEventArgs e) {
             //note that the textbox is cleared when the popups were last closed
             CreateFolder.IsOpen = true;
         }
 
+        /// <summary>
+        /// This event handler opens the CreateDocument pop-up window
+        /// </summary>
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">The event arguments</param>
         private void openCreateDocumentWindow(object sender, RoutedEventArgs e) {
             //note that the textbox is cleared when the popups were last closed
             CreateDocument.IsOpen = true;
@@ -249,6 +283,11 @@ namespace SliceOfPie {
             }
         }
 
+        /// <summary>
+        /// This is the event handler for key events in the Document Explorer
+        /// </summary>
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">The event arguments</param>
         private void DocumentExplorer_KeyDown(object sender, KeyEventArgs e) {
             if (e.Key.Equals(System.Windows.Input.Key.Enter)) {
                 TreeViewItem item = e.Source as TreeViewItem;
@@ -260,11 +299,21 @@ namespace SliceOfPie {
             }
         }
 
+        /// <summary>
+        /// This is the click handler for the Cancel button in the CreateProject pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">The event arguments</param>
         private void CreateProjectCancelButton_Click(object sender, RoutedEventArgs e) {
             CreateProject.IsOpen = false;
             CreateProjectTextBox.Clear();
         }
 
+        /// <summary>
+        /// This is the click handler for the Create button in the CreateProject pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">The event arguments</param>
         private void CreateProjectCreateButton_Click(object sender, RoutedEventArgs e) {
             //Call to controller creates project
             CreateProject.IsOpen = false;
@@ -272,11 +321,21 @@ namespace SliceOfPie {
             RefreshDocumentExplorer();
         }
 
+        /// <summary>
+        /// This is the click handler for the Cancel button in the CreateFolder pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">The event arguments</param>
         private void CreateFolderCancelButton_Click(object sender, RoutedEventArgs e) {
             CreateFolder.IsOpen = false;
             CreateFolderTextBox.Clear();
         }
 
+        /// <summary>
+        /// This is the click handler for the Create button in the CreateFolder pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">The event arguments</param>
         private void CreateFolderCreateButton_Click(object sender, RoutedEventArgs e) {
             //Call to controller creates folder. Get parent from DocumentExplorer
             CreateFolder.IsOpen = false;
@@ -284,11 +343,21 @@ namespace SliceOfPie {
             RefreshDocumentExplorer();
         }
 
+        /// <summary>
+        /// This is the click handler for the Cancel button in the CreateDocument pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">The event arguments</param>
         private void CreateDocumentCancelButton_Click(object sender, RoutedEventArgs e) {
             CreateDocument.IsOpen = false;
             CreateDocumentTextBox.Clear();
         }
 
+        /// <summary>
+        /// This is the click handler for the Create button in the CreateDocument pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">The event arguments</param>
         private void CreateDocumentCreateButton_Click(object sender, RoutedEventArgs e) {
             //Call to controller creates document. Get parent from DocumentExplorer
             CreateDocument.IsOpen = false;
@@ -296,8 +365,26 @@ namespace SliceOfPie {
             RefreshDocumentExplorer();
         }
 
-        private void CreateProjectButton_Click(object sender, RoutedEventArgs e) {
-            CreateProject.IsOpen = true;
+        /// <summary>
+        /// This is the click handler for the Cancel button in the ShareProject pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">The event arguments</param>
+        private void ShareProjectCancelButton_Click(object sender, RoutedEventArgs e) {
+            ShareProject.IsOpen = false;
+            ShareProjectTextBox.Clear();
+        }
+
+        /// <summary>
+        /// This is the click handler for the Share button in the ShareProject pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">The event arguments</param>
+        private void ShareProjectShareButton_Click(object sender, RoutedEventArgs e) {
+            //Call to controller shares the project. Awaiting controller method before implementation
+            ShareProject.IsOpen = false;
+            ShareProjectTextBox.Clear();
+            RefreshDocumentExplorer();
         }
 
 
