@@ -11,41 +11,32 @@ namespace SliceOfPie {
         private static Document Merge(String[] curArr, String[] oldArr) {
             int curLast = curArr.Length - 1;
             int oldLast = oldArr.Length - 1;
-            int m = 0;
 
             int maxLen = curArr.Length > oldArr.Length ? curArr.Length : oldArr.Length;
             String[] merged = new String[maxLen];
-            int o = 0, n = 0;
+            int o = 0, n = 0, m = 0;
 
             //actual algorithm, 'steps' are according to the describtion from the assignment https://docs.google.com/viewer?url=https%3A%2F%2Fblog.itu.dk%2FBDSA-E2012%2Ffiles%2F2012%2F11%2Fslice-of-pie.pdf
-            while (o < oldArr.Length && n < curArr.Length) {
-                //true if the merge 'skipped ahead' or appended one array after the other in merged
-                //this boolean serves ony to lessenthe degree of nested if - else if - else if statements 
-                Boolean jumped = false;
+            while (o <= oldLast || n <= curLast) {
+                Console.WriteLine("step");
                 //Step 4
-                if (o == oldLast) {
+                if (o == oldLast+1 && n <= curLast) {
+                    Console.WriteLine("step 4");
                     //copy the last [length of curArr] - n lines from curArr of merged
-                    Array.Copy(curArr, n, merged, o, curArr.Length - n);
-                    n = oldLast;
-                    jumped = true;
-                }
-
-                //step 5
-                if (n == curLast) {
-                    o = oldLast;
-                    jumped = true;
-                }
-
-                //step 6
-                if (!jumped && curArr[curLast].Equals(oldArr[oldLast])) {
-                    merged[oldLast] = oldArr[oldLast];
+                    Array.Copy(curArr, n, merged, o, curLast - n);
+                    n = curLast+1;
+                } else if (n == curLast+1) { //step 5
+                    Console.WriteLine("step 5");
+                    o = oldLast+1;
+                } else if (curArr[n].Equals(oldArr[o])) { //step 6
+                    Console.WriteLine("step 6");
+                    merged[m++] = oldArr[o++];
                     ++n;
-                    ++o;
-                }
-                else if (!jumped) { //step 7
+                } else if (!curArr[n].Equals(oldArr[o])) { //step 7
+                    Console.WriteLine("step 7");
                     int t = -1;
                     //step 7.a
-                    for (int i = n; i < curLast; i++) {
+                    for (int i = n; i <= curLast; i++) {
                         if (curArr[i].Equals(oldArr[o])) {
                             t = i;
                             break;
@@ -53,20 +44,24 @@ namespace SliceOfPie {
                     }
                     //step 7.b + 7.c
                     if (t == -1) {
+                        Console.WriteLine("step 7.b");
                         ++o;
-                    }
-                    else {
+                    } else {
+                        Console.WriteLine("step 7.c");
                         Array.Copy(curArr, n, merged, n, t - n);
                         n = t + 1;
                     }
                 }
+                PrintArray(merged);
             }
-
-            Document ret = new Document { CurrentRevision = merged.ToString() };
+            Document ret = new Document();
+            foreach (var s in merged) {
+                ret.CurrentRevision += s + "\n";
+            }
             return ret;
         }
 
-        public static void TestRun() {
+        public static void Main(String[] args) {
             Document o = new Document {
                 CurrentRevision = @"DRACULA 
 
@@ -111,10 +106,21 @@ and depth, took us among the traditions of Turkish rule. ";
 
             String[] arrC = c.CurrentRevision.Split('\n');
             String[] arrO = o.CurrentRevision.Split('\n');
+            //PrintArray(arrC);
+            //PrintArray(arrO);
+
             Document merged = Merger.Merge(arrC, arrO);
             String[] mergedArr = merged.CurrentRevision.Split('\n');
-            for (int i = 0; i < mergedArr.Length; i++) {
-                Console.WriteLine("[{0}] {1}", i, mergedArr[i]);
+            Console.WriteLine("Merge result:");
+            PrintArray(mergedArr);
+            
+            Console.WriteLine("done");
+            Console.ReadLine();
+        }
+
+        private static void PrintArray(String[] arr) {
+            for (int i = 0; i < arr.Length; i++) {
+                Console.WriteLine("[{0}] {1}", i, arr[i]);
             }
         }
     }
