@@ -51,7 +51,7 @@ namespace SliceOfPie {
         }
 
         public void RemoveDocument(Document d) {
-            //lawl
+            fileModel.RemoveDocument(d);
         }
 
         #endregion
@@ -67,7 +67,7 @@ namespace SliceOfPie {
         }
 
         public void RemoveFolder(Folder f) {
-            //naw
+            fileModel.RemoveFolder(f);
         }
 
         #endregion
