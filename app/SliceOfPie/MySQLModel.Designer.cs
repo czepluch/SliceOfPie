@@ -353,6 +353,30 @@ namespace SliceOfPie
         private global::System.String _Title;
         partial void OnTitleChanging(global::System.String value);
         partial void OnTitleChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String CurrentRevision
+        {
+            get
+            {
+                return _CurrentRevision;
+            }
+            set
+            {
+                OnCurrentRevisionChanging(value);
+                ReportPropertyChanging("CurrentRevision");
+                _CurrentRevision = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("CurrentRevision");
+                OnCurrentRevisionChanged();
+            }
+        }
+        private global::System.String _CurrentRevision;
+        partial void OnCurrentRevisionChanging(global::System.String value);
+        partial void OnCurrentRevisionChanged();
 
         #endregion
     
