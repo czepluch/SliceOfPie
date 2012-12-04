@@ -53,12 +53,16 @@ namespace SliceOfPie {
             project.Title = title;
         }
 
+        public void RemoveProject(Project project) {
+
+        }
+
         /// <summary>
         /// Lazily return all projects for a user.
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public override IEnumerable<Project> GetProjects(int userId) {
+        public override IEnumerable<Project> GetProjects(string userMail) {
             foreach (Project project in Projects) {
                 yield return project;
             }
@@ -98,6 +102,10 @@ namespace SliceOfPie {
             }
             Directory.Move(folder.GetPath(), folderPath);
             folder.Title = title;
+        }
+
+        public void RemoveFolder(Folder folder) {
+
         }
 
         /// <summary>
@@ -151,6 +159,10 @@ namespace SliceOfPie {
             streamWriter.Flush();
             streamWriter.Close();
             fileStream.Close();
+        }
+
+        public void RemoveDocument(Document document) {
+
         }
 
         /// <summary>
