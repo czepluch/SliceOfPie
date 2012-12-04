@@ -22,6 +22,7 @@ namespace SliceOfPie {
         private static Controller controller;
 
         private static ListableItem currentlyActiveItem;
+        private static TreeViewItem currentlyActiveDocumentExplorerItem;
         private static Popup currentlyActivePopUp;
 
         public MainWindow() {
@@ -496,18 +497,9 @@ namespace SliceOfPie {
         private void FolderContentView_DoubleClick(object sender, MouseButtonEventArgs e) {
             ListableItem itemClicked = (sender as ListViewItem).Tag as ListableItem;
             //Find the corresponding item in the document explorer and fold out tree, so it is visible
-            TreeViewItem treeViewParent = DocumentExplorer.SelectedItem as TreeViewItem;
-            if (treeViewParent.IsExpanded == false) { //Expand parentfolder of the clicked item if it's not expanded
-                treeViewParent.IsExpanded = true;
+            foreach (TreeViewItem project in DocumentExplorer.Items) {
+                ExpandToItem(project, itemClicked);
             }
-            foreach (TreeViewItem item in treeViewParent.Items) {
-                if (itemClicked.Equals(item.Tag)) {
-                    currentlyActiveItem = item.Tag as ListableItem;
-                    item.IsSelected = true;
-                    item.IsExpanded = true;
-                }
-            }
-            SetMainContentFromItem(itemClicked);
         }
 
         /// <summary>
