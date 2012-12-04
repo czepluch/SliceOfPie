@@ -13,8 +13,32 @@ namespace SliceOfPie {
             }
         }
 
+        public override Project AddProject(string title, bool db) {
+            throw new NotImplementedException();
+        }
+
+        public override void RemoveProject(Project project) {
+            throw new NotImplementedException();
+        }
+
+        public override Folder AddFolder(IItemContainer parent, string title, bool db) {
+            throw new NotImplementedException();
+        }
+
+        public override void RemoveFolder(Folder folder) {
+            throw new NotImplementedException();
+        }
+
+        public override Document AddDocument(IItemContainer parent, string title, bool db) {
+            throw new NotImplementedException();
+        }
+
         public override void SaveDocument(Document document) {
-            
+            throw new NotImplementedException();
+        }
+
+        public override void RemoveDocument(Document document) {
+            throw new NotImplementedException();
         }
     }
 }

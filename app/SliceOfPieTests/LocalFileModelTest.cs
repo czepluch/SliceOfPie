@@ -62,6 +62,27 @@ namespace SliceOfPieTests {
         }
 
         [TestMethod]
+        public void TestRemoveProject() {
+            Project project = Model.AddProject("TestProject");
+
+            Folder folder = Model.AddFolder(project, "TestFolder");
+            Document document = Model.AddDocument(folder, "TestDocument");
+
+            Assert.AreEqual(1, project.Folders.Count());
+            Assert.AreEqual(1, folder.Documents.Count());
+            String path = project.GetPath();
+            String folderPath = folder.GetPath();
+            String docPath = document.GetPath();
+
+            Model.RemoveProject(project);
+
+            Assert.AreEqual(1, Model.GetProjects("local").Count());
+            Assert.AreEqual(false, Directory.Exists(path));
+            Assert.AreEqual(false, Directory.Exists(folderPath));
+            Assert.AreEqual(false, File.Exists(docPath));
+        }
+
+        [TestMethod]
         public void TestAddFolder() {
             IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(1, projects.Count());
@@ -88,6 +109,26 @@ namespace SliceOfPieTests {
 
             Model.RenameFolder(folder, "RenamedFolder");
             Assert.AreEqual(folder.Title, "RenamedFolder");
+        }
+
+        [TestMethod]
+        public void TestRemoveFolder() {
+            IEnumerable<Project> projects = Model.GetProjects("local");
+            Assert.AreEqual(1, projects.Count());
+            Project project = projects.First();
+
+            Folder folder = Model.AddFolder(project, "TestFolder");
+            Document document = Model.AddDocument(folder, "TestDocument");
+
+            Assert.AreEqual(1, project.Folders.Count());
+            String path = folder.GetPath();
+            String docPath = document.GetPath();
+
+            Model.RemoveFolder(folder);
+
+            Assert.AreEqual(0, project.Folders.Count());
+            Assert.AreEqual(false, Directory.Exists(path));
+            Assert.AreEqual(false, File.Exists(docPath));
         }
 
         [TestMethod]
@@ -147,14 +188,15 @@ namespace SliceOfPieTests {
             Assert.AreEqual(1, projects.Count());
             Project project = projects.First();
 
-            Model.AddDocument(project, "TestDocument");
+            Document document = Model.AddDocument(project, "TestDocument");
 
             Assert.AreEqual(1, project.Documents.Count());
-            Document document = project.Documents.First();
+            String path = document.GetPath();
 
             Model.RemoveDocument(document);
 
             Assert.AreEqual(0, project.Documents.Count());
+            Assert.AreEqual(false, File.Exists(path));
         }
 
         [TestMethod]
