@@ -10,7 +10,7 @@ namespace SliceOfPie {
         public IItemContainer Parent { get; set; }
         public string CurrentRevision { get; set; }
 
-        public IEnumerable<string> Revisions()
+        public IEnumerable<string> GetRevisions()
         {
             yield return CurrentRevision;
         }
