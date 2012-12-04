@@ -45,7 +45,7 @@ namespace SliceOfPie {
         private static BitmapImage createBitmapImage(string iconFileName) {
             BitmapImage icon = new BitmapImage();
             icon.BeginInit();
-            icon.UriSource = new Uri("pack://application:,,,/Icons/" + iconFileName + ".bmp");
+            icon.UriSource = new Uri("pack://application:,,,/Icons/" + iconFileName + ".png");
             icon.EndInit();
             return icon;
         }
