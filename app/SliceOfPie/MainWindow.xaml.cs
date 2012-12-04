@@ -443,6 +443,7 @@ namespace SliceOfPie {
             ListableItem containerListable = container.Tag as ListableItem;
             if (containerListable == item) {
                 container.IsSelected = true;
+                container.IsExpanded = true;
                 currentlyActiveItem = item;
                 SetMainContentFromItem(currentlyActiveItem); 
                 return true;
