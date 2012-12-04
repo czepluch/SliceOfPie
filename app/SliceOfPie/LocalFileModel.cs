@@ -49,7 +49,7 @@ namespace SliceOfPie {
             if (Directory.Exists(projectPath) || File.Exists(projectPath)) {
                 throw new ArgumentException("Name is already in use (" + projectPath + ")");
             }
-            Directory.Move(Path.Combine(AppPath, project.Title), projectPath);
+            Directory.Move(project.GetPath(), projectPath);
             project.Title = title;
         }
 
@@ -165,7 +165,7 @@ namespace SliceOfPie {
             if (Directory.Exists(documentPath) || File.Exists(documentPath)) {
                 throw new ArgumentException("Name is already in use(" + documentPath + ")");
             }
-            File.Move(Path.Combine(document.Parent.GetPath(), document.Title), document.GetPath());
+            File.Move(document.GetPath(), documentPath);
             document.Title = title;
         }
 
@@ -177,9 +177,12 @@ namespace SliceOfPie {
             if (!File.Exists(document.GetPath())) {
                 throw new ArgumentException("File does not exist (" + document.GetPath() + ")");
             }
-            FileStream fileStream = new FileStream(document.GetPath(), FileMode.Open, FileAccess.Write);
+            FileStream fileStream = new FileStream(document.GetPath(), FileMode.Create, FileAccess.Write);
             StreamWriter streamWriter = new StreamWriter(fileStream);
-            streamWriter.Write(document.CurrentRevision);
+            string[] lines = document.CurrentRevision.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+            foreach (string line in lines) {
+                streamWriter.WriteLine(line);
+            }
             streamWriter.Flush();
             streamWriter.Close();
             fileStream.Close();
@@ -361,8 +364,16 @@ namespace SliceOfPie {
                 Document document = new Document();
                 string[] parts = pathName.Split('-');
                 document.Id = int.Parse(parts[0]);
-                document.Title = pathName.Replace(parts[0] + "-", "");
+                document.Title = pathName.Replace(parts[0] + "-", "").Replace(".txt", "");
                 document.Parent = parent;
+                FileStream fileStream = new FileStream(document.GetPath(), FileMode.Open, FileAccess.Read);
+                StreamReader streamReader = new StreamReader(fileStream);
+                string line;
+                while ((line = streamReader.ReadLine()) != null) {
+                    document.CurrentRevision += line + "\n";
+                }
+                streamReader.Close();
+                fileStream.Close();
                 parent.Documents.Add(document);
             }
         }
