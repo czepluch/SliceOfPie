@@ -9,7 +9,7 @@ namespace SliceOfPie.ApmHelpers {
     /// <summary>
     /// Source: http://msdn.microsoft.com/en-us/magazine/cc163467.aspx
     /// </summary>
-    internal class AsyncResultNoResult : IAsyncResult {
+    public class AsyncResultNoResult : IAsyncResult {
         // Fields set at construction which never change while 
         // operation is pending
         private readonly AsyncCallback m_AsyncCallback;
