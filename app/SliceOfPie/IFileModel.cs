@@ -33,14 +33,45 @@ namespace SliceOfPie {
         /// <summary>
         /// Adds a folder to the model.
         /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="title"></param>
-        /// <param name="db"></param>
-        /// <returns></returns>
+        /// <param name="parent">The parent container to place the folder in. All folders must be placed in either
+        /// projects or folders.</param>
+        /// <param name="title">Name of the folder</param>
+        /// <param name="db">Used to indicate whether the folder is retrieved from database or created
+        /// from scratch. If set to true, the object is added to the model from the database, if set to
+        /// false, it is created and then added to the model. This should only ever be set when loading
+        /// files at launch.</param>
+        /// <returns>The newly created folder.</returns>
         public abstract Folder AddFolder(IItemContainer parent, string title, bool db = false);
+
+        /// <summary>
+        /// Remove the folder from the model
+        /// </summary>
+        /// <param name="f">Folder to remove</param>
         public abstract void RemoveFolder(Folder f);
+
+        /// <summary>
+        /// Add a new document to the model.
+        /// </summary>
+        /// <param name="parent">Container for the document. All documents must be placed in either folders
+        /// or projects.</param>
+        /// <param name="title">Name of the document</param>
+        /// <param name="db">Used to indicate whether the document is retrieved from database or created
+        /// from scratch. If set to true, the object is added to the model from the database, if set to
+        /// false, it is created and then added to the model. This should only ever be set when loading
+        /// files at launch.</param>
+        /// <returns>The newly created document</returns>
         public abstract Document AddDocument(IItemContainer parent, string title, bool db = false);
+
+        /// <summary>
+        /// Save the document.
+        /// </summary>
+        /// <param name="d">Document to save</param>
         public abstract void SaveDocument(Document d);
+
+        /// <summary>
+        /// Remove the document from the model
+        /// </summary>
+        /// <param name="d">Document to remove</param>
         public abstract void RemoveDocument(Document d);
     }
 }
