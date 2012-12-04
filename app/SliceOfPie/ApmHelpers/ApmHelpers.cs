@@ -121,7 +121,7 @@ namespace SliceOfPie.ApmHelpers {
 
         public AsyncResultNoResult(AsyncCallback asyncCallback, object state, TParameter parameter)
             : base(asyncCallback, state) {
-                TParameter param1 = parameter;
+                param1 = parameter;
         }
 
         /// <summary>
