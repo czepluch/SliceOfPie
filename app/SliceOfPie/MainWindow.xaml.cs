@@ -31,8 +31,9 @@ namespace SliceOfPie {
             InitializeDocumentExplorer();
             RefreshDocumentExplorer();
             TreeViewItem topProject = DocumentExplorer.Items[0] as TreeViewItem; //Note there's always at least one project
+            currentlyActiveItem = topProject.Tag as ListableItem;
             topProject.IsSelected = true;
-            SetMainContentFromItem(topProject.Tag as ListableItem); 
+            SetMainContentFromItem(currentlyActiveItem); 
         }
 
         /// <summary>
@@ -46,16 +47,16 @@ namespace SliceOfPie {
 
             //create the project context menu
             MenuItem shareProjectProjectContext = new MenuItem() { Header = "Share project" };
-            shareProjectProjectContext.Click += new RoutedEventHandler(openShareProjectWindow);
+            shareProjectProjectContext.Click += new RoutedEventHandler(OpenShareProjectWindow);
 
             MenuItem openProjectFolderProjectContext = new MenuItem() { Header = "Open project folder" };
             openProjectFolderProjectContext.Click += new RoutedEventHandler(SetActiveItemContextMenu_Click);
 
             MenuItem addFolderProjectContext = new MenuItem() { Header = "Add folder" };
-            addFolderProjectContext.Click += new RoutedEventHandler(openCreateFolderWindow);
+            addFolderProjectContext.Click += new RoutedEventHandler(OpenCreateFolderWindow);
 
             MenuItem addDocumentProjectContext = new MenuItem() { Header = "Add document" };
-            addDocumentProjectContext.Click += new RoutedEventHandler(openCreateDocumentWindow);
+            addDocumentProjectContext.Click += new RoutedEventHandler(OpenCreateDocumentWindow);
 
             projectContextMenu.Items.Add(shareProjectProjectContext);
             projectContextMenu.Items.Add(openProjectFolderProjectContext);
@@ -67,10 +68,10 @@ namespace SliceOfPie {
             openFolderFolderContext.Click += new RoutedEventHandler(SetActiveItemContextMenu_Click);
 
             MenuItem addFolderFolderContext = new MenuItem() { Header = "Add folder" };
-            addFolderFolderContext.Click += new RoutedEventHandler(openCreateFolderWindow);
+            addFolderFolderContext.Click += new RoutedEventHandler(OpenCreateFolderWindow);
 
             MenuItem addDocumentFolderContext = new MenuItem() { Header = "Add document" };
-            addDocumentFolderContext.Click += new RoutedEventHandler(openCreateDocumentWindow);
+            addDocumentFolderContext.Click += new RoutedEventHandler(OpenCreateDocumentWindow);
 
             folderContextMenu.Items.Add(openFolderFolderContext);
             folderContextMenu.Items.Add(addFolderFolderContext);
@@ -98,7 +99,7 @@ namespace SliceOfPie {
         /// This generates and shows a context menu for the document explorer at runtime
         /// </summary>
         /// <param name="item">The item which was clicked on the document explorer</param>
-        private void generateContextMenu(ListableItem item) {
+        private void GenerateContextMenu(ListableItem item) {
             if (item is Project) {
                 DocumentExplorer.ContextMenu = projectContextMenu;
             } else if (item is Folder) {
@@ -118,7 +119,7 @@ namespace SliceOfPie {
         private void RefreshDocumentExplorer() {
             DocumentExplorer.Items.Clear();
             foreach (Project project in controller.GetProjects("local")) {
-                TreeViewItem projectItem = createDocumentExplorerItem(project);
+                TreeViewItem projectItem = CreateDocumentExplorerItem(project);
                 AddProjectToDocExplorer(projectItem);
             }
         }
@@ -161,7 +162,7 @@ namespace SliceOfPie {
         /// <param name="text">The text to be shown in the item</param>
         /// <param name="item">The type of the item. Can be either "project", "folder", or "document"</param>
         /// <returns></returns>
-        private TreeViewItem createDocumentExplorerItem(ListableItem item) {
+        private TreeViewItem CreateDocumentExplorerItem(ListableItem item) {
             TreeViewItem thisTreeViewItem = new TreeViewItem() { Tag = item };
             //StackPanel for image and text block
             StackPanel sp = new StackPanel() { Orientation = Orientation.Horizontal, IsHitTestVisible = false };
@@ -197,11 +198,11 @@ namespace SliceOfPie {
             if (item is IItemContainer) {
                 //First add folders
                 foreach(Folder folder in (item as IItemContainer).GetFolders()) {
-                    AddSubItemToDocExplorer(thisTreeViewItem, createDocumentExplorerItem(folder));
+                    AddSubItemToDocExplorer(thisTreeViewItem, CreateDocumentExplorerItem(folder));
                 }
                 //then documents
                 foreach (Document document in (item as IItemContainer).GetDocuments()) {
-                    AddSubItemToDocExplorer(thisTreeViewItem, createDocumentExplorerItem(document));
+                    AddSubItemToDocExplorer(thisTreeViewItem, CreateDocumentExplorerItem(document));
                 }
             }
             return thisTreeViewItem;
@@ -217,8 +218,8 @@ namespace SliceOfPie {
             currentlyActiveItem = item;
             if (item is IItemContainer) {
                 FolderContentView folderContentView = new FolderContentView(item as IItemContainer, new MouseButtonEventHandler(FolderContentView_DoubleClick));
-                folderContentView.setCreateFolderHandler(new RoutedEventHandler(openCreateFolderWindow));
-                folderContentView.setCreateDocumentHandler(new RoutedEventHandler(openCreateDocumentWindow));
+                folderContentView.setCreateFolderHandler(new RoutedEventHandler(OpenCreateFolderWindow));
+                folderContentView.setCreateDocumentHandler(new RoutedEventHandler(OpenCreateDocumentWindow));
                 MainContent.Content = folderContentView;
             } else {
                 MainContent.Content = new TextEditor(item as Document);
@@ -232,7 +233,7 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
-        private void openCreateProjectWindow(object sender, RoutedEventArgs e) {
+        private void OpenCreateProjectWindow(object sender, RoutedEventArgs e) {
             IsEnabled = false;
             CreateProject.IsOpen = true;
             currentlyActivePopUP = CreateProject;
@@ -244,7 +245,7 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
-        private void openShareProjectWindow(object sender, RoutedEventArgs e) {
+        private void OpenShareProjectWindow(object sender, RoutedEventArgs e) {
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
             ShareProject.IsOpen = true;
@@ -257,7 +258,7 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
-        private void openCreateFolderWindow(object sender, RoutedEventArgs e) {
+        private void OpenCreateFolderWindow(object sender, RoutedEventArgs e) {
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
             CreateFolder.IsOpen = true;
@@ -270,7 +271,7 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
-        private void openCreateDocumentWindow(object sender, RoutedEventArgs e) {
+        private void OpenCreateDocumentWindow(object sender, RoutedEventArgs e) {
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
             CreateDocument.IsOpen = true;
@@ -289,7 +290,7 @@ namespace SliceOfPie {
                 e.Handled = true;
                 currentlyActiveItem = item.Tag as ListableItem;
                 item.IsSelected = true;
-                generateContextMenu(item.Tag as ListableItem);
+                GenerateContextMenu(item.Tag as ListableItem);
             }
         }
 
@@ -472,6 +473,15 @@ namespace SliceOfPie {
         }
 
         #endregion
+
+        private void Synchronize_Click(object sender, RoutedEventArgs e) {
+            //TODO sync current changes here
+            RefreshDocumentExplorer();
+            TreeViewItem topProject = DocumentExplorer.Items[0] as TreeViewItem; //Note there's always at least one project
+            currentlyActiveItem = topProject.Tag as ListableItem;
+            topProject.IsSelected = true;
+            SetMainContentFromItem(currentlyActiveItem); 
+        }
     }
 
 }

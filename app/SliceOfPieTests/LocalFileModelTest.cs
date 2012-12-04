@@ -298,7 +298,7 @@ namespace SliceOfPieTests {
 
         [TestCleanup]
         public void Cleanup() {
-            //ClearFolder(AppPath);
+            ClearFolder(AppPath);
         }
 
         private void ClearFolder(string path) {
