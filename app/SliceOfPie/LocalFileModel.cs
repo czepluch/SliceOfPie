@@ -18,7 +18,7 @@ namespace SliceOfPie {
             FindProjects();
         }
 
-        /// <summary>
+        /// <summary> 
         /// Add project to system. If db is set to true, only create folder.
         /// </summary>
         /// <param name="title"></param>

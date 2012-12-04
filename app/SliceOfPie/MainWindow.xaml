@@ -61,8 +61,8 @@
                         <ColumnDefinition Width="7*"/>
                         <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Height="70" Click="openCreateProjectWindow">Create new project</Button>
-                    <Button Grid.Column="1" Height="70">Sync.</Button>
+                    <Button Height="70" Click="OpenCreateProjectWindow">Create new project</Button>
+                    <Button Grid.Column="1" Height="70" Click="Synchronize_Click">Sync.</Button>
                 </Grid>
                 <ScrollViewer  Width="170" Height="auto" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="scrollViewer1">
                     <TreeView Name="DocumentExplorer" FontSize="13" FontWeight="DemiBold"/>
