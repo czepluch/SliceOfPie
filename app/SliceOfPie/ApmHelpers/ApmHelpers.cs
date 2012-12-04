@@ -6,6 +6,8 @@ using System.Threading;
 
 namespace SliceOfPie.ApmHelpers {
 
+    #region AsyncResult without return
+
     /// <summary>
     /// Based on a class by Jeffrey Richter.
     /// </summary>
@@ -132,6 +134,10 @@ namespace SliceOfPie.ApmHelpers {
         }
     }
 
+    #endregion
+
+    #region AsyncResult with return
+
     /// <summary>
     /// Based on a class by Jeffrey Richter.
     /// </summary>
@@ -238,4 +244,91 @@ namespace SliceOfPie.ApmHelpers {
             }
         }
     }
+
+    #endregion
+
+    /// <summary>
+    /// Helps create APM methods automatically to avoid code duplication in implementations.
+    /// </summary>
+    public class ApmMethodFactory {
+
+        #region Create No Result methods on the fly
+
+        #region No Result: End
+
+        private static  Action<IAsyncResult> noResultEndMethod = delegate(IAsyncResult asyncResult) {
+                AsyncResultNoResult ar = (AsyncResultNoResult)asyncResult;
+                ar.EndInvoke();
+            };
+
+        /// <summary>
+        /// Returns an End method for usage in APM where the backing method returns void, and takes however many parameters.
+        /// </summary>
+        /// <returns>APM end method</returns>
+        public static Action<IAsyncResult> CreateNoResultEndMethod() {
+            return noResultEndMethod;
+        }
+
+        #endregion
+
+        #region No Result: Begin, No Parameters
+
+        /// <summary>
+        /// Returns a method that works as the begin method of an APM version of the backing method provided.
+        /// </summary>
+        /// <param name="backingMethod">Method to wrap in APM.</param>
+        /// <returns>APM method</returns>
+        public static Func<AsyncCallback,object,IAsyncResult> CreateNoResultBeginMethod(Action backingMethod) {
+            return delegate(AsyncCallback callback,object state) {
+                AsyncResultNoResult ar = new AsyncResultNoResult(callback, state);
+                ThreadPool.QueueUserWorkItem((x) => {
+                    AsyncResultNoResult result = (AsyncResultNoResult)x;
+                    try {
+                        backingMethod();
+                        result.SetAsCompleted(null, false);
+                    }
+                    catch(Exception e) {
+                        result.SetAsCompleted(e, false);
+                    }
+                }, ar);
+
+                return ar;
+            };
+        }
+
+        #endregion
+
+        #region No Result: Begin, One Parameter
+
+        /// <summary>
+        /// Returns a method that wraps the backing method in APM. The backing method is a method which takes ONE parameter, defined
+        /// as the type argumnt, TParameter.
+        /// </summary>
+        /// <typeparam name="TParameter">Type of parameter taken by backingMethod</typeparam>
+        /// <param name="backingMethod">Method to be wrapped in APM</param>
+        /// <returns>APM wrapped method</returns>
+        public static Func<TParameter, AsyncCallback, object, IAsyncResult> CreateNoResultBeginMethod<TParameter>(Action<TParameter> backingMethod) {
+            return delegate(TParameter parameter, AsyncCallback callback, object state) {
+                AsyncResultNoResult<TParameter> ar = new AsyncResultNoResult<TParameter>(callback, state, parameter);
+                ThreadPool.QueueUserWorkItem((x) => {
+                    AsyncResultNoResult<TParameter> result = (AsyncResultNoResult<TParameter>)x;
+                    try {
+                        backingMethod(parameter);
+                        result.SetAsCompleted(null, false);
+                    }
+                    catch (Exception e) {
+                        result.SetAsCompleted(e, false);
+                    }
+                }, ar);
+
+                return ar;
+            };
+        }
+
+        #endregion
+
+        #endregion
+
+    }
+
 }

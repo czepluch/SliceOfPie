@@ -35,6 +35,11 @@ namespace SliceOfPie {
             fileModel = model;
         }
 
+        /// <summary>
+        /// Helper reducing code duplication
+        /// </summary>
+        private Action<IAsyncResult> apmNoResultHelper = ApmMethodFactory.CreateNoResultEndMethod();
+
         #region Project
 
         #region Create Project
@@ -108,9 +113,9 @@ namespace SliceOfPie {
         /// <summary>
         /// Helper to remove project asynchronously
         /// </summary>
-        /// <param name="asyncResult"><c>AsyncResult&lt;object,Project&gt;</c></param>
-        private void RemoveProjectAsyncHelper(object asyncResult) { //TODO: Use AsyncResultNoResult instead (generic this!)
-            AsyncResult<object,Project> ar = (AsyncResult<object,Project>)asyncResult;
+        /// <param name="asyncResult"><c>AsyncResultNoResult&lt;Project&gt;</c></param>
+        private void RemoveProjectAsyncHelper(object asyncResult) {
+            AsyncResultNoResult<Project> ar = (AsyncResultNoResult<Project>)asyncResult;
             try {
                 RemoveProject(ar.Parameter1);
                 ar.SetAsCompleted(null, false);
@@ -129,7 +134,7 @@ namespace SliceOfPie {
         /// <returns>IAsyncResult used by EndRemoveProject</returns>
         /// <seealso cref="EndRemoveProject"/>
         public IAsyncResult BeginRemoveProject(Project p, AsyncCallback callback, object state) {
-            AsyncResult<object, Project> ar = new AsyncResult<object, Project>(callback, state, p);
+            AsyncResultNoResult<Project> ar = new AsyncResultNoResult<Project>(callback, state, p);
             ThreadPool.QueueUserWorkItem(RemoveProjectAsyncHelper, ar);
 
             return ar;
@@ -141,8 +146,7 @@ namespace SliceOfPie {
         /// <param name="asyncResult">IAsyncResult made by BeginRemoveProject</param>
         /// <seealso cref="BeginRemoveProject"/>
         public void EndRemoveProject(IAsyncResult asyncResult) {
-            AsyncResult<object, Project> ar = (AsyncResult<object, Project>)asyncResult;
-            ar.EndInvoke();
+            apmNoResultHelper(asyncResult);
         }
 
         #endregion
@@ -278,8 +282,7 @@ namespace SliceOfPie {
         /// <param name="asyncResult">IAsyncResult from BeginSaveDocument</param>
         /// <seealso cref="BeginSaveDocument"/>
         public void EndSaveDocument(IAsyncResult asyncResult) {
-            AsyncResultNoResult<Document> ar = (AsyncResultNoResult<Document>)asyncResult;
-            ar.EndInvoke();
+            apmNoResultHelper(asyncResult);
         }
 
         #endregion
@@ -331,8 +334,7 @@ namespace SliceOfPie {
         /// <param name="asyncResult">IAsyncResult from BeginRemoveDocument</param>
         /// <seealso cref="BeginRemoveDocument"/>
         public void EndRemoveDocument(IAsyncResult asyncResult) {
-            AsyncResultNoResult<Document> ar = (AsyncResultNoResult<Document>)asyncResult;
-            ar.EndInvoke();
+            apmNoResultHelper(asyncResult);
         }
 
         #endregion
@@ -444,8 +446,7 @@ namespace SliceOfPie {
         /// <param name="asyncResult">IAsyncResult from BeginRemoveFolder</param>
         /// <seealso cref="BeginRemoveFolder"/>
         public void EndRemoveFolder(IAsyncResult asyncResult) {
-            AsyncResultNoResult<Folder> ar = (AsyncResultNoResult<Folder>)asyncResult;
-            ar.EndInvoke();
+            apmNoResultHelper(asyncResult);
         }
 
         #endregion
