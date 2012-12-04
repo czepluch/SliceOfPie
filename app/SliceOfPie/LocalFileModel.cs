@@ -12,16 +12,20 @@ namespace SliceOfPie {
         private List<Project> Projects = new List<Project>();
 
         public LocalFileModel() {
+            AppPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie");
+            //SyncFiles("me@michaelstorgaard.com");
             CreateStructure();
             FindProjects();
         }
 
-        public Project AddProject(string title) {
+        public Project AddProject(string title, bool db = false) {
             string projectPath = Path.Combine(AppPath, title);
             if (Directory.Exists(projectPath)) {
+                if (db) return null;
                 throw new ArgumentException("Project name is already in use (" + projectPath + ")");
             }
             Directory.CreateDirectory(projectPath);
+            if (db) return null;
             Project project = new Project();
             project.Title = title;
             project.AppPath = AppPath;
@@ -44,12 +48,14 @@ namespace SliceOfPie {
             }
         }
 
-        public Folder AddFolder(IItemContainer parent, string title) {
+        public Folder AddFolder(IItemContainer parent, string title, bool db = false) {
             string folderPath = Path.Combine(parent.GetPath(), title);
             if (Directory.Exists(folderPath)) {
+                if (db) return null;
                 throw new ArgumentException("Project/folder name is already in use (" + folderPath + ")");
             }
             Directory.CreateDirectory(folderPath);
+            if (db) return null;
             Folder folder = new Folder();
             folder.Title = title;
             folder.Parent = parent;
@@ -66,13 +72,15 @@ namespace SliceOfPie {
             folder.Title = title;
         }
 
-        public Document AddDocument(IItemContainer parent, string title) {
+        public Document AddDocument(IItemContainer parent, string title, bool db = false) {
             string documentPath = Path.Combine(parent.GetPath(), title);
             if (File.Exists(documentPath)) {
+                if (db) return null;
                 throw new ArgumentException("File name is already in use (" + documentPath + ")");
             }
             FileStream fileStream = File.Create(documentPath);
             fileStream.Close();
+            if (db) return null;
             Document document = new Document();
             document.Title = title;
             document.Parent = parent;
@@ -101,8 +109,87 @@ namespace SliceOfPie {
             fileStream.Close();
         }
 
+        public void SyncFiles(string email) {
+            UploadStructure(email);
+            DownloadStructure(email);
+        }
+
+        public void UploadStructure(string email) {
+
+        }
+
+        public void DownloadStructure(string email) {
+            List<Project> projectsContainer = new List<Project>();
+            using (var dbContext = new sliceofpieEntities2()) {
+                var projects = from projectUser in dbContext.ProjectUsers
+                               from project in dbContext.Projects
+                               where projectUser.UserEmail == email && projectUser.ProjectId == project.Id
+                               select project;
+                foreach (Project project in projects) {
+                    project.AppPath = AppPath;
+                    projectsContainer.Add(project);
+                    AddProject(project.Title, true);
+                }
+            }
+            foreach (Project project in projectsContainer) {
+                List<Folder> foldersContainer = new List<Folder>();
+                using (var dbContext = new sliceofpieEntities2()) {
+                    var folders = from folder in dbContext.Folders
+                                  where folder.ProjectId == project.Id
+                                  select folder;
+                    foreach (Folder folder in folders) {
+                        folder.Parent = project;
+                        AddFolder(project, folder.Title, true);
+                        foldersContainer.Add(folder);
+                    }
+                }
+                foreach (Folder folder in foldersContainer) {
+                    DownloadFolders(folder);
+                    DownloadDocuments(folder);
+                }
+                using (var dbContext = new sliceofpieEntities2()) {
+                    var documents = from document in dbContext.Documents
+                                    where document.ProjectId == project.Id
+                                    select document;
+                    foreach (Document document in documents) {
+                        document.Parent = project;
+                        AddDocument(project, document.Title, true);
+                    }
+                }
+            }
+        }
+
+        public void DownloadFolders(Folder parent) {
+            List<Folder> foldersContainer = new List<Folder>();
+            using (var dbContext = new sliceofpieEntities2()) {
+                var folders = from folder in dbContext.Folders
+                              where folder.FolderId == parent.Id
+                              select folder;
+                foreach (Folder folder in folders) {
+                    folder.Parent = parent;
+                    AddFolder(parent, folder.Title, true);
+                    foldersContainer.Add(folder);
+                }
+            }
+            foreach (Folder folder in foldersContainer) {
+                DownloadFolders(folder);
+                DownloadDocuments(folder);
+            }
+        }
+
+        public void DownloadDocuments(Folder parent) {
+            using (var dbContext = new sliceofpieEntities2()) {
+                var documents = from document in dbContext.Documents
+                                where document.FolderId == parent.Id
+                                select document;
+                foreach (Document document in documents) {
+                    document.Parent = parent;
+                    AddDocument(parent, document.Title, true);
+                }
+            }
+        }
+
         public void CreateStructure() {
-            AppPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie");
             if (!Directory.Exists(AppPath)) {
                 Directory.CreateDirectory(AppPath);
             }
