@@ -18,7 +18,7 @@ namespace SliceOfPieTests {
 
         [TestMethod]
         public void TestConstruct() {
-            IEnumerable<Project> projects = Model.GetProjects(0);
+            IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(1, projects.Count());
 
             int i = 0;
@@ -36,7 +36,7 @@ namespace SliceOfPieTests {
         public void TestAddProject() {
             Model.AddProject("TestProject");
 
-            IEnumerable<Project> projects = Model.GetProjects(0);
+            IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(2, projects.Count());
 
             int i = 0;
@@ -63,7 +63,7 @@ namespace SliceOfPieTests {
 
         [TestMethod]
         public void TestAddFolder() {
-            IEnumerable<Project> projects = Model.GetProjects(0);
+            IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(1, projects.Count());
             Project project = projects.First();
 
@@ -76,7 +76,7 @@ namespace SliceOfPieTests {
 
         [TestMethod]
         public void TestRenameFolder() {
-            IEnumerable<Project> projects = Model.GetProjects(0);
+            IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(1, projects.Count());
             Project project = projects.First();
 
@@ -92,7 +92,7 @@ namespace SliceOfPieTests {
 
         [TestMethod]
         public void TestAddDocument() {
-            IEnumerable<Project> projects = Model.GetProjects(0);
+            IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(1, projects.Count());
             Project project = projects.First();
 
@@ -105,7 +105,7 @@ namespace SliceOfPieTests {
 
         [TestMethod]
         public void TestRenameDocument() {
-            IEnumerable<Project> projects = Model.GetProjects(0);
+            IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(1, projects.Count());
             Project project = projects.First();
 
@@ -121,7 +121,7 @@ namespace SliceOfPieTests {
 
         [TestMethod]
         public void TestSaveDocument() {
-            IEnumerable<Project> projects = Model.GetProjects(0);
+            IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(1, projects.Count());
             Project project = projects.First();
 
@@ -142,13 +142,29 @@ namespace SliceOfPieTests {
         }
 
         [TestMethod]
+        public void TestRemoveDocument() {
+            IEnumerable<Project> projects = Model.GetProjects("local");
+            Assert.AreEqual(1, projects.Count());
+            Project project = projects.First();
+
+            Model.AddDocument(project, "TestDocument");
+
+            Assert.AreEqual(1, project.Documents.Count());
+            Document document = project.Documents.First();
+
+            Model.RemoveDocument(document);
+
+            Assert.AreEqual(0, project.Documents.Count());
+        }
+
+        [TestMethod]
         public void TestFindProjects() {
             string projectPath = Path.Combine(AppPath, "TestProject");
             Directory.CreateDirectory(projectPath);
 
             Model.FindProjects();
 
-            IEnumerable<Project> projects = Model.GetProjects(0);
+            IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(2, projects.Count());
 
             int i = 0;
@@ -172,7 +188,7 @@ namespace SliceOfPieTests {
 
             Model.FindProjects();
 
-            IEnumerable<Project> projects = Model.GetProjects(0);
+            IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(1, projects.Count());
             Project project = projects.First();
             Assert.AreEqual(Path.Combine(AppPath, "default"), Path.Combine(project.AppPath, project.Title));
@@ -193,7 +209,7 @@ namespace SliceOfPieTests {
 
             Model.FindProjects();
 
-            IEnumerable<Project> projects = Model.GetProjects(0);
+            IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(1, projects.Count());
             Project project = projects.First();
             Assert.AreEqual(Path.Combine(AppPath, "default"), Path.Combine(project.AppPath, project.Title));

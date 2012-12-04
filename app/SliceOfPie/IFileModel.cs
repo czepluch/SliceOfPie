@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SliceOfPie {
     public abstract class IFileModel {
-        public abstract IEnumerable<Project> GetProjects(int userId);
+        public abstract IEnumerable<Project> GetProjects(string userMail);
         public abstract void SaveDocument(Document document);
     }
 }
