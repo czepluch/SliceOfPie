@@ -1,0 +1,232 @@
+﻿using System;
+using System.Text;
+using System.Collections.Generic;
+using System.Linq;
+using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SliceOfPie;
+
+namespace SliceOfPieTests {
+    [TestClass]
+    public class LocalFileModelTest {
+        string AppPath;
+        LocalFileModel Model;
+
+        public LocalFileModelTest() {
+            AppPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie");
+        }
+
+        [TestMethod]
+        public void TestConstruct() {
+            IEnumerable<Project> projects = Model.GetProjects(0);
+            Assert.AreEqual(1, projects.Count());
+
+            int i = 0;
+            foreach (Project project in projects) {
+                switch (i) {
+                    case 0:
+                        Assert.AreEqual(Path.Combine(AppPath, "default"), Path.Combine(project.AppPath, project.Title));
+                        break;
+                }
+                i++;
+            }
+        }
+
+        [TestMethod]
+        public void TestAddProject() {
+            Model.AddProject("TestProject");
+
+            IEnumerable<Project> projects = Model.GetProjects(0);
+            Assert.AreEqual(2, projects.Count());
+
+            int i = 0;
+            foreach (Project project in projects) {
+                switch (i) {
+                    case 0:
+                        Assert.AreEqual(Path.Combine(AppPath, "default"), Path.Combine(project.AppPath, project.Title));
+                        break;
+                    case 1:
+                        Assert.AreEqual(Path.Combine(AppPath, "TestProject"), Path.Combine(project.AppPath, project.Title));
+                        break;
+                }
+                i++;
+            }
+        }
+
+        [TestMethod]
+        public void TestRenameProject() {
+            Project testProject = Model.AddProject("TestProject");
+            Model.RenameProject(testProject, "RenamedProject");
+
+            Assert.AreEqual(testProject.Title, "RenamedProject");
+        }
+
+        [TestMethod]
+        public void TestAddFolder() {
+            IEnumerable<Project> projects = Model.GetProjects(0);
+            Assert.AreEqual(1, projects.Count());
+            Project project = projects.First();
+
+            Model.AddFolder(project, "TestFolder");
+
+            Assert.AreEqual(1, project.Folders.Count());
+            Folder folder = project.Folders.First();
+            Assert.AreEqual("TestFolder", folder.Title);
+        }
+
+        [TestMethod]
+        public void TestRenameFolder() {
+            IEnumerable<Project> projects = Model.GetProjects(0);
+            Assert.AreEqual(1, projects.Count());
+            Project project = projects.First();
+
+            Model.AddFolder(project, "TestFolder");
+
+            Assert.AreEqual(1, project.Folders.Count());
+            Folder folder = project.Folders.First();
+            Assert.AreEqual("TestFolder", folder.Title);
+
+            Model.RenameFolder(folder, "RenamedFolder");
+            Assert.AreEqual(folder.Title, "RenamedFolder");
+        }
+
+        [TestMethod]
+        public void TestAddDocument() {
+            IEnumerable<Project> projects = Model.GetProjects(0);
+            Assert.AreEqual(1, projects.Count());
+            Project project = projects.First();
+
+            Model.AddDocument(project, "TestDocument");
+
+            Assert.AreEqual(1, project.Documents.Count());
+            Document document = project.Documents.First();
+            Assert.AreEqual("TestDocument", document.Title);
+        }
+
+        [TestMethod]
+        public void TestRenameDocument() {
+            IEnumerable<Project> projects = Model.GetProjects(0);
+            Assert.AreEqual(1, projects.Count());
+            Project project = projects.First();
+
+            Model.AddDocument(project, "TestDocument");
+
+            Assert.AreEqual(1, project.Documents.Count());
+            Document document = project.Documents.First();
+            Assert.AreEqual("TestDocument", document.Title);
+
+            Model.RenameDocument(document, "RenamedDocument");
+            Assert.AreEqual(document.Title, "RenamedDocument");
+        }
+
+        [TestMethod]
+        public void TestSaveDocument() {
+            IEnumerable<Project> projects = Model.GetProjects(0);
+            Assert.AreEqual(1, projects.Count());
+            Project project = projects.First();
+
+            Document document = Model.AddDocument(project, "TestDocument");
+            document.CurrentRevision = "This is a test!";
+            Model.SaveDocument(document);
+
+            FileStream fileStream = new FileStream(document.GetPath(), FileMode.Open, FileAccess.Read);
+            StreamReader streamReader = new StreamReader(fileStream);
+            string contents = "";
+            while (streamReader.Peek() >= 0) {
+                contents += streamReader.ReadLine() + "\n";
+            }
+            streamReader.Close();
+            fileStream.Close();
+
+            Assert.AreEqual("This is a test!\n", contents);
+        }
+
+        [TestMethod]
+        public void TestFindProjects() {
+            string projectPath = Path.Combine(AppPath, "TestProject");
+            Directory.CreateDirectory(projectPath);
+
+            Model.FindProjects();
+
+            IEnumerable<Project> projects = Model.GetProjects(0);
+            Assert.AreEqual(2, projects.Count());
+
+            int i = 0;
+            foreach (Project project in projects) {
+                switch (i) {
+                    case 0:
+                        Assert.AreEqual(Path.Combine(AppPath, "default"), Path.Combine(project.AppPath, project.Title));
+                        break;
+                    case 1:
+                        Assert.AreEqual(Path.Combine(AppPath, "TestProject"), Path.Combine(project.AppPath, project.Title));
+                        break;
+                }
+                i++;
+            }
+        }
+
+        [TestMethod]
+        public void TestFindFolders() {
+            string folderPath = Path.Combine(Path.Combine(AppPath, "default"), "TestFolder");
+            Directory.CreateDirectory(folderPath);
+
+            Model.FindProjects();
+
+            IEnumerable<Project> projects = Model.GetProjects(0);
+            Assert.AreEqual(1, projects.Count());
+            Project project = projects.First();
+            Assert.AreEqual(Path.Combine(AppPath, "default"), Path.Combine(project.AppPath, project.Title));
+
+            Assert.AreEqual(1, project.Folders.Count());
+            Folder folder = project.Folders.First();
+            Assert.AreEqual("TestFolder", folder.Title);
+        }
+
+        [TestMethod]
+        public void TestFindDocuments() {
+            string folderPath = Path.Combine(Path.Combine(AppPath, "default"), "TestFolder");
+            Directory.CreateDirectory(folderPath);
+            string documentPath = Path.Combine(Path.Combine(Path.Combine(AppPath, "default"), "TestFolder"), "TestFile");
+            FileStream fileStream = File.Create(documentPath);
+            fileStream.Close();
+            Assert.AreEqual(true, File.Exists(documentPath));
+
+            Model.FindProjects();
+
+            IEnumerable<Project> projects = Model.GetProjects(0);
+            Assert.AreEqual(1, projects.Count());
+            Project project = projects.First();
+            Assert.AreEqual(Path.Combine(AppPath, "default"), Path.Combine(project.AppPath, project.Title));
+
+            Assert.AreEqual(1, project.Folders.Count());
+            Folder folder = project.Folders.First();
+            Assert.AreEqual("TestFolder", folder.Title);
+
+            Assert.AreEqual(1, folder.Documents.Count());
+            Document document = folder.Documents.First();
+            Assert.AreEqual("TestFile", document.Title);
+        }
+
+        [TestInitialize]
+        public void Initialize() {
+            ClearFolder(AppPath);
+            Model = new LocalFileModel();
+        }
+
+        [TestCleanup]
+        public void Cleanup() {
+            ClearFolder(AppPath);
+        }
+
+        private void ClearFolder(string path) {
+            DirectoryInfo dir = new DirectoryInfo(path);
+            foreach (FileInfo file in dir.GetFiles()) {
+                file.Delete();
+            }
+            foreach (DirectoryInfo folder in dir.GetDirectories()) {
+                ClearFolder(folder.FullName);
+                folder.Delete();
+            }
+        }
+    }
+}

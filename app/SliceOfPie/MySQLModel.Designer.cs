@@ -23,8 +23,8 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("sliceofpieModel", "r_documentId", "document", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(SliceOfPie.Document), "revision", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SliceOfPie.Revision), true)]
 [assembly: EdmRelationshipAttribute("sliceofpieModel", "f_folderId", "folder", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(SliceOfPie.Folder), "folder1", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SliceOfPie.Folder), true)]
 [assembly: EdmRelationshipAttribute("sliceofpieModel", "f_projectId", "project", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(SliceOfPie.Project), "folder", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SliceOfPie.Folder), true)]
-[assembly: EdmRelationshipAttribute("sliceofpieModel", "pu_projectId", "project", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(SliceOfPie.Project), "project_users", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SliceOfPie.ProjectUser), true)]
-[assembly: EdmRelationshipAttribute("sliceofpieModel", "pu_userId", "user", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(SliceOfPie.User), "project_users", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SliceOfPie.ProjectUser), true)]
+[assembly: EdmRelationshipAttribute("sliceofpieModel", "pu_projectId", "Project", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(SliceOfPie.Project), "project_users", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SliceOfPie.ProjectUser), true)]
+[assembly: EdmRelationshipAttribute("sliceofpieModel", "pu_userEmail", "User", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(SliceOfPie.User), "project_users", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(SliceOfPie.ProjectUser), true)]
 
 #endregion
 
@@ -35,32 +35,32 @@ namespace SliceOfPie
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    public partial class sliceofpieEntities : ObjectContext
+    public partial class sliceofpieEntities2 : ObjectContext
     {
         #region Constructors
     
         /// <summary>
-        /// Initializes a new sliceofpieEntities object using the connection string found in the 'sliceofpieEntities' section of the application configuration file.
+        /// Initializes a new sliceofpieEntities2 object using the connection string found in the 'sliceofpieEntities2' section of the application configuration file.
         /// </summary>
-        public sliceofpieEntities() : base("name=sliceofpieEntities", "sliceofpieEntities")
+        public sliceofpieEntities2() : base("name=sliceofpieEntities2", "sliceofpieEntities2")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
         }
     
         /// <summary>
-        /// Initialize a new sliceofpieEntities object.
+        /// Initialize a new sliceofpieEntities2 object.
         /// </summary>
-        public sliceofpieEntities(string connectionString) : base(connectionString, "sliceofpieEntities")
+        public sliceofpieEntities2(string connectionString) : base(connectionString, "sliceofpieEntities2")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
         }
     
         /// <summary>
-        /// Initialize a new sliceofpieEntities object.
+        /// Initialize a new sliceofpieEntities2 object.
         /// </summary>
-        public sliceofpieEntities(EntityConnection connection) : base(connection, "sliceofpieEntities")
+        public sliceofpieEntities2(EntityConnection connection) : base(connection, "sliceofpieEntities2")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
@@ -79,148 +79,148 @@ namespace SliceOfPie
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<Document> Documents1
+        public ObjectSet<Document> Documents
         {
             get
             {
-                if ((_Documents1 == null))
+                if ((_Documents == null))
                 {
-                    _Documents1 = base.CreateObjectSet<Document>("Documents1");
+                    _Documents = base.CreateObjectSet<Document>("Documents");
                 }
-                return _Documents1;
+                return _Documents;
             }
         }
-        private ObjectSet<Document> _Documents1;
+        private ObjectSet<Document> _Documents;
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<Folder> Folders1
+        public ObjectSet<Folder> Folders
         {
             get
             {
-                if ((_Folders1 == null))
+                if ((_Folders == null))
                 {
-                    _Folders1 = base.CreateObjectSet<Folder>("Folders1");
+                    _Folders = base.CreateObjectSet<Folder>("Folders");
                 }
-                return _Folders1;
+                return _Folders;
             }
         }
-        private ObjectSet<Folder> _Folders1;
+        private ObjectSet<Folder> _Folders;
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<Project> Projects1
+        public ObjectSet<Project> Projects
         {
             get
             {
-                if ((_Projects1 == null))
+                if ((_Projects == null))
                 {
-                    _Projects1 = base.CreateObjectSet<Project>("Projects1");
+                    _Projects = base.CreateObjectSet<Project>("Projects");
                 }
-                return _Projects1;
+                return _Projects;
             }
         }
-        private ObjectSet<Project> _Projects1;
+        private ObjectSet<Project> _Projects;
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<ProjectUser> ProjectUsers1
+        public ObjectSet<Revision> Revisions
         {
             get
             {
-                if ((_ProjectUsers1 == null))
+                if ((_Revisions == null))
                 {
-                    _ProjectUsers1 = base.CreateObjectSet<ProjectUser>("ProjectUsers1");
+                    _Revisions = base.CreateObjectSet<Revision>("Revisions");
                 }
-                return _ProjectUsers1;
+                return _Revisions;
             }
         }
-        private ObjectSet<ProjectUser> _ProjectUsers1;
+        private ObjectSet<Revision> _Revisions;
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<Revision> Revisions1
+        public ObjectSet<User> Users
         {
             get
             {
-                if ((_Revisions1 == null))
+                if ((_Users == null))
                 {
-                    _Revisions1 = base.CreateObjectSet<Revision>("Revisions1");
+                    _Users = base.CreateObjectSet<User>("Users");
                 }
-                return _Revisions1;
+                return _Users;
             }
         }
-        private ObjectSet<Revision> _Revisions1;
+        private ObjectSet<User> _Users;
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<User> Users1
+        public ObjectSet<ProjectUser> ProjectUsers
         {
             get
             {
-                if ((_Users1 == null))
+                if ((_ProjectUsers == null))
                 {
-                    _Users1 = base.CreateObjectSet<User>("Users1");
+                    _ProjectUsers = base.CreateObjectSet<ProjectUser>("ProjectUsers");
                 }
-                return _Users1;
+                return _ProjectUsers;
             }
         }
-        private ObjectSet<User> _Users1;
+        private ObjectSet<ProjectUser> _ProjectUsers;
 
         #endregion
         #region AddTo Methods
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the Documents1 EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the Documents EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToDocuments1(Document document)
+        public void AddToDocuments(Document document)
         {
-            base.AddObject("Documents1", document);
+            base.AddObject("Documents", document);
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the Folders1 EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the Folders EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToFolders1(Folder folder)
+        public void AddToFolders(Folder folder)
         {
-            base.AddObject("Folders1", folder);
+            base.AddObject("Folders", folder);
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the Projects1 EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the Projects EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToProjects1(Project project)
+        public void AddToProjects(Project project)
         {
-            base.AddObject("Projects1", project);
+            base.AddObject("Projects", project);
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the ProjectUsers1 EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the Revisions EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToProjectUsers1(ProjectUser projectUser)
+        public void AddToRevisions(Revision revision)
         {
-            base.AddObject("ProjectUsers1", projectUser);
+            base.AddObject("Revisions", revision);
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the Revisions1 EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the Users EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToRevisions1(Revision revision)
+        public void AddToUsers(User user)
         {
-            base.AddObject("Revisions1", revision);
+            base.AddObject("Users", user);
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the Users1 EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// Deprecated Method for adding a new object to the ProjectUsers EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
-        public void AddToUsers1(User user)
+        public void AddToProjectUsers(ProjectUser projectUser)
         {
-            base.AddObject("Users1", user);
+            base.AddObject("ProjectUsers", projectUser);
         }
 
         #endregion
@@ -244,11 +244,11 @@ namespace SliceOfPie
         /// <summary>
         /// Create a new Document object.
         /// </summary>
-        /// <param name="id">Initial value of the id property.</param>
+        /// <param name="id">Initial value of the Id property.</param>
         public static Document CreateDocument(global::System.Int32 id)
         {
             Document document = new Document();
-            document.id = id;
+            document.Id = id;
             return document;
         }
 
@@ -260,99 +260,99 @@ namespace SliceOfPie
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> folderId
+        public Nullable<global::System.Int32> FolderId
         {
             get
             {
-                return _folderId;
+                return _FolderId;
             }
             set
             {
-                OnfolderIdChanging(value);
-                ReportPropertyChanging("folderId");
-                _folderId = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("folderId");
-                OnfolderIdChanged();
+                OnFolderIdChanging(value);
+                ReportPropertyChanging("FolderId");
+                _FolderId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("FolderId");
+                OnFolderIdChanged();
             }
         }
-        private Nullable<global::System.Int32> _folderId;
-        partial void OnfolderIdChanging(Nullable<global::System.Int32> value);
-        partial void OnfolderIdChanged();
+        private Nullable<global::System.Int32> _FolderId;
+        partial void OnFolderIdChanging(Nullable<global::System.Int32> value);
+        partial void OnFolderIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 id
+        public global::System.Int32 Id
         {
             get
             {
-                return _id;
+                return _Id;
             }
             set
             {
-                if (_id != value)
+                if (_Id != value)
                 {
-                    OnidChanging(value);
-                    ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("id");
-                    OnidChanged();
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
                 }
             }
         }
-        private global::System.Int32 _id;
-        partial void OnidChanging(global::System.Int32 value);
-        partial void OnidChanged();
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> projectId
+        public Nullable<global::System.Int32> ProjectId
         {
             get
             {
-                return _projectId;
+                return _ProjectId;
             }
             set
             {
-                OnprojectIdChanging(value);
-                ReportPropertyChanging("projectId");
-                _projectId = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("projectId");
-                OnprojectIdChanged();
+                OnProjectIdChanging(value);
+                ReportPropertyChanging("ProjectId");
+                _ProjectId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ProjectId");
+                OnProjectIdChanged();
             }
         }
-        private Nullable<global::System.Int32> _projectId;
-        partial void OnprojectIdChanging(Nullable<global::System.Int32> value);
-        partial void OnprojectIdChanged();
+        private Nullable<global::System.Int32> _ProjectId;
+        partial void OnProjectIdChanging(Nullable<global::System.Int32> value);
+        partial void OnProjectIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String title
+        public global::System.String Title
         {
             get
             {
-                return _title;
+                return _Title;
             }
             set
             {
-                OntitleChanging(value);
-                ReportPropertyChanging("title");
-                _title = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("title");
-                OntitleChanged();
+                OnTitleChanging(value);
+                ReportPropertyChanging("Title");
+                _Title = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Title");
+                OnTitleChanged();
             }
         }
-        private global::System.String _title;
-        partial void OntitleChanging(global::System.String value);
-        partial void OntitleChanged();
+        private global::System.String _Title;
+        partial void OnTitleChanging(global::System.String value);
+        partial void OnTitleChanged();
 
         #endregion
     
@@ -364,84 +364,8 @@ namespace SliceOfPie
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "d_folderId", "folder")]
-        public Folder folder
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Folder>("sliceofpieModel.d_folderId", "folder").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Folder>("sliceofpieModel.d_folderId", "folder").Value = value;
-            }
-        }
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<Folder> folderReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Folder>("sliceofpieModel.d_folderId", "folder");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Folder>("sliceofpieModel.d_folderId", "folder", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "d_projectId", "project")]
-        public Project project
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Project>("sliceofpieModel.d_projectId", "project").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Project>("sliceofpieModel.d_projectId", "project").Value = value;
-            }
-        }
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<Project> projectReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Project>("sliceofpieModel.d_projectId", "project");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Project>("sliceofpieModel.d_projectId", "project", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "r_documentId", "revision")]
-        public EntityCollection<Revision> revisions
+        public EntityCollection<Revision> Revisions
         {
             get
             {
@@ -472,11 +396,11 @@ namespace SliceOfPie
         /// <summary>
         /// Create a new Folder object.
         /// </summary>
-        /// <param name="id">Initial value of the id property.</param>
+        /// <param name="id">Initial value of the Id property.</param>
         public static Folder CreateFolder(global::System.Int32 id)
         {
             Folder folder = new Folder();
-            folder.id = id;
+            folder.Id = id;
             return folder;
         }
 
@@ -488,99 +412,99 @@ namespace SliceOfPie
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> folderId
+        public Nullable<global::System.Int32> FolderId
         {
             get
             {
-                return _folderId;
+                return _FolderId;
             }
             set
             {
-                OnfolderIdChanging(value);
-                ReportPropertyChanging("folderId");
-                _folderId = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("folderId");
-                OnfolderIdChanged();
+                OnFolderIdChanging(value);
+                ReportPropertyChanging("FolderId");
+                _FolderId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("FolderId");
+                OnFolderIdChanged();
             }
         }
-        private Nullable<global::System.Int32> _folderId;
-        partial void OnfolderIdChanging(Nullable<global::System.Int32> value);
-        partial void OnfolderIdChanged();
+        private Nullable<global::System.Int32> _FolderId;
+        partial void OnFolderIdChanging(Nullable<global::System.Int32> value);
+        partial void OnFolderIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 id
+        public global::System.Int32 Id
         {
             get
             {
-                return _id;
+                return _Id;
             }
             set
             {
-                if (_id != value)
+                if (_Id != value)
                 {
-                    OnidChanging(value);
-                    ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("id");
-                    OnidChanged();
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
                 }
             }
         }
-        private global::System.Int32 _id;
-        partial void OnidChanging(global::System.Int32 value);
-        partial void OnidChanged();
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> projectId
+        public Nullable<global::System.Int32> ProjectId
         {
             get
             {
-                return _projectId;
+                return _ProjectId;
             }
             set
             {
-                OnprojectIdChanging(value);
-                ReportPropertyChanging("projectId");
-                _projectId = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("projectId");
-                OnprojectIdChanged();
+                OnProjectIdChanging(value);
+                ReportPropertyChanging("ProjectId");
+                _ProjectId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ProjectId");
+                OnProjectIdChanged();
             }
         }
-        private Nullable<global::System.Int32> _projectId;
-        partial void OnprojectIdChanging(Nullable<global::System.Int32> value);
-        partial void OnprojectIdChanged();
+        private Nullable<global::System.Int32> _ProjectId;
+        partial void OnProjectIdChanging(Nullable<global::System.Int32> value);
+        partial void OnProjectIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String title
+        public global::System.String Title
         {
             get
             {
-                return _title;
+                return _Title;
             }
             set
             {
-                OntitleChanging(value);
-                ReportPropertyChanging("title");
-                _title = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("title");
-                OntitleChanged();
+                OnTitleChanging(value);
+                ReportPropertyChanging("Title");
+                _Title = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Title");
+                OnTitleChanged();
             }
         }
-        private global::System.String _title;
-        partial void OntitleChanging(global::System.String value);
-        partial void OntitleChanged();
+        private global::System.String _Title;
+        partial void OnTitleChanging(global::System.String value);
+        partial void OnTitleChanged();
 
         #endregion
     
@@ -593,7 +517,7 @@ namespace SliceOfPie
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "d_folderId", "document")]
-        public EntityCollection<Document> documents
+        public EntityCollection<Document> Documents
         {
             get
             {
@@ -615,7 +539,7 @@ namespace SliceOfPie
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "f_folderId", "folder1")]
-        public EntityCollection<Folder> folder1
+        public EntityCollection<Folder> Folders
         {
             get
             {
@@ -626,82 +550,6 @@ namespace SliceOfPie
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Folder>("sliceofpieModel.f_folderId", "folder1", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "f_folderId", "folder")]
-        public Folder folder2
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Folder>("sliceofpieModel.f_folderId", "folder").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Folder>("sliceofpieModel.f_folderId", "folder").Value = value;
-            }
-        }
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<Folder> folder2Reference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Folder>("sliceofpieModel.f_folderId", "folder");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Folder>("sliceofpieModel.f_folderId", "folder", value);
-                }
-            }
-        }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "f_projectId", "project")]
-        public Project project
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Project>("sliceofpieModel.f_projectId", "project").Value;
-            }
-            set
-            {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Project>("sliceofpieModel.f_projectId", "project").Value = value;
-            }
-        }
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [BrowsableAttribute(false)]
-        [DataMemberAttribute()]
-        public EntityReference<Project> projectReference
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Project>("sliceofpieModel.f_projectId", "project");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Project>("sliceofpieModel.f_projectId", "project", value);
                 }
             }
         }
@@ -722,11 +570,11 @@ namespace SliceOfPie
         /// <summary>
         /// Create a new Project object.
         /// </summary>
-        /// <param name="id">Initial value of the id property.</param>
+        /// <param name="id">Initial value of the Id property.</param>
         public static Project CreateProject(global::System.Int32 id)
         {
             Project project = new Project();
-            project.id = id;
+            project.Id = id;
             return project;
         }
 
@@ -738,51 +586,51 @@ namespace SliceOfPie
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 id
+        public global::System.Int32 Id
         {
             get
             {
-                return _id;
+                return _Id;
             }
             set
             {
-                if (_id != value)
+                if (_Id != value)
                 {
-                    OnidChanging(value);
-                    ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("id");
-                    OnidChanged();
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
                 }
             }
         }
-        private global::System.Int32 _id;
-        partial void OnidChanging(global::System.Int32 value);
-        partial void OnidChanged();
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String title
+        public global::System.String Title
         {
             get
             {
-                return _title;
+                return _Title;
             }
             set
             {
-                OntitleChanging(value);
-                ReportPropertyChanging("title");
-                _title = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("title");
-                OntitleChanged();
+                OnTitleChanging(value);
+                ReportPropertyChanging("Title");
+                _Title = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Title");
+                OnTitleChanged();
             }
         }
-        private global::System.String _title;
-        partial void OntitleChanging(global::System.String value);
-        partial void OntitleChanged();
+        private global::System.String _Title;
+        partial void OnTitleChanging(global::System.String value);
+        partial void OnTitleChanged();
 
         #endregion
     
@@ -795,7 +643,7 @@ namespace SliceOfPie
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "d_projectId", "document")]
-        public EntityCollection<Document> documents
+        public EntityCollection<Document> Documents
         {
             get
             {
@@ -817,7 +665,7 @@ namespace SliceOfPie
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "f_projectId", "folder")]
-        public EntityCollection<Folder> folders
+        public EntityCollection<Folder> Folders
         {
             get
             {
@@ -870,11 +718,11 @@ namespace SliceOfPie
         /// <summary>
         /// Create a new ProjectUser object.
         /// </summary>
-        /// <param name="id">Initial value of the id property.</param>
-        public static ProjectUser CreateProjectUser(global::System.Int32 id)
+        /// <param name="id">Initial value of the Id property.</param>
+        public static ProjectUser CreateProjectUser(global::System.Int64 id)
         {
             ProjectUser projectUser = new ProjectUser();
-            projectUser.id = id;
+            projectUser.Id = id;
             return projectUser;
         }
 
@@ -886,75 +734,75 @@ namespace SliceOfPie
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 id
+        public global::System.Int64 Id
         {
             get
             {
-                return _id;
+                return _Id;
             }
             set
             {
-                if (_id != value)
+                if (_Id != value)
                 {
-                    OnidChanging(value);
-                    ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("id");
-                    OnidChanged();
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
                 }
             }
         }
-        private global::System.Int32 _id;
-        partial void OnidChanging(global::System.Int32 value);
-        partial void OnidChanged();
+        private global::System.Int64 _Id;
+        partial void OnIdChanging(global::System.Int64 value);
+        partial void OnIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> projectId
+        public Nullable<global::System.Int32> ProjectId
         {
             get
             {
-                return _projectId;
+                return _ProjectId;
             }
             set
             {
-                OnprojectIdChanging(value);
-                ReportPropertyChanging("projectId");
-                _projectId = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("projectId");
-                OnprojectIdChanged();
+                OnProjectIdChanging(value);
+                ReportPropertyChanging("ProjectId");
+                _ProjectId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ProjectId");
+                OnProjectIdChanged();
             }
         }
-        private Nullable<global::System.Int32> _projectId;
-        partial void OnprojectIdChanging(Nullable<global::System.Int32> value);
-        partial void OnprojectIdChanged();
+        private Nullable<global::System.Int32> _ProjectId;
+        partial void OnProjectIdChanging(Nullable<global::System.Int32> value);
+        partial void OnProjectIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> userId
+        public global::System.String UserEmail
         {
             get
             {
-                return _userId;
+                return _UserEmail;
             }
             set
             {
-                OnuserIdChanging(value);
-                ReportPropertyChanging("userId");
-                _userId = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("userId");
-                OnuserIdChanged();
+                OnUserEmailChanging(value);
+                ReportPropertyChanging("UserEmail");
+                _UserEmail = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("UserEmail");
+                OnUserEmailChanged();
             }
         }
-        private Nullable<global::System.Int32> _userId;
-        partial void OnuserIdChanging(Nullable<global::System.Int32> value);
-        partial void OnuserIdChanged();
+        private global::System.String _UserEmail;
+        partial void OnUserEmailChanging(global::System.String value);
+        partial void OnUserEmailChanged();
 
         #endregion
     
@@ -966,16 +814,16 @@ namespace SliceOfPie
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "pu_projectId", "project")]
+        [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "pu_projectId", "Project")]
         public Project project
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Project>("sliceofpieModel.pu_projectId", "project").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Project>("sliceofpieModel.pu_projectId", "Project").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Project>("sliceofpieModel.pu_projectId", "project").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Project>("sliceofpieModel.pu_projectId", "Project").Value = value;
             }
         }
         /// <summary>
@@ -987,13 +835,13 @@ namespace SliceOfPie
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Project>("sliceofpieModel.pu_projectId", "project");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Project>("sliceofpieModel.pu_projectId", "Project");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Project>("sliceofpieModel.pu_projectId", "project", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Project>("sliceofpieModel.pu_projectId", "Project", value);
                 }
             }
         }
@@ -1004,16 +852,16 @@ namespace SliceOfPie
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "pu_userId", "user")]
+        [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "pu_userEmail", "User")]
         public User user
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<User>("sliceofpieModel.pu_userId", "user").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<User>("sliceofpieModel.pu_userEmail", "User").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<User>("sliceofpieModel.pu_userId", "user").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<User>("sliceofpieModel.pu_userEmail", "User").Value = value;
             }
         }
         /// <summary>
@@ -1025,13 +873,13 @@ namespace SliceOfPie
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<User>("sliceofpieModel.pu_userId", "user");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<User>("sliceofpieModel.pu_userEmail", "User");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<User>("sliceofpieModel.pu_userId", "user", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<User>("sliceofpieModel.pu_userEmail", "User", value);
                 }
             }
         }
@@ -1052,11 +900,11 @@ namespace SliceOfPie
         /// <summary>
         /// Create a new Revision object.
         /// </summary>
-        /// <param name="id">Initial value of the id property.</param>
+        /// <param name="id">Initial value of the Id property.</param>
         public static Revision CreateRevision(global::System.Int32 id)
         {
             Revision revision = new Revision();
-            revision.id = id;
+            revision.Id = id;
             return revision;
         }
 
@@ -1068,99 +916,99 @@ namespace SliceOfPie
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String content
+        public global::System.String Content
         {
             get
             {
-                return _content;
+                return _Content;
             }
             set
             {
-                OncontentChanging(value);
-                ReportPropertyChanging("content");
-                _content = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("content");
-                OncontentChanged();
+                OnContentChanging(value);
+                ReportPropertyChanging("Content");
+                _Content = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Content");
+                OnContentChanged();
             }
         }
-        private global::System.String _content;
-        partial void OncontentChanging(global::System.String value);
-        partial void OncontentChanged();
+        private global::System.String _Content;
+        partial void OnContentChanging(global::System.String value);
+        partial void OnContentChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> contentHash
+        public Nullable<global::System.Int32> ContentHash
         {
             get
             {
-                return _contentHash;
+                return _ContentHash;
             }
             set
             {
-                OncontentHashChanging(value);
-                ReportPropertyChanging("contentHash");
-                _contentHash = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("contentHash");
-                OncontentHashChanged();
+                OnContentHashChanging(value);
+                ReportPropertyChanging("ContentHash");
+                _ContentHash = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ContentHash");
+                OnContentHashChanged();
             }
         }
-        private Nullable<global::System.Int32> _contentHash;
-        partial void OncontentHashChanging(Nullable<global::System.Int32> value);
-        partial void OncontentHashChanged();
+        private Nullable<global::System.Int32> _ContentHash;
+        partial void OnContentHashChanging(Nullable<global::System.Int32> value);
+        partial void OnContentHashChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> documentId
+        public Nullable<global::System.Int32> DocumentId
         {
             get
             {
-                return _documentId;
+                return _DocumentId;
             }
             set
             {
-                OndocumentIdChanging(value);
-                ReportPropertyChanging("documentId");
-                _documentId = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("documentId");
-                OndocumentIdChanged();
+                OnDocumentIdChanging(value);
+                ReportPropertyChanging("DocumentId");
+                _DocumentId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("DocumentId");
+                OnDocumentIdChanged();
             }
         }
-        private Nullable<global::System.Int32> _documentId;
-        partial void OndocumentIdChanging(Nullable<global::System.Int32> value);
-        partial void OndocumentIdChanged();
+        private Nullable<global::System.Int32> _DocumentId;
+        partial void OnDocumentIdChanging(Nullable<global::System.Int32> value);
+        partial void OnDocumentIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 id
+        public global::System.Int32 Id
         {
             get
             {
-                return _id;
+                return _Id;
             }
             set
             {
-                if (_id != value)
+                if (_Id != value)
                 {
-                    OnidChanging(value);
-                    ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("id");
-                    OnidChanged();
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
                 }
             }
         }
-        private global::System.Int32 _id;
-        partial void OnidChanging(global::System.Int32 value);
-        partial void OnidChanged();
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
 
         #endregion
     
@@ -1173,7 +1021,7 @@ namespace SliceOfPie
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "r_documentId", "document")]
-        public Document document
+        public Document Document
         {
             get
             {
@@ -1189,7 +1037,7 @@ namespace SliceOfPie
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
-        public EntityReference<Document> documentReference
+        public EntityReference<Document> DocumentReference
         {
             get
             {
@@ -1220,11 +1068,11 @@ namespace SliceOfPie
         /// <summary>
         /// Create a new User object.
         /// </summary>
-        /// <param name="id">Initial value of the id property.</param>
-        public static User CreateUser(global::System.Int32 id)
+        /// <param name="email">Initial value of the Email property.</param>
+        public static User CreateUser(global::System.String email)
         {
             User user = new User();
-            user.id = id;
+            user.Email = email;
             return user;
         }
 
@@ -1234,77 +1082,53 @@ namespace SliceOfPie
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
-        [DataMemberAttribute()]
-        public global::System.String email
-        {
-            get
-            {
-                return _email;
-            }
-            set
-            {
-                OnemailChanging(value);
-                ReportPropertyChanging("email");
-                _email = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("email");
-                OnemailChanged();
-            }
-        }
-        private global::System.String _email;
-        partial void OnemailChanging(global::System.String value);
-        partial void OnemailChanged();
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 id
+        public global::System.String Email
         {
             get
             {
-                return _id;
+                return _Email;
             }
             set
             {
-                if (_id != value)
+                if (_Email != value)
                 {
-                    OnidChanging(value);
-                    ReportPropertyChanging("id");
-                    _id = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("id");
-                    OnidChanged();
+                    OnEmailChanging(value);
+                    ReportPropertyChanging("Email");
+                    _Email = StructuralObject.SetValidValue(value, false);
+                    ReportPropertyChanged("Email");
+                    OnEmailChanged();
                 }
             }
         }
-        private global::System.Int32 _id;
-        partial void OnidChanging(global::System.Int32 value);
-        partial void OnidChanged();
+        private global::System.String _Email;
+        partial void OnEmailChanging(global::System.String value);
+        partial void OnEmailChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public global::System.String password
+        public global::System.String Password
         {
             get
             {
-                return _password;
+                return _Password;
             }
             set
             {
-                OnpasswordChanging(value);
-                ReportPropertyChanging("password");
-                _password = StructuralObject.SetValidValue(value, true);
-                ReportPropertyChanged("password");
-                OnpasswordChanged();
+                OnPasswordChanging(value);
+                ReportPropertyChanging("Password");
+                _Password = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Password");
+                OnPasswordChanged();
             }
         }
-        private global::System.String _password;
-        partial void OnpasswordChanging(global::System.String value);
-        partial void OnpasswordChanged();
+        private global::System.String _Password;
+        partial void OnPasswordChanging(global::System.String value);
+        partial void OnPasswordChanged();
 
         #endregion
     
@@ -1316,18 +1140,18 @@ namespace SliceOfPie
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "pu_userId", "project_users")]
+        [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "pu_userEmail", "project_users")]
         public EntityCollection<ProjectUser> project_users
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ProjectUser>("sliceofpieModel.pu_userId", "project_users");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ProjectUser>("sliceofpieModel.pu_userEmail", "project_users");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ProjectUser>("sliceofpieModel.pu_userId", "project_users", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ProjectUser>("sliceofpieModel.pu_userEmail", "project_users", value);
                 }
             }
         }

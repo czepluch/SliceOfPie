@@ -17,7 +17,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -60,14 +60,23 @@
     </ApplicationDefinition>
     <Compile Include="Document.cs" />
     <Compile Include="Folder.cs" />
-    <Compile Include="Item.cs" />
-    <Compile Include="ItemContainer.cs" />
+    <Compile Include="IconFactory.cs" />
+    <Compile Include="IItem.cs" />
+    <Compile Include="IItemContainer.cs" />
+    <Compile Include="ListableItem.cs" />
     <Compile Include="MySQLModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MySQLModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Project.cs" />
+    <Compile Include="TextEditor.xaml.cs">
+      <DependentUpon>TextEditor.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="User.cs" />
+    <Compile Include="FolderContentView.xaml.cs">
+      <DependentUpon>FolderContentView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WebFileModel.cs" />
     <Compile Include="LocalFileModel.cs" />
     <Compile Include="UserModel.cs" />
@@ -80,11 +89,19 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controller.cs" />
-    <Compile Include="FileModel.cs" />
+    <Compile Include="IFileModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="TextEditor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="FolderContentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -104,16 +121,22 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="App.Config" />
     <EntityDeploy Include="MySQLModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>MySQLModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="App.Config" />
+    <None Include="Properties\DataSources\sliceofpieEntities.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\document-icon.bmp" />
+    <Resource Include="Icons\folder-icon.bmp" />
+    <Resource Include="Icons\project-icon.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
