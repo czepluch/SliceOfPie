@@ -13,7 +13,7 @@ namespace SliceOfPie {
 
         public LocalFileModel() {
             AppPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie");
-            SyncFiles("me@michaelstorgaard.com");
+            //SyncFiles("me@michaelstorgaard.com");
             CreateStructure();
             FindProjects();
         }
