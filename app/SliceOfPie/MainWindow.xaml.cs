@@ -32,7 +32,7 @@ namespace SliceOfPie {
             RefreshDocumentExplorer();
             TreeViewItem topProject = DocumentExplorer.Items[0] as TreeViewItem; //Note there's always at least one project
             topProject.IsSelected = true;
-            SetActiveItem(topProject.Tag as ListableItem); 
+            SetMainContentFromItem(topProject.Tag as ListableItem); 
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace SliceOfPie {
         /// <param name="sender">The sender object</param>
         /// <param name="e">The RoutedEventArgs</param>
         private void SetActiveItemContextMenu_Click(object sender, RoutedEventArgs e) {
-            SetActiveItem(currentlyActiveItem);
+            SetMainContentFromItem(currentlyActiveItem);
         }
 
         
@@ -118,8 +118,8 @@ namespace SliceOfPie {
         private void RefreshDocumentExplorer() {
             DocumentExplorer.Items.Clear();
             foreach (Project project in controller.GetProjects("local")) {
-                TreeViewItem myProject = createDocumentExplorerItem(project);
-                AddProjectToDocExplorer(myProject);
+                TreeViewItem projectItem = createDocumentExplorerItem(project);
+                AddProjectToDocExplorer(projectItem);
             }
         }
 
@@ -213,7 +213,7 @@ namespace SliceOfPie {
         /// Fills the MainContent with useful information for the specific item
         /// </summary>
         /// <param name="item">The item which mainContent will use as a context</param>
-        private void SetActiveItem(ListableItem item) {
+        private void SetMainContentFromItem(ListableItem item) {
             currentlyActiveItem = item;
             if (item is IItemContainer) {
                 FolderContentView folderContentView = new FolderContentView(item as IItemContainer, new MouseButtonEventHandler(FolderContentView_DoubleClick));
@@ -318,7 +318,7 @@ namespace SliceOfPie {
                 currentlyActiveItem = item.Tag as ListableItem;
                 item.IsSelected = true;
                 item.IsExpanded = true;
-                SetActiveItem(item.Tag as ListableItem);
+                SetMainContentFromItem(item.Tag as ListableItem);
             }
         }
 
@@ -335,7 +335,7 @@ namespace SliceOfPie {
                     currentlyActiveItem = item.Tag as ListableItem;
                     item.IsSelected = true;
                     item.IsExpanded = true;
-                    SetActiveItem(item.Tag as ListableItem);
+                    SetMainContentFromItem(item.Tag as ListableItem);
                 }
             }
         }
@@ -389,6 +389,7 @@ namespace SliceOfPie {
             CreateFolder.IsOpen = false;
             IsEnabled = true;
             CreateFolderTextBox.Clear();
+            SetMainContentFromItem(currentlyActiveItem); //show folder content and as such the new folder
             RefreshDocumentExplorer();
         }
 
@@ -415,6 +416,7 @@ namespace SliceOfPie {
             CreateDocument.IsOpen = false;
             IsEnabled = true;
             CreateDocumentTextBox.Clear();
+            SetMainContentFromItem(currentlyActiveItem); //show folder content and as such the new document
             RefreshDocumentExplorer();
         }
 
@@ -466,7 +468,7 @@ namespace SliceOfPie {
                     item.IsExpanded = true;
                 }
             }
-            SetActiveItem(itemClicked);
+            SetMainContentFromItem(itemClicked);
         }
 
         #endregion

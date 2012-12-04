@@ -9,13 +9,13 @@
         <WrapPanel DockPanel.Dock="Top" Height="50" Background="#FFDDDDDD">
             <Button Name="CreateDocumentButton" Margin="10,0,10,0">
                 <StackPanel Orientation="Vertical">
-                    <Image Width="30" Source="Icons/document-icon.bmp"/>
+                    <Image Width="30" Source="Icons/document-icon.png"/>
                     <TextBlock>Create document</TextBlock>
                 </StackPanel>
             </Button>
             <Button Name="CreateFolderButton" Margin="10,0,10,0">
                 <StackPanel Orientation="Vertical">
-                    <Image Width="30" Source="Icons/folder-icon.bmp"/>
+                    <Image Width="30" Source="Icons/folder-icon.png"/>
                     <TextBlock>Create folder</TextBlock>
                 </StackPanel>
             </Button>
