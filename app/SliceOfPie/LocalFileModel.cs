@@ -49,7 +49,7 @@ namespace SliceOfPie {
             if (Directory.Exists(projectPath) || File.Exists(projectPath)) {
                 throw new ArgumentException("Name is already in use (" + projectPath + ")");
             }
-            Directory.Move(Path.Combine(AppPath, project.Title), projectPath);
+            Directory.Move(project.GetPath(), projectPath);
             project.Title = title;
         }
 
@@ -165,7 +165,7 @@ namespace SliceOfPie {
             if (Directory.Exists(documentPath) || File.Exists(documentPath)) {
                 throw new ArgumentException("Name is already in use(" + documentPath + ")");
             }
-            File.Move(Path.Combine(document.Parent.GetPath(), document.Title), document.GetPath());
+            File.Move(document.GetPath(), documentPath);
             document.Title = title;
         }
 

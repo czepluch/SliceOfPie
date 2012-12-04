@@ -201,7 +201,7 @@ namespace SliceOfPieTests {
 
         [TestMethod]
         public void TestFindProjects() {
-            string projectPath = Path.Combine(AppPath, "TestProject");
+            string projectPath = Path.Combine(AppPath, "0-TestProject");
             Directory.CreateDirectory(projectPath);
 
             Model.FindProjects();
@@ -213,10 +213,10 @@ namespace SliceOfPieTests {
             foreach (Project project in projects) {
                 switch (i) {
                     case 0:
-                        Assert.AreEqual(Path.Combine(AppPath, "default"), Path.Combine(project.AppPath, project.Title));
+                        Assert.AreEqual(Path.Combine(AppPath, "0-default"), project.GetPath());
                         break;
                     case 1:
-                        Assert.AreEqual(Path.Combine(AppPath, "TestProject"), Path.Combine(project.AppPath, project.Title));
+                        Assert.AreEqual(Path.Combine(AppPath, "0-TestProject"), project.GetPath());
                         break;
                 }
                 i++;
@@ -225,7 +225,7 @@ namespace SliceOfPieTests {
 
         [TestMethod]
         public void TestFindFolders() {
-            string folderPath = Path.Combine(Path.Combine(AppPath, "default"), "TestFolder");
+            string folderPath = Path.Combine(Path.Combine(AppPath, "0-default"), "0-TestFolder");
             Directory.CreateDirectory(folderPath);
 
             Model.FindProjects();
@@ -233,18 +233,18 @@ namespace SliceOfPieTests {
             IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(1, projects.Count());
             Project project = projects.First();
-            Assert.AreEqual(Path.Combine(AppPath, "default"), Path.Combine(project.AppPath, project.Title));
+            Assert.AreEqual(Path.Combine(AppPath, "0-default"), project.GetPath());
 
             Assert.AreEqual(1, project.Folders.Count());
             Folder folder = project.Folders.First();
-            Assert.AreEqual("TestFolder", folder.Title);
+            Assert.AreEqual(Path.Combine(project.GetPath(), "0-TestFolder"), folder.GetPath());
         }
 
         [TestMethod]
         public void TestFindDocuments() {
-            string folderPath = Path.Combine(Path.Combine(AppPath, "default"), "TestFolder");
+            string folderPath = Path.Combine(Path.Combine(AppPath, "0-default"), "0-TestFolder");
             Directory.CreateDirectory(folderPath);
-            string documentPath = Path.Combine(Path.Combine(Path.Combine(AppPath, "default"), "TestFolder"), "TestFile");
+            string documentPath = Path.Combine(Path.Combine(Path.Combine(AppPath, "0-default"), "0-TestFolder"), "0-TestFile");
             FileStream fileStream = File.Create(documentPath);
             fileStream.Close();
             Assert.AreEqual(true, File.Exists(documentPath));
@@ -254,7 +254,7 @@ namespace SliceOfPieTests {
             IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(1, projects.Count());
             Project project = projects.First();
-            Assert.AreEqual(Path.Combine(AppPath, "default"), Path.Combine(project.AppPath, project.Title));
+            Assert.AreEqual(Path.Combine(AppPath, "0-default"), project.GetPath());
 
             Assert.AreEqual(1, project.Folders.Count());
             Folder folder = project.Folders.First();
