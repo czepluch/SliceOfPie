@@ -331,7 +331,7 @@ namespace SliceOfPie {
         /// <returns>IAsyncResult for EndRemoveDocument</returns>
         /// <see cref="EndRemoveDocument"/>
         public IAsyncResult BeginRemoveDocument(Document d, AsyncCallback callback, object state) {
-            AsyncResult<object, Document> ar = new AsyncResult<object, Document>(callback, state, p);
+            AsyncResult<object, Document> ar = new AsyncResult<object, Document>(callback, state, d);
             ThreadPool.QueueUserWorkItem(RemoveDocumentAsyncHelper, ar);
 
             return ar;
@@ -451,11 +451,11 @@ namespace SliceOfPie {
         }
 
         /// <summary>
-        /// Block while project is removed, then continue
+        /// Block while folder is removed, then continue
         /// </summary>
         /// <param name="asyncResult">IAsyncResult from BeginRemoveFolder</param>
         /// <see cref="BeginRemoveFolder"/>
-        public void EndRemoveProject(IAsyncResult asyncResult) {
+        public void EndRemoveFolder(IAsyncResult asyncResult) {
             AsyncResult<object, Folder> ar = (AsyncResult<object, Folder>)asyncResult;
             ar.EndInvoke();
         }
