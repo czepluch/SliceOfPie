@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Controls.Primitives;
 
 namespace SliceOfPie {
     /// <summary>
@@ -228,7 +229,9 @@ namespace SliceOfPie {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void openCreateProjectWindow(object sender, RoutedEventArgs e) {
+            IsEnabled = false;
             CreateProject.IsOpen = true;
+            CreateProjectTextBox.Focus();
         }
 
         /// <summary>
@@ -238,7 +241,9 @@ namespace SliceOfPie {
         /// <param name="e">The event arguments</param>
         private void openShareProjectWindow(object sender, RoutedEventArgs e) {
             //note that the textbox is cleared when the popups were last closed
+            IsEnabled = false;
             ShareProject.IsOpen = true;
+            ShareProjectTextBox.Focus();
         }
 
         /// <summary>
@@ -248,7 +253,9 @@ namespace SliceOfPie {
         /// <param name="e">The event arguments</param>
         private void openCreateFolderWindow(object sender, RoutedEventArgs e) {
             //note that the textbox is cleared when the popups were last closed
+            IsEnabled = false;
             CreateFolder.IsOpen = true;
+            CreateFolderTextBox.Focus();
         }
 
         /// <summary>
@@ -258,7 +265,9 @@ namespace SliceOfPie {
         /// <param name="e">The event arguments</param>
         private void openCreateDocumentWindow(object sender, RoutedEventArgs e) {
             //note that the textbox is cleared when the popups were last closed
+            IsEnabled = false;
             CreateDocument.IsOpen = true;
+            CreateDocumentTextBox.Focus();
         }
 
         /// <summary>
@@ -326,6 +335,7 @@ namespace SliceOfPie {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void CreateProjectCancelButton_Click(object sender, RoutedEventArgs e) {
+            IsEnabled = true;
             CreateProject.IsOpen = false;
             CreateProjectTextBox.Clear();
         }
@@ -337,6 +347,7 @@ namespace SliceOfPie {
         /// <param name="e">The event arguments</param>
         private void CreateProjectCreateButton_Click(object sender, RoutedEventArgs e) {
             Controller.Instance.CreateProject(CreateProjectTextBox.Text, "local");
+            IsEnabled = true;
             CreateProject.IsOpen = false;
             CreateProjectTextBox.Clear();
             RefreshDocumentExplorer();
@@ -348,6 +359,7 @@ namespace SliceOfPie {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void CreateFolderCancelButton_Click(object sender, RoutedEventArgs e) {
+            IsEnabled = true;
             CreateFolder.IsOpen = false;
             CreateFolderTextBox.Clear();
         }
@@ -359,6 +371,7 @@ namespace SliceOfPie {
         /// <param name="e">The event arguments</param>
         private void CreateFolderCreateButton_Click(object sender, RoutedEventArgs e) {
             Controller.Instance.CreateFolder(CreateFolderTextBox.Text, "local", (DocumentExplorer.SelectedItem as TreeViewItem).Tag as IItemContainer);
+            IsEnabled = true;
             CreateFolder.IsOpen = false;
             CreateFolderTextBox.Clear();
             RefreshDocumentExplorer();
@@ -370,6 +383,7 @@ namespace SliceOfPie {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void CreateDocumentCancelButton_Click(object sender, RoutedEventArgs e) {
+            IsEnabled = true;
             CreateDocument.IsOpen = false;
             CreateDocumentTextBox.Clear();
         }
@@ -381,6 +395,7 @@ namespace SliceOfPie {
         /// <param name="e">The event arguments</param>
         private void CreateDocumentCreateButton_Click(object sender, RoutedEventArgs e) {
             Controller.Instance.CreateDocument(CreateDocumentTextBox.Text, "local", (DocumentExplorer.SelectedItem as TreeViewItem).Tag as IItemContainer);
+            IsEnabled = true;
             CreateDocument.IsOpen = false;
             CreateDocumentTextBox.Clear();
             RefreshDocumentExplorer();
@@ -392,6 +407,7 @@ namespace SliceOfPie {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void ShareProjectCancelButton_Click(object sender, RoutedEventArgs e) {
+            IsEnabled = true;
             ShareProject.IsOpen = false;
             ShareProjectTextBox.Clear();
         }
@@ -404,6 +420,7 @@ namespace SliceOfPie {
         private void ShareProjectShareButton_Click(object sender, RoutedEventArgs e) {
             Controller.Instance.ShareProject((DocumentExplorer.SelectedItem as TreeViewItem).Tag as Project, ShareProjectTextBox.Text.Split(','));
             //Call to controller shares the project. Awaiting controller method before implementation
+            IsEnabled = true;
             ShareProject.IsOpen = false;
             ShareProjectTextBox.Clear();
             RefreshDocumentExplorer();
