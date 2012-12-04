@@ -81,8 +81,9 @@ namespace SliceOfPie {
         }
 
         public void RenameDocument(Document document, string title) {
-            if (File.Exists(document.GetPath())) {
-                throw new ArgumentException("File name is already in use(" + document.GetPath() + ")");
+            string documentPath = Path.Combine(document.Parent.GetPath(), title);
+            if (File.Exists(documentPath)) {
+                throw new ArgumentException("File name is already in use(" + documentPath + ")");
             }
             File.Move(Path.Combine(document.Parent.GetPath(), document.Title), document.GetPath());
             document.Title = title;
