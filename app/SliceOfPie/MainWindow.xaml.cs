@@ -190,6 +190,7 @@ namespace SliceOfPie {
             thisTreeViewItem.Header = sp;
             //set up event handlers
             thisTreeViewItem.MouseLeftButtonUp += new MouseButtonEventHandler(DocumentExplorerItemMouseLeftButtonUp);
+            thisTreeViewItem.MouseDoubleClick += new MouseButtonEventHandler(DocumentExplorerItemMouseDoubleClick);
             thisTreeViewItem.MouseRightButtonUp += new MouseButtonEventHandler(DocumentExplorerItemMouseRightButtonUp);
             thisTreeViewItem.MouseRightButtonDown += new MouseButtonEventHandler(DocumentExplorerItemMouseRightButtonDown);
             thisTreeViewItem.KeyUp += new KeyEventHandler(DocumentExplorerItemKeyUp);
@@ -277,6 +278,15 @@ namespace SliceOfPie {
             CreateDocument.IsOpen = true;
             currentlyActivePopUP = CreateDocument;
             CreateDocumentTextBox.Focus();
+        }
+
+        /// <summary>
+        /// This makes right click select an item in the Document Explorer and show the appropiate context menu for the item.
+        /// </summary>
+        /// <param name="sender">The object that send the event</param>
+        /// <param name="e">The MouseButtonEventArgs for the event</param>
+        private void DocumentExplorerItemMouseDoubleClick(object sender, MouseButtonEventArgs e) {
+            e.Handled = true; //Disabling the default doubleclick event in a treeview list item.
         }
 
         /// <summary>
