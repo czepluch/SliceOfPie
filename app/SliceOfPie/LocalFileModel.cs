@@ -18,6 +18,12 @@ namespace SliceOfPie {
             FindProjects();
         }
 
+        /// <summary>
+        /// Add project to system. If db is set to true, only create folder.
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="db"></param>
+        /// <returns></returns>
         public Project AddProject(string title, bool db = false) {
             string projectPath = Path.Combine(AppPath, title);
             if (Directory.Exists(projectPath)) {
@@ -33,6 +39,11 @@ namespace SliceOfPie {
             return project;
         }
 
+        /// <summary>
+        /// Rename project both in file system and internal system.
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="title"></param>
         public void RenameProject(Project project, string title) {
             string projectPath = Path.Combine(AppPath, title);
             if (Directory.Exists(projectPath)) {
@@ -42,12 +53,24 @@ namespace SliceOfPie {
             project.Title = title;
         }
 
+        /// <summary>
+        /// Lazily return all projects for a user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public override IEnumerable<Project> GetProjects(int userId) {
             foreach (Project project in Projects) {
                 yield return project;
             }
         }
 
+        /// <summary>
+        /// Add folder to system. If db is set to true, only create folder.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="title"></param>
+        /// <param name="db"></param>
+        /// <returns></returns>
         public Folder AddFolder(IItemContainer parent, string title, bool db = false) {
             string folderPath = Path.Combine(parent.GetPath(), title);
             if (Directory.Exists(folderPath)) {
@@ -63,6 +86,11 @@ namespace SliceOfPie {
             return folder;
         }
 
+        /// <summary>
+        /// Rename folder both in file system and internal system.
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="title"></param>
         public void RenameFolder(Folder folder, string title) {
             string folderPath = Path.Combine(folder.Parent.GetPath(), title);
             if (Directory.Exists(folderPath)) {
@@ -72,6 +100,13 @@ namespace SliceOfPie {
             folder.Title = title;
         }
 
+        /// <summary>
+        /// Add document to system. If db is set to true, only create file.
+        /// </summary>
+        /// <param name="parent"></param>
+        /// <param name="title"></param>
+        /// <param name="db"></param>
+        /// <returns></returns>
         public Document AddDocument(IItemContainer parent, string title, bool db = false) {
             string documentPath = Path.Combine(parent.GetPath(), title);
             if (File.Exists(documentPath)) {
@@ -88,6 +123,11 @@ namespace SliceOfPie {
             return document;
         }
 
+        /// <summary>
+        /// Rename file both in file system and internal system.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <param name="title"></param>
         public void RenameDocument(Document document, string title) {
             string documentPath = Path.Combine(document.Parent.GetPath(), title);
             if (File.Exists(documentPath)) {
@@ -97,6 +137,10 @@ namespace SliceOfPie {
             document.Title = title;
         }
 
+        /// <summary>
+        /// Save document to file. Take CurrentRevision from Document and overwrite existing file.
+        /// </summary>
+        /// <param name="document"></param>
         public override void SaveDocument(Document document) {
             if (!File.Exists(document.GetPath())) {
                 throw new ArgumentException("File does not exist (" + document.GetPath() + ")");
@@ -109,15 +153,27 @@ namespace SliceOfPie {
             fileStream.Close();
         }
 
+        /// <summary>
+        /// Synchronize all files and folders with db. Upload first then download.
+        /// </summary>
+        /// <param name="email"></param>
         public void SyncFiles(string email) {
             UploadStructure(email);
             DownloadStructure(email);
         }
 
+        /// <summary>
+        /// Upload all files and folders to db for specific user.
+        /// </summary>
+        /// <param name="email"></param>
         public void UploadStructure(string email) {
 
         }
 
+        /// <summary>
+        /// Download all files and folders from db for specific user.
+        /// </summary>
+        /// <param name="email"></param>
         public void DownloadStructure(string email) {
             List<Project> projectsContainer = new List<Project>();
             using (var dbContext = new sliceofpieEntities2()) {
@@ -159,6 +215,10 @@ namespace SliceOfPie {
             }
         }
 
+        /// <summary>
+        /// Download all folders for a specific parent folder. Do this recursively.
+        /// </summary>
+        /// <param name="parent"></param>
         public void DownloadFolders(Folder parent) {
             List<Folder> foldersContainer = new List<Folder>();
             using (var dbContext = new sliceofpieEntities2()) {
@@ -177,6 +237,10 @@ namespace SliceOfPie {
             }
         }
 
+        /// <summary>
+        /// Download all documents for a specific parent folder.
+        /// </summary>
+        /// <param name="parent"></param>
         public void DownloadDocuments(Folder parent) {
             using (var dbContext = new sliceofpieEntities2()) {
                 var documents = from document in dbContext.Documents
@@ -189,6 +253,9 @@ namespace SliceOfPie {
             }
         }
 
+        /// <summary>
+        /// Create basic structure if not found already. This includes SliceOfPie-folder and default project folder.
+        /// </summary>
         public void CreateStructure() {
             if (!Directory.Exists(AppPath)) {
                 Directory.CreateDirectory(AppPath);
@@ -200,6 +267,9 @@ namespace SliceOfPie {
             }
         }
 
+        /// <summary>
+        /// Find all projects in file system and create them in internal system.
+        /// </summary>
         public void FindProjects() {
             Projects = new List<Project>();
 
@@ -215,6 +285,10 @@ namespace SliceOfPie {
             }
         }
 
+        /// <summary>
+        /// Find all folders in project folder and subfolders in file system and create them in internal system.
+        /// </summary>
+        /// <param name="parent"></param>
         public void FindFolders(IItemContainer parent) {
             string[] folders = Directory.GetDirectories(parent.GetPath());
             foreach (string folderName in folders) {
@@ -228,6 +302,10 @@ namespace SliceOfPie {
             }
         }
 
+        /// <summary>
+        /// Find all documents in project/folder in file system and create them in internal system.
+        /// </summary>
+        /// <param name="parent"></param>
         public void FindDocuments(IItemContainer parent) {
             string[] documentPaths = Directory.GetFiles(parent.GetPath());
             foreach (string documentName in documentPaths) {
