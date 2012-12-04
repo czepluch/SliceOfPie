@@ -24,7 +24,7 @@ namespace SliceOfPie {
         /// <param name="title"></param>
         /// <param name="db"></param>
         /// <returns></returns>
-        public Project AddProject(string title, bool db = false) {
+        public override Project AddProject(string title, bool db = false) {
             string projectPath = Path.Combine(AppPath, title);
             if (Directory.Exists(projectPath)) {
                 if (db) return null;
@@ -53,8 +53,20 @@ namespace SliceOfPie {
             project.Title = title;
         }
 
-        public void RemoveProject(Project project) {
-
+        public override void RemoveProject(Project project) {
+            if (!Directory.Exists(project.GetPath())) {
+                throw new ArgumentException("Project folder does not exist (" + project.GetPath() + ")");
+            }
+            Document[] removeDocuments = project.Documents.ToArray();
+            foreach (Document document in removeDocuments) {
+                RemoveDocument(document);
+            }
+            Folder[] removeFolders = project.Folders.ToArray();
+            foreach (Folder subFolder in removeFolders) {
+                RemoveFolder(subFolder);
+            }
+            Directory.Delete(project.GetPath());
+            Projects.Remove(project);
         }
 
         /// <summary>
@@ -75,7 +87,7 @@ namespace SliceOfPie {
         /// <param name="title"></param>
         /// <param name="db"></param>
         /// <returns></returns>
-        public Folder AddFolder(IItemContainer parent, string title, bool db = false) {
+        public override Folder AddFolder(IItemContainer parent, string title, bool db = false) {
             string folderPath = Path.Combine(parent.GetPath(), title);
             if (Directory.Exists(folderPath)) {
                 if (db) return null;
@@ -104,8 +116,20 @@ namespace SliceOfPie {
             folder.Title = title;
         }
 
-        public void RemoveFolder(Folder folder) {
-
+        public override void RemoveFolder(Folder folder) {
+            if (!Directory.Exists(folder.GetPath())) {
+                throw new ArgumentException("Folder does not exist (" + folder.GetPath() + ")");
+            }
+            Document[] removeDocuments = folder.Documents.ToArray();
+            foreach (Document document in removeDocuments) {
+                RemoveDocument(document);
+            }
+            Folder[] removeFolders = folder.Folders.ToArray();
+            foreach (Folder subFolder in removeFolders) {
+                RemoveFolder(subFolder);
+            }
+            Directory.Delete(folder.GetPath());
+            folder.Parent.Folders.Remove(folder);
         }
 
         /// <summary>
@@ -115,7 +139,7 @@ namespace SliceOfPie {
         /// <param name="title"></param>
         /// <param name="db"></param>
         /// <returns></returns>
-        public Document AddDocument(IItemContainer parent, string title, bool db = false) {
+        public override Document AddDocument(IItemContainer parent, string title, bool db = false) {
             string documentPath = Path.Combine(parent.GetPath(), title);
             if (File.Exists(documentPath)) {
                 if (db) return null;
@@ -161,8 +185,12 @@ namespace SliceOfPie {
             fileStream.Close();
         }
 
-        public void RemoveDocument(Document document) {
-
+        public override void RemoveDocument(Document document) {
+            if (!File.Exists(document.GetPath())) {
+                throw new ArgumentException("File does not exist (" + document.GetPath() + ")");
+            }
+            File.Delete(document.GetPath());
+            document.Parent.Documents.Remove(document);
         }
 
         /// <summary>
