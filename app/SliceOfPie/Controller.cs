@@ -5,7 +5,7 @@ using System.Text;
 
 namespace SliceOfPie {
     public class Controller {
-        
+
         private static Controller _instance = new Controller();
         public static Controller Instance {
             get {
@@ -23,25 +23,18 @@ namespace SliceOfPie {
         #region Project
 
         public Project CreateProject(string name, string userMail) {
-            return new Project();
+            return fileModel.AddProject(name);
         }
 
-        public Boolean SaveProject(Project p) {
-            return true;
+        public void RemoveProject(Project p) {
+            fileModel.RemoveProject(p);
         }
 
-        public void RemoveProject(Project p)
-        {
-            //baw
-        }
-
-        public void ShareProject(Project p, IEnumerable<string> emails)
-        {
+        public void ShareProject(Project p, IEnumerable<string> emails) {
             //nope
         }
 
-        public void SyncProject(Project p)
-        {
+        public void SyncProject(Project p) {
             //story cool, yes
         }
 
@@ -49,17 +42,15 @@ namespace SliceOfPie {
 
         #region Document
 
-        public Document CreateDocument(string name, string userMail, IItemContainer parent)
-        {
-            return new Document();
+        public Document CreateDocument(string name, string userMail, IItemContainer parent) {
+            return fileModel.AddDocument(parent, name);
         }
 
         public void SaveDocument(Document document) {
             fileModel.SaveDocument(document);
         }
 
-        public void RemoveDocument(Document d)
-        {
+        public void RemoveDocument(Document d) {
             //lawl
         }
 
@@ -67,17 +58,15 @@ namespace SliceOfPie {
 
         #region Folder
 
-        public Folder CreateFolder(String name, string userMail, IItemContainer parent)
-        {
-            return new Folder();
+        public Folder CreateFolder(String name, string userMail, IItemContainer parent) {
+            return fileModel.AddFolder(parent, name);
         }
 
         public void SaveFolder(Folder f) {
-
+            //LOLNOPE
         }
 
-        public void RemoveFolder(Folder f)
-        {
+        public void RemoveFolder(Folder f) {
             //naw
         }
 
