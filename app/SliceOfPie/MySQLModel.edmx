@@ -45,6 +45,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
+          <Property Name="currentRevision" Type="text" />
           <Property Name="folderId" Type="int" />
           <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="projectId" Type="int" />
@@ -223,6 +224,7 @@
           <Property Name="ProjectId" Type="Int32" />
           <Property Name="Title" Type="String" />
           <NavigationProperty Name="Revisions" Relationship="sliceofpieModel.r_documentId" FromRole="document" ToRole="revision" />
+          <Property Type="String" Name="CurrentRevision" />
         </EntityType>
         <EntityType Name="Folder">
           <Key>
@@ -364,7 +366,8 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="sliceofpieModelStoreContainer" CdmEntityContainer="sliceofpieEntities2">
           <EntitySetMapping Name="Documents"><EntityTypeMapping TypeName="sliceofpieModel.Document"><MappingFragment StoreEntitySet="document">
-            <ScalarProperty Name="FolderId" ColumnName="folderId" />
+            <ScalarProperty Name="CurrentRevision" ColumnName="currentRevision" />
+                <ScalarProperty Name="FolderId" ColumnName="folderId" />
             <ScalarProperty Name="Id" ColumnName="id" />
             <ScalarProperty Name="ProjectId" ColumnName="projectId" />
             <ScalarProperty Name="Title" ColumnName="title" />

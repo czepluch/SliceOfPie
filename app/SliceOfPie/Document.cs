@@ -8,7 +8,6 @@ namespace SliceOfPie {
     public partial class Document : IItem, ListableItem {
 
         public IItemContainer Parent { get; set; }
-        public string CurrentRevision { get; set; }
 
         public IEnumerable<string> GetRevisions()
         {
