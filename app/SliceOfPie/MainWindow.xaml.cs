@@ -22,7 +22,6 @@ namespace SliceOfPie {
         private static Controller controller;
 
         private static ListableItem currentlyActiveItem;
-        private static TreeViewItem currentlyActiveDocumentExplorerItem;
         private static Popup currentlyActivePopUp;
 
         public MainWindow() {
@@ -34,10 +33,9 @@ namespace SliceOfPie {
         }
 
         /// <summary>
-        /// Sets up the DocumentExplorer's icons and context menus
+        /// Sets up the DocumentExplorer's context menus
         /// </summary>
         private void InitializeDocumentExplorer() {
-            //Setup Project Context Menu for the Document Explorer
             projectContextMenu = new ContextMenu();
             folderContextMenu = new ContextMenu();
             documentContextMenu = new ContextMenu();
