@@ -13,7 +13,7 @@ namespace SliceOfPie {
 
         public LocalFileModel() {
             AppPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie");
-            //SyncFiles("me@michaelstorgaard.com");
+            SyncFiles("me@michaelstorgaard.com");
             CreateStructure();
             FindProjects();
         }
@@ -224,7 +224,7 @@ namespace SliceOfPie {
                 foreach (Project project in projects) {
                     project.AppPath = AppPath;
                     projectsContainer.Add(project);
-                    AddProject(project.Title, true);
+                    AddProject(Helper.GenerateName(project.Id, project.Title), true);
                 }
             }
             foreach (Project project in projectsContainer) {
@@ -235,7 +235,7 @@ namespace SliceOfPie {
                                   select folder;
                     foreach (Folder folder in folders) {
                         folder.Parent = project;
-                        AddFolder(project, folder.Title, true);
+                        AddFolder(project, Helper.GenerateName(folder.Id, folder.Title), true);
                         foldersContainer.Add(folder);
                     }
                 }
@@ -249,7 +249,7 @@ namespace SliceOfPie {
                                     select document;
                     foreach (Document document in documents) {
                         document.Parent = project;
-                        AddDocument(project, document.Title, true);
+                        AddDocument(project, Helper.GenerateName(document.Id, document.Title), true);
                     }
                 }
             }
@@ -267,7 +267,7 @@ namespace SliceOfPie {
                               select folder;
                 foreach (Folder folder in folders) {
                     folder.Parent = parent;
-                    AddFolder(parent, folder.Title, true);
+                    AddFolder(parent, Helper.GenerateName(folder.Id, folder.Title), true);
                     foldersContainer.Add(folder);
                 }
             }
@@ -288,7 +288,7 @@ namespace SliceOfPie {
                                 select document;
                 foreach (Document document in documents) {
                     document.Parent = parent;
-                    AddDocument(parent, document.Title, true);
+                    AddDocument(parent, Helper.GenerateName(document.Id, document.Title), true);
                 }
             }
         }
@@ -301,9 +301,11 @@ namespace SliceOfPie {
                 Directory.CreateDirectory(AppPath);
             }
 
-            DefaultProjectPath = Path.Combine(AppPath, "default");
-            if (!Directory.Exists(DefaultProjectPath)) {
-                Directory.CreateDirectory(DefaultProjectPath);
+            if (Directory.GetDirectories(AppPath).Count() == 0) {
+                DefaultProjectPath = Path.Combine(AppPath, "0-default");
+                if (!Directory.Exists(DefaultProjectPath)) {
+                    Directory.CreateDirectory(DefaultProjectPath);
+                }
             }
         }
 
@@ -315,8 +317,11 @@ namespace SliceOfPie {
 
             string[] folders = Directory.GetDirectories(AppPath);
             foreach (string folderName in folders) {
+                string pathName = Path.GetFileName(folderName);
                 Project project = new Project();
-                project.Title = Path.GetFileName(folderName);
+                string[] parts = pathName.Split('-');
+                project.Id = int.Parse(parts[0]);
+                project.Title = pathName.Replace(parts[0] + "-", "");
                 project.AppPath = AppPath;
                 Projects.Add(project);
 
@@ -332,8 +337,11 @@ namespace SliceOfPie {
         public void FindFolders(IItemContainer parent) {
             string[] folders = Directory.GetDirectories(parent.GetPath());
             foreach (string folderName in folders) {
+                string pathName = Path.GetFileName(folderName);
                 Folder folder = new Folder();
-                folder.Title = Path.GetFileName(folderName);
+                string[] parts = pathName.Split('-');
+                folder.Id = int.Parse(parts[0]);
+                folder.Title = pathName.Replace(parts[0] + "-", "");
                 folder.Parent = parent;
                 parent.Folders.Add(folder);
 
@@ -349,8 +357,11 @@ namespace SliceOfPie {
         public void FindDocuments(IItemContainer parent) {
             string[] documentPaths = Directory.GetFiles(parent.GetPath());
             foreach (string documentName in documentPaths) {
+                string pathName = Path.GetFileName(documentName);
                 Document document = new Document();
-                document.Title = Path.GetFileName(documentName);
+                string[] parts = pathName.Split('-');
+                document.Id = int.Parse(parts[0]);
+                document.Title = pathName.Replace(parts[0] + "-", "");
                 document.Parent = parent;
                 parent.Documents.Add(document);
             }

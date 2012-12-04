@@ -22,7 +22,7 @@ namespace SliceOfPie {
         }
 
         public string GetPath() {
-            return Path.Combine(Parent.GetPath(), Title);
+            return Path.Combine(Parent.GetPath(), Helper.GenerateName(Id, Title));
         }
     }
 }
