@@ -22,7 +22,7 @@ namespace SliceOfPie {
         /// false, it is created and then added to the model. This should only ever be set when loading
         /// files at launch.</param>
         /// <returns>The newly created project</returns>
-        public abstract Project AddProject(string title, bool db = false);
+        public abstract Project AddProject(string title, int id = 0, bool db = false);
 
         /// <summary>
         /// Removes a project from the model.
@@ -41,7 +41,7 @@ namespace SliceOfPie {
         /// false, it is created and then added to the model. This should only ever be set when loading
         /// files at launch.</param>
         /// <returns>The newly created folder.</returns>
-        public abstract Folder AddFolder(IItemContainer parent, string title, bool db = false);
+        public abstract Folder AddFolder(IItemContainer parent, string title, int id = 0, bool db = false);
 
         /// <summary>
         /// Remove the folder from the model
@@ -60,7 +60,7 @@ namespace SliceOfPie {
         /// false, it is created and then added to the model. This should only ever be set when loading
         /// files at launch.</param>
         /// <returns>The newly created document</returns>
-        public abstract Document AddDocument(IItemContainer parent, string title, bool db = false);
+        public abstract Document AddDocument(IItemContainer parent, string title, int id = 0, bool db = false);
 
         /// <summary>
         /// Save the document.

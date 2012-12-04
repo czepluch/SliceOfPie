@@ -13,7 +13,7 @@ namespace SliceOfPie {
             }
         }
 
-        public override Project AddProject(string title, bool db) {
+        public override Project AddProject(string title, int id = 0, bool db = false) {
             throw new NotImplementedException();
         }
 
@@ -21,7 +21,7 @@ namespace SliceOfPie {
             throw new NotImplementedException();
         }
 
-        public override Folder AddFolder(IItemContainer parent, string title, bool db) {
+        public override Folder AddFolder(IItemContainer parent, string title, int id = 0, bool db = false) {
             throw new NotImplementedException();
         }
 
@@ -29,7 +29,7 @@ namespace SliceOfPie {
             throw new NotImplementedException();
         }
 
-        public override Document AddDocument(IItemContainer parent, string title, bool db) {
+        public override Document AddDocument(IItemContainer parent, string title, int id = 0, bool db = false) {
             throw new NotImplementedException();
         }
 
