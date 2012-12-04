@@ -160,7 +160,7 @@ namespace SliceOfPie {
         private TreeViewItem createDocumentExplorerItem(ListableItem item) {
             TreeViewItem thisTreeViewItem = new TreeViewItem() { Tag = item };
             //StackPanel for image and text block
-            StackPanel sp = new StackPanel() { Orientation = Orientation.Horizontal };
+            StackPanel sp = new StackPanel() { Orientation = Orientation.Horizontal, IsHitTestVisible = false };
             //Create the image
             BitmapImage icon;
             string text;
@@ -176,13 +176,18 @@ namespace SliceOfPie {
                 icon = IconFactory.DocumentIcon;
                 text = (item as Document).Title;
             }
-            Image image = new Image() { Source = icon, Height = 15, Width = 15, IsHitTestVisible = false }; /* note that IsHitTestVisible=false disables event handling for this element -
+            Image image = new Image() { Source = icon, Height = 15, Width = 15 }; /* note that IsHitTestVisible=false disables event handling for this element -
                                                                                                              * fallback on the general treeview handling (rightclick for the context menu).                                                                                                */
             sp.Children.Add(image);
             //Create the text block
             TextBlock itemText = new TextBlock() { Text = text, Margin = new Thickness(5, 0, 0, 0), IsHitTestVisible = false };
             sp.Children.Add(itemText);
             thisTreeViewItem.Header = sp;
+            //set up event handlers
+            thisTreeViewItem.MouseLeftButtonUp += new MouseButtonEventHandler(DocumentExplorerItemMouseLeftButtonUp);
+            thisTreeViewItem.MouseRightButtonUp += new MouseButtonEventHandler(DocumentExplorerItemMouseRightButtonUp);
+            thisTreeViewItem.MouseRightButtonDown += new MouseButtonEventHandler(DocumentExplorerItemMouseRightButtonDown);
+            thisTreeViewItem.KeyUp += new KeyEventHandler(DocumentExplorerItemKeyUp);
 
             //recursive traversal of structure for Item Containers
             if (item is IItemContainer) {
@@ -261,11 +266,25 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="sender">The object that send the event</param>
         /// <param name="e">The MouseButtonEventArgs for the event</param>
-        private void DocumentExplorer_MouseRightButtonDown(object sender, MouseButtonEventArgs e) {
-            TreeViewItem item = e.Source as TreeViewItem;
+        private void DocumentExplorerItemMouseRightButtonUp(object sender, MouseButtonEventArgs e) {
+            TreeViewItem item = sender as TreeViewItem;
             if (item != null) {
+                e.Handled = true;
                 item.IsSelected = true;
                 generateContextMenu(item.Tag as ListableItem);
+            }
+        }
+
+        /// <summary>
+        /// This makes right click select an item on the keydown event.
+        /// </summary>
+        /// <param name="sender">The object that send the event</param>
+        /// <param name="e">The MouseButtonEventArgs for the event</param>
+        private void DocumentExplorerItemMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
+            TreeViewItem item = sender as TreeViewItem;
+            if (item != null) {
+                e.Handled = true;
+                item.IsSelected = true;
             }
         }
 
@@ -274,9 +293,10 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="sender">The sender of the event</param>
         /// <param name="e">MouseButtonEventArgs</param>
-        private void DocumentExplorer_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
-            TreeViewItem item = ((TreeView)sender).SelectedItem as TreeViewItem;
+        private void DocumentExplorerItemMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
+            TreeViewItem item = sender as TreeViewItem;
             if (item != null) {
+                e.Handled = true;
                 item.IsSelected = true;
                 item.IsExpanded = true;
                 GenerateContent(item.Tag as ListableItem);
@@ -288,10 +308,11 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
-        private void DocumentExplorer_KeyDown(object sender, KeyEventArgs e) {
+        private void DocumentExplorerItemKeyUp(object sender, KeyEventArgs e) {
             if (e.Key.Equals(System.Windows.Input.Key.Enter)) {
-                TreeViewItem item = e.Source as TreeViewItem;
+                TreeViewItem item = sender as TreeViewItem;
                 if (item != null) {
+                    e.Handled = true;
                     item.IsSelected = true;
                     item.IsExpanded = true;
                     GenerateContent(item.Tag as ListableItem);
