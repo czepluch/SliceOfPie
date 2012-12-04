@@ -5,5 +5,6 @@ using System.Text;
 
 namespace SliceOfPie {
     public interface IItem {
+        string Title { get; set; }
     }
 }
