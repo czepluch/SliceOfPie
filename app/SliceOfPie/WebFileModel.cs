@@ -40,5 +40,29 @@ namespace SliceOfPie {
         public override void RemoveDocument(Document document) {
             throw new NotImplementedException();
         }
+
+        public override Document AddDocument(IItemContainer parent, string title, bool db = false) {
+            throw new NotImplementedException();
+        }
+
+        public override void RemoveDocument(Document d) {
+            throw new NotImplementedException();
+        }
+
+        public override Folder AddFolder(IItemContainer parent, string title, bool db = false) {
+            throw new NotImplementedException();
+        }
+
+        public override void RemoveFolder(Folder f) {
+            throw new NotImplementedException();
+        }
+
+        public override Project AddProject(string title, bool db = false) {
+            throw new NotImplementedException();
+        }
+
+        public override void RemoveProject(Project p) {
+            throw new NotImplementedException();
+        }
     }
 }

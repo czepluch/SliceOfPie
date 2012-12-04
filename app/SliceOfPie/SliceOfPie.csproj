@@ -36,8 +36,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>
-    </StartupObject>
+    <StartupObject>SliceOfPie.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -68,7 +67,7 @@
     <Compile Include="IItem.cs" />
     <Compile Include="IItemContainer.cs" />
     <Compile Include="ListableItem.cs" />
-    <Compile Include="Merger.cs" />
+	<Compile Include="Merger.cs" />
     <Compile Include="MySQLModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -143,6 +142,11 @@
     <Resource Include="Icons\document-icon.bmp" />
     <Resource Include="Icons\folder-icon.bmp" />
     <Resource Include="Icons\project-icon.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\document-icon.png" />
+    <Resource Include="Icons\folder-icon.png" />
+    <Resource Include="Icons\project-icon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
