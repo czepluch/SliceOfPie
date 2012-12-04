@@ -56,7 +56,14 @@
 
         <DockPanel LastChildFill="True">
             <DockPanel DockPanel.Dock="Left">
-                <Button Height="70" DockPanel.Dock="Bottom" Click="openCreateProjectWindow">Create new project</Button>
+                <Grid DockPanel.Dock="Bottom">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Height="70" Click="openCreateProjectWindow">Create new project</Button>
+                    <Button Grid.Column="1" Height="70">Sync.</Button>
+                </Grid>
                 <ScrollViewer  Width="170" Height="auto" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="scrollViewer1">
                     <TreeView Name="DocumentExplorer" FontSize="13" FontWeight="DemiBold"/>
                 </ScrollViewer>

@@ -9,7 +9,7 @@
         <WrapPanel DockPanel.Dock="Top" Height="50" Background="#FFDDDDDD">
             <Button Margin="10,0,10,0" Click="SaveButton_Click">
                 <StackPanel Orientation="Vertical">
-                    <Image Width="30" Source="Icons/document-icon.bmp"/>
+                    <Image Width="30" Source="Icons/document-icon.png"/>
                     <TextBlock>Save Document</TextBlock>
                 </StackPanel>
             </Button>
