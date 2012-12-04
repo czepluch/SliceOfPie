@@ -72,7 +72,7 @@ namespace SliceOfPie {
         /// <param name="name">Name of the project to create</param>
         /// <param name="userMail">Email of the user who owns the project</param>
         /// <param name="callback">Callback delegate, called on completion</param>
-        /// <param name="stateObject">State object (not used)</param>
+        /// <param name="stateObject">State object (passed to callback)</param>
         /// <returns><c>IAsyncResult</c> to be used with <c>EndCreateProject</c></returns>
         /// <see cref="EndCreateProject"/>
         public IAsyncResult BeginCreateProject(string name, string userMail, AsyncCallback callback, object stateObject) {
@@ -125,7 +125,7 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="p">Project to remove</param>
         /// <param name="callback">Callback called upon finish</param>
-        /// <param name="state">State object, not used.</param>
+        /// <param name="state">State object, passed to callback.</param>
         /// <returns>IAsyncResult used by EndRemoveProject</returns>
         /// <see cref="EndRemoveProject"/>
         public IAsyncResult BeginRemoveProject(Project p, AsyncCallback callback, object state) {
@@ -221,7 +221,7 @@ namespace SliceOfPie {
         /// <param name="userMail">Email of owning user</param>
         /// <param name="parent">Folder or project to place the document in</param>
         /// <param name="callback">Callback called on completion of creation</param>
-        /// <param name="stateObject">state object (not used)</param>
+        /// <param name="stateObject">state object (passed to callback)</param>
         /// <returns>IAsyncResult to be used in EndCreateDocument</returns>
         /// <see cref="EndCreateDocument"/>
         public IAsyncResult BeginCreateDocument(string name, string userMail, IItemContainer parent, AsyncCallback callback, object stateObject) {
@@ -274,7 +274,7 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="d">Document to save</param>
         /// <param name="callback">Callback called when document saving finishes</param>
-        /// <param name="state">State object, not used</param>
+        /// <param name="state">State object, passed to callback</param>
         /// <returns>IAsyncResult for EndSaveDocument</returns>
         /// <see cref="EndSaveDocument"/>
         public IAsyncResult BeginSaveDocument(Document d, AsyncCallback callback, object state) {
