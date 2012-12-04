@@ -38,6 +38,10 @@
   <PropertyGroup>
     <StartupObject>SliceOfPie.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -148,6 +152,9 @@
     <Resource Include="Icons\document-icon.png" />
     <Resource Include="Icons\folder-icon.png" />
     <Resource Include="Icons\project-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="grin.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
