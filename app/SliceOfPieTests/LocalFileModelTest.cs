@@ -62,6 +62,64 @@ namespace SliceOfPieTests {
         }
 
         [TestMethod]
+        public void TestAddFolder() {
+            IEnumerable<Project> projects = Model.GetProjects(0);
+            Assert.AreEqual(1, projects.Count());
+            Project project = projects.First();
+
+            Model.AddFolder(project, "TestFolder");
+
+            Assert.AreEqual(1, project.Folders.Count());
+            Folder folder = project.Folders.First();
+            Assert.AreEqual("TestFolder", folder.Title);
+        }
+
+        [TestMethod]
+        public void TestRenameFolder() {
+            IEnumerable<Project> projects = Model.GetProjects(0);
+            Assert.AreEqual(1, projects.Count());
+            Project project = projects.First();
+
+            Model.AddFolder(project, "TestFolder");
+
+            Assert.AreEqual(1, project.Folders.Count());
+            Folder folder = project.Folders.First();
+            Assert.AreEqual("TestFolder", folder.Title);
+
+            Model.RenameFolder(folder, "RenamedFolder");
+            Assert.AreEqual(folder.Title, "RenamedFolder");
+        }
+
+        [TestMethod]
+        public void TestAddDocument() {
+            IEnumerable<Project> projects = Model.GetProjects(0);
+            Assert.AreEqual(1, projects.Count());
+            Project project = projects.First();
+
+            Model.AddDocument(project, "TestDocument");
+
+            Assert.AreEqual(1, project.Documents.Count());
+            Document document = project.Documents.First();
+            Assert.AreEqual("TestDocument", document.Title);
+        }
+
+        [TestMethod]
+        public void TestRenameDocument() {
+            IEnumerable<Project> projects = Model.GetProjects(0);
+            Assert.AreEqual(1, projects.Count());
+            Project project = projects.First();
+
+            Model.AddDocument(project, "TestDocument");
+
+            Assert.AreEqual(1, project.Documents.Count());
+            Document document = project.Documents.First();
+            Assert.AreEqual("TestDocument", document.Title);
+
+            Model.RenameDocument(document, "RenamedDocument");
+            Assert.AreEqual(document.Title, "RenamedDocument");
+        }
+
+        [TestMethod]
         public void TestSaveDocument() {
             IEnumerable<Project> projects = Model.GetProjects(0);
             Assert.AreEqual(1, projects.Count());
