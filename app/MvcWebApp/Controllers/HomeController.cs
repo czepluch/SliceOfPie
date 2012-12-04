@@ -10,7 +10,7 @@ namespace MvcWebApp.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = "Welcome to ASP.NET MVC!";
+            ViewBag.Message = "Welcome to the Slice of Pie online file sharer and editor";
 
             return View();
         }

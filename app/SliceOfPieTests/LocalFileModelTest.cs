@@ -145,6 +145,31 @@ namespace SliceOfPieTests {
         }
 
         [TestMethod]
+        public void TestGetAvailableName() {
+            string documentPath = Path.Combine(Path.Combine(AppPath, "0-default"), "0-TestFile");
+            FileStream fileStream = File.Create(documentPath);
+            fileStream.Close();
+            Assert.AreEqual(true, File.Exists(documentPath));
+            Assert.AreEqual("TestFile-1", Model.GetAvailableName("TestFile", 0, Path.Combine(AppPath, "0-default")));
+        }
+
+        [TestMethod]
+        public void TestAddExistingDocument() {
+            IEnumerable<Project> projects = Model.GetProjects("local");
+            Assert.AreEqual(1, projects.Count());
+            Project project = projects.First();
+
+            Document document = Model.AddDocument(project, "TestDocument");
+            Document document1 = Model.AddDocument(project, "TestDocument");
+            Document document2 = Model.AddDocument(project, "TestDocument");
+            Assert.AreEqual(3, project.Documents.Count());
+
+            Assert.AreEqual("TestDocument", document.Title);
+            Assert.AreEqual("TestDocument-1", document1.Title);
+            Assert.AreEqual("TestDocument-2", document2.Title);
+        }
+
+        [TestMethod]
         public void TestRenameDocument() {
             IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(1, projects.Count());
@@ -244,7 +269,7 @@ namespace SliceOfPieTests {
         public void TestFindDocuments() {
             string folderPath = Path.Combine(Path.Combine(AppPath, "0-default"), "0-TestFolder");
             Directory.CreateDirectory(folderPath);
-            string documentPath = Path.Combine(Path.Combine(Path.Combine(AppPath, "0-default"), "0-TestFolder"), "0-TestFile");
+            string documentPath = Path.Combine(Path.Combine(Path.Combine(AppPath, "0-default"), "0-TestFolder"), "0-TestFile.txt");
             FileStream fileStream = File.Create(documentPath);
             fileStream.Close();
             Assert.AreEqual(true, File.Exists(documentPath));
@@ -273,17 +298,19 @@ namespace SliceOfPieTests {
 
         [TestCleanup]
         public void Cleanup() {
-            ClearFolder(AppPath);
+            //ClearFolder(AppPath);
         }
 
         private void ClearFolder(string path) {
-            DirectoryInfo dir = new DirectoryInfo(path);
-            foreach (FileInfo file in dir.GetFiles()) {
-                file.Delete();
-            }
-            foreach (DirectoryInfo folder in dir.GetDirectories()) {
-                ClearFolder(folder.FullName);
-                folder.Delete();
+            if (Directory.Exists(path)) {
+                DirectoryInfo dir = new DirectoryInfo(path);
+                foreach (FileInfo file in dir.GetFiles()) {
+                    file.Delete();
+                }
+                foreach (DirectoryInfo folder in dir.GetDirectories()) {
+                    ClearFolder(folder.FullName);
+                    folder.Delete();
+                }
             }
         }
     }

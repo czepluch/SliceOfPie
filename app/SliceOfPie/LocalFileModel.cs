@@ -25,12 +25,14 @@ namespace SliceOfPie {
         /// <param name="db"></param>
         /// <returns></returns>
         public override Project AddProject(string title, int id = 0, bool db = false) {
+            if (!db) title = GetAvailableName(title, id, AppPath);
             string projectPath = Path.Combine(AppPath, Helper.GenerateName(id, title));
-            if (Directory.Exists(projectPath) || File.Exists(projectPath)) {
-                if (db) return null;
-                throw new ArgumentException("Name is already in use (" + projectPath + ")");
+            try {
+                Directory.CreateDirectory(projectPath);
+            } catch (IOException e) {
+                // Should not be accesible
+                Console.WriteLine(e.Message);
             }
-            Directory.CreateDirectory(projectPath);
             if (db) return null;
             Project project = new Project();
             project.Title = title;
@@ -45,11 +47,13 @@ namespace SliceOfPie {
         /// <param name="project"></param>
         /// <param name="title"></param>
         public void RenameProject(Project project, string title) {
-            string projectPath = Path.Combine(AppPath, Helper.GenerateName(project.Id, title));
-            if (Directory.Exists(projectPath) || File.Exists(projectPath)) {
-                throw new ArgumentException("Name is already in use (" + projectPath + ")");
+            string projectPath = Path.Combine(AppPath, Helper.GenerateName(project.Id, GetAvailableName(title, project.Id, AppPath)));
+            try {
+                Directory.Move(project.GetPath(), projectPath);
+            } catch (IOException e) {
+                // Should not be accesible
+                Console.WriteLine(e.Message);
             }
-            Directory.Move(project.GetPath(), projectPath);
             project.Title = title;
         }
 
@@ -88,12 +92,14 @@ namespace SliceOfPie {
         /// <param name="db"></param>
         /// <returns></returns>
         public override Folder AddFolder(IItemContainer parent, string title, int id = 0, bool db = false) {
+            if (!db) title = GetAvailableName(title, id, parent.GetPath());
             string folderPath = Path.Combine(parent.GetPath(), Helper.GenerateName(id, title));
-            if (Directory.Exists(folderPath) || File.Exists(folderPath)) {
-                if (db) return null;
-                throw new ArgumentException("Name is already in use (" + folderPath + ")");
+            try {
+                Directory.CreateDirectory(folderPath);
+            } catch (IOException e) {
+                // Should not be accesible
+                Console.WriteLine(e.Message);
             }
-            Directory.CreateDirectory(folderPath);
             if (db) return null;
             Folder folder = new Folder();
             folder.Title = title;
@@ -108,11 +114,13 @@ namespace SliceOfPie {
         /// <param name="folder"></param>
         /// <param name="title"></param>
         public void RenameFolder(Folder folder, string title) {
-            string folderPath = Path.Combine(folder.Parent.GetPath(), Helper.GenerateName(folder.Id, title));
-            if (Directory.Exists(folderPath) || File.Exists(folderPath)) {
-                throw new ArgumentException("Name is already in use (" + folderPath + ")");
+            string folderPath = Path.Combine(folder.Parent.GetPath(), Helper.GenerateName(folder.Id, GetAvailableName(title, folder.Id, folder.Parent.GetPath())));
+            try {
+                Directory.Move(folder.GetPath(), folderPath);
+            } catch (IOException e) {
+                // Should not be accesible
+                Console.WriteLine(e.Message);
             }
-            Directory.Move(folder.GetPath(), folderPath);
             folder.Title = title;
         }
 
@@ -140,18 +148,21 @@ namespace SliceOfPie {
         /// <param name="db"></param>
         /// <returns></returns>
         public override Document AddDocument(IItemContainer parent, string title, int id = 0, bool db = false) {
-            string documentPath = Path.Combine(parent.GetPath(), Helper.GenerateName(id, title) + ".txt");
-            if (Directory.Exists(documentPath) || File.Exists(documentPath)) {
-                if (db) return null;
-                throw new ArgumentException("Name is already in use (" + documentPath + ")");
+            if (!db) title = GetAvailableName(title, id, parent.GetPath(), ".txt");
+            string documentPath = Path.Combine(parent.GetPath(), Helper.GenerateName(id, title));
+            documentPath += ".txt";
+            try {
+                FileStream fileStream = File.Create(documentPath);
+                fileStream.Close();
+            } catch (IOException e) {
+                // Should not be accesible
+                Console.WriteLine(e.Message);
             }
             if (db) return null;
             Document document = new Document();
             document.Title = title;
             document.Parent = parent;
             parent.Documents.Add(document);
-            FileStream fileStream = File.Create(documentPath);
-            fileStream.Close();
             return document;
         }
 
@@ -161,11 +172,13 @@ namespace SliceOfPie {
         /// <param name="document"></param>
         /// <param name="title"></param>
         public void RenameDocument(Document document, string title) {
-            string documentPath = Path.Combine(document.Parent.GetPath(), Helper.GenerateName(document.Id, title) + ".txt");
-            if (Directory.Exists(documentPath) || File.Exists(documentPath)) {
-                throw new ArgumentException("Name is already in use(" + documentPath + ")");
+            string documentPath = Path.Combine(document.Parent.GetPath(), Helper.GenerateName(document.Id, GetAvailableName(title, document.Id, document.Parent.GetPath(), ".txt"))) + ".txt";
+            try {
+                File.Move(document.GetPath(), documentPath);
+            } catch (IOException e) {
+                // Should not be accesible
+                Console.WriteLine(e.Message);
             }
-            File.Move(document.GetPath(), documentPath);
             document.Title = title;
         }
 
@@ -376,6 +389,19 @@ namespace SliceOfPie {
                 fileStream.Close();
                 parent.Documents.Add(document);
             }
+        }
+
+        public string GetAvailableName(string title, int id, string path, string ext = "") {
+            string name = Path.Combine(path, Helper.GenerateName(id, title)) + ext;
+            if (!Directory.Exists(name) && !File.Exists(name)) {
+                return title;
+            }
+            Match match = Regex.Match(title, @"(.*)-([0-9]+)", RegexOptions.IgnoreCase);
+            if (match.Success) {
+                int num = int.Parse(match.Groups[2].Value) + 1;
+                return GetAvailableName(match.Groups[1].Value + "-" + num, id, path, ext);
+            }
+            return GetAvailableName(title + "-1", id, path, ext);
         }
     }
 }
