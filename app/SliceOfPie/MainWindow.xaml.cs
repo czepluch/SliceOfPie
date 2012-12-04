@@ -113,7 +113,7 @@ namespace SliceOfPie {
         /// </summary>
         private void RefreshDocumentExplorer() {
             DocumentExplorer.Items.Clear();
-            foreach (Project project in controller.GetProjects()) {
+            foreach (Project project in controller.GetProjects("local")) {
                 TreeViewItem myProject = createDocumentExplorerItem(project);
                 AddProjectToDocExplorer(myProject);
             }
@@ -315,7 +315,7 @@ namespace SliceOfPie {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void CreateProjectCreateButton_Click(object sender, RoutedEventArgs e) {
-            //Call to controller creates project
+            Controller.Instance.CreateProject(CreateProjectTextBox.Text, "local");
             CreateProject.IsOpen = false;
             CreateProjectTextBox.Clear();
             RefreshDocumentExplorer();
@@ -337,7 +337,7 @@ namespace SliceOfPie {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void CreateFolderCreateButton_Click(object sender, RoutedEventArgs e) {
-            //Call to controller creates folder. Get parent from DocumentExplorer
+            Controller.Instance.CreateFolder(CreateFolderTextBox.Text, "local", (DocumentExplorer.SelectedItem as TreeViewItem).Tag as IItemContainer);
             CreateFolder.IsOpen = false;
             CreateFolderTextBox.Clear();
             RefreshDocumentExplorer();
@@ -359,7 +359,7 @@ namespace SliceOfPie {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void CreateDocumentCreateButton_Click(object sender, RoutedEventArgs e) {
-            //Call to controller creates document. Get parent from DocumentExplorer
+            Controller.Instance.CreateDocument(CreateDocumentTextBox.Text, "local", (DocumentExplorer.SelectedItem as TreeViewItem).Tag as IItemContainer);
             CreateDocument.IsOpen = false;
             CreateDocumentTextBox.Clear();
             RefreshDocumentExplorer();
@@ -381,6 +381,7 @@ namespace SliceOfPie {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void ShareProjectShareButton_Click(object sender, RoutedEventArgs e) {
+            Controller.Instance.ShareProject((DocumentExplorer.SelectedItem as TreeViewItem).Tag as Project, ShareProjectTextBox.Text.Split(','));
             //Call to controller shares the project. Awaiting controller method before implementation
             ShareProject.IsOpen = false;
             ShareProjectTextBox.Clear();
