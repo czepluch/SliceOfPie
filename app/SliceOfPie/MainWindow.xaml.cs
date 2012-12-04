@@ -482,16 +482,21 @@ namespace SliceOfPie {
             SetMainContentFromItem(itemClicked);
         }
 
-        #endregion
-
+        /// <summary>
+        /// This is the click handler for the Sync button in the main window
+        /// </summary>
+        /// <param name="sender">The object that sent the event</param>
+        /// <param name="e">The event arguments</param>
         private void Synchronize_Click(object sender, RoutedEventArgs e) {
             //TODO sync current changes here
             RefreshDocumentExplorer();
             TreeViewItem topProject = DocumentExplorer.Items[0] as TreeViewItem; //Note there's always at least one project
             currentlyActiveItem = topProject.Tag as ListableItem;
             topProject.IsSelected = true;
-            SetMainContentFromItem(currentlyActiveItem); 
+            SetMainContentFromItem(currentlyActiveItem);
         }
+
+        #endregion   
     }
 
 }
