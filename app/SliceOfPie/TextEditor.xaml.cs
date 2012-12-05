@@ -14,13 +14,14 @@ using System.Windows.Shapes;
 
 namespace SliceOfPie {
     /// <summary>
-    /// Interaction logic for TextEditor.xaml
+    /// Interaction logic for the Text Editor User Control.
     /// </summary>
     public partial class TextEditor : UserControl {
         private Document _document; //backing field
 
-        public event RoutedEventHandler SaveDocumentButtonClicked;
-
+        /// <summary>
+        /// This is the Document currently shown in the Text Editor
+        /// </summary>
         public Document Document {
             get {
                 if (_document != null) { //if it has been set at least once
@@ -28,12 +29,20 @@ namespace SliceOfPie {
                 }
                 return _document;
             }
-            set { 
+            set {
                 _document = value;
                 TextField.Text = _document.CurrentRevision;
             }
         }
 
+        /// <summary>
+        /// This event is fired when the button to save the active document is clicked
+        /// </summary>
+        public event RoutedEventHandler SaveDocumentButtonClicked;
+
+        /// <summary>
+        /// Creates a Text Editor with the functionality to show and edit Documents
+        /// </summary>
         public TextEditor() {
             InitializeComponent();
 
@@ -44,6 +53,10 @@ namespace SliceOfPie {
 
         #region Event triggers
 
+        /// <summary>
+        /// This method triggers the SaveDocumentButtonClicked event
+        /// </summary>
+        /// <param name="e">The event arguments</param>
         private void OnSaveDocumentButtonClicked(RoutedEventArgs e) {
             if (SaveDocumentButtonClicked != null) {
                 SaveDocumentButtonClicked(this, e);

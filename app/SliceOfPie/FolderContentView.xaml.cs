@@ -14,29 +14,41 @@ using System.Windows.Shapes;
 
 namespace SliceOfPie {
     /// <summary>
-    /// Interaction logic for FolderContentView.xaml.
-    /// This is a template/encapsulating class. Event handling need to be set by the initatiator.
+    /// Interaction logic for the FolderContentView User Control.
     /// </summary>
     public partial class FolderContentView : UserControl {
 
         private IItemContainer _container; //backing field
 
-        public event RoutedEventHandler CreateDocumentButtonClicked, CreateFolderButtonClicked;
-        public event EventHandler<ListableItemEventArgs> ItemDoubleClicked;
-
+        /// <summary>
+        /// This is the IItemContainer which contains the currently shown content
+        /// </summary>
         public IItemContainer ItemContainer {
             get { return _container; }
             set {
-                _container = value; 
+                _container = value;
                 ReloadItemContainerContents();
             }
         }
 
+        #region Events
+
         /// <summary>
-        /// This UserControl shows a list of subfolders in a specified parent container.
+        /// This event is fired when the button to create a Document is clicked
         /// </summary>
-        /// <param name="parentContainer">The parent whose subfolders will be shown</param>
-        /// <param name="doubleClickAction">The MouseDoubleClick handler for each subfolder</param>
+        public event RoutedEventHandler CreateDocumentButtonClicked;
+        
+        /// <summary>
+        /// This event is fired when the button to create a Folder is clicked
+        /// </summary>
+        public event RoutedEventHandler CreateFolderButtonClicked;
+        public event EventHandler<ListableItemEventArgs> ItemDoubleClicked;
+        
+        #endregion
+
+        /// <summary>
+        /// This UserControl shows a list of subfolders based on its ItemContainer property.
+        /// </summary>
         public FolderContentView() {
             InitializeComponent();
             //On button clicks
@@ -49,6 +61,9 @@ namespace SliceOfPie {
             
         }
 
+        /// <summary>
+        /// This reloads the entire FolderListView based on the current ItemContainer
+        /// </summary>
         private void ReloadItemContainerContents() {
             FolderListView.Items.Clear();
             foreach (Folder folder in ItemContainer.GetFolders()) { //Add folders first
@@ -59,6 +74,11 @@ namespace SliceOfPie {
             }
         }
 
+        /// <summary>
+        /// This method creates a ListViewItem based on a given ListableItem
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         private ListViewItem CreateListViewItem(ListableItem item) {
             StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical, IsHitTestVisible = false };
             sp.Children.Add(new Image() { Source = ((item is Folder) ? IconFactory.FolderIcon : IconFactory.DocumentIcon), Width = 24, Height = 24 });
@@ -74,6 +94,10 @@ namespace SliceOfPie {
 
         #region Event triggers
 
+        /// <summary>
+        /// This method triggers the CreateDocumentButtonClicked event
+        /// </summary>
+        /// <param name="e">The event arguments</param>
         private void OnCreateDocumentButtonClicked(RoutedEventArgs e) {
             if (CreateDocumentButtonClicked != null) {
                 //Invoke the delegates attached to this event
@@ -81,6 +105,10 @@ namespace SliceOfPie {
             }
         }
 
+        /// <summary>
+        /// This method triggers the CreateFolderButtonClicked event
+        /// </summary>
+        /// <param name="e">The event arguments</param>
         private void OnCreateFolderButtonClicked(RoutedEventArgs e) {
             if (CreateFolderButtonClicked != null) {
                 //Invoke the delegates attached to this event
@@ -88,6 +116,10 @@ namespace SliceOfPie {
             }
         }
 
+        /// <summary>
+        /// This method triggers the ItemDoubleClicked event
+        /// </summary>
+        /// <param name="e">The event arguments</param>
         private void OnItemDoubleClicked(ListableItemEventArgs e) {
             if (ItemDoubleClicked != null) {
                 //Invoke the delegates attached to this event

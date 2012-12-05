@@ -24,9 +24,12 @@ namespace SliceOfPie {
         private TextEditor textEditor;
         private ContextMenu projectContextMenu, folderContextMenu, documentContextMenu;
 
-        private ListableItem currentPopUpContextItem;
+        private ListableItem currentContextItem;
         private Popup currentActivePopUp;
 
+        /// <summary>
+        /// Creates the Main Window for the Slice of Pie application
+        /// </summary>
         public MainWindow() {
             controller = Controller.Instance;
             InitializeComponent();
@@ -57,7 +60,7 @@ namespace SliceOfPie {
             shareProjectProjectContext.Click += new RoutedEventHandler(OpenShareProjectWindow);
 
             MenuItem openProjectFolderProjectContext = new MenuItem() { Header = "Open project folder" };
-            openProjectFolderProjectContext.Click += new RoutedEventHandler(SetActiveItemContextMenu_Click);
+            openProjectFolderProjectContext.Click += new RoutedEventHandler(OpenItemOnContextMenuClick);
 
             MenuItem addFolderProjectContext = new MenuItem() { Header = "Add folder" };
             addFolderProjectContext.Click += new RoutedEventHandler(OpenCreateFolderWindow);
@@ -72,7 +75,7 @@ namespace SliceOfPie {
 
             //create the folder context menu
             MenuItem openFolderFolderContext = new MenuItem() { Header = "Open folder" };
-            openFolderFolderContext.Click += new RoutedEventHandler(SetActiveItemContextMenu_Click);
+            openFolderFolderContext.Click += new RoutedEventHandler(OpenItemOnContextMenuClick);
 
             MenuItem addFolderFolderContext = new MenuItem() { Header = "Add folder" };
             addFolderFolderContext.Click += new RoutedEventHandler(OpenCreateFolderWindow);
@@ -86,7 +89,7 @@ namespace SliceOfPie {
 
             //create the document context men
             MenuItem editDocumentDocumentContext = new MenuItem() { Header = "Edit document" };
-            editDocumentDocumentContext.Click += new RoutedEventHandler(SetActiveItemContextMenu_Click);
+            editDocumentDocumentContext.Click += new RoutedEventHandler(OpenItemOnContextMenuClick);
 
             documentContextMenu.Items.Add(editDocumentDocumentContext);  
         }
@@ -94,20 +97,10 @@ namespace SliceOfPie {
         #endregion
 
         /// <summary>
-        /// A default event handler for changing the main content due to a click
-        /// </summary>
-        /// <param name="sender">The sender object</param>
-        /// <param name="e">The RoutedEventArgs</param>
-        private void SetActiveItemContextMenu_Click(object sender, RoutedEventArgs e) {
-            Open(currentPopUpContextItem);
-        }
-
-
-        /// <summary>
         /// This generates and shows a context menu for the document explorer at runtime
         /// </summary>
         /// <param name="item">The item which was clicked on the document explorer</param>
-        private void GenerateContextMenu(ListableItem item) {
+        private void ShowContextMenu(ListableItem item) {
             if (item is Project) {
                 DocumentExplorer.ContextMenu = projectContextMenu;
             } else if (item is Folder) {
@@ -140,9 +133,51 @@ namespace SliceOfPie {
             else {
                 TreeViewItem topProject = DocumentExplorer.Items[0] as TreeViewItem;
                 topProject.IsSelected = true;
-                currentPopUpContextItem = topProject.Tag as ListableItem;
-                Open(currentPopUpContextItem);
+                currentContextItem = topProject.Tag as ListableItem;
+                Open(currentContextItem);
             }
+        }
+
+        /// <summary>
+        /// Fills the MainContent with useful information for the specific item
+        /// </summary>
+        /// <param name="item">The item which mainContent will use as a context</param>
+        private void Open(ListableItem item) {
+            currentContextItem = item;
+            if (item is IItemContainer) {
+                folderContentView.ItemContainer = item as IItemContainer;
+                MainContent.Content = folderContentView;
+            } else {
+                textEditor.Document = item as Document;
+                MainContent.Content = textEditor;
+            }
+        }
+
+        /// <summary>
+        /// This method expands the DocumentExplorers items from a start container down to a given item.
+        /// </summary>
+        /// <param name="container">The starter container for the search</param>
+        /// <param name="item">The item to be found. This item is also expanded if found </param>
+        /// <returns>Returns true if the item was found</returns>
+        private bool ExpandToAndOpenItem(TreeViewItem container, ListableItem item) {
+            ListableItem containerListable = container.Tag as ListableItem;
+            if (containerListable == item) {
+                container.IsSelected = true;
+                container.IsExpanded = true;
+                currentContextItem = item;
+                Open(currentContextItem);
+                return true;
+            }
+            else if (containerListable is IItemContainer) { //possibility that it's a subitem
+                //
+                foreach (TreeViewItem subItem in container.Items) { //repeat search for each subitem
+                    if (ExpandToAndOpenItem(subItem, item)) {
+                        container.IsExpanded = true;
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         #region Helper methods for the Document Explorer
@@ -206,7 +241,7 @@ namespace SliceOfPie {
             //recursive traversal of structure for Item Containers
             if (item is IItemContainer) {
                 //First add folders
-                foreach(Folder folder in (item as IItemContainer).GetFolders()) {
+                foreach (Folder folder in (item as IItemContainer).GetFolders()) {
                     AddSubItemToDocExplorer(thisTreeViewItem, CreateDocumentExplorerItem(folder));
                 }
                 //then documents
@@ -219,22 +254,16 @@ namespace SliceOfPie {
 
         #endregion
 
-        /// <summary>
-        /// Fills the MainContent with useful information for the specific item
-        /// </summary>
-        /// <param name="item">The item which mainContent will use as a context</param>
-        private void Open(ListableItem item) {
-            currentPopUpContextItem = item;
-            if (item is IItemContainer) {
-                folderContentView.ItemContainer = item as IItemContainer;
-                MainContent.Content = folderContentView;
-            } else {
-                textEditor.Document = item as Document;
-                MainContent.Content = textEditor;
-            }
-        }
-
         #region EventHandlers
+
+        /// <summary>
+        /// A default event handler for changing the main content due to a click
+        /// </summary>
+        /// <param name="sender">The sender object</param>
+        /// <param name="e">The RoutedEventArgs</param>
+        private void OpenItemOnContextMenuClick(object sender, RoutedEventArgs e) {
+            Open(currentContextItem);
+        }
 
         /// <summary>
         /// This event handler opens the CreateProject pop-up window
@@ -305,9 +334,9 @@ namespace SliceOfPie {
             TreeViewItem item = sender as TreeViewItem;
             if (item != null) {
                 e.Handled = true;
-                currentPopUpContextItem = item.Tag as ListableItem;
+                currentContextItem = item.Tag as ListableItem;
                 item.IsSelected = true;
-                GenerateContextMenu(item.Tag as ListableItem);
+                ShowContextMenu(item.Tag as ListableItem);
             }
         }
 
@@ -333,7 +362,7 @@ namespace SliceOfPie {
             TreeViewItem item = sender as TreeViewItem;
             if (item != null) {
                 e.Handled = true;
-                currentPopUpContextItem = item.Tag as ListableItem;
+                currentContextItem = item.Tag as ListableItem;
                 item.IsSelected = true;
                 item.IsExpanded = true;
                 Open(item.Tag as ListableItem);
@@ -350,7 +379,7 @@ namespace SliceOfPie {
                 TreeViewItem item = sender as TreeViewItem;
                 if (item != null) {
                     e.Handled = true;
-                    currentPopUpContextItem = item.Tag as ListableItem;
+                    currentContextItem = item.Tag as ListableItem;
                     item.IsSelected = true;
                     item.IsExpanded = true;
                     Open(item.Tag as ListableItem);
@@ -402,7 +431,7 @@ namespace SliceOfPie {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void CreateFolderCreateButton_Click(object sender, RoutedEventArgs e) {
-            Folder folder = controller.CreateFolder(CreateFolderTextBox.Text, "local", currentPopUpContextItem as IItemContainer);
+            Folder folder = controller.CreateFolder(CreateFolderTextBox.Text, "local", currentContextItem as IItemContainer);
             currentActivePopUp = null;
             CreateFolder.IsOpen = false;
             IsEnabled = true;
@@ -428,34 +457,13 @@ namespace SliceOfPie {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void CreateDocumentCreateButton_Click(object sender, RoutedEventArgs e) {
-            Document document = controller.CreateDocument(CreateDocumentTextBox.Text, "local", currentPopUpContextItem as IItemContainer);
+            Document document = controller.CreateDocument(CreateDocumentTextBox.Text, "local", currentContextItem as IItemContainer);
             currentActivePopUp = null;
             CreateDocument.IsOpen = false;
             IsEnabled = true;
             CreateDocumentTextBox.Clear();
-            Open(currentPopUpContextItem); //show folder content and as such the new document
+            Open(currentContextItem); //show folder content and as such the new document
             ReloadProjects(document);
-        }
-
-        private bool ExpandToAndOpenItem(TreeViewItem container, ListableItem item) {
-            ListableItem containerListable = container.Tag as ListableItem;
-            if (containerListable == item) {
-                container.IsSelected = true;
-                container.IsExpanded = true;
-                currentPopUpContextItem = item;
-                Open(currentPopUpContextItem); 
-                return true;
-            }
-            else if (containerListable is IItemContainer) { //possibility that it's a subitem
-                //
-                foreach (TreeViewItem subItem in container.Items) { //repeat search for each subitem
-                    if (ExpandToAndOpenItem(subItem, item)) {
-                        container.IsExpanded = true;
-                        return true;
-                    }
-                }
-            }
-            return false;
         }
 
         /// <summary>
@@ -476,14 +484,13 @@ namespace SliceOfPie {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void ShareProjectShareButton_Click(object sender, RoutedEventArgs e) {
-            controller.ShareProject(currentPopUpContextItem as Project, ShareProjectTextBox.Text.Split(','));
+            controller.ShareProject(currentContextItem as Project, ShareProjectTextBox.Text.Split(','));
             //Call to controller shares the project. Awaiting controller method before implementation
             currentActivePopUp = null;
             ShareProject.IsOpen = false;
             IsEnabled = true;
             ShareProjectTextBox.Clear();
         }
-
 
         /// <summary>
         /// This method is sent as a mouseeventhandler to the FolderContentView class.
@@ -505,7 +512,7 @@ namespace SliceOfPie {
         /// <param name="e">The event arguments</param>
         private void Synchronize_Click(object sender, RoutedEventArgs e) {
             //TODO sync current changes here
-            ReloadProjects(currentPopUpContextItem);
+            ReloadProjects(currentContextItem);
             TreeViewItem topProject = DocumentExplorer.Items[0] as TreeViewItem; //Note there's always at least one project
         }
 
