@@ -182,8 +182,7 @@ namespace SliceOfPie {
                 Open(currentContextItem);
                 return true;
             }
-            else if (containerListable is IItemContainer) { //possibility that it's a subitem
-                //
+            else if (containerListable is IItemContainer) { //possibility that it's in a subitem
                 foreach (TreeViewItem subItem in container.Items) { //repeat search for each subitem
                     if (ExpandToAndOpenItem(subItem, item)) {
                         container.IsExpanded = true;
