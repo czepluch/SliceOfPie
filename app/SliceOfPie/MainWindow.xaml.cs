@@ -24,7 +24,7 @@ namespace SliceOfPie {
         private TextEditor textEditor;
         private ContextMenu projectContextMenu, folderContextMenu, documentContextMenu;
 
-        private ListableItem currentContextItem;
+        private IListableItem currentContextItem;
         private Popup currentActivePopUp;
 
         /// <summary>
@@ -100,7 +100,7 @@ namespace SliceOfPie {
         /// This generates and shows a context menu for the document explorer at runtime
         /// </summary>
         /// <param name="item">The item which was clicked on the document explorer</param>
-        private void ShowContextMenu(ListableItem item) {
+        private void ShowContextMenu(IListableItem item) {
             if (item is Project) {
                 DocumentExplorer.ContextMenu = projectContextMenu;
             } else if (item is Folder) {
@@ -115,7 +115,7 @@ namespace SliceOfPie {
         /// This method is supposed to refresh the document explorer.
         /// It exists as a placeholder and testing method untill the model/controller allows local file traversal.
         /// </summary>
-        private void ReloadProjects(ListableItem itemToHighLight = null) {
+        private void ReloadProjects(IListableItem itemToHighLight = null) {
             DocumentExplorer.Items.Clear();
             //Add each project
             foreach (Project project in controller.GetProjects("local")) {
@@ -133,7 +133,7 @@ namespace SliceOfPie {
             else {
                 TreeViewItem topProject = DocumentExplorer.Items[0] as TreeViewItem;
                 topProject.IsSelected = true;
-                currentContextItem = topProject.Tag as ListableItem;
+                currentContextItem = topProject.Tag as IListableItem;
                 Open(currentContextItem);
             }
         }
@@ -142,7 +142,7 @@ namespace SliceOfPie {
         /// Fills the MainContent with useful information for the specific item
         /// </summary>
         /// <param name="item">The item which mainContent will use as a context</param>
-        private void Open(ListableItem item) {
+        private void Open(IListableItem item) {
             currentContextItem = item;
             if (item is IItemContainer) {
                 folderContentView.ItemContainer = item as IItemContainer;
@@ -159,8 +159,8 @@ namespace SliceOfPie {
         /// <param name="container">The starter container for the search</param>
         /// <param name="item">The item to be found. This item is also expanded if found </param>
         /// <returns>Returns true if the item was found</returns>
-        private bool ExpandToAndOpenItem(TreeViewItem container, ListableItem item) {
-            ListableItem containerListable = container.Tag as ListableItem;
+        private bool ExpandToAndOpenItem(TreeViewItem container, IListableItem item) {
+            IListableItem containerListable = container.Tag as IListableItem;
             if (containerListable == item) {
                 container.IsSelected = true;
                 container.IsExpanded = true;
@@ -205,7 +205,7 @@ namespace SliceOfPie {
         /// <param name="text">The text to be shown in the item</param>
         /// <param name="item">The type of the item. Can be either "project", "folder", or "document"</param>
         /// <returns></returns>
-        private TreeViewItem CreateDocumentExplorerItem(ListableItem item) {
+        private TreeViewItem CreateDocumentExplorerItem(IListableItem item) {
             TreeViewItem thisTreeViewItem = new TreeViewItem() { Tag = item };
             //StackPanel for image and text block
             StackPanel sp = new StackPanel() { Orientation = Orientation.Horizontal, IsHitTestVisible = false };
@@ -334,9 +334,9 @@ namespace SliceOfPie {
             TreeViewItem item = sender as TreeViewItem;
             if (item != null) {
                 e.Handled = true;
-                currentContextItem = item.Tag as ListableItem;
+                currentContextItem = item.Tag as IListableItem;
                 item.IsSelected = true;
-                ShowContextMenu(item.Tag as ListableItem);
+                ShowContextMenu(item.Tag as IListableItem);
             }
         }
 
@@ -362,10 +362,10 @@ namespace SliceOfPie {
             TreeViewItem item = sender as TreeViewItem;
             if (item != null) {
                 e.Handled = true;
-                currentContextItem = item.Tag as ListableItem;
+                currentContextItem = item.Tag as IListableItem;
                 item.IsSelected = true;
                 item.IsExpanded = true;
-                Open(item.Tag as ListableItem);
+                Open(item.Tag as IListableItem);
             }
         }
 
@@ -379,10 +379,10 @@ namespace SliceOfPie {
                 TreeViewItem item = sender as TreeViewItem;
                 if (item != null) {
                     e.Handled = true;
-                    currentContextItem = item.Tag as ListableItem;
+                    currentContextItem = item.Tag as IListableItem;
                     item.IsSelected = true;
                     item.IsExpanded = true;
-                    Open(item.Tag as ListableItem);
+                    Open(item.Tag as IListableItem);
                 }
             }
         }

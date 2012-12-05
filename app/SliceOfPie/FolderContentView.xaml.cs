@@ -79,7 +79,7 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-        private ListViewItem CreateListViewItem(ListableItem item) {
+        private ListViewItem CreateListViewItem(IListableItem item) {
             StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical, IsHitTestVisible = false };
             sp.Children.Add(new Image() { Source = ((item is Folder) ? IconFactory.FolderIcon : IconFactory.DocumentIcon), Width = 24, Height = 24 });
             sp.Children.Add(new TextBlock() { Text = item.Title, MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center });
@@ -87,7 +87,7 @@ namespace SliceOfPie {
             listViewItem.Content = sp;
             listViewItem.Tag = item;
             listViewItem.MouseDoubleClick += new MouseButtonEventHandler(
-                (sender, e) => OnItemDoubleClicked(new ListableItemEventArgs((sender as ListViewItem).Tag as ListableItem)) //fire own event
+                (sender, e) => OnItemDoubleClicked(new ListableItemEventArgs((sender as ListViewItem).Tag as IListableItem)) //fire own event
             );
             return listViewItem;
         }

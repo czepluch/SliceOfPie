@@ -13,12 +13,12 @@ namespace SliceOfPie {
         /// Constructs the event arguments based on a ListableItem
         /// </summary>
         /// <param name="item">The Listable item to associate with the event</param>
-        public ListableItemEventArgs(ListableItem item) {
+        public ListableItemEventArgs(IListableItem item) {
             this.Item = item;
         }
         /// <summary>
         /// This is the ListableItem associated with the event
         /// </summary>
-        public ListableItem Item { get; protected set; }
+        public IListableItem Item { get; protected set; }
     }
 }
