@@ -19,13 +19,23 @@ namespace SliceOfPie {
     /// </summary>
     public partial class FolderContentView : UserControl {
 
+        public event RoutedEventHandler CreateDocumentButtonClicked, CreateFolderButtonClicked;
+        public event EventHandler<ListableItemEventArgs> ItemDoubleClicked;
+
         /// <summary>
         /// This UserControl shows a list of subfolders in a specified parent container.
         /// </summary>
         /// <param name="parentContainer">The parent whose subfolders will be shown</param>
         /// <param name="doubleClickAction">The MouseDoubleClick handler for each subfolder</param>
-        public FolderContentView(IItemContainer parentContainer, MouseButtonEventHandler doubleClickAction) {
+        public FolderContentView(IItemContainer parentContainer) {
             InitializeComponent();
+            //On button clicks
+            CreateDocumentButton.Click += new RoutedEventHandler(
+                (sender, e) => OnCreateDocumentButtonClicked(e) //fire own event
+            );
+            CreateFolderButton.Click += new RoutedEventHandler(
+                (sender, e) => OnCreateFolderButtonClicked(e) //fire own event
+            );
             //Add items in the provied parent containeer to the list and attach MouseDoubleClick handler.
 
             foreach (Folder folder in parentContainer.GetFolders()) { //Add folders first
@@ -35,7 +45,9 @@ namespace SliceOfPie {
                 ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
                 listViewItem.Content = sp;
                 listViewItem.Tag = folder;
-                listViewItem.MouseDoubleClick += doubleClickAction;
+                listViewItem.MouseDoubleClick += new MouseButtonEventHandler(
+                    (sender, e) => OnItemDoubleClicked(new ListableItemEventArgs((sender as ListViewItem).Tag as ListableItem)) //fire own event
+                );
                 FolderListView.Items.Add(listViewItem);
             }
             foreach (Document document in parentContainer.GetDocuments()) { //Then documents
@@ -45,25 +57,36 @@ namespace SliceOfPie {
                 ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
                 listViewItem.Content = sp;
                 listViewItem.Tag = document;
-                listViewItem.MouseDoubleClick += doubleClickAction;
+                listViewItem.MouseDoubleClick += new MouseButtonEventHandler(
+                    (sender, e) => OnItemDoubleClicked(new ListableItemEventArgs((sender as ListViewItem).Tag as ListableItem)) //fire own event
+                );
                 FolderListView.Items.Add(listViewItem);
-            } 
+            }
         }
 
-        /// <summary>
-        /// This methods adds an event handler to the Create Document Button
-        /// </summary>
-        /// <param name="handler">The event handler to add</param>
-        public void setCreateDocumentHandler(RoutedEventHandler handler) {
-            CreateDocumentButton.Click+=new RoutedEventHandler(handler);
+        #region event triggers
+
+        private void OnCreateDocumentButtonClicked(RoutedEventArgs e) {
+            if (CreateDocumentButtonClicked != null) {
+                //Invoke the delegates attached to this event
+                CreateDocumentButtonClicked(this, e);
+            }
         }
 
-        /// <summary>
-        /// This methods adds an event handler to the Create Folder Button
-        /// </summary>
-        /// <param name="handler">The event handler to add</param>
-        public void setCreateFolderHandler(RoutedEventHandler handler) {
-            CreateFolderButton.Click += new RoutedEventHandler(handler);
+        private void OnCreateFolderButtonClicked(RoutedEventArgs e) {
+            if (CreateFolderButtonClicked != null) {
+                //Invoke the delegates attached to this event
+                CreateFolderButtonClicked(this, e);
+            }
         }
+
+        private void OnItemDoubleClicked(ListableItemEventArgs e) {
+            if (ItemDoubleClicked != null) {
+                //Invoke the delegates attached to this event
+                ItemDoubleClicked(this, e);
+            }
+        }
+
+        #endregion
     }
 }
