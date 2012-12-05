@@ -7,7 +7,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel>
         <WrapPanel DockPanel.Dock="Top" Height="50" Background="#FFDDDDDD">
-            <Button Margin="10,0,10,0" Click="SaveButton_Click">
+            <Button Name="SaveDocumentButton"  Margin="10,0,10,0">
                 <StackPanel Orientation="Vertical">
                     <Image Width="30" Source="Icons/document-icon.png"/>
                     <TextBlock>Save Document</TextBlock>

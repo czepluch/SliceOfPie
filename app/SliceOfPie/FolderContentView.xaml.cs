@@ -19,15 +19,25 @@ namespace SliceOfPie {
     /// </summary>
     public partial class FolderContentView : UserControl {
 
+        private IItemContainer _container; //backing field
+
         public event RoutedEventHandler CreateDocumentButtonClicked, CreateFolderButtonClicked;
         public event EventHandler<ListableItemEventArgs> ItemDoubleClicked;
+
+        public IItemContainer ItemContainer {
+            get { return _container; }
+            set {
+                _container = value; 
+                ReloadItemContainerContents();
+            }
+        }
 
         /// <summary>
         /// This UserControl shows a list of subfolders in a specified parent container.
         /// </summary>
         /// <param name="parentContainer">The parent whose subfolders will be shown</param>
         /// <param name="doubleClickAction">The MouseDoubleClick handler for each subfolder</param>
-        public FolderContentView(IItemContainer parentContainer) {
+        public FolderContentView() {
             InitializeComponent();
             //On button clicks
             CreateDocumentButton.Click += new RoutedEventHandler(
@@ -36,35 +46,33 @@ namespace SliceOfPie {
             CreateFolderButton.Click += new RoutedEventHandler(
                 (sender, e) => OnCreateFolderButtonClicked(e) //fire own event
             );
-            //Add items in the provied parent containeer to the list and attach MouseDoubleClick handler.
+            
+        }
 
-            foreach (Folder folder in parentContainer.GetFolders()) { //Add folders first
-                StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical, IsHitTestVisible = false };
-                sp.Children.Add(new Image() { Source = IconFactory.FolderIcon, Width = 24, Height = 24 });
-                sp.Children.Add(new TextBlock() { Text = folder.Title, MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center });
-                ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
-                listViewItem.Content = sp;
-                listViewItem.Tag = folder;
-                listViewItem.MouseDoubleClick += new MouseButtonEventHandler(
-                    (sender, e) => OnItemDoubleClicked(new ListableItemEventArgs((sender as ListViewItem).Tag as ListableItem)) //fire own event
-                );
-                FolderListView.Items.Add(listViewItem);
+        private void ReloadItemContainerContents() {
+            FolderListView.Items.Clear();
+            foreach (Folder folder in ItemContainer.GetFolders()) { //Add folders first
+                FolderListView.Items.Add(CreateListViewItem(folder));
             }
-            foreach (Document document in parentContainer.GetDocuments()) { //Then documents
-                StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical };
-                sp.Children.Add(new Image() { Source = IconFactory.DocumentIcon, Width = 24, Height = 24 });
-                sp.Children.Add(new TextBlock() { Text = document.Title, MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center });
-                ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
-                listViewItem.Content = sp;
-                listViewItem.Tag = document;
-                listViewItem.MouseDoubleClick += new MouseButtonEventHandler(
-                    (sender, e) => OnItemDoubleClicked(new ListableItemEventArgs((sender as ListViewItem).Tag as ListableItem)) //fire own event
-                );
-                FolderListView.Items.Add(listViewItem);
+            foreach (Document document in ItemContainer.GetDocuments()) { //Then documents
+                FolderListView.Items.Add(CreateListViewItem(document));
             }
         }
 
-        #region event triggers
+        private ListViewItem CreateListViewItem(ListableItem item) {
+            StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical, IsHitTestVisible = false };
+            sp.Children.Add(new Image() { Source = ((item is Folder) ? IconFactory.FolderIcon : IconFactory.DocumentIcon), Width = 24, Height = 24 });
+            sp.Children.Add(new TextBlock() { Text = item.Title, MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center });
+            ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
+            listViewItem.Content = sp;
+            listViewItem.Tag = item;
+            listViewItem.MouseDoubleClick += new MouseButtonEventHandler(
+                (sender, e) => OnItemDoubleClicked(new ListableItemEventArgs((sender as ListViewItem).Tag as ListableItem)) //fire own event
+            );
+            return listViewItem;
+        }
+
+        #region Event triggers
 
         private void OnCreateDocumentButtonClicked(RoutedEventArgs e) {
             if (CreateDocumentButtonClicked != null) {
