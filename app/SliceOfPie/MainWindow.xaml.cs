@@ -33,7 +33,7 @@ namespace SliceOfPie {
         public MainWindow() {
             controller = Controller.Instance;
             InitializeComponent();
-            InitializeDocumentExplorer();
+            CreateContextMenus();
             
             folderContentView = new FolderContentView();
             folderContentView.ItemDoubleClicked += new EventHandler<ListableItemEventArgs>(FolderContentView_DoubleClick);
@@ -50,7 +50,7 @@ namespace SliceOfPie {
         /// <summary>
         /// Sets up the DocumentExplorer's context menus
         /// </summary>
-        private void InitializeDocumentExplorer() {
+        private void CreateContextMenus() {
             projectContextMenu = new ContextMenu();
             folderContextMenu = new ContextMenu();
             documentContextMenu = new ContextMenu();
