@@ -23,7 +23,7 @@ namespace SliceOfPie {
                 if (o == oldLast+1 && n <= curLast) {
                     Console.WriteLine("step 4");
                     //copy the last [length of curArr] - n lines from curArr of merged
-                    Array.Copy(curArr, n, merged, o, curLast - n);
+                    Array.Copy(curArr, n, merged, m, (curLast - n)+1);
                     n = curLast+1;
                 } else if (n == curLast+1) { //step 5
                     Console.WriteLine("step 5");
@@ -36,7 +36,7 @@ namespace SliceOfPie {
                     Console.WriteLine("step 7");
                     int t = -1;
                     //step 7.a
-                    for (int i = n; i <= curLast; i++) {
+                    for (int i = n+1; i <= curLast; i++) {
                         if (curArr[i].Equals(oldArr[o])) {
                             t = i;
                             break;
@@ -48,19 +48,28 @@ namespace SliceOfPie {
                         ++o;
                     } else {
                         Console.WriteLine("step 7.c");
-                        Array.Copy(curArr, n, merged, n, t - n);
+                        Array.Copy(curArr, n, merged, m, (t - n)+1);
                         n = t + 1;
+                        m = n;
+                        ++o; //not necessary, but it lets us skip a round (without this, the next run would end in step 7.b)
                     }
                 }
                 PrintArray(merged);
             }
             Document ret = new Document();
-            foreach (var s in merged) {
-                ret.CurrentRevision += s + "\n";
+            for (int i=0; i<merged.Length;i++) {
+                if (i == merged.Length - 1) {
+                    ret.CurrentRevision += merged[i];
+                } else {
+                    ret.CurrentRevision += merged[i] + "\n";
+                }
             }
             return ret;
         }
-
+        /// <summary>
+        /// Used as a demonstration only.
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(String[] args) {
             Document o = new Document {
                 CurrentRevision = @"DRACULA 

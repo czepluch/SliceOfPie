@@ -73,7 +73,6 @@
     <Compile Include="IItem.cs" />
     <Compile Include="IItemContainer.cs" />
     <Compile Include="ListableItem.cs" />
-    <Compile Include="Merger.cs" />
     <Compile Include="MySQLModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
