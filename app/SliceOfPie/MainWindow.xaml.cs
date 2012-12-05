@@ -112,21 +112,21 @@ namespace SliceOfPie {
         }
 
         /// <summary>
-        /// This method is supposed to refresh the document explorer.
-        /// It exists as a placeholder and testing method untill the model/controller allows local file traversal.
+        /// This method refreshes the document explorer.
+        /// If a Current Context Item is set, this will be expanded to in the Document Explorer and it will be opened.
         /// </summary>
-        private void ReloadProjects(IListableItem itemToHighLight = null) {
+        private void ReloadProjects() {
             DocumentExplorer.Items.Clear();
             //Add each project
             foreach (Project project in controller.GetProjects("local")) {
                 TreeViewItem projectItem = CreateDocumentExplorerItem(project);
                 AddProjectToDocExplorer(projectItem);
             }
-            //Expand to the optional item
-            if (itemToHighLight != null) {
+            //Expand to the current context item
+            if (currentContextItem != null) {
                 
                 foreach (TreeViewItem container in DocumentExplorer.Items) {
-                    ExpandToAndOpenItem(container, itemToHighLight);
+                    ExpandToAndOpenItem(container, currentContextItem);
                 }
             }
             //or just select the top project (there will always be at least one project)
@@ -410,7 +410,8 @@ namespace SliceOfPie {
             CreateProject.IsOpen = false;
             IsEnabled = true;
             CreateProjectTextBox.Clear();
-            ReloadProjects(project);
+            currentContextItem = project;
+            ReloadProjects();
         }
 
         /// <summary>
@@ -436,7 +437,8 @@ namespace SliceOfPie {
             CreateFolder.IsOpen = false;
             IsEnabled = true;
             CreateFolderTextBox.Clear();
-            ReloadProjects(folder);
+            currentContextItem = folder;
+            ReloadProjects();
         }
 
         /// <summary>
@@ -462,8 +464,8 @@ namespace SliceOfPie {
             CreateDocument.IsOpen = false;
             IsEnabled = true;
             CreateDocumentTextBox.Clear();
-            Open(currentContextItem); //show folder content and as such the new document
-            ReloadProjects(document);
+            currentContextItem = document;
+            ReloadProjects();
         }
 
         /// <summary>
@@ -512,7 +514,7 @@ namespace SliceOfPie {
         /// <param name="e">The event arguments</param>
         private void Synchronize_Click(object sender, RoutedEventArgs e) {
             //TODO sync current changes here
-            ReloadProjects(currentContextItem);
+            ReloadProjects();
             TreeViewItem topProject = DocumentExplorer.Items[0] as TreeViewItem; //Note there's always at least one project
         }
 
