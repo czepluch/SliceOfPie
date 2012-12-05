@@ -68,10 +68,16 @@ namespace SliceOfPie {
             MenuItem addDocumentProjectContext = new MenuItem() { Header = "Add document" };
             addDocumentProjectContext.Click += new RoutedEventHandler(OpenCreateDocumentWindow);
 
+            MenuItem removeProjectContext = new MenuItem() { Header = "Remove project" };
+            removeProjectContext.Click += new RoutedEventHandler(RemoveItemOnContextMenuClick);
+
+            
+
             projectContextMenu.Items.Add(shareProjectProjectContext);
             projectContextMenu.Items.Add(openProjectFolderProjectContext);
             projectContextMenu.Items.Add(addFolderProjectContext);
             projectContextMenu.Items.Add(addDocumentProjectContext);
+            projectContextMenu.Items.Add(removeProjectContext);
 
             //create the folder context menu
             MenuItem openFolderFolderContext = new MenuItem() { Header = "Open folder" };
@@ -83,15 +89,23 @@ namespace SliceOfPie {
             MenuItem addDocumentFolderContext = new MenuItem() { Header = "Add document" };
             addDocumentFolderContext.Click += new RoutedEventHandler(OpenCreateDocumentWindow);
 
+            MenuItem removeFolderContext = new MenuItem() { Header = "Remove folder" };
+            removeFolderContext.Click += new RoutedEventHandler(RemoveItemOnContextMenuClick);
+
             folderContextMenu.Items.Add(openFolderFolderContext);
             folderContextMenu.Items.Add(addFolderFolderContext);
             folderContextMenu.Items.Add(addDocumentFolderContext);
+            folderContextMenu.Items.Add(removeFolderContext);
 
             //create the document context men
             MenuItem editDocumentDocumentContext = new MenuItem() { Header = "Edit document" };
             editDocumentDocumentContext.Click += new RoutedEventHandler(OpenItemOnContextMenuClick);
 
-            documentContextMenu.Items.Add(editDocumentDocumentContext);  
+            MenuItem removeDocumentContext = new MenuItem() { Header = "Remove document" };
+            removeDocumentContext.Click += new RoutedEventHandler(RemoveItemOnContextMenuClick);
+
+            documentContextMenu.Items.Add(editDocumentDocumentContext);
+            documentContextMenu.Items.Add(removeDocumentContext);
         }
 
         #endregion
@@ -113,9 +127,9 @@ namespace SliceOfPie {
 
         /// <summary>
         /// This method refreshes the document explorer.
-        /// If a Current Context Item is set, this will be expanded to in the Document Explorer and it will be opened.
         /// </summary>
-        private void ReloadProjects() {
+        /// <param name="itemToOpen">The item to open, when the projects are reloaded</param>
+        private void ReloadProjects(IListableItem itemToOpen = null) {
             DocumentExplorer.Items.Clear();
             //Add each project
             foreach (Project project in controller.GetProjects("local")) {
@@ -123,10 +137,10 @@ namespace SliceOfPie {
                 AddProjectToDocExplorer(projectItem);
             }
             //Expand to the current context item
-            if (currentContextItem != null) {
+            if (itemToOpen != null) {
                 
                 foreach (TreeViewItem container in DocumentExplorer.Items) {
-                    ExpandToAndOpenItem(container, currentContextItem);
+                    ExpandToAndOpenItem(container, itemToOpen);
                 }
             }
             //or just select the top project (there will always be at least one project)
@@ -263,6 +277,22 @@ namespace SliceOfPie {
         /// <param name="e">The RoutedEventArgs</param>
         private void OpenItemOnContextMenuClick(object sender, RoutedEventArgs e) {
             Open(currentContextItem);
+        }
+
+        /// <summary>
+        /// A default event handler for changing the main content due to a click
+        /// </summary>
+        /// <param name="sender">The sender object</param>
+        /// <param name="e">The RoutedEventArgs</param>
+        private void RemoveItemOnContextMenuClick(object sender, RoutedEventArgs e) {
+            if (currentContextItem is Project) {
+                controller.RemoveProject(currentContextItem as Project);
+            } else if (currentContextItem is Folder) {
+                controller.RemoveFolder(currentContextItem as Folder);
+            } else {
+                controller.RemoveDocument(currentContextItem as Document);
+            }
+            ReloadProjects();
         }
 
         /// <summary>
@@ -410,8 +440,7 @@ namespace SliceOfPie {
             CreateProject.IsOpen = false;
             IsEnabled = true;
             CreateProjectTextBox.Clear();
-            currentContextItem = project;
-            ReloadProjects();
+            ReloadProjects(project);
         }
 
         /// <summary>
@@ -437,8 +466,7 @@ namespace SliceOfPie {
             CreateFolder.IsOpen = false;
             IsEnabled = true;
             CreateFolderTextBox.Clear();
-            currentContextItem = folder;
-            ReloadProjects();
+            ReloadProjects(folder);
         }
 
         /// <summary>
@@ -464,8 +492,7 @@ namespace SliceOfPie {
             CreateDocument.IsOpen = false;
             IsEnabled = true;
             CreateDocumentTextBox.Clear();
-            currentContextItem = document;
-            ReloadProjects();
+            ReloadProjects(document);
         }
 
         /// <summary>
