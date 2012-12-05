@@ -40,5 +40,9 @@ namespace SliceOfPie {
         public override void RemoveDocument(Document document) {
             throw new NotImplementedException();
         }
+
+        public override void SyncFiles(string userMail) {
+            throw new NotImplementedException();
+        }
     }
 }

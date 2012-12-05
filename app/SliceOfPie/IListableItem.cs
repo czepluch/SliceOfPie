@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 
 namespace SliceOfPie {
-    interface ListableItem {
+    public interface IListableItem {
+        string Title {
+            get;
+            set;
+        }
     }
 }

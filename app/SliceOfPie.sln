@@ -14,8 +14,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcWebApp", "MvcWebApp\MvcWebApp.csproj", "{D7DCF35B-0F98-4166-A532-63166714AB38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Merging", "ConsoleApplication1\Merging.csproj", "{736C7F55-1860-4ECA-A1DB-73060BFCAE83}"
-EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = SliceOfPie.vsmdi
@@ -61,16 +59,6 @@ Global
 		{D7DCF35B-0F98-4166-A532-63166714AB38}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D7DCF35B-0F98-4166-A532-63166714AB38}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D7DCF35B-0F98-4166-A532-63166714AB38}.Release|x86.ActiveCfg = Release|Any CPU
-		{736C7F55-1860-4ECA-A1DB-73060BFCAE83}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{736C7F55-1860-4ECA-A1DB-73060BFCAE83}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{736C7F55-1860-4ECA-A1DB-73060BFCAE83}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{736C7F55-1860-4ECA-A1DB-73060BFCAE83}.Debug|x86.ActiveCfg = Debug|x86
-		{736C7F55-1860-4ECA-A1DB-73060BFCAE83}.Debug|x86.Build.0 = Debug|x86
-		{736C7F55-1860-4ECA-A1DB-73060BFCAE83}.Release|Any CPU.ActiveCfg = Release|x86
-		{736C7F55-1860-4ECA-A1DB-73060BFCAE83}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{736C7F55-1860-4ECA-A1DB-73060BFCAE83}.Release|Mixed Platforms.Build.0 = Release|x86
-		{736C7F55-1860-4ECA-A1DB-73060BFCAE83}.Release|x86.ActiveCfg = Release|x86
-		{736C7F55-1860-4ECA-A1DB-73060BFCAE83}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

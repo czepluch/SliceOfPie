@@ -45,7 +45,7 @@ namespace SliceOfPie {
         /// <param name="name">Name of project</param>
         /// <param name="userMail">Email of user</param>
         /// <returns>The new project</returns>
-        /// <see cref="BeginCreateProject"/>
+        /// <seealso cref="BeginCreateProject"/>
         public Project CreateProject(string name, string userMail) {
             return fileModel.AddProject(name);
         }
@@ -66,7 +66,7 @@ namespace SliceOfPie {
         }
 
         /// <summary>
-        /// Create a project asynchronously, according to the Asynchronous Programming Model (see 
+        /// Create a project asynchronously, according to the Asynchronous Programming Model (seealso 
         /// http://msdn.microsoft.com/en-us/library/ms228963.aspx)
         /// </summary>
         /// <param name="name">Name of the project to create</param>
@@ -74,7 +74,7 @@ namespace SliceOfPie {
         /// <param name="callback">Callback delegate, called on completion</param>
         /// <param name="stateObject">State object (passed to callback)</param>
         /// <returns><c>IAsyncResult</c> to be used with <c>EndCreateProject</c></returns>
-        /// <see cref="EndCreateProject"/>
+        /// <seealso cref="EndCreateProject"/>
         public IAsyncResult BeginCreateProject(string name, string userMail, AsyncCallback callback, object stateObject) {
             AsyncResult<Project,string,string> ar = new AsyncResult<Project,string,string>(callback, stateObject, name, userMail);
             ThreadPool.QueueUserWorkItem(CreateProjectAsyncHelper, ar);
@@ -100,7 +100,7 @@ namespace SliceOfPie {
         /// Remove the specified project from the system.
         /// </summary>
         /// <param name="p">Project to remove.</param>
-        /// <see cref="BeginRemoveProject"/>
+        /// <seealso cref="BeginRemoveProject"/>
         public void RemoveProject(Project p) {
             fileModel.RemoveProject(p);
         }
@@ -127,7 +127,7 @@ namespace SliceOfPie {
         /// <param name="callback">Callback called upon finish</param>
         /// <param name="state">State object, passed to callback.</param>
         /// <returns>IAsyncResult used by EndRemoveProject</returns>
-        /// <see cref="EndRemoveProject"/>
+        /// <seealso cref="EndRemoveProject"/>
         public IAsyncResult BeginRemoveProject(Project p, AsyncCallback callback, object state) {
             AsyncResult<object, Project> ar = new AsyncResult<object, Project>(callback, state, p);
             ThreadPool.QueueUserWorkItem(RemoveProjectAsyncHelper, ar);
@@ -139,7 +139,7 @@ namespace SliceOfPie {
         /// Block until asynchronous removal of project is underway.
         /// </summary>
         /// <param name="asyncResult">IAsyncResult made by BeginRemoveProject</param>
-        /// <see cref="BeginRemoveProject"/>
+        /// <seealso cref="BeginRemoveProject"/>
         public void EndRemoveProject(IAsyncResult asyncResult) {
             AsyncResult<object, Project> ar = (AsyncResult<object, Project>)asyncResult;
             ar.EndInvoke();
@@ -169,18 +169,6 @@ namespace SliceOfPie {
 
         #endregion
 
-        #region SyncProject
-
-        /// <summary>
-        /// Synchronize the project with the online version
-        /// </summary>
-        /// <param name="p">Project to synchronize</param>
-        public void SyncProject(Project p) {
-            //story cool, yes
-        }
-
-        #endregion
-
         #endregion
 
         #region Document
@@ -194,7 +182,7 @@ namespace SliceOfPie {
         /// <param name="userMail">Email of owning user</param>
         /// <param name="parent">Parent of document. Must be placed in a project or folder</param>
         /// <returns>Newly created document</returns>
-        /// <see cref="BeginCreateDocument"/>
+        /// <seealso cref="BeginCreateDocument"/>
         public Document CreateDocument(string name, string userMail, IItemContainer parent) {
             return fileModel.AddDocument(parent, name);
         }
@@ -223,7 +211,7 @@ namespace SliceOfPie {
         /// <param name="callback">Callback called on completion of creation</param>
         /// <param name="stateObject">state object (passed to callback)</param>
         /// <returns>IAsyncResult to be used in EndCreateDocument</returns>
-        /// <see cref="EndCreateDocument"/>
+        /// <seealso cref="EndCreateDocument"/>
         public IAsyncResult BeginCreateDocument(string name, string userMail, IItemContainer parent, AsyncCallback callback, object stateObject) {
             AsyncResult<Document, string, string, IItemContainer> ar = new AsyncResult<Document, string, string, IItemContainer>(callback, stateObject, name, userMail, parent);
             ThreadPool.QueueUserWorkItem(CreateDocumentAsyncHelper, ar);
@@ -236,7 +224,7 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="asyncResult">IAsyncResult from BeginCreateDocument</param>
         /// <returns>Newly created document</returns>
-        /// <see cref="BeginCreateDocument"/>
+        /// <seealso cref="BeginCreateDocument"/>
         public Document EndCreateDocument(IAsyncResult asyncResult) {
             AsyncResult<Document, string, string, IItemContainer> ar = (AsyncResult<Document, string, string, IItemContainer>)asyncResult;
             return ar.EndInvoke();
@@ -276,7 +264,7 @@ namespace SliceOfPie {
         /// <param name="callback">Callback called when document saving finishes</param>
         /// <param name="state">State object, passed to callback</param>
         /// <returns>IAsyncResult for EndSaveDocument</returns>
-        /// <see cref="EndSaveDocument"/>
+        /// <seealso cref="EndSaveDocument"/>
         public IAsyncResult BeginSaveDocument(Document d, AsyncCallback callback, object state) {
             AsyncResult<object, Document> ar = new AsyncResult<object, Document>(callback, state, d);
             ThreadPool.QueueUserWorkItem(RemoveDocumentAsyncHelper, ar);
@@ -288,7 +276,7 @@ namespace SliceOfPie {
         /// Block until the document saving concludes, then continue.
         /// </summary>
         /// <param name="asyncResult">IAsyncResult from BeginSaveDocument</param>
-        /// <see cref="BeginSaveDocument"/>
+        /// <seealso cref="BeginSaveDocument"/>
         public void EndSaveDocument(IAsyncResult asyncResult) {
             AsyncResult<object, Document> ar = (AsyncResult<object, Document>)asyncResult;
             ar.EndInvoke();
@@ -302,7 +290,7 @@ namespace SliceOfPie {
         /// Remove a document from the system.
         /// </summary>
         /// <param name="d">Document to remove</param>
-        /// <see cref="BeginRemoveDocument"/>
+        /// <seealso cref="BeginRemoveDocument"/>
         public void RemoveDocument(Document d) {
             fileModel.RemoveDocument(d);
         }
@@ -329,7 +317,7 @@ namespace SliceOfPie {
         /// <param name="callback">Callback called on removal completion</param>
         /// <param name="state">State object (passed to callback)</param>
         /// <returns>IAsyncResult for EndRemoveDocument</returns>
-        /// <see cref="EndRemoveDocument"/>
+        /// <seealso cref="EndRemoveDocument"/>
         public IAsyncResult BeginRemoveDocument(Document d, AsyncCallback callback, object state) {
             AsyncResult<object, Document> ar = new AsyncResult<object, Document>(callback, state, d);
             ThreadPool.QueueUserWorkItem(RemoveDocumentAsyncHelper, ar);
@@ -341,7 +329,7 @@ namespace SliceOfPie {
         /// Wait for removal of document to finish, then continue (block while waiting).
         /// </summary>
         /// <param name="asyncResult">IAsyncResult from BeginRemoveDocument</param>
-        /// <see cref="BeginRemoveDocument"/>
+        /// <seealso cref="BeginRemoveDocument"/>
         public void EndRemoveDocument(IAsyncResult asyncResult) {
             AsyncResult<object, Document> ar = (AsyncResult<object, Document>)asyncResult;
             ar.EndInvoke();
@@ -390,7 +378,7 @@ namespace SliceOfPie {
         /// <param name="callback">Callback called upon folder creation</param>
         /// <param name="stateObject">State object (passed to callback)</param>
         /// <returns>IAsyncResult for EndCreateFolder</returns>
-        /// <see cref="EndCreateFolder"/>
+        /// <seealso cref="EndCreateFolder"/>
         public IAsyncResult BeginCreateFolder(string name, string userMail, IItemContainer parent, AsyncCallback callback, object stateObject) {
             AsyncResult<Folder, string, string, IItemContainer> ar = new AsyncResult<Folder, string, string, IItemContainer>(callback, stateObject, name, userMail, parent);
             ThreadPool.QueueUserWorkItem(CreateFolderAsyncHelper, ar);
@@ -442,7 +430,7 @@ namespace SliceOfPie {
         /// <param name="callback">Callback called when folder has been removed</param>
         /// <param name="state">State object (passed to callback)</param>
         /// <returns>IAsyncResult for EndRemoveFolder</returns>
-        /// <see cref="EndRemoveFolder"/>
+        /// <seealso cref="EndRemoveFolder"/>
         public IAsyncResult BeginRemoveFolder(Folder f, AsyncCallback callback, object state) {
             AsyncResult<object, Folder> ar = new AsyncResult<object, Folder>(callback, state, f);
             ThreadPool.QueueUserWorkItem(RemoveFolderAsyncHelper, ar);
@@ -454,7 +442,7 @@ namespace SliceOfPie {
         /// Block while folder is removed, then continue
         /// </summary>
         /// <param name="asyncResult">IAsyncResult from BeginRemoveFolder</param>
-        /// <see cref="BeginRemoveFolder"/>
+        /// <seealso cref="BeginRemoveFolder"/>
         public void EndRemoveFolder(IAsyncResult asyncResult) {
             AsyncResult<object, Folder> ar = (AsyncResult<object, Folder>)asyncResult;
             ar.EndInvoke();
@@ -464,6 +452,65 @@ namespace SliceOfPie {
 
         #endregion
 
+        #region All
+
+        #region Sync Projects
+
+        /// <summary>
+        /// Synchronize all files with the remote version.
+        /// </summary>
+        /// <param name="p">Updated collection of projects.</param>
+        /// <seealso cref="BeginSyncProjects"/>
+        public IEnumerable<Project> SyncProjects(string userMail) {
+            fileModel.SyncFiles(userMail);
+            return GetProjects(userMail);
+        }
+
+        /// <summary>
+        /// Helper for synchronizing projects asynchronously (funny as that sounds).
+        /// </summary>
+        /// <param name="asyncResult">AsyncResult&lt;IEnumerable&ltProject&gt;,string&gt;</param>
+        private void SyncProjectsAsyncHelper(object asyncResult) {
+            AsyncResult<IEnumerable<Project>, string> ar = (AsyncResult<IEnumerable<Project>, string>)asyncResult;
+            try {
+                IEnumerable<Project> result = SyncProjects(ar.Parameter1);
+                ar.SetAsCompleted(result, false);
+            }
+            catch (Exception e) {
+                ar.SetAsCompleted(e, false);
+            }
+        }
+
+        /// <summary>
+        /// Start synchronizing all projects for a user asynchronously, in accordance with the Asynchronous
+        /// Programming Model pattern.
+        /// </summary>
+        /// <param name="userMail">Email of user</param>
+        /// <param name="callback">Callback called when synchronization finishes</param>
+        /// <param name="state">State object, passed to callback</param>
+        /// <returns>IAsyncResult for EndSyncProjects</returns>
+        /// <seealso cref="EndSyncProjects"/>
+        public IAsyncResult BeginSyncProjects(string userMail, AsyncCallback callback, object state) {
+            AsyncResult<IEnumerable<Project>, string> ar = new AsyncResult<IEnumerable<Project>, string>(callback, state, userMail);
+            ThreadPool.QueueUserWorkItem(SyncProjectsAsyncHelper, ar);
+
+            return ar;
+        }
+
+        /// <summary>
+        /// Blocks until synchronization of projects has completed, then returns the result.
+        /// </summary>
+        /// <param name="asyncResult">ASyncResult from BeginSyncProjects</param>
+        /// <returns>Updated enumerable of projects</returns>
+        /// <seealso cref="BeginSyncProjects"/>
+        public IEnumerable<Project> EndSyncProjects(IAsyncResult asyncResult) {
+            AsyncResult<IEnumerable<Project>, string> ar = (AsyncResult<IEnumerable<Project>, string>)asyncResult;
+            return ar.EndInvoke();
+        }
+
+        #endregion
+
+        #region Get Projects
 
         /// <summary>
         /// Get An IEnumerable of the project associated with the user denoted by userId
@@ -475,5 +522,50 @@ namespace SliceOfPie {
                 yield return p;
             }
         }
+
+        /// <summary>
+        /// Helper for asynchronously getting projects
+        /// </summary>
+        /// <param name="asyncResult">AsyncResult&ltIEnumerable&lt;Project&gt;,string&gt;</param>
+        private void GetProjectsAsyncHelper(object asyncResult) { //TODO: Use AsyncResultNoResult instead (generic this!)
+            AsyncResult<IEnumerable<Project>, string> ar = (AsyncResult<IEnumerable<Project>, string>)asyncResult;
+            try {
+                IEnumerable<Project> result = GetProjects(ar.Parameter1);
+                ar.SetAsCompleted(result, false);
+            }
+            catch (Exception e) {
+                ar.SetAsCompleted(e, false);
+            }
+        }
+
+        /// <summary>
+        /// Start getting all projects from the model asynchronously, in accordance with the APM pattern.
+        /// </summary>
+        /// <param name="userMail">Email of user whose projects are retrieved</param>
+        /// <param name="callback">Callback called when all projects have been retrieved</param>
+        /// <param name="state">Passed to callback</param>
+        /// <returns>IAsynResult for EndGetProjects</returns>
+        /// <seealso cref="EndGetProjects"/>
+        public IAsyncResult BeginGetProjects(string userMail, AsyncCallback callback, object state) {
+            AsyncResult<IEnumerable<Project>, string> ar = new AsyncResult<IEnumerable<Project>, string>(callback, state, userMail);
+            ThreadPool.QueueUserWorkItem(GetProjectsAsyncHelper, ar);
+
+            return ar;
+        }
+
+        /// <summary>
+        /// Block until all projects have been retrieved, then return them.
+        /// </summary>
+        /// <param name="asyncResult">IAsyncResult from BeginGetProjects</param>
+        /// <returns>Enumerable containing all projects</returns>
+        /// <seealso cref="BeginGetProjects"/>
+        public IEnumerable<Project> EndGetProjects(IAsyncResult asyncResult) {
+            AsyncResult<IEnumerable<Project>, string> ar = (AsyncResult<IEnumerable<Project>, string>)asyncResult;
+            return ar.EndInvoke();
+        }
+
+        #endregion
+
+        #endregion
     }
 }

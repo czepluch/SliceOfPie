@@ -73,5 +73,13 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="d">Document to remove</param>
         public abstract void RemoveDocument(Document d);
+
+        /// <summary>
+        /// Synchronizes all files for the user with the given email so the local and
+        /// remote states are the same.
+        /// Uploads first, then downloads.
+        /// </summary>
+        /// <param name="userMail">Email of user</param>
+        public abstract void SyncFiles(string userMail);
     }
 }
