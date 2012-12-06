@@ -5,11 +5,81 @@ using System.Text;
 
 namespace SliceOfPie {
     public class WebFileModel : IFileModel {
-        public override IEnumerable<Project> GetProjects(string userMail) {
-            List<Project> projects = new List<Project>();
 
-            foreach (Project project in projects) {
-                yield return project;
+        public override IEnumerable<Project> GetProjects(string email) {
+            List<Project> projectsContainer = new List<Project>();
+            using (var dbContext = new sliceofpieEntities2()) {
+                var projects = from projectUser in dbContext.ProjectUsers
+                               from project in dbContext.Projects
+                               where projectUser.UserEmail == email && projectUser.ProjectId == project.Id
+                               select project;
+                foreach (Project project in projects) { // Get all folders from project
+                    projectsContainer.Add(project);
+                    GetFolders(project, dbContext);
+                    GetDocuments(project, dbContext);
+                }
+            }
+            return projectsContainer;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="dbContext"></param>
+        private void GetFolders(Project project, sliceofpieEntities2 dbContext) {
+            var folders = from folder in dbContext.Folders
+                          where folder.ProjectId == project.Id
+                          select folder;
+            foreach (Folder folder in folders) {
+                folder.Parent = project;
+                project.Folders.Add(folder);
+                GetFolders(folder, dbContext);
+                GetDocuments(folder, dbContext);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="project"></param>
+        /// <param name="dbContext"></param>
+        private void GetDocuments(Project project, sliceofpieEntities2 dbContext) {
+            var documents = from document in dbContext.Documents
+                            where document.ProjectId == project.Id
+                            select document;
+            foreach (Document document in documents) {
+                document.Parent = project;
+                project.Documents.Add(document);
+            }
+        }
+
+        /// <summary>
+        /// Recurrrrsive
+        /// </summary>
+        /// <param name="folder"></param>
+        private void GetFolders(Folder parent, sliceofpieEntities2 dbContext) {
+            var folders = from folder in dbContext.Folders
+                            where folder.FolderId == parent.Id
+                            select folder;
+            foreach (Folder folder in folders) {
+                folder.Parent = parent;
+                parent.Folders.Add(folder);
+                GetFolders(folder, dbContext);
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="folder"></param>
+        private void GetDocuments(Folder parent, sliceofpieEntities2 dbContext) {
+            var documents = from document in dbContext.Documents
+                            where document.FolderId == parent.Id
+                            select document;
+            foreach (Document document in documents) {
+                document.Parent = parent;
+                parent.Documents.Add(document);
             }
         }
 
