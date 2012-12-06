@@ -23,29 +23,6 @@ namespace SliceOfPie {
             }
         }
 
-        private bool webController = false;
-
-        /// <summary>
-        /// Denotes whether the controller is a web controller (for server-side) or a local controller
-        /// (for client). If this is changed, the controller i reset to a different kind of controller.
-        /// </summary>
-        public bool IsWebController {
-            get {
-                return webController;
-            }
-            set {
-                if (value != webController) {
-                    if (value == true) {
-                        _instance = new Controller(new WebFileModel());
-                    }
-                    else {
-                        _instance = new Controller();
-                    }
-                    webController = value;
-                }
-            }
-        }
-
         private IFileModel fileModel;
 
         /// <summary>
