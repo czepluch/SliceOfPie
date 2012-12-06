@@ -60,7 +60,6 @@ namespace SliceOfPie {
         private Controller(IFileModel model = null) {
             if (model == null) model = new LocalFileModel();
             fileModel = model;
-            Merger.TestRun();
         }
 
         /// <summary>
