@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace SliceOfPie {
-    class Merger {
+    public class Merger {
         private Merger() {
         }
 
@@ -66,11 +66,23 @@ namespace SliceOfPie {
             }
             return ret;
         }
+
+        public static Document Merge(Document current, Document old) {
+            //Null checks
+            if (current.CurrentRevision == null && old.CurrentRevision == null) return null;
+            if (current.CurrentRevision == null) return old;
+            if (current.CurrentRevision == null) return current;
+
+            String[] arrC = current.CurrentRevision.Split('\n');
+            String[] arrO = old.CurrentRevision.Split('\n');
+            return Merge(arrC, arrO);
+        }
+
         /// <summary>
         /// Used as a demonstration only.
         /// </summary>
         /// <param name="args"></param>
-        public static void Main(String[] args) {
+        public static void TestRun() {
             Document o = new Document {
                 CurrentRevision = @"DRACULA 
 
@@ -107,6 +119,7 @@ riving at Vienna early next morning; should have arrived at
 6:46, but train was an hour late. Buda-Pesth seems a wonderful 
 place, from the glimpse which I got of it from the train and the 
 little I could walk through the streets. I feared to go very far 
+I'VE BEEN WORKING ON THE RAILROAD, ALL THE LIFE-LONG DAYAYAYAY 
 from the station, as we had arrived late and would start as near 
 the correct time as possible. The impression I had was that we 
 were leaving the West and entering the East; the most western 
@@ -115,8 +128,6 @@ and depth, took us among the traditions of Turkish rule. ";
 
             String[] arrC = c.CurrentRevision.Split('\n');
             String[] arrO = o.CurrentRevision.Split('\n');
-            //PrintArray(arrC);
-            //PrintArray(arrO);
 
             Document merged = Merger.Merge(arrC, arrO);
             String[] mergedArr = merged.CurrentRevision.Split('\n');

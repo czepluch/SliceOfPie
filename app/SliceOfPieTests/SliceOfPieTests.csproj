@@ -49,6 +49,7 @@
     <Compile Include="ControllerAPMTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LocalFileModelTest.cs" />
+    <Compile Include="MergerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SliceOfPie\SliceOfPie.csproj">
