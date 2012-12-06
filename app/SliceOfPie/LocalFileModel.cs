@@ -6,7 +6,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 
 namespace SliceOfPie {
-    internal class LocalFileModel : IFileModel {
+    public class LocalFileModel : IFileModel {
         private string AppPath;
         private string DefaultProjectPath;
         private List<Project> Projects = new List<Project>();
@@ -200,6 +200,7 @@ namespace SliceOfPie {
             FileStream fileStream = new FileStream(document.GetPath(), FileMode.Create, FileAccess.Write);
             StreamWriter streamWriter = new StreamWriter(fileStream);
             string[] lines = document.CurrentRevision.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+            streamWriter.WriteLine(document.CurrentHash);
             foreach (string line in lines) {
                 streamWriter.WriteLine(line);
             }
