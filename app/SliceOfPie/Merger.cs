@@ -67,12 +67,15 @@ namespace SliceOfPie {
             }
             return ret;
         }
+
+        #region comments
         /// <summary>
         /// Produces a merge of current and old. Lines from current will take precedence.
         /// </summary>
         /// <param name="current">"newest" Document</param>
         /// <param name="old">"oldest" Document</param>
         /// <returns>Merged document</returns>
+        #endregion
         public static Document Merge(Document current, Document old) {
             //Null checks
             if (current.CurrentRevision == null && old.CurrentRevision == null) return null;
