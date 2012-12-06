@@ -32,12 +32,12 @@ namespace SliceOfPie {
                 var folders = from folder in dbContext.Folders
                               where folder.ProjectId == project.Id
                               select folder;
-                foreach (Folder folder in folders) {
-                    folder.Parent = project;
-                    project.Folders.Add(folder);
-                    //GetFolders(folder);
-                    //GetDocuments(folder);
-                }
+                //foreach (Folder folder in folders) {
+                //    folder.Parent = project;
+                //    project.Folders.Add(folder);
+                //    GetFolders(folder);
+                //    GetDocuments(folder);
+                //}
             }
         }
 
