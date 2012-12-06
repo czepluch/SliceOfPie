@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Data.Objects;
 
 namespace SliceOfPie {
     public class WebFileModel : IFileModel {
@@ -13,77 +14,47 @@ namespace SliceOfPie {
                                from project in dbContext.Projects
                                where projectUser.UserEmail.Equals(email) && projectUser.ProjectId == project.Id
                                select project;
-                foreach (Project project in projects) { // Get all folders from project
-                    projectsContainer.Add(project);
+                foreach (Project project in projects) {
+                    projectsContainer.Add(new Project() {
+                        Id = project.Id,
+                        Title = project.Title
+                    });
                 }
             }
             foreach (Project project in projectsContainer) {
-                //GetFolders(project);
-                //GetDocuments(project);
+                GetFolders(project);
+                GetDocuments(project);
             }
             return projectsContainer;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="project"></param>
-        /// <param name="dbContext"></param>
-        private void GetFolders(Project project) {
-            List<Folder> folderList = new List<Folder>();
-            using (var dbContext = new sliceofpieEntities2()) {
-                var folders = from folder in dbContext.Folders
-                              where folder.ProjectId == project.Id
-                              select folder;
-                foreach (Folder folder in folders) {
-                    folderList.Add(folder);
-                }
-            }
-            foreach (Folder folder in folderList) {
-                folder.Parent = project;
-                project.Folders.Add(folder);
-                GetFolders(folder);
-                GetDocuments(folder);
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="project"></param>
-        /// <param name="dbContext"></param>
-        private void GetDocuments(Project project) {
-            List<Document> docList = new List<Document>();
-            using (var dbContext = new sliceofpieEntities2()) {
-                var documents = from document in dbContext.Documents
-                                where document.ProjectId == project.Id
-                                select document;
-                foreach (Document document in documents) {
-                    docList.Add(document);
-                }
-            }
-            foreach (Document document in docList) {
-                document.Parent = project;
-                project.Documents.Add(document);
-            }
         }
 
         /// <summary>
         /// Recurrrrsive
         /// </summary>
         /// <param name="folder"></param>
-        private void GetFolders(Folder parent) {
+        private void GetFolders(IItemContainer parent) {
             List<Folder> folderList = new List<Folder>();
             using (var dbContext = new sliceofpieEntities2()) {
-                var folders = from folder in dbContext.Folders
+                IQueryable<Folder> folders;
+                if (parent is Folder) {
+                    folders = from folder in dbContext.Folders
                               where folder.FolderId == parent.Id
                               select folder;
+                }
+                else {
+                    folders = from folder in dbContext.Folders
+                              where folder.ProjectId == parent.Id
+                              select folder;
+                }
                 foreach (Folder folder in folders) {
-                    folderList.Add(folder);
+                    folderList.Add(new Folder() {
+                        Id = folder.Id,
+                        Title = folder.Title,
+                        Parent = parent
+                    });
                 }
             }
             foreach (Folder folder in folderList) {
-                folder.Parent = parent;
                 parent.Folders.Add(folder);
                 GetFolders(folder);
                 GetDocuments(folder);
@@ -94,18 +65,31 @@ namespace SliceOfPie {
         /// 
         /// </summary>
         /// <param name="folder"></param>
-        private void GetDocuments(Folder parent) {
+        private void GetDocuments(IItemContainer parent) {
             List<Document> docList = new List<Document>();
             using (var dbContext = new sliceofpieEntities2()) {
-                var documents = from document in dbContext.Documents
+                IQueryable<Document> documents;
+                if (parent is Folder) {
+                    documents = from document in dbContext.Documents
                                 where document.FolderId == parent.Id
                                 select document;
+                }
+                else {
+                    documents = from document in dbContext.Documents
+                                where document.ProjectId == parent.Id
+                                select document;
+                }
                 foreach (Document document in documents) {
-                    docList.Add(document);
+                    docList.Add(new Document() {
+                        Id = document.Id,
+                        Title = document.Title,
+                        Parent = parent,
+                        CurrentRevision = document.CurrentRevision,
+                        CurrentHash = document.CurrentRevision.GetHashCode()
+                    });
                 }
             }
             foreach (Document document in docList) {
-                document.Parent = parent;
                 parent.Documents.Add(document);
             }
         }
@@ -139,7 +123,7 @@ namespace SliceOfPie {
         }
 
         public override void SyncFiles(string userMail) {
-            throw new NotImplementedException();
+            throw new NotSupportedException("Synchronization is not supported from web, as you should simply GetProjects ever time...");
         }
     }
 }

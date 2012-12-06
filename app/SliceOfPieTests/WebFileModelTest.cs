@@ -38,17 +38,27 @@ namespace SliceOfPie.Tests {
 
             if (projects.Count() < 1) throw new AssertFailedException("No projects returned from model");
 
-            Project p = projects.First(); //get first project
+            Project p = projects.First(proj => proj.Id == 1); //get first project
+            if (p.Id < 1) throw new AssertFailedException("Project has id below allowed value");
+            if (p.Title.Equals(string.Empty)) throw new AssertFailedException("Project title has not been set");
 
-            if (p.Folders.Count() < 1) throw new AssertFailedException("No folders were contained in the project");
+            if (p.GetFolders().Count() < 1) throw new AssertFailedException("No folders were contained in the project, "+p.Title);
 
-            Folder f = p.Folders.First();
+            Folder f = p.GetFolders().First(fold => fold.Id == 1);
+            if (f.Id < 1) throw new AssertFailedException("Folder has id below allowed value");
+            if (f.Title.Equals(string.Empty)) throw new AssertFailedException("Folder title has not been set");
 
-            if (f.Documents.Count() < 1) throw new AssertFailedException("No documents were contained in the folder");
+            if (f.GetDocuments().Count() < 1) throw new AssertFailedException("No documents were contained in the folder, "+f.Title+" in "+p.Title);
 
-            Document d = f.Documents.First();
+            Document d = f.GetDocuments().First(doc => doc.Id == 1);
+            if (d.Id < 1) throw new AssertFailedException("Document has id below allowed value");
+            if (d.Title.Equals(string.Empty)) throw new AssertFailedException("Document title has not been set");
+            if (d.CurrentRevision.Equals(string.Empty)) throw new AssertFailedException("Document CurrentRevision is empty!!!");
+            if (d.CurrentHash == 0) throw new AssertFailedException("Document Hash has not been set");
 
-            if (d.Revisions.Count() < 1) throw new AssertFailedException("No revisions were contained in the document");
+            if (d.GetRevisions().Count() < 1) throw new AssertFailedException("No revisions were contained in the document, "+d.Title+" in "+f.Title);
+
+            string s = d.GetRevisions().First();
         }
     }
 }
