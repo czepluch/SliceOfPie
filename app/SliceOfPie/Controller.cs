@@ -271,7 +271,7 @@ namespace SliceOfPie {
         /// <seealso cref="EndSaveDocument"/>
         public IAsyncResult BeginSaveDocument(Document d, AsyncCallback callback, object state) {
             AsyncResultNoResult<Document> ar = new AsyncResultNoResult<Document>(callback, state, d);
-            ThreadPool.QueueUserWorkItem(RemoveDocumentAsyncHelper, ar);
+            ThreadPool.QueueUserWorkItem(SaveDocumentAsyncHelper, ar);
 
             return ar;
         }
