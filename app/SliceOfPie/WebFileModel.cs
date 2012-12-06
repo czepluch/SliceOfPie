@@ -13,11 +13,11 @@ namespace SliceOfPie {
                                from project in dbContext.Projects
                                where projectUser.UserEmail == email && projectUser.ProjectId == project.Id
                                select project;
-                foreach (Project project in projects) { // Get all folders from project
-                    projectsContainer.Add(project);
-                    GetFolders(project);
-                    GetDocuments(project);
-                }
+                //foreach (Project project in projects) { // Get all folders from project
+                //    projectsContainer.Add(project);
+                //    GetFolders(project);
+                //    GetDocuments(project);
+                //}
             }
             return projectsContainer;
         }
@@ -32,12 +32,12 @@ namespace SliceOfPie {
                 var folders = from folder in dbContext.Folders
                               where folder.ProjectId == project.Id
                               select folder;
-                //foreach (Folder folder in folders) {
-                //    folder.Parent = project;
-                //    project.Folders.Add(folder);
-                //    GetFolders(folder);
-                //    GetDocuments(folder);
-                //}
+                foreach (Folder folder in folders) {
+                    folder.Parent = project;
+                    project.Folders.Add(folder);
+                    GetFolders(folder);
+                    GetDocuments(folder);
+                }
             }
         }
 
