@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using SliceOfPie.ApmHelpers;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("SliceOfPieTests")]
 
 namespace SliceOfPie {
 
