@@ -156,7 +156,7 @@
     <Content Include="Views\Home\Folder.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Home\Project.cshtml" />
+    <Content Include="Views\Account\Project.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

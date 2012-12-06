@@ -26,9 +26,5 @@ namespace MvcWebApp.Controllers
             return View(new Revision());
         }
 
-        public ActionResult Project()
-        {
-            return View(new Project());
-        }
     }
 }
