@@ -35,8 +35,8 @@ namespace SliceOfPie {
                 foreach (Folder folder in folders) {
                     folder.Parent = project;
                     project.Folders.Add(folder);
-                    GetFolders(folder);
-                    GetDocuments(folder);
+                    //GetFolders(folder);
+                    //GetDocuments(folder);
                 }
             }
         }
