@@ -9,7 +9,7 @@
     <ProjectGuid>{06C176A6-82EB-46FF-83F6-09F2EE719B88}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SliceOfPieTests</RootNamespace>
+    <RootNamespace>SliceOfPie.Tests</RootNamespace>
     <AssemblyName>SliceOfPieTests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -33,12 +33,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
@@ -46,16 +57,21 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApmMethodFactoryTest.cs" />
+    <Compile Include="AsyncResultNoResultTest.cs" />
+    <Compile Include="AsyncResultTest.cs" />
     <Compile Include="ControllerAPMTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LocalFileModelTest.cs" />
-    <Compile Include="MergerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SliceOfPie\SliceOfPie.csproj">
       <Project>{DA9495C3-18C2-491D-8AA6-5BD9A4BEA9C7}</Project>
       <Name>SliceOfPie</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

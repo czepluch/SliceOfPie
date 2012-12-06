@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Editor";
+}
+
+<h2>Editor</h2>
+
+@if(Request.IsAuthenticated) {
+    <text>This document is being edited by <strong>@User.Identity.Name</strong>!</text>
+}
+
+
+@model MvcWebApp.Models.Revision
+@using (Html.BeginForm())
+{
+    @Html.EditorFor(x => x.Content)
+    <input type="submit" value="Edit" />
+}

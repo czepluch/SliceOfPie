@@ -150,6 +150,14 @@ namespace MvcWebApp.Controllers
             return View();
         }
 
+        //
+        // GET: /Account/Project
+
+        public ActionResult Project()
+        {
+            return View(new Project());
+        }
+
         #region Status Codes
         private static string ErrorCodeToString(MembershipCreateStatus createStatus)
         {

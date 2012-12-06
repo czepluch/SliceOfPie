@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Project";
+}
+
+<h2>Project</h2>
+<p>Create new project!</p>
+
+@model MvcWebApp.Models.Project
+@using (Html.BeginForm())
+{
+    @Html.EditorFor(x => x.Title)
+    <input type="submit" value="Create" />
+}
+
+<p>Here will be a list of all projects.</p>
+<li>@Html.ActionLink("First project", "Project", "Account")</li>
