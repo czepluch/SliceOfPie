@@ -18,9 +18,6 @@ namespace SliceOfPie.Tests {
             string folderName = "New Project";
             IAsyncResult ar = controller.BeginCreateProject(folderName, "user@mail.com", null, new object());
 
-            //do something
-            int i = 53 * 100 * 100 * 100 / 5293 * 100;
-
             Project p = controller.EndCreateProject(ar);
 
             Assert.AreEqual(folderName, p.Title);
