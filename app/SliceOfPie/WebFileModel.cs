@@ -15,8 +15,8 @@ namespace SliceOfPie {
                                select project;
                 foreach (Project project in projects) { // Get all folders from project
                     projectsContainer.Add(project);
-                    GetFolders(project, dbContext);
-                    GetDocuments(project, dbContext);
+                    GetFolders(project);
+                    GetDocuments(project);
                 }
             }
             return projectsContainer;
@@ -27,15 +27,17 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="project"></param>
         /// <param name="dbContext"></param>
-        private void GetFolders(Project project, sliceofpieEntities2 dbContext) {
-            var folders = from folder in dbContext.Folders
-                          where folder.ProjectId == project.Id
-                          select folder;
-            foreach (Folder folder in folders) {
-                folder.Parent = project;
-                project.Folders.Add(folder);
-                GetFolders(folder, dbContext);
-                GetDocuments(folder, dbContext);
+        private void GetFolders(Project project) {
+            using (var dbContext = new sliceofpieEntities2()) {
+                var folders = from folder in dbContext.Folders
+                              where folder.ProjectId == project.Id
+                              select folder;
+                foreach (Folder folder in folders) {
+                    folder.Parent = project;
+                    project.Folders.Add(folder);
+                    GetFolders(folder);
+                    GetDocuments(folder);
+                }
             }
         }
 
@@ -44,13 +46,15 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="project"></param>
         /// <param name="dbContext"></param>
-        private void GetDocuments(Project project, sliceofpieEntities2 dbContext) {
-            var documents = from document in dbContext.Documents
-                            where document.ProjectId == project.Id
-                            select document;
-            foreach (Document document in documents) {
-                document.Parent = project;
-                project.Documents.Add(document);
+        private void GetDocuments(Project project) {
+            using (var dbContext = new sliceofpieEntities2()) {
+                var documents = from document in dbContext.Documents
+                                where document.ProjectId == project.Id
+                                select document;
+                foreach (Document document in documents) {
+                    document.Parent = project;
+                    project.Documents.Add(document);
+                }
             }
         }
 
@@ -58,14 +62,16 @@ namespace SliceOfPie {
         /// Recurrrrsive
         /// </summary>
         /// <param name="folder"></param>
-        private void GetFolders(Folder parent, sliceofpieEntities2 dbContext) {
-            var folders = from folder in dbContext.Folders
-                            where folder.FolderId == parent.Id
-                            select folder;
-            foreach (Folder folder in folders) {
-                folder.Parent = parent;
-                parent.Folders.Add(folder);
-                GetFolders(folder, dbContext);
+        private void GetFolders(Folder parent) {
+            using (var dbContext = new sliceofpieEntities2()) {
+                var folders = from folder in dbContext.Folders
+                              where folder.FolderId == parent.Id
+                              select folder;
+                foreach (Folder folder in folders) {
+                    folder.Parent = parent;
+                    parent.Folders.Add(folder);
+                    GetFolders(folder);
+                }
             }
         }
 
@@ -73,13 +79,15 @@ namespace SliceOfPie {
         /// 
         /// </summary>
         /// <param name="folder"></param>
-        private void GetDocuments(Folder parent, sliceofpieEntities2 dbContext) {
-            var documents = from document in dbContext.Documents
-                            where document.FolderId == parent.Id
-                            select document;
-            foreach (Document document in documents) {
-                document.Parent = parent;
-                parent.Documents.Add(document);
+        private void GetDocuments(Folder parent) {
+            using (var dbContext = new sliceofpieEntities2()) {
+                var documents = from document in dbContext.Documents
+                                where document.FolderId == parent.Id
+                                select document;
+                foreach (Document document in documents) {
+                    document.Parent = parent;
+                    parent.Documents.Add(document);
+                }
             }
         }
 
