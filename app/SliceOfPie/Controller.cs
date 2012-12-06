@@ -15,14 +15,38 @@ namespace SliceOfPie {
     /// </summary>
     public class Controller {
 
-        private static Controller _instance = new Controller();
+        private static Controller _instance = null;
+        private static bool isWebController = false;
 
         /// <summary>
         /// Get the single Controller instance.
         /// </summary>
         public static Controller Instance {
             get {
+                if (_instance == null) _instance = new Controller();
                 return _instance;
+            }
+        }
+
+        /// <summary>
+        /// Denotes whether the controller used is a web controller or a local controller. Set to true before
+        /// using the controller (calling Instance) to change the type of it.
+        /// </summary>
+        /// <seealso cref="Controller.Instance"/>
+        public static bool IsWebController {
+            get {
+                return isWebController;
+            }
+            set {
+                if (value != isWebController) {
+                    if (value == false) {
+                        _instance = new Controller(new LocalFileModel());
+                    }
+                    else {
+                        _instance = new Controller(new WebFileModel());
+                    }
+                    isWebController = value;
+                }
             }
         }
 
