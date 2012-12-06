@@ -13,7 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Controls.Primitives;
 
-namespace SliceOfPie {
+namespace SliceOfPie.Client {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>

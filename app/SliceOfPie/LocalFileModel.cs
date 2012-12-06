@@ -6,7 +6,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 
 namespace SliceOfPie {
-    public class LocalFileModel : IFileModel {
+    internal class LocalFileModel : IFileModel {
         private string AppPath;
         private string DefaultProjectPath;
         private List<Project> Projects = new List<Project>();

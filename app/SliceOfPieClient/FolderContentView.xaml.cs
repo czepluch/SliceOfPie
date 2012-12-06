@@ -12,7 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SliceOfPie {
+namespace SliceOfPie.Client {
     /// <summary>
     /// Interaction logic for the FolderContentView User Control.
     /// </summary>

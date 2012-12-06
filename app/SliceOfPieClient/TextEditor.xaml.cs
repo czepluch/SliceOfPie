@@ -11,8 +11,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SliceOfPie;
 
-namespace SliceOfPie {
+namespace SliceOfPie.Client {
     /// <summary>
     /// Interaction logic for the Text Editor User Control.
     /// </summary>
