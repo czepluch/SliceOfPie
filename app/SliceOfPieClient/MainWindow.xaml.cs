@@ -434,12 +434,13 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void CreateProjectCreateButton_Click(object sender, RoutedEventArgs e) {
-            Project project = controller.CreateProject(CreateProjectTextBox.Text, "local");
+            //Create project asynchronously and then reload the projects when done and open the document
+            controller.BeginCreateProject(CreateProjectTextBox.Text, "local", (iar) => { Project project = controller.EndCreateProject(iar); ReloadProjects(project); }, null);
+            //Close popup
             currentActivePopUp = null;
             CreateProject.IsOpen = false;
             IsEnabled = true;
             CreateProjectTextBox.Clear();
-            ReloadProjects(project);
         }
 
         /// <summary>
@@ -460,12 +461,13 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void CreateFolderCreateButton_Click(object sender, RoutedEventArgs e) {
-            Folder folder = controller.CreateFolder(CreateFolderTextBox.Text, "local", currentContextItem as IItemContainer);
+            //Create folder asynchronously and then reload the projects when done and open the document
+            controller.BeginCreateFolder(CreateFolderTextBox.Text, "local", currentContextItem as IItemContainer, (iar) => { Folder folder = controller.EndCreateFolder(iar); ReloadProjects(folder); }, null);
+            //Close popup
             currentActivePopUp = null;
             CreateFolder.IsOpen = false;
             IsEnabled = true;
             CreateFolderTextBox.Clear();
-            ReloadProjects(folder);
         }
 
         /// <summary>
