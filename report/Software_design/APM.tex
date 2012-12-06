@@ -1,7 +1,11 @@
 \subsubsection{Asynchronous Calls}
 
+% Consider moving this under something with patterns?
+
 For a desktop UI to be repsonsive, it is important that heavy loads are moved away from the UI thread. There are several possible ways of doing this: threading, abstracting to using tasks, or asynchronous methods. To reduce the amount of boilerplate code in the UI layer, the responsibility for delegating to threads was moved to the controller.
 
 The \emph{Asynchronous Programming Model}\cite{msdnAPMdoc} (abbrevated \emph{APM}) allows for easy, asynchronous calls to heavy-duty methods at a nice level of abstraction, substrantially simplifying UI programming. The support for callbacks lets the UI react as soon as a job finishes, without having to continuously poll the model.
 
-There do not seem to be any obvious building blocks for implementing the APM, however the MSDN Magazine\cite{richtermsdn0307} has an article guiding the process. Based on these ideas, building custom APM comes easier and this is the way we chose to go with the controller.
+There do not seem to be any obvious building blocks for implementing the APM, however the MSDN Magazine\cite{richtermsdn0307} has an article by Jeffrey Richter guiding the process. Based on these ideas, building custom APM comes easier and this is the way we chose to go with the controller. Instead of just using Richter's classes and implementations, we built an automated factory, which quickly wraps a blokcing method in APM, making it non-blocking.
+
+Another advantage with the APM pattern is that it is nicely supported by the \emph{Task Parallel Library}\cite[p.~656]{Griffiths2010} (TPL), allowing for them to be used in a simple interface with great concurrency and error-handling support.

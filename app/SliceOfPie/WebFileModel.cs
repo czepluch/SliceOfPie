@@ -29,7 +29,7 @@ namespace SliceOfPie {
             throw new NotImplementedException();
         }
 
-        public override Document AddDocument(IItemContainer parent, string title, int id = 0, bool db = false) {
+        public override Document AddDocument(IItemContainer parent, string title, string revision = "", int id = 0, bool db = false) {
             throw new NotImplementedException();
         }
 

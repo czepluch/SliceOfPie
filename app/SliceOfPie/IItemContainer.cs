@@ -6,6 +6,7 @@ using System.Data.Objects.DataClasses;
 
 namespace SliceOfPie {
     public interface IItemContainer {
+        int Id { get; set; }
         string Title { get; set; }
         string AppPath { get; set; }
         IItemContainer Parent { get; set; }
