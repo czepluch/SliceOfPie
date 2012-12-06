@@ -486,12 +486,13 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void CreateDocumentCreateButton_Click(object sender, RoutedEventArgs e) {
-            Document document = controller.CreateDocument(CreateDocumentTextBox.Text, "local", currentContextItem as IItemContainer);
+            //Create document asynchronously and then reload the projects when done and open the document
+            controller.BeginCreateDocument(CreateDocumentTextBox.Text, "local", currentContextItem as IItemContainer, (iar) => { Document document = controller.EndCreateDocument(iar); ReloadProjects(document); }, null);
+            //Close popup
             currentActivePopUp = null;
             CreateDocument.IsOpen = false;
             IsEnabled = true;
             CreateDocumentTextBox.Clear();
-            ReloadProjects(document);
         }
 
         /// <summary>
@@ -513,7 +514,7 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments</param>
         private void ShareProjectShareButton_Click(object sender, RoutedEventArgs e) {
             controller.ShareProject(currentContextItem as Project, ShareProjectTextBox.Text.Split(','));
-            //Call to controller shares the project. Awaiting controller method before implementation
+            
             currentActivePopUp = null;
             ShareProject.IsOpen = false;
             IsEnabled = true;
