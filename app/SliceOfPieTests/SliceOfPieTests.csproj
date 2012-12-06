@@ -9,7 +9,7 @@
     <ProjectGuid>{06C176A6-82EB-46FF-83F6-09F2EE719B88}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SliceOfPieTests</RootNamespace>
+    <RootNamespace>SliceOfPie.Tests</RootNamespace>
     <AssemblyName>SliceOfPieTests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

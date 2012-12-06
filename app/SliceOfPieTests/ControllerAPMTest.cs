@@ -5,7 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SliceOfPie;
 
-namespace SliceOfPieTests {
+namespace SliceOfPie.Tests {
     [TestClass]
     public class ControllerAPMTest {
         private Controller controller = Controller.Instance;

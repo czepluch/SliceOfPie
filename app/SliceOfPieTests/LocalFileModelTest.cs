@@ -6,7 +6,7 @@ using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SliceOfPie;
 
-namespace SliceOfPieTests {
+namespace SliceOfPie.Tests {
     [TestClass]
     public class LocalFileModelTest {
         string AppPath;

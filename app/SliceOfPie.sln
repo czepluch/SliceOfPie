@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcWebApp", "MvcWebApp\MvcWebApp.csproj", "{D7DCF35B-0F98-4166-A532-63166714AB38}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SliceOfPieClient", "SliceOfPieClient\SliceOfPieClient.csproj", "{D1DBF0A6-1315-4C25-8523-EF8D8EAA0F32}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = SliceOfPie.vsmdi
@@ -59,6 +61,16 @@ Global
 		{D7DCF35B-0F98-4166-A532-63166714AB38}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{D7DCF35B-0F98-4166-A532-63166714AB38}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{D7DCF35B-0F98-4166-A532-63166714AB38}.Release|x86.ActiveCfg = Release|Any CPU
+		{D1DBF0A6-1315-4C25-8523-EF8D8EAA0F32}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{D1DBF0A6-1315-4C25-8523-EF8D8EAA0F32}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{D1DBF0A6-1315-4C25-8523-EF8D8EAA0F32}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{D1DBF0A6-1315-4C25-8523-EF8D8EAA0F32}.Debug|x86.ActiveCfg = Debug|x86
+		{D1DBF0A6-1315-4C25-8523-EF8D8EAA0F32}.Debug|x86.Build.0 = Debug|x86
+		{D1DBF0A6-1315-4C25-8523-EF8D8EAA0F32}.Release|Any CPU.ActiveCfg = Release|x86
+		{D1DBF0A6-1315-4C25-8523-EF8D8EAA0F32}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{D1DBF0A6-1315-4C25-8523-EF8D8EAA0F32}.Release|Mixed Platforms.Build.0 = Release|x86
+		{D1DBF0A6-1315-4C25-8523-EF8D8EAA0F32}.Release|x86.ActiveCfg = Release|x86
+		{D1DBF0A6-1315-4C25-8523-EF8D8EAA0F32}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
