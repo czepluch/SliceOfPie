@@ -213,7 +213,7 @@ namespace SliceOfPie {
         /// Synchronize all files and folders with db. Upload first then download.
         /// </summary>
         /// <param name="email"></param>
-        public void SyncFiles(string email) {
+        public override void SyncFiles(string email) {
             UploadStructure(email);
             DownloadStructure(email);
         }

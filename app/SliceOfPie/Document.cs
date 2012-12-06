@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 
 namespace SliceOfPie {
-    public partial class Document : IItem, ListableItem {
+    public partial class Document : IItem, IListableItem {
 
         public IItemContainer Parent { get; set; }
 

@@ -5,7 +5,7 @@ using System.Text;
 using System.IO;
 
 namespace SliceOfPie {
-    public partial class Folder : IItem, IItemContainer, ListableItem {
+    public partial class Folder : IItem, IItemContainer, IListableItem {
         public string AppPath { get; set; } // Not used
         public IItemContainer Parent { get; set; }
 
