@@ -145,15 +145,6 @@ namespace SliceOfPieTests {
         }
 
         [TestMethod]
-        public void TestGetAvailableName() {
-            string documentPath = Path.Combine(Path.Combine(AppPath, "0-default"), "0-TestFile");
-            FileStream fileStream = File.Create(documentPath);
-            fileStream.Close();
-            Assert.AreEqual(true, File.Exists(documentPath));
-            Assert.AreEqual("TestFile-1", Model.GetAvailableName("TestFile", 0, Path.Combine(AppPath, "0-default")));
-        }
-
-        [TestMethod]
         public void TestAddExistingDocument() {
             IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(1, projects.Count());
@@ -289,6 +280,20 @@ namespace SliceOfPieTests {
             Document document = folder.Documents.First();
             Assert.AreEqual("TestFile", document.Title);
         }
+
+        [TestMethod]
+        public void TestGetAvailableName() {
+            string documentPath = Path.Combine(Path.Combine(AppPath, "0-default"), "0-TestFile");
+            FileStream fileStream = File.Create(documentPath);
+            fileStream.Close();
+            Assert.AreEqual(true, File.Exists(documentPath));
+            Assert.AreEqual("TestFile-1", Model.GetAvailableName("TestFile", 0, Path.Combine(AppPath, "0-default")));
+        }
+
+        //[TestMethod]
+        //public void TestUploadStructure() {
+        //    Assert.AreEqual(true, Model.UploadStructure("me@michaelstorgaard.com"));
+        //}
 
         [TestInitialize]
         public void Initialize() {

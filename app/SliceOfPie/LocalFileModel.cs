@@ -222,8 +222,92 @@ namespace SliceOfPie {
         /// Upload all files and folders to db for specific user.
         /// </summary>
         /// <param name="email"></param>
-        public void UploadStructure(string email) {
+        public int UploadStructure(string email) {
+            IEnumerable<Project> projects = GetProjects("local");
+            foreach (Project project in projects) {
+                List<Folder> folders = new List<Folder>();
+                List<Document> documents = new List<Document>();
+                // Insert or update project
+                using (var dbContext = new sliceofpieEntities2()) {
+                    folders = project.Folders.ToList();
+                    documents = project.Documents.ToList();
+                    if (project.Id == 0) {
+                        dbContext.Projects.AddObject(project);
+                    }
+                    dbContext.SaveChanges();
+                }
+                // Move project due to ID-change
+                //Directory.Move(Path.Combine(project.AppPath, "0-" + project.Title), project.GetPath());
+                // Set relation between project and user
+                using (var dbContext = new sliceofpieEntities2()) {
+                    dbContext.ProjectUsers.AddObject(new ProjectUser {
+                        ProjectId = project.Id,
+                        UserEmail = email
+                    });
+                    dbContext.SaveChanges();
+                }
+                // Go through each folder in project
+                foreach (Folder folder in folders) {
+                    List<Folder> subFolders = new List<Folder>();
+                    List<Document> subDocuments = new List<Document>();
+                    using (var dbContext = new sliceofpieEntities2()) {
+                        // Add folder
+                        folder.ProjectId = project.Id;
+                        if (folder.Id == 0) {
+                            subFolders = folder.Folders.ToList();
+                            subDocuments = folder.Documents.ToList();
+                            dbContext.Folders.AddObject(folder);
+                        }
+                        dbContext.SaveChanges();
+                    }
+                    UploadFolders(subFolders);
+                    UploadDocuments(subDocuments);
+                }
+                // Go through each document in project
+                foreach (Document document in documents) {
+                    using (var dbContext = new sliceofpieEntities2()) {
+                        // Add document
+                        document.ProjectId = project.Id;
+                        if (document.Id == 0) {
+                            dbContext.Documents.AddObject(document);
+                        }
+                        dbContext.SaveChanges();
+                    }
+                }
+            }
+            return 0;
+        }
 
+        public void UploadFolders(List<Folder> folders) {
+            foreach (Folder folder in folders) {
+                List<Folder> subFolders = new List<Folder>();
+                List<Document> subDocuments = new List<Document>();
+                using (var dbContext = new sliceofpieEntities2()) {
+                    // Add folder
+                    subFolders = folder.Folders.ToList();
+                    subDocuments = folder.Documents.ToList();
+                    folder.FolderId = folder.Parent.Id;
+                    if (folder.Id == 0) {
+                        dbContext.Folders.AddObject(folder);
+                    }
+                    dbContext.SaveChanges();
+                }
+                UploadFolders(subFolders);
+                UploadDocuments(subDocuments);
+            }
+        }
+
+        public void UploadDocuments(List<Document> documents) {
+            foreach (Document document in documents) {
+                using (var dbContext = new sliceofpieEntities2()) {
+                    // Add document
+                    document.FolderId = document.Parent.Id;
+                    if (document.Id == 0) {
+                        dbContext.Documents.AddObject(document);
+                    }
+                    dbContext.SaveChanges();
+                }
+            }
         }
 
         /// <summary>
