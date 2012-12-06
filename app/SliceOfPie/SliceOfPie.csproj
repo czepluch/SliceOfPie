@@ -102,7 +102,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="App.Config" />
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
     <EntityDeploy Include="MySQLModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>MySQLModel.Designer.cs</LastGenOutput>
