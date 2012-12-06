@@ -28,11 +28,27 @@ namespace SliceOfPie.Tests {
             model = new WebFileModel();
         }
 
+        /// <summary>
+        /// Tests that projects are properly returned from the model and contain all the sub-layers.
+        /// </summary>
         [TestMethod]
         public void TestGetProjects() {
+            //Assumes that me@michaelstorgaard.com has at least one project with both folders and documents
             IEnumerable<Project> projects = model.GetProjects("me@michaelstorgaard.com");
 
-            Assert.IsTrue(projects.Count() > 0);
+            if (projects.Count() < 1) throw new AssertFailedException("No projects returned from model");
+
+            Project p = projects.First(); //get first project
+
+            if (p.Folders.Count() < 1) throw new AssertFailedException("No folders were contained in the project");
+
+            Folder f = p.Folders.First();
+
+            if (f.Documents.Count() < 1) throw new AssertFailedException("No documents were contained in the folder");
+
+            Document d = f.Documents.First();
+
+            if (d.Revisions.Count() < 1) throw new AssertFailedException("No revisions were contained in the document");
         }
     }
 }
