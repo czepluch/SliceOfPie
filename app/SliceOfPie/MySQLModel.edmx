@@ -84,6 +84,7 @@
           <Property Name="contentHash" Type="int" />
           <Property Name="documentId" Type="int" />
           <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="timestamp" Type="datetime" />
         </EntityType>
         <EntityType Name="user">
           <Key>
@@ -257,6 +258,7 @@
           <Property Name="DocumentId" Type="Int32" />
           <Property Name="Id" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Document" Relationship="sliceofpieModel.r_documentId" FromRole="revision" ToRole="document" />
+          <Property Type="DateTime" Name="Timestamp" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -384,7 +386,8 @@
             <ScalarProperty Name="Title" ColumnName="title" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Revisions"><EntityTypeMapping TypeName="sliceofpieModel.Revision"><MappingFragment StoreEntitySet="revision">
-            <ScalarProperty Name="Content" ColumnName="content" />
+            <ScalarProperty Name="Timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="Content" ColumnName="content" />
             <ScalarProperty Name="ContentHash" ColumnName="contentHash" />
             <ScalarProperty Name="DocumentId" ColumnName="documentId" />
             <ScalarProperty Name="Id" ColumnName="id" />

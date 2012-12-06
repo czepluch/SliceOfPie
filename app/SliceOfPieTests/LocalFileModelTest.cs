@@ -190,12 +190,12 @@ namespace SliceOfPie.Tests {
             StreamReader streamReader = new StreamReader(fileStream);
             string contents = "";
             while (streamReader.Peek() >= 0) {
-                contents += streamReader.ReadLine() + "\n";
+                contents += streamReader.ReadLine();
             }
             streamReader.Close();
             fileStream.Close();
 
-            Assert.AreEqual("This is a test!\n", contents);
+            Assert.AreEqual("This is a test!", contents);
         }
 
         [TestMethod]
@@ -292,7 +292,7 @@ namespace SliceOfPie.Tests {
 
         [TestMethod]
         public void TestUploadStructure() {
-            //Assert.AreEqual(true, Model.UploadStructure("me@michaelstorgaard.com"));
+            //Model.SyncFiles("me@michaelstorgaard.com");
         }
 
         [TestInitialize]
