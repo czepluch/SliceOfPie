@@ -290,10 +290,10 @@ namespace SliceOfPieTests {
             Assert.AreEqual("TestFile-1", Model.GetAvailableName("TestFile", 0, Path.Combine(AppPath, "0-default")));
         }
 
-        //[TestMethod]
-        //public void TestUploadStructure() {
-        //    Assert.AreEqual(true, Model.UploadStructure("me@michaelstorgaard.com"));
-        //}
+        [TestMethod]
+        public void TestUploadStructure() {
+            //Assert.AreEqual(true, Model.UploadStructure("me@michaelstorgaard.com"));
+        }
 
         [TestInitialize]
         public void Initialize() {

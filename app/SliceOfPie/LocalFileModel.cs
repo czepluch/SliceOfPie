@@ -147,12 +147,19 @@ namespace SliceOfPie {
         /// <param name="title"></param>
         /// <param name="db"></param>
         /// <returns></returns>
-        public override Document AddDocument(IItemContainer parent, string title, int id = 0, bool db = false) {
+        public override Document AddDocument(IItemContainer parent, string title, string revision = "", int id = 0, bool db = false) {
             if (!db) title = GetAvailableName(title, id, parent.GetPath(), ".txt");
             string documentPath = Path.Combine(parent.GetPath(), Helper.GenerateName(id, title));
             documentPath += ".txt";
             try {
                 FileStream fileStream = File.Create(documentPath);
+                StreamWriter streamWriter = new StreamWriter(fileStream);
+                string[] lines = revision.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+                foreach (string line in lines) {
+                    streamWriter.WriteLine(line);
+                }
+                streamWriter.Flush();
+                streamWriter.Close();
                 fileStream.Close();
             } catch (IOException e) {
                 // Should not be accesible
@@ -248,29 +255,57 @@ namespace SliceOfPie {
                 }
                 // Go through each folder in project
                 foreach (Folder folder in folders) {
-                    List<Folder> subFolders = new List<Folder>();
-                    List<Document> subDocuments = new List<Document>();
-                    using (var dbContext = new sliceofpieEntities2()) {
-                        // Add folder
-                        folder.ProjectId = project.Id;
-                        if (folder.Id == 0) {
+                    try {
+                        List<Folder> subFolders = new List<Folder>();
+                        List<Document> subDocuments = new List<Document>();
+                        using (var dbContext = new sliceofpieEntities2()) {
+                            // Add folder
                             subFolders = folder.Folders.ToList();
                             subDocuments = folder.Documents.ToList();
-                            dbContext.Folders.AddObject(folder);
+                            folder.ProjectId = project.Id;
+                            folder.FolderId = null;
+                            if (folder.Id == 0) {
+                                dbContext.Folders.AddObject(folder);
+                            }
+                            dbContext.SaveChanges();
                         }
-                        dbContext.SaveChanges();
+                        UploadFolders(folder.Id, subFolders);
+                        UploadDocuments(folder.Id, subDocuments);
+                    } catch (Exception e) {
+                        Console.WriteLine(e.Message);
                     }
-                    UploadFolders(subFolders);
-                    UploadDocuments(subDocuments);
                 }
                 // Go through each document in project
                 foreach (Document document in documents) {
+                    Document theirDocument = null;
+                    if (document.Id != 0) {
+                        using (var dbContext = new sliceofpieEntities2()) {
+                            var sDocuments = from sDocument in dbContext.Documents
+                                             where sDocument.Id == document.Id
+                                             select sDocument;
+                            theirDocument = sDocuments.First();
+                        }
+                    }
                     using (var dbContext = new sliceofpieEntities2()) {
                         // Add document
                         document.ProjectId = project.Id;
+                        document.FolderId = null;
                         if (document.Id == 0) {
                             dbContext.Documents.AddObject(document);
+                            dbContext.SaveChanges();
+                        } else if (theirDocument.CurrentHash == document.CurrentHash) {
+                            dbContext.SaveChanges();
+                        } else {
+                            // Handle conflict here
                         }
+                    }
+                    // Insert revision
+                    using (var dbContext = new sliceofpieEntities2()) {
+                        dbContext.Revisions.AddObject(new Revision {
+                            DocumentId = document.Id,
+                            Content = document.CurrentRevision,
+                            ContentHash = document.CurrentRevision.GetHashCode()
+                        });
                         dbContext.SaveChanges();
                     }
                 }
@@ -278,7 +313,7 @@ namespace SliceOfPie {
             return 0;
         }
 
-        public void UploadFolders(List<Folder> folders) {
+        public void UploadFolders(int folderId, List<Folder> folders) {
             foreach (Folder folder in folders) {
                 List<Folder> subFolders = new List<Folder>();
                 List<Document> subDocuments = new List<Document>();
@@ -286,25 +321,49 @@ namespace SliceOfPie {
                     // Add folder
                     subFolders = folder.Folders.ToList();
                     subDocuments = folder.Documents.ToList();
-                    folder.FolderId = folder.Parent.Id;
+                    folder.ProjectId = null;
+                    folder.FolderId = folderId;
                     if (folder.Id == 0) {
                         dbContext.Folders.AddObject(folder);
                     }
                     dbContext.SaveChanges();
                 }
-                UploadFolders(subFolders);
-                UploadDocuments(subDocuments);
+                UploadFolders(folder.Id, subFolders);
+                UploadDocuments(folder.Id, subDocuments);
             }
         }
 
-        public void UploadDocuments(List<Document> documents) {
+        public void UploadDocuments(int folderId, List<Document> documents) {
             foreach (Document document in documents) {
+                Document theirDocument = null;
+                if (document.Id != 0) {
+                    using (var dbContext = new sliceofpieEntities2()) {
+                        var sDocuments = from sDocument in dbContext.Documents
+                                        where sDocument.Id == document.Id
+                                        select sDocument;
+                        theirDocument = sDocuments.First();
+                    }
+                }
                 using (var dbContext = new sliceofpieEntities2()) {
                     // Add document
-                    document.FolderId = document.Parent.Id;
+                    document.ProjectId = null;
+                    document.FolderId = folderId;
                     if (document.Id == 0) {
                         dbContext.Documents.AddObject(document);
+                        dbContext.SaveChanges();
+                    } else if (theirDocument.CurrentHash == document.CurrentHash) {
+                        dbContext.SaveChanges();
+                    } else {
+                        // Handle conflict here
                     }
+                }
+                // Insert revision
+                using (var dbContext = new sliceofpieEntities2()) {
+                    dbContext.Revisions.AddObject(new Revision {
+                        DocumentId = document.Id,
+                        Content = document.CurrentRevision,
+                        ContentHash = document.CurrentRevision.GetHashCode()
+                    });
                     dbContext.SaveChanges();
                 }
             }
@@ -349,7 +408,9 @@ namespace SliceOfPie {
                                     select document;
                     foreach (Document document in documents) {
                         document.Parent = project;
-                        AddDocument(project, document.Title, document.Id, true);
+                        string[] lines = document.CurrentRevision.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+                        document.CurrentRevision = lines[0] + "\n" + document.CurrentRevision;
+                        AddDocument(project, document.Title, document.CurrentRevision, document.Id, true);
                     }
                 }
             }
@@ -388,7 +449,9 @@ namespace SliceOfPie {
                                 select document;
                 foreach (Document document in documents) {
                     document.Parent = parent;
-                    AddDocument(parent, document.Title, document.Id, true);
+                    string[] lines = document.CurrentRevision.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+                    document.CurrentRevision = lines[0] + "\n" + document.CurrentRevision;
+                    AddDocument(parent, document.Title, document.CurrentRevision, document.Id, true);
                 }
             }
         }
@@ -418,11 +481,12 @@ namespace SliceOfPie {
             string[] folders = Directory.GetDirectories(AppPath);
             foreach (string folderName in folders) {
                 string pathName = Path.GetFileName(folderName);
-                Project project = new Project();
                 string[] parts = pathName.Split('-');
-                project.Id = int.Parse(parts[0]);
-                project.Title = pathName.Replace(parts[0] + "-", "");
-                project.AppPath = AppPath;
+                Project project = new Project {
+                    Id = int.Parse(parts[0]),
+                    Title = pathName.Replace(parts[0] + "-", ""),
+                    AppPath = AppPath
+                };
                 Projects.Add(project);
 
                 FindFolders(project);
@@ -438,11 +502,12 @@ namespace SliceOfPie {
             string[] folders = Directory.GetDirectories(parent.GetPath());
             foreach (string folderName in folders) {
                 string pathName = Path.GetFileName(folderName);
-                Folder folder = new Folder();
                 string[] parts = pathName.Split('-');
-                folder.Id = int.Parse(parts[0]);
-                folder.Title = pathName.Replace(parts[0] + "-", "");
-                folder.Parent = parent;
+                Folder folder = new Folder {
+                    Id = int.Parse(parts[0]),
+                    Title = pathName.Replace(parts[0] + "-", ""),
+                    Parent = parent
+                };
                 parent.Folders.Add(folder);
 
                 FindFolders(folder);
@@ -458,19 +523,33 @@ namespace SliceOfPie {
             string[] documentPaths = Directory.GetFiles(parent.GetPath());
             foreach (string documentName in documentPaths) {
                 string pathName = Path.GetFileName(documentName);
-                Document document = new Document();
                 string[] parts = pathName.Split('-');
-                document.Id = int.Parse(parts[0]);
-                document.Title = pathName.Replace(parts[0] + "-", "").Replace(".txt", "");
-                document.Parent = parent;
-                FileStream fileStream = new FileStream(document.GetPath(), FileMode.Open, FileAccess.Read);
+                int id = int.Parse(parts[0]);
+                int hash = "".GetHashCode();
+                string revision = "";
+                FileStream fileStream = new FileStream(documentName, FileMode.Open, FileAccess.Read);
                 StreamReader streamReader = new StreamReader(fileStream);
                 string line;
+                int i = 0;
                 while ((line = streamReader.ReadLine()) != null) {
-                    document.CurrentRevision += line + "\n";
+                    if (i == 0) {
+                        if (line.Length > 0) {
+                            hash = int.Parse(line);
+                        }
+                    } else {
+                        revision += line + "\n";
+                    }
+                    i++;
                 }
                 streamReader.Close();
                 fileStream.Close();
+                Document document = new Document {
+                    Id = id,
+                    Title = pathName.Replace(parts[0] + "-", "").Replace(".txt", ""),
+                    Parent = parent,
+                    CurrentRevision = revision,
+                    CurrentHash = (id == 0 ? revision.GetHashCode() : hash)
+                };
                 parent.Documents.Add(document);
             }
         }
