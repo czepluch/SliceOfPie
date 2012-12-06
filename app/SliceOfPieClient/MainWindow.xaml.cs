@@ -539,9 +539,7 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void Synchronize_Click(object sender, RoutedEventArgs e) {
-            //TODO sync current changes here
-            ReloadProjects();
-            TreeViewItem topProject = DocumentExplorer.Items[0] as TreeViewItem; //Note there's always at least one project
+            controller.BeginSyncProjects("local", (iar) => ReloadProjects(), null);
         }
 
         /// <summary>
