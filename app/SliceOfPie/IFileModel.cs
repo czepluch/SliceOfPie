@@ -60,7 +60,7 @@ namespace SliceOfPie {
         /// false, it is created and then added to the model. This should only ever be set when loading
         /// files at launch.</param>
         /// <returns>The newly created document</returns>
-        public abstract Document AddDocument(IItemContainer parent, string title, int id = 0, bool db = false);
+        public abstract Document AddDocument(IItemContainer parent, string title, string revision = "", int id = 0, bool db = false);
 
         /// <summary>
         /// Save the document.

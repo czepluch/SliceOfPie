@@ -550,11 +550,9 @@ namespace SliceOfPie {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void SaveDocument(object sender, RoutedEventArgs e) {
-            controller.SaveDocument(textEditor.Document);
-            //controller.BeginSaveDocument(textEditor.Document, (iar) => controller.EndSaveDocument(iar), null);
+            controller.BeginSaveDocument(textEditor.Document, null, null);
         }
 
         #endregion   
     }
-
 }

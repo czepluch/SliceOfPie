@@ -45,6 +45,7 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
+          <Property Name="currentHash" Type="int" />
           <Property Name="currentRevision" Type="text" />
           <Property Name="folderId" Type="int" />
           <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
@@ -225,6 +226,7 @@
           <Property Name="Title" Type="String" />
           <NavigationProperty Name="Revisions" Relationship="sliceofpieModel.r_documentId" FromRole="document" ToRole="revision" />
           <Property Type="String" Name="CurrentRevision" />
+          <Property Type="Int32" Name="CurrentHash" />
         </EntityType>
         <EntityType Name="Folder">
           <Key>
@@ -245,7 +247,6 @@
           <Property Name="Title" Type="String" />
           <NavigationProperty Name="Documents" Relationship="sliceofpieModel.d_projectId" FromRole="project" ToRole="document" />
           <NavigationProperty Name="Folders" Relationship="sliceofpieModel.f_projectId" FromRole="project" ToRole="folder" />
-          <NavigationProperty Name="project_users" Relationship="sliceofpieModel.pu_projectId" FromRole="Project" ToRole="project_users" />
         </EntityType>
         <EntityType Name="Revision">
           <Key>
@@ -263,7 +264,6 @@
           </Key>
           <Property Name="Email" Type="String" Nullable="false" />
           <Property Name="Password" Type="String" />
-          <NavigationProperty Name="project_users" Relationship="sliceofpieModel.pu_userEmail" FromRole="User" ToRole="project_users" />
         </EntityType>
         <Association Name="d_folderId">
           <End Role="folder" Type="sliceofpieModel.Folder" Multiplicity="0..1" />
@@ -332,8 +332,8 @@
           <Property Type="Int64" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="Int32" Name="ProjectId" />
           <Property Type="String" Name="UserEmail" />
-          <NavigationProperty Name="project" Relationship="sliceofpieModel.pu_projectId" FromRole="project_users" ToRole="Project" />
-          <NavigationProperty Name="user" Relationship="sliceofpieModel.pu_userEmail" FromRole="project_users" ToRole="User" />
+          <NavigationProperty Name="Project" Relationship="sliceofpieModel.pu_projectId" FromRole="project_users" ToRole="Project" />
+          <NavigationProperty Name="User" Relationship="sliceofpieModel.pu_userEmail" FromRole="project_users" ToRole="User" />
         </EntityType>
         <Association Name="pu_projectId">
           <End Type="sliceofpieModel.Project" Role="Project" Multiplicity="0..1" />
@@ -366,7 +366,8 @@
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="sliceofpieModelStoreContainer" CdmEntityContainer="sliceofpieEntities2">
           <EntitySetMapping Name="Documents"><EntityTypeMapping TypeName="sliceofpieModel.Document"><MappingFragment StoreEntitySet="document">
-            <ScalarProperty Name="CurrentRevision" ColumnName="currentRevision" />
+            <ScalarProperty Name="CurrentHash" ColumnName="currentHash" />
+                <ScalarProperty Name="CurrentRevision" ColumnName="currentRevision" />
                 <ScalarProperty Name="FolderId" ColumnName="folderId" />
             <ScalarProperty Name="Id" ColumnName="id" />
             <ScalarProperty Name="ProjectId" ColumnName="projectId" />
@@ -422,22 +423,23 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="MySQLModel">
-        <EntityTypeShape EntityType="sliceofpieModel.Document" Width="1.5" PointX="5.25" PointY="4.5" Height="1.9802864583333335" IsExpanded="true" />
+        <EntityTypeShape EntityType="sliceofpieModel.Document" Width="1.5" PointX="5.25" PointY="4.5" Height="2.3648893229166665" IsExpanded="true" />
         <EntityTypeShape EntityType="sliceofpieModel.Folder" Width="1.5" PointX="3" PointY="5.75" Height="2.1725878906249996" IsExpanded="true" />
         <EntityTypeShape EntityType="sliceofpieModel.Project" Width="1.5" PointX="0.75" PointY="3" Height="1.7879850260416657" IsExpanded="true" />
         <EntityTypeShape EntityType="sliceofpieModel.Revision" Width="1.5" PointX="7.5" PointY="4.75" Height="1.9802864583333335" IsExpanded="true" />
-        <EntityTypeShape EntityType="sliceofpieModel.User" Width="1.5" PointX="0.75" PointY="0.75" Height="1.4033821614583317" IsExpanded="true" />
+        <EntityTypeShape EntityType="sliceofpieModel.User" Width="1.5" PointX="0.75" PointY="0.75" Height="1.4033821614583331" IsExpanded="true" />
         <AssociationConnector Association="sliceofpieModel.d_folderId" ManuallyRouted="false">
-          <ConnectorPoint PointX="4.5" PointY="6.1151432291666667" />
-          <ConnectorPoint PointX="5.25" PointY="6.1151432291666667" />
+          <ConnectorPoint PointX="4.5" PointY="6.3074446614583337" />
+          <ConnectorPoint PointX="5.25" PointY="6.3074446614583337" />
         </AssociationConnector>
         <AssociationConnector Association="sliceofpieModel.d_projectId" ManuallyRouted="false">
-          <ConnectorPoint PointX="2.25" PointY="4.7401432291666659" />
-          <ConnectorPoint PointX="5.25" PointY="4.7401432291666659" />
+          <ConnectorPoint PointX="2.25" PointY="4.2088927291666653" />
+          <ConnectorPoint PointX="6" PointY="4.2088927291666653" />
+          <ConnectorPoint PointX="6" PointY="4.5" />
         </AssociationConnector>
         <AssociationConnector Association="sliceofpieModel.r_documentId" ManuallyRouted="false">
-          <ConnectorPoint PointX="6.75" PointY="5.6151432291666667" />
-          <ConnectorPoint PointX="7.5" PointY="5.6151432291666667" />
+          <ConnectorPoint PointX="6.75" PointY="5.7401432291666667" />
+          <ConnectorPoint PointX="7.5" PointY="5.7401432291666667" />
         </AssociationConnector>
         <AssociationConnector Association="sliceofpieModel.f_folderId" ManuallyRouted="false">
           <ConnectorPoint PointX="3.5319230769230767" PointY="7.922587890625" />
@@ -446,18 +448,19 @@
           <ConnectorPoint PointX="3.9784615384615383" PointY="7.922587890625" />
         </AssociationConnector>
         <AssociationConnector Association="sliceofpieModel.f_projectId" ManuallyRouted="false">
-          <ConnectorPoint PointX="1.5" PointY="4.9802864583333326" />
+          <ConnectorPoint PointX="1.5" PointY="4.7879850260416656" />
           <ConnectorPoint PointX="1.5" PointY="6.8362939453125" />
           <ConnectorPoint PointX="3" PointY="6.8362939453125" />
         </AssociationConnector>
         <EntityTypeShape EntityType="sliceofpieModel.ProjectUser" Width="1.5" PointX="3" PointY="1.875" Height="1.9802864583333326" />
         <AssociationConnector Association="sliceofpieModel.pu_projectId" >
-          <ConnectorPoint PointX="2.25" PointY="3.4276432291666663" />
-          <ConnectorPoint PointX="3" PointY="3.4276432291666663" />
+          <ConnectorPoint PointX="2.25" PointY="3.4276432291666659" />
+          <ConnectorPoint PointX="3" PointY="3.4276432291666659" />
         </AssociationConnector>
         <AssociationConnector Association="sliceofpieModel.pu_userEmail" >
-          <ConnectorPoint PointX="2.25" PointY="2.110341796875" />
-          <ConnectorPoint PointX="3" PointY="2.110341796875" />
+          <ConnectorPoint PointX="2.25" PointY="1.3124995" />
+          <ConnectorPoint PointX="3.75" PointY="1.3124995" />
+          <ConnectorPoint PointX="3.75" PointY="1.875" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

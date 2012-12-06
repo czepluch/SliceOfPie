@@ -4,6 +4,7 @@
 
 <h2>Project</h2>
 <p>Create new project!</p>
+
 @model MvcWebApp.Models.Project
 @using (Html.BeginForm())
 {
@@ -12,3 +13,4 @@
 }
 
 <p>Here will be a list of all projects.</p>
+<li>@Html.ActionLink("First project", "Project", "Account")</li>

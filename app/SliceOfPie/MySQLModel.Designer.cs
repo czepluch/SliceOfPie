@@ -377,6 +377,30 @@ namespace SliceOfPie
         private global::System.String _CurrentRevision;
         partial void OnCurrentRevisionChanging(global::System.String value);
         partial void OnCurrentRevisionChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> CurrentHash
+        {
+            get
+            {
+                return _CurrentHash;
+            }
+            set
+            {
+                OnCurrentHashChanging(value);
+                ReportPropertyChanging("CurrentHash");
+                _CurrentHash = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CurrentHash");
+                OnCurrentHashChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _CurrentHash;
+        partial void OnCurrentHashChanging(Nullable<global::System.Int32> value);
+        partial void OnCurrentHashChanged();
 
         #endregion
     
@@ -703,28 +727,6 @@ namespace SliceOfPie
                 }
             }
         }
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "pu_projectId", "project_users")]
-        public EntityCollection<ProjectUser> project_users
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ProjectUser>("sliceofpieModel.pu_projectId", "project_users");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ProjectUser>("sliceofpieModel.pu_projectId", "project_users", value);
-                }
-            }
-        }
 
         #endregion
     }
@@ -839,7 +841,7 @@ namespace SliceOfPie
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "pu_projectId", "Project")]
-        public Project project
+        public Project Project
         {
             get
             {
@@ -855,7 +857,7 @@ namespace SliceOfPie
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
-        public EntityReference<Project> projectReference
+        public EntityReference<Project> ProjectReference
         {
             get
             {
@@ -877,7 +879,7 @@ namespace SliceOfPie
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
         [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "pu_userEmail", "User")]
-        public User user
+        public User User
         {
             get
             {
@@ -893,7 +895,7 @@ namespace SliceOfPie
         /// </summary>
         [BrowsableAttribute(false)]
         [DataMemberAttribute()]
-        public EntityReference<User> userReference
+        public EntityReference<User> UserReference
         {
             get
             {
@@ -1156,31 +1158,6 @@ namespace SliceOfPie
 
         #endregion
     
-        #region Navigation Properties
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        [XmlIgnoreAttribute()]
-        [SoapIgnoreAttribute()]
-        [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("sliceofpieModel", "pu_userEmail", "project_users")]
-        public EntityCollection<ProjectUser> project_users
-        {
-            get
-            {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ProjectUser>("sliceofpieModel.pu_userEmail", "project_users");
-            }
-            set
-            {
-                if ((value != null))
-                {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ProjectUser>("sliceofpieModel.pu_userEmail", "project_users", value);
-                }
-            }
-        }
-
-        #endregion
     }
 
     #endregion
