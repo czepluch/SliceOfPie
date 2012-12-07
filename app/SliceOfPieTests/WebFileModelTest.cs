@@ -98,5 +98,39 @@ namespace SliceOfPie.Tests {
             Assert.AreEqual(p.Id, f.Parent.Id);
             Assert.AreNotEqual(0, f.Id);
         }
+
+        /// <summary>
+        /// Tests that folders are actually removed
+        /// </summary>
+        [TestMethod]
+        public void TestRemoveFolder() {
+            Project p = model.AddProject("Shazam, hullu.", "me@hypesystem.dk");
+            Folder f = model.AddFolder(p, "New Test Folder");
+
+            Assert.IsTrue(model.GetProjects("me@hypesystem.dk") //assert that the project now contains this folder
+                .First(project => project.Id == p.Id)
+                .GetFolders().Count(folder => folder.Id == f.Id) > 0);
+
+            model.RemoveFolder(f);
+
+            Assert.IsFalse(model.GetProjects("me@hypesystem.dk") //assert that the above is no longer true
+                .First(project => project.Id == p.Id)
+                .GetFolders().Count(folder => folder.Id == f.Id) > 0);
+        }
+
+        [TestMethod]
+        public void TestAddDocument() {
+
+        }
+
+        [TestMethod]
+        public void TestSaveDocument() {
+
+        }
+
+        [TestMethod]
+        public void TestRemoveDocument() {
+
+        }
     }
 }

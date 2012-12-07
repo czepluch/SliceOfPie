@@ -150,7 +150,11 @@ namespace SliceOfPie {
         }
 
         public override void RemoveFolder(Folder folder) {
-            throw new NotImplementedException();
+            using (var dbContext = new sliceofpieEntities2()) {
+                Folder f = dbContext.Folders.First(fold => fold.Id == folder.Id);
+                dbContext.Folders.DeleteObject(f);
+                dbContext.SaveChanges();
+            }
         }
 
         public override Document AddDocument(IItemContainer parent, string title, string revision = "", int id = 0, bool db = false) {
