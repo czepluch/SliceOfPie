@@ -178,7 +178,11 @@ namespace SliceOfPie {
         }
 
         public override void RemoveDocument(Document document) {
-            throw new NotImplementedException();
+            using (var dbContext = new sliceofpieEntities2()) {
+                Document d = dbContext.Documents.First(doc => doc.Id == document.Id);
+                dbContext.Documents.DeleteObject(d);
+                dbContext.SaveChanges();
+            }
         }
 
         public override void SyncFiles(string userMail) {

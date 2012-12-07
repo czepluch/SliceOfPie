@@ -156,15 +156,15 @@ namespace SliceOfPie.Tests {
             Project p = model.AddProject("Shazam, hullu.", "me@hypesystem.dk");
             Document d = model.AddDocument(p, "New Test Doc");
 
-            Assert.IsTrue(model.GetProjects("me@hypesystem.dk") //assert that the project now contains this folder
+            Assert.IsTrue(model.GetProjects("me@hypesystem.dk") //assert that the project now contains this document
                 .First(project => project.Id == p.Id)
-                .GetFolders().Count(doc => doc.Id == d.Id) > 0);
+                .GetDocuments().Count(doc => doc.Id == d.Id) > 0);
 
             model.RemoveDocument(d);
 
             Assert.IsFalse(model.GetProjects("me@hypesystem.dk") //assert that the above is no longer true
                 .First(project => project.Id == p.Id)
-                .GetFolders().Count(doc => doc.Id == d.Id) > 0);
+                .GetDocuments().Count(doc => doc.Id == d.Id) > 0);
         }
     }
 }
