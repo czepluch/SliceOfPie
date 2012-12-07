@@ -55,7 +55,7 @@
     <Compile Include="FolderContentView.xaml.cs">
       <DependentUpon>FolderContentView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IconFactory.cs" />
+    <Compile Include="IListableItemIconExtension.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>

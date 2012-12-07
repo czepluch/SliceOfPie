@@ -88,7 +88,7 @@ namespace SliceOfPie.Client {
         /// <returns></returns>
         private ListViewItem CreateListViewItem(IListableItem item) {
             StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical, IsHitTestVisible = false };
-            sp.Children.Add(new Image() { Source = ((item is Folder) ? IconFactory.FolderIcon : IconFactory.DocumentIcon), Width = 24, Height = 24 });
+            sp.Children.Add(new Image() { Source = item.GetIcon(), Width = 24, Height = 24 });
             sp.Children.Add(new TextBlock() { Text = item.Title, MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center });
             ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
             listViewItem.Content = sp;

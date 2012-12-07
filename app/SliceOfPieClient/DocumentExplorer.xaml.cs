@@ -85,18 +85,7 @@ namespace SliceOfPie.Client {
             //StackPanel for image and text block
             StackPanel sp = new StackPanel() { Orientation = Orientation.Horizontal, IsHitTestVisible = false };
             //Create the image
-            BitmapImage icon;
-            if (item is Project) {
-                icon = IconFactory.ProjectIcon;
-            }
-            else if (item is Folder) {
-                icon = IconFactory.FolderIcon;
-            }
-            else {
-                icon = IconFactory.DocumentIcon;
-            }
-            Image image = new Image() { Source = icon, Height = 15, Width = 15 }; /* note that IsHitTestVisible=false disables event handling for this element -
-                                                                                                             * fallback on the general treeview handling (rightclick for the context menu).  */
+            Image image = new Image() { Source = item.GetIcon(), Height = 15, Width = 15 };
             sp.Children.Add(image);
             //Create the text block
             TextBlock itemText = new TextBlock() { Text = item.Title, Margin = new Thickness(5, 0, 0, 0), IsHitTestVisible = false };
