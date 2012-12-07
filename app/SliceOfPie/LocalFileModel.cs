@@ -24,7 +24,7 @@ namespace SliceOfPie {
         /// <param name="title"></param>
         /// <param name="db"></param>
         /// <returns></returns>
-        public override Project AddProject(string title, int id = 0, bool db = false) {
+        public override Project AddProject(string title, string userMail, int id = 0, bool db = false) {
             if (!db) title = GetAvailableName(title, id, AppPath);
             string projectPath = Path.Combine(AppPath, Helper.GenerateName(id, title));
             try {

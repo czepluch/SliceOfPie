@@ -29,9 +29,10 @@ namespace SliceOfPie {
         }
 
         /// <summary>
-        /// Recurrrrsive
+        /// Recursively get all folders and their documents. These are saved to the IItemContainer provided,
+        /// hence no return value.
         /// </summary>
-        /// <param name="folder"></param>
+        /// <param name="parent">Item whose sub-folders to get</param>
         private void GetFolders(IItemContainer parent) {
             List<Folder> folderList = new List<Folder>();
             using (var dbContext = new sliceofpieEntities2()) {
@@ -62,9 +63,10 @@ namespace SliceOfPie {
         }
 
         /// <summary>
-        /// 
+        /// Get all documents in a IItemContainer. The documents are saved to the container,
+        /// so there is no reason for return values.
         /// </summary>
-        /// <param name="folder"></param>
+        /// <param name="parent">Container whose documents to get.</param>
         private void GetDocuments(IItemContainer parent) {
             List<Document> docList = new List<Document>();
             using (var dbContext = new sliceofpieEntities2()) {
@@ -94,8 +96,16 @@ namespace SliceOfPie {
             }
         }
 
-        public override Project AddProject(string title, int id = 0, bool db = false) {
-            throw new NotImplementedException();
+        public override Project AddProject(string title, string userMail, int id = 0, bool db = false) {
+            Project p = new Project() {
+                Title = title
+            };
+            if (id > 0) p.Id = id;
+            using (var dbContext = new sliceofpieEntities2()) {
+                dbContext.Projects.AddObject(p);
+                dbContext.SaveChanges();
+            }
+            return p;
         }
 
         public override void RemoveProject(Project project) {

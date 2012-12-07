@@ -79,7 +79,7 @@ namespace SliceOfPie {
         /// <returns>The new project</returns>
         /// <seealso cref="BeginCreateProject"/>
         public Project CreateProject(string name, string userMail) {
-            return fileModel.AddProject(name);
+            return fileModel.AddProject(name, userMail);
         }
 
         /// <summary>

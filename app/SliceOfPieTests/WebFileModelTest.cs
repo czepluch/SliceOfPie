@@ -60,5 +60,16 @@ namespace SliceOfPie.Tests {
 
             string s = d.GetRevisions().First();
         }
+
+        /// <summary>
+        /// Tests that projects are returned correctly when added.
+        /// </summary>
+        [TestMethod]
+        public void TestAddProject() {
+            Project p = model.AddProject("Hello Kitty", "me@hypesystem.dk");
+
+            Assert.AreNotEqual(0, p.Id);
+            Assert.AreEqual("Hello Kitty", p.Title);
+        }
     }
 }
