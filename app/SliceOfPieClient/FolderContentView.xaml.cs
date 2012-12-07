@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 namespace SliceOfPie.Client {
     /// <summary>
     /// Interaction logic for the FolderContentView User Control.
+    /// This UserControl shows a list of subfolders based on its ItemContainer property.
     /// </summary>
     public partial class FolderContentView : UserControl {
 
@@ -22,6 +23,7 @@ namespace SliceOfPie.Client {
 
         /// <summary>
         /// This is the IItemContainer which contains the currently shown content
+        /// Changing this will change what is shown.
         /// </summary>
         public IItemContainer ItemContainer {
             get { return _container; }
@@ -42,20 +44,25 @@ namespace SliceOfPie.Client {
         /// This event is fired when the button to create a Folder is clicked
         /// </summary>
         public event RoutedEventHandler CreateFolderButtonClicked;
+
+        /// <summary>
+        /// This event is fired when an item is double clicked
+        /// </summary>
         public event EventHandler<ListableItemEventArgs> ItemDoubleClicked;
         
         #endregion
 
         /// <summary>
-        /// This UserControl shows a list of subfolders based on its ItemContainer property.
+        /// Creates a new instance of a FolderContentView.
+        /// For content to be shown, the ItemContainer property must be set.
         /// </summary>
         public FolderContentView() {
             InitializeComponent();
             //On button clicks
-            CreateDocumentButton.Click += new RoutedEventHandler(
+            createDocumentButton.Click += new RoutedEventHandler(
                 (sender, e) => OnCreateDocumentButtonClicked(e) //fire own event
             );
-            CreateFolderButton.Click += new RoutedEventHandler(
+            createFolderButton.Click += new RoutedEventHandler(
                 (sender, e) => OnCreateFolderButtonClicked(e) //fire own event
             );
             
@@ -65,17 +72,17 @@ namespace SliceOfPie.Client {
         /// This reloads the entire FolderListView based on the current ItemContainer
         /// </summary>
         private void ReloadItemContainerContents() {
-            FolderListView.Items.Clear();
+            folderListView.Items.Clear();
             foreach (Folder folder in ItemContainer.GetFolders()) { //Add folders first
-                FolderListView.Items.Add(CreateListViewItem(folder));
+                folderListView.Items.Add(CreateListViewItem(folder));
             }
             foreach (Document document in ItemContainer.GetDocuments()) { //Then documents
-                FolderListView.Items.Add(CreateListViewItem(document));
+                folderListView.Items.Add(CreateListViewItem(document));
             }
         }
 
         /// <summary>
-        /// This method creates a ListViewItem based on a given ListableItem
+        /// This method creates a ListViewItem based on a given IListableItem
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>

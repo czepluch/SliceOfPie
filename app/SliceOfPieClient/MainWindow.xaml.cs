@@ -86,11 +86,11 @@ namespace SliceOfPie.Client {
             currentContextItem = item;
             if (item is IItemContainer) {
                 folderContentView.ItemContainer = item as IItemContainer;
-                MainContent.Content = folderContentView;
+                mainContent.Content = folderContentView;
             }
             else {
                 textEditor.Document = item as Document;
-                MainContent.Content = textEditor;
+                mainContent.Content = textEditor;
             }
         }
 
@@ -207,9 +207,9 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments</param>
         private void OpenCreateProjectWindow(object sender, RoutedEventArgs e) {
             IsEnabled = false;
-            CreateProject.IsOpen = true;
-            currentActivePopUp = CreateProject;
-            CreateProjectTextBox.Focus();
+            createProject.IsOpen = true;
+            currentActivePopUp = createProject;
+            createProjectTextBox.Focus();
         }
 
         /// <summary>
@@ -220,9 +220,9 @@ namespace SliceOfPie.Client {
         private void OpenShareProjectWindow(object sender, RoutedEventArgs e) {
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
-            ShareProject.IsOpen = true;
-            currentActivePopUp = ShareProject;
-            ShareProjectTextBox.Focus();
+            shareProject.IsOpen = true;
+            currentActivePopUp = shareProject;
+            shareProjectTextBox.Focus();
         }
 
         /// <summary>
@@ -233,9 +233,9 @@ namespace SliceOfPie.Client {
         private void OpenCreateFolderWindow(object sender, RoutedEventArgs e) {
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
-            CreateFolder.IsOpen = true;
-            currentActivePopUp = CreateFolder;
-            CreateFolderTextBox.Focus();
+            createFolder.IsOpen = true;
+            currentActivePopUp = createFolder;
+            createFolderTextBox.Focus();
         }
 
         /// <summary>
@@ -246,9 +246,9 @@ namespace SliceOfPie.Client {
         private void OpenCreateDocumentWindow(object sender, RoutedEventArgs e) {
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
-            CreateDocument.IsOpen = true;
-            currentActivePopUp = CreateDocument;
-            CreateDocumentTextBox.Focus();
+            createDocument.IsOpen = true;
+            currentActivePopUp = createDocument;
+            createDocumentTextBox.Focus();
         }
 
         /// <summary>
@@ -288,9 +288,9 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments</param>
         private void CreateProjectCancelButton_Click(object sender, RoutedEventArgs e) {
             currentActivePopUp = null;
-            CreateProject.IsOpen = false;
+            createProject.IsOpen = false;
             IsEnabled = true;
-            CreateProjectTextBox.Clear();
+            createProjectTextBox.Clear();
         }
 
         /// <summary>
@@ -299,11 +299,11 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void CreateProjectCreateButton_Click(object sender, RoutedEventArgs e) {
-            Project project = controller.CreateProject(CreateProjectTextBox.Text, "local");
+            Project project = controller.CreateProject(createProjectTextBox.Text, "local");
             currentActivePopUp = null;
-            CreateProject.IsOpen = false;
+            createProject.IsOpen = false;
             IsEnabled = true;
-            CreateProjectTextBox.Clear();
+            createProjectTextBox.Clear();
             ReloadProjects(project);
         }
 
@@ -314,9 +314,9 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments</param>
         private void CreateFolderCancelButton_Click(object sender, RoutedEventArgs e) {
             currentActivePopUp = null;
-            CreateFolder.IsOpen = false;
+            createFolder.IsOpen = false;
             IsEnabled = true;
-            CreateFolderTextBox.Clear();
+            createFolderTextBox.Clear();
         }
 
         /// <summary>
@@ -325,11 +325,11 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void CreateFolderCreateButton_Click(object sender, RoutedEventArgs e) {
-            Folder folder = controller.CreateFolder(CreateFolderTextBox.Text, "local", currentContextItem as IItemContainer);
+            Folder folder = controller.CreateFolder(createFolderTextBox.Text, "local", currentContextItem as IItemContainer);
             currentActivePopUp = null;
-            CreateFolder.IsOpen = false;
+            createFolder.IsOpen = false;
             IsEnabled = true;
-            CreateFolderTextBox.Clear();
+            createFolderTextBox.Clear();
             ReloadProjects(folder);
         }
 
@@ -340,9 +340,9 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments</param>
         private void CreateDocumentCancelButton_Click(object sender, RoutedEventArgs e) {
             currentActivePopUp = null;
-            CreateDocument.IsOpen = false;
+            createDocument.IsOpen = false;
             IsEnabled = true;
-            CreateDocumentTextBox.Clear();
+            createDocumentTextBox.Clear();
         }
 
         /// <summary>
@@ -351,11 +351,11 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void CreateDocumentCreateButton_Click(object sender, RoutedEventArgs e) {
-            Document document = controller.CreateDocument(CreateDocumentTextBox.Text, "local", currentContextItem as IItemContainer);
+            Document document = controller.CreateDocument(createDocumentTextBox.Text, "local", currentContextItem as IItemContainer);
             currentActivePopUp = null;
-            CreateDocument.IsOpen = false;
+            createDocument.IsOpen = false;
             IsEnabled = true;
-            CreateDocumentTextBox.Clear();
+            createDocumentTextBox.Clear();
             ReloadProjects(document);
         }
 
@@ -366,9 +366,9 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments</param>
         private void ShareProjectCancelButton_Click(object sender, RoutedEventArgs e) {
             currentActivePopUp = null;
-            ShareProject.IsOpen = false;
+            shareProject.IsOpen = false;
             IsEnabled = true;
-            ShareProjectTextBox.Clear();
+            shareProjectTextBox.Clear();
         }
 
         /// <summary>
@@ -377,11 +377,11 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void ShareProjectShareButton_Click(object sender, RoutedEventArgs e) {
-            controller.ShareProject(currentContextItem as Project, ShareProjectTextBox.Text.Split(','));
+            controller.ShareProject(currentContextItem as Project, shareProjectTextBox.Text.Split(','));
             currentActivePopUp = null;
-            ShareProject.IsOpen = false;
+            shareProject.IsOpen = false;
             IsEnabled = true;
-            ShareProjectTextBox.Clear();
+            shareProjectTextBox.Clear();
         }
 
         /// <summary>

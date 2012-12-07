@@ -15,12 +15,34 @@ using System.Windows.Shapes;
 namespace SliceOfPie.Client {
     /// <summary>
     /// Interaction logic for DocumentExplorer.xaml
+    /// This UserControl shows a hierarchical structure based on its Projects property.
     /// </summary>
     public partial class DocumentExplorer : UserControl {
         private IEnumerable<Project> _projects;
 
-        public event EventHandler<ListableItemEventArgs> ItemMouseLeftButtonUp, ItemMouseRightButtonUp, ItemEnterKeyUp;
+        #region Events
 
+        /// <summary>
+        /// This event is fired when an item is clicked with the left mouse button (when released)
+        /// </summary>
+        public event EventHandler<ListableItemEventArgs> ItemMouseLeftButtonUp;
+
+        /// <summary>
+        /// This event is fired when an item is clicked with the right mouse button (when released)
+        /// </summary>
+        public event EventHandler<ListableItemEventArgs> ItemMouseRightButtonUp;
+
+        /// <summary>
+        /// This event is fired when enter is pressed while an item is active.
+        /// </summary>
+        public event EventHandler<ListableItemEventArgs> ItemEnterKeyUp;
+
+        #endregion
+
+        /// <summary>
+        /// This is the collection of projects which contains the currently shown content.
+        /// Changing this will change what is shown.
+        /// </summary>
         public IEnumerable<Project> Projects {
             get { return _projects; }
             set {
@@ -64,24 +86,20 @@ namespace SliceOfPie.Client {
             StackPanel sp = new StackPanel() { Orientation = Orientation.Horizontal, IsHitTestVisible = false };
             //Create the image
             BitmapImage icon;
-            string text;
             if (item is Project) {
                 icon = IconFactory.ProjectIcon;
-                text = (item as Project).Title;
             }
             else if (item is Folder) {
                 icon = IconFactory.FolderIcon;
-                text = (item as Folder).Title;
             }
             else {
                 icon = IconFactory.DocumentIcon;
-                text = (item as Document).Title;
             }
             Image image = new Image() { Source = icon, Height = 15, Width = 15 }; /* note that IsHitTestVisible=false disables event handling for this element -
                                                                                                              * fallback on the general treeview handling (rightclick for the context menu).  */
             sp.Children.Add(image);
             //Create the text block
-            TextBlock itemText = new TextBlock() { Text = text, Margin = new Thickness(5, 0, 0, 0), IsHitTestVisible = false };
+            TextBlock itemText = new TextBlock() { Text = item.Title, Margin = new Thickness(5, 0, 0, 0), IsHitTestVisible = false };
             sp.Children.Add(itemText);
             thisTreeViewItem.Header = sp;
             //set up event handlers
@@ -129,14 +147,14 @@ namespace SliceOfPie.Client {
         /// </summary>
         /// <param name="itemToOpen">The item to open, when the projects are reloaded</param>
         private void RefreshProjects() {
-            TreeView.Items.Clear();
+            treeView.Items.Clear();
             if (Projects != null) {
                 //Add each project
                 foreach (Project project in Projects) {
                     TreeViewItem projectItem = CreateDocumentExplorerItem(project);
-                    TreeView.Items.Add(projectItem);
+                    treeView.Items.Add(projectItem);
                 }
-                TreeViewItem topProject = TreeView.Items[0] as TreeViewItem;
+                TreeViewItem topProject = treeView.Items[0] as TreeViewItem;
                 topProject.IsSelected = true;
             }
         }
@@ -148,7 +166,7 @@ namespace SliceOfPie.Client {
         /// <param name="item">The item to be found. This item is also expanded if found </param>
         /// <returns>Returns true if the item was found</returns>
         public void ExpandTo(IListableItem item, Action<IListableItem> callback) {
-            foreach (TreeViewItem project in TreeView.Items) {
+            foreach (TreeViewItem project in treeView.Items) {
                 if (ExpandTo(project, item, callback)) return; //return when found
             }
         }
@@ -175,14 +193,14 @@ namespace SliceOfPie.Client {
         }
 
         public void ShowContextMenuForSelected(ContextMenu contextMenu) {
-            if (TreeView.SelectedItem != null) {
-                (TreeView.SelectedItem as TreeViewItem).ContextMenu = contextMenu;
+            if (treeView.SelectedItem != null) {
+                (treeView.SelectedItem as TreeViewItem).ContextMenu = contextMenu;
                 contextMenu.IsOpen = true;
             }
         }
 
         public void CallbackSelected(Action<IListableItem> callback) {
-            callback((TreeView.SelectedItem as TreeViewItem).Tag as IListableItem);
+            callback((treeView.SelectedItem as TreeViewItem).Tag as IListableItem);
         }
     }
 }
