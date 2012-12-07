@@ -85,5 +85,18 @@ namespace SliceOfPie.Tests {
 
             Assert.IsFalse(model.GetProjects("me@hypesystem.dk").Count(project => project.Id == p.Id) > 0);
         }
+
+        /// <summary>
+        /// Tests that folders are added correctly with reference to their parent.
+        /// </summary>
+        [TestMethod]
+        public void TestAddFolder() {
+            Project p = model.AddProject("Hello World", "me@hypesystem.dk");
+            Folder f = model.AddFolder(p, "Test Folder");
+
+            Assert.AreEqual("Test Folder", f.Title);
+            Assert.AreEqual(p.Id, f.Parent.Id);
+            Assert.AreNotEqual(0, f.Id);
+        }
     }
 }

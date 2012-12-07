@@ -120,6 +120,8 @@ namespace SliceOfPie {
                 dbContext.ProjectUsers.AddObject(pu);
                 dbContext.SaveChanges();
             }
+            GetFolders(p);
+            GetDocuments(p);
             return p;
         }
 
@@ -134,7 +136,17 @@ namespace SliceOfPie {
         }
 
         public override Folder AddFolder(IItemContainer parent, string title, int id = 0, bool db = false) {
-            throw new NotImplementedException();
+            Folder f = new Folder() {
+                Title = title,
+                Parent = parent
+            };
+            if (parent is Folder) f.FolderId = parent.Id;
+            else f.ProjectId = parent.Id;
+            using (var dbContext = new sliceofpieEntities2()) {
+                dbContext.Folders.AddObject(f);
+                dbContext.SaveChanges();
+            }
+            return f;
         }
 
         public override void RemoveFolder(Folder folder) {
