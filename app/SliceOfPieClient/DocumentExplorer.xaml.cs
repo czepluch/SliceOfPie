@@ -29,14 +29,6 @@ namespace SliceOfPie.Client {
             }
         }
 
-        public void ShowContextMenuForSelected(ContextMenu contextMenu) {
-            if (TreeView.SelectedItem != null) {
-                (TreeView.SelectedItem as TreeViewItem).ContextMenu = contextMenu;
-                contextMenu.IsOpen = true;
-            }
-        }
-
-
         public DocumentExplorer() {
             InitializeComponent();
         }
@@ -122,11 +114,11 @@ namespace SliceOfPie.Client {
             if (item is IItemContainer) {
                 //First add folders
                 foreach (Folder folder in (item as IItemContainer).GetFolders()) {
-                    AddSubItemToDocExplorer(thisTreeViewItem, CreateDocumentExplorerItem(folder));
+                    thisTreeViewItem.Items.Add(CreateDocumentExplorerItem(folder));
                 }
                 //then documents
                 foreach (Document document in (item as IItemContainer).GetDocuments()) {
-                    AddSubItemToDocExplorer(thisTreeViewItem, CreateDocumentExplorerItem(document));
+                    thisTreeViewItem.Items.Add(CreateDocumentExplorerItem(document));
                 }
             }
             return thisTreeViewItem;
@@ -136,40 +128,18 @@ namespace SliceOfPie.Client {
         /// This method refreshes the document explorer.
         /// </summary>
         /// <param name="itemToOpen">The item to open, when the projects are reloaded</param>
-        private void ReloadProjects(IListableItem itemToOpen = null) {
-            DocumentExplorer.Items.Clear();
-            //Add each project
-            foreach (Project project in controller.GetProjects("local")) {
-                TreeViewItem projectItem = CreateDocumentExplorerItem(project);
-                AddProjectToDocExplorer(projectItem);
-            }
-            //Expand to the current context item
-            if (itemToOpen != null) {
-
-                foreach (TreeViewItem container in DocumentExplorer.Items) {
-                    ExpandToAndOpenItem(container, itemToOpen);
+        private void ReloadProjects() {
+            TreeView.Items.Clear();
+            if (Projects != null) {
+                //Add each project
+                foreach (Project project in Projects) {
+                    TreeViewItem projectItem = CreateDocumentExplorerItem(project);
+                    TreeView.Items.Add(projectItem);
                 }
-            }
-            //or just select the top project (there will always be at least one project)
-            else {
-                TreeViewItem topProject = DocumentExplorer.Items[0] as TreeViewItem;
+                TreeViewItem topProject = TreeView.Items[0] as TreeViewItem;
                 topProject.IsSelected = true;
-                currentContextItem = topProject.Tag as IListableItem;
-                Open(currentContextItem);
             }
         }
-
-
-
-        /// <summary>
-        /// Adds a subitem to the existing item
-        /// </summary>
-        /// <param name="existingItem">The existing item</param>
-        /// <param name="subItem">The subitem to add</param>
-        private void AddSubItemToDocExplorer(TreeViewItem existingItem, TreeViewItem subItem) {
-            existingItem.Items.Add(subItem);
-        }
-
 
         /// <summary>
         /// This method expands the DocumentExplorers items from a start container down to a given item.
@@ -200,9 +170,15 @@ namespace SliceOfPie.Client {
                         return true;
                     }
                 }
-            }            
+            }
             return false;
         }
 
+        public void ShowContextMenuForSelected(ContextMenu contextMenu) {
+            if (TreeView.SelectedItem != null) {
+                (TreeView.SelectedItem as TreeViewItem).ContextMenu = contextMenu;
+                contextMenu.IsOpen = true;
+            }
+        }
     }
 }
