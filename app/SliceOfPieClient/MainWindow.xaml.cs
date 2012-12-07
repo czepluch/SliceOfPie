@@ -20,8 +20,10 @@ namespace SliceOfPie.Client {
     public partial class MainWindow : Window {
 
         private Controller controller;
+        private DocumentExplorer documentExplorer;
         private FolderContentView folderContentView;
         private TextEditor textEditor;
+
         private ContextMenu projectContextMenu, folderContextMenu, documentContextMenu;
 
         private IListableItem currentContextItem;
@@ -31,10 +33,16 @@ namespace SliceOfPie.Client {
         /// Creates the Main Window for the Slice of Pie application
         /// </summary>
         public MainWindow() {
-            controller = Controller.Instance;
             InitializeComponent();
             CreateContextMenus();
-            
+
+            controller = Controller.Instance;
+
+            documentExplorer = new DocumentExplorer();
+            documentExplorer.ItemMouseLeftButtonUp += DocumentExplorerItemMouseLeftButtonUp;
+            documentExplorer.ItemMouseRightButtonUp += DocumentExplorerItemMouseRightButtonUp;
+            documentExplorer.ItemEnterKeyUp += DocumentExplorerItemEnterKeyUp;
+
             folderContentView = new FolderContentView();
             folderContentView.ItemDoubleClicked += new EventHandler<ListableItemEventArgs>(FolderContentView_DoubleClick);
             folderContentView.CreateDocumentButtonClicked += (new RoutedEventHandler(OpenCreateDocumentWindow));
@@ -43,10 +51,10 @@ namespace SliceOfPie.Client {
             textEditor = new TextEditor();
             textEditor.SaveDocumentButtonClicked += (new RoutedEventHandler(SaveDocument));
 
-            ReloadProjects();
+            //Using controllers APM to load the projects DocumentExplorer
+            controller.BeginGetProjects("local", (iar) => documentExplorer.Projects = controller.EndGetProjects(iar), null);
         }
 
-        #region Initialization of the Document Explorer
         /// <summary>
         /// Sets up the DocumentExplorer's context menus
         /// </summary>
@@ -71,7 +79,7 @@ namespace SliceOfPie.Client {
             MenuItem removeProjectContext = new MenuItem() { Header = "Remove project" };
             removeProjectContext.Click += new RoutedEventHandler(RemoveItemOnContextMenuClick);
 
-            
+
 
             projectContextMenu.Items.Add(shareProjectProjectContext);
             projectContextMenu.Items.Add(openProjectFolderProjectContext);
@@ -97,7 +105,7 @@ namespace SliceOfPie.Client {
             folderContextMenu.Items.Add(addDocumentFolderContext);
             folderContextMenu.Items.Add(removeFolderContext);
 
-            //create the document context men
+            //create the document context menu
             MenuItem editDocumentDocumentContext = new MenuItem() { Header = "Edit document" };
             editDocumentDocumentContext.Click += new RoutedEventHandler(OpenItemOnContextMenuClick);
 
@@ -108,7 +116,6 @@ namespace SliceOfPie.Client {
             documentContextMenu.Items.Add(removeDocumentContext);
         }
 
-        #endregion
 
         /// <summary>
         /// This generates and shows a context menu for the document explorer at runtime
@@ -117,9 +124,11 @@ namespace SliceOfPie.Client {
         private void ShowContextMenu(IListableItem item) {
             if (item is Project) {
                 DocumentExplorer.ContextMenu = projectContextMenu;
-            } else if (item is Folder) {
+            }
+            else if (item is Folder) {
                 DocumentExplorer.ContextMenu = folderContextMenu;
-            } else {
+            }
+            else {
                 DocumentExplorer.ContextMenu = documentContextMenu;
             }
             DocumentExplorer.ContextMenu.IsOpen = true;
@@ -138,7 +147,7 @@ namespace SliceOfPie.Client {
             }
             //Expand to the current context item
             if (itemToOpen != null) {
-                
+
                 foreach (TreeViewItem container in DocumentExplorer.Items) {
                     ExpandToAndOpenItem(container, itemToOpen);
                 }
@@ -161,111 +170,14 @@ namespace SliceOfPie.Client {
             if (item is IItemContainer) {
                 folderContentView.ItemContainer = item as IItemContainer;
                 MainContent.Content = folderContentView;
-            } else {
+            }
+            else {
                 textEditor.Document = item as Document;
                 MainContent.Content = textEditor;
             }
         }
 
-        /// <summary>
-        /// This method expands the DocumentExplorers items from a start container down to a given item.
-        /// </summary>
-        /// <param name="container">The starter container for the search</param>
-        /// <param name="item">The item to be found. This item is also expanded if found </param>
-        /// <returns>Returns true if the item was found</returns>
-        private bool ExpandToAndOpenItem(TreeViewItem container, IListableItem item) {
-            IListableItem containerListable = container.Tag as IListableItem;
-            if (containerListable == item) {
-                container.IsSelected = true;
-                container.IsExpanded = true;
-                currentContextItem = item;
-                Open(currentContextItem);
-                return true;
-            }
-            else if (containerListable is IItemContainer) { //possibility that it's in a subitem
-                foreach (TreeViewItem subItem in container.Items) { //repeat search for each subitem
-                    if (ExpandToAndOpenItem(subItem, item)) {
-                        container.IsExpanded = true;
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
 
-        #region Helper methods for the Document Explorer
-
-        /// <summary>
-        /// Adds a new project to the root of the document explorer
-        /// </summary>
-        /// <param name="project">The project to add</param>
-        private void AddProjectToDocExplorer(TreeViewItem project) {
-            DocumentExplorer.Items.Add(project);
-        }
-
-        /// <summary>
-        /// Adds a subitem to the existing item
-        /// </summary>
-        /// <param name="existingItem">The existing item</param>
-        /// <param name="subItem">The subitem to add</param>
-        private void AddSubItemToDocExplorer(TreeViewItem existingItem, TreeViewItem subItem) {
-            existingItem.Items.Add(subItem);
-        }
-
-        /// <summary>
-        /// This is a helper method for creating an item in the document explorer.
-        /// </summary>
-        /// <param name="text">The text to be shown in the item</param>
-        /// <param name="item">The type of the item. Can be either "project", "folder", or "document"</param>
-        /// <returns></returns>
-        private TreeViewItem CreateDocumentExplorerItem(IListableItem item) {
-            TreeViewItem thisTreeViewItem = new TreeViewItem() { Tag = item };
-            //StackPanel for image and text block
-            StackPanel sp = new StackPanel() { Orientation = Orientation.Horizontal, IsHitTestVisible = false };
-            //Create the image
-            BitmapImage icon;
-            string text;
-            if (item is Project) {
-                icon = IconFactory.ProjectIcon;
-                text = (item as Project).Title;
-            }
-            else if (item is Folder) {
-                icon = IconFactory.FolderIcon;
-                text = (item as Folder).Title;
-            }
-            else {
-                icon = IconFactory.DocumentIcon;
-                text = (item as Document).Title;
-            }
-            Image image = new Image() { Source = icon, Height = 15, Width = 15 }; /* note that IsHitTestVisible=false disables event handling for this element -
-                                                                                                             * fallback on the general treeview handling (rightclick for the context menu).                                                                                                */
-            sp.Children.Add(image);
-            //Create the text block
-            TextBlock itemText = new TextBlock() { Text = text, Margin = new Thickness(5, 0, 0, 0), IsHitTestVisible = false };
-            sp.Children.Add(itemText);
-            thisTreeViewItem.Header = sp;
-            //set up event handlers
-            thisTreeViewItem.MouseLeftButtonUp += new MouseButtonEventHandler(DocumentExplorerItemMouseLeftButtonUp);
-            thisTreeViewItem.MouseDoubleClick += new MouseButtonEventHandler(DocumentExplorerItemMouseDoubleClick);
-            thisTreeViewItem.MouseRightButtonUp += new MouseButtonEventHandler(DocumentExplorerItemMouseRightButtonUp);
-            thisTreeViewItem.MouseRightButtonDown += new MouseButtonEventHandler(DocumentExplorerItemMouseRightButtonDown);
-            thisTreeViewItem.KeyUp += new KeyEventHandler(DocumentExplorerItemKeyUp);
-
-            //recursive traversal of structure for Item Containers
-            if (item is IItemContainer) {
-                //First add folders
-                foreach (Folder folder in (item as IItemContainer).GetFolders()) {
-                    AddSubItemToDocExplorer(thisTreeViewItem, CreateDocumentExplorerItem(folder));
-                }
-                //then documents
-                foreach (Document document in (item as IItemContainer).GetDocuments()) {
-                    AddSubItemToDocExplorer(thisTreeViewItem, CreateDocumentExplorerItem(document));
-                }
-            }
-            return thisTreeViewItem;
-        }
-
-        #endregion
 
         #region EventHandlers
 
@@ -286,9 +198,11 @@ namespace SliceOfPie.Client {
         private void RemoveItemOnContextMenuClick(object sender, RoutedEventArgs e) {
             if (currentContextItem is Project) {
                 controller.RemoveProject(currentContextItem as Project);
-            } else if (currentContextItem is Folder) {
+            }
+            else if (currentContextItem is Folder) {
                 controller.RemoveFolder(currentContextItem as Folder);
-            } else {
+            }
+            else {
                 controller.RemoveDocument(currentContextItem as Document);
             }
             ReloadProjects();
@@ -350,36 +264,9 @@ namespace SliceOfPie.Client {
         /// </summary>
         /// <param name="sender">The object that send the event</param>
         /// <param name="e">The MouseButtonEventArgs for the event</param>
-        private void DocumentExplorerItemMouseDoubleClick(object sender, MouseButtonEventArgs e) {
-            e.Handled = true; //Disabling the default doubleclick event in a treeview list item.
-        }
-
-        /// <summary>
-        /// This makes right click select an item in the Document Explorer and show the appropiate context menu for the item.
-        /// </summary>
-        /// <param name="sender">The object that send the event</param>
-        /// <param name="e">The MouseButtonEventArgs for the event</param>
-        private void DocumentExplorerItemMouseRightButtonUp(object sender, MouseButtonEventArgs e) {
-            TreeViewItem item = sender as TreeViewItem;
-            if (item != null) {
-                e.Handled = true;
-                currentContextItem = item.Tag as IListableItem;
-                item.IsSelected = true;
-                ShowContextMenu(item.Tag as IListableItem);
-            }
-        }
-
-        /// <summary>
-        /// This makes right click select an item on the keydown event.
-        /// </summary>
-        /// <param name="sender">The object that send the event</param>
-        /// <param name="e">The MouseButtonEventArgs for the event</param>
-        private void DocumentExplorerItemMouseRightButtonDown(object sender, MouseButtonEventArgs e) {
-            TreeViewItem item = sender as TreeViewItem;
-            if (item != null) {
-                e.Handled = true;
-                item.IsSelected = true; //selected for visual feedback. It is not considered the active item though.
-            }
+        private void DocumentExplorerItemMouseRightButtonUp(object sender, ListableItemEventArgs e) {
+            currentContextItem = e.Item;
+            ShowContextMenu(e.Item);
         }
 
         /// <summary>
@@ -387,15 +274,9 @@ namespace SliceOfPie.Client {
         /// </summary>
         /// <param name="sender">The sender of the event</param>
         /// <param name="e">MouseButtonEventArgs</param>
-        private void DocumentExplorerItemMouseLeftButtonUp(object sender, MouseButtonEventArgs e) {
-            TreeViewItem item = sender as TreeViewItem;
-            if (item != null) {
-                e.Handled = true;
-                currentContextItem = item.Tag as IListableItem;
-                item.IsSelected = true;
-                item.IsExpanded = true;
-                Open(item.Tag as IListableItem);
-            }
+        private void DocumentExplorerItemMouseLeftButtonUp(object sender, ListableItemEventArgs e) {
+            currentContextItem = e.Item;
+            Open(e.Item);
         }
 
         /// <summary>
@@ -403,17 +284,9 @@ namespace SliceOfPie.Client {
         /// </summary>
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
-        private void DocumentExplorerItemKeyUp(object sender, KeyEventArgs e) {
-            if (e.Key.Equals(System.Windows.Input.Key.Enter)) {
-                TreeViewItem item = sender as TreeViewItem;
-                if (item != null) {
-                    e.Handled = true;
-                    currentContextItem = item.Tag as IListableItem;
-                    item.IsSelected = true;
-                    item.IsExpanded = true;
-                    Open(item.Tag as IListableItem);
-                }
-            }
+        private void DocumentExplorerItemEnterKeyUp(object sender, ListableItemEventArgs e) {
+            currentContextItem = e.Item;
+            Open(e.Item);
         }
 
         /// <summary>
@@ -553,6 +426,6 @@ namespace SliceOfPie.Client {
             controller.BeginSaveDocument(textEditor.Document, null, null);
         }
 
-        #endregion   
+        #endregion
     }
 }
