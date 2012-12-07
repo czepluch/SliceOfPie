@@ -71,5 +71,19 @@ namespace SliceOfPie.Tests {
             Assert.AreNotEqual(0, p.Id);
             Assert.AreEqual("Hello Kitty", p.Title);
         }
+
+        /// <summary>
+        /// Tests that projects are removed correctly from the database.
+        /// </summary>
+        [TestMethod]
+        public void TestRemoveProject() {
+            Project p = model.AddProject("Shazam, hullu.", "me@hypesystem.dk");
+
+            Assert.IsTrue(model.GetProjects("me@hypesystem.dk").Count(project => project.Id == p.Id) > 0);
+
+            model.RemoveProject(p);
+
+            Assert.IsFalse(model.GetProjects("me@hypesystem.dk").Count(project => project.Id == p.Id) > 0);
+        }
     }
 }

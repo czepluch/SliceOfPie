@@ -28,6 +28,8 @@ namespace SliceOfPie {
             return projectsContainer;
         }
 
+        #region GetProject helpers
+
         /// <summary>
         /// Recursively get all folders and their documents. These are saved to the IItemContainer provided,
         /// hence no return value.
@@ -96,6 +98,8 @@ namespace SliceOfPie {
             }
         }
 
+        #endregion
+
         public override Project AddProject(string title, string userMail, int id = 0, bool db = false) {
             Project p = new Project() {
                 Title = title
@@ -120,7 +124,13 @@ namespace SliceOfPie {
         }
 
         public override void RemoveProject(Project project) {
-            throw new NotImplementedException();
+            using (var dbContext = new sliceofpieEntities2()) {
+                Project p = dbContext.Projects.First(proj => project.Id == proj.Id);
+                ProjectUser pu = dbContext.ProjectUsers.First(user => project.Id == user.ProjectId);
+                dbContext.ProjectUsers.DeleteObject(pu);
+                dbContext.Projects.DeleteObject(p);
+                dbContext.SaveChanges();
+            }
         }
 
         public override Folder AddFolder(IItemContainer parent, string title, int id = 0, bool db = false) {
