@@ -84,8 +84,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This method creates a ListViewItem based on a given IListableItem
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
+        /// <param name="item">The item to generate a ListViewItem for.</param>
+        /// <returns>The created ListViewItem.</returns>
         private ListViewItem CreateListViewItem(IListableItem item) {
             StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical, IsHitTestVisible = false };
             sp.Children.Add(new Image() { Source = item.GetIcon(), Width = 24, Height = 24 });
@@ -104,7 +104,7 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This method triggers the CreateDocumentButtonClicked event
         /// </summary>
-        /// <param name="e">The event arguments</param>
+        /// <param name="e">The event arguments.</param>
         private void OnCreateDocumentButtonClicked(RoutedEventArgs e) {
             if (CreateDocumentButtonClicked != null) {
                 //Invoke the delegates attached to this event
@@ -115,7 +115,7 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This method triggers the CreateFolderButtonClicked event
         /// </summary>
-        /// <param name="e">The event arguments</param>
+        /// <param name="e">The event arguments.</param>
         private void OnCreateFolderButtonClicked(RoutedEventArgs e) {
             if (CreateFolderButtonClicked != null) {
                 //Invoke the delegates attached to this event
@@ -126,7 +126,7 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This method triggers the ItemDoubleClicked event
         /// </summary>
-        /// <param name="e">The event arguments</param>
+        /// <param name="e">The event arguments.</param>
         private void OnItemDoubleClicked(ListableItemEventArgs e) {
             if (ItemDoubleClicked != null) {
                 //Invoke the delegates attached to this event

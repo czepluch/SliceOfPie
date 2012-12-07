@@ -45,6 +45,7 @@ namespace SliceOfPie.Client {
 
         /// <summary>
         /// Creates a Text Editor with the functionality to show and edit Documents
+        /// For content to be shown, the Document property must be set.
         /// </summary>
         public TextEditor() {
             InitializeComponent();
@@ -59,7 +60,7 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This method triggers the SaveDocumentButtonClicked event
         /// </summary>
-        /// <param name="e">The event arguments</param>
+        /// <param name="e">The event arguments.</param>
         private void OnSaveDocumentButtonClicked(RoutedEventArgs e) {
             if (SaveDocumentButtonClicked != null) {
                 SaveDocumentButtonClicked(this, e);

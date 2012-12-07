@@ -56,7 +56,7 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This method reloads projects from the controller
         /// </summary>
-        /// <param name="itemToOpen">The item to open, when the projects are reloaded. Default is the top project</param>
+        /// <param name="itemToOpen">The item to open, when the projects are reloaded. Default is the top project.</param>
         private void ReloadProjects(IListableItem itemToOpen = null) {
             documentExplorer.Projects = controller.GetProjects("local").ToList();
             if (itemToOpen != null) {
@@ -81,7 +81,7 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// Fills the MainContent with useful information for the specific item
         /// </summary>
-        /// <param name="item">The item which mainContent will use as a context</param>
+        /// <param name="item">The item which mainContent will use as a context.</param>
         private void Open(IListableItem item) {
             currentContextItem = item;
             if (item is IItemContainer) {
@@ -158,7 +158,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This generates a suitable context menu for a given listable item
         /// </summary>
-        /// <param name="item">The item to show a context menu for</param>
+        /// <param name="item">The item to show a context menu for.</param>
+        /// <returns>The context menu</returns>
         private ContextMenu GetContextMenu(IListableItem item) {
             if (item is Project) {
                 return projectContextMenu;
@@ -176,8 +177,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// A default event handler for changing the main content due to a click
         /// </summary>
-        /// <param name="sender">The sender object</param>
-        /// <param name="e">The RoutedEventArgs</param>
+        /// <param name="sender">The sender object.</param>
+        /// <param name="e">The RoutedEventArgs.</param>
         private void OpenItemOnContextMenuClick(object sender, RoutedEventArgs e) {
             Open(currentContextItem);
         }
@@ -185,8 +186,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// A default event handler for changing the main content due to a click
         /// </summary>
-        /// <param name="sender">The sender object</param>
-        /// <param name="e">The RoutedEventArgs</param>
+        /// <param name="sender">The sender object.</param>
+        /// <param name="e">The RoutedEventArgs.</param>
         private void RemoveItemOnContextMenuClick(object sender, RoutedEventArgs e) {
             if (currentContextItem is Project) {
                 controller.RemoveProject(currentContextItem as Project);
@@ -203,8 +204,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This event handler opens the CreateProject pop-up window
         /// </summary>
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void OpenCreateProjectWindow(object sender, RoutedEventArgs e) {
             IsEnabled = false;
             createProject.IsOpen = true;
@@ -215,8 +216,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This event handler opens the ShareProject pop-up window
         /// </summary>
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void OpenShareProjectWindow(object sender, RoutedEventArgs e) {
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
@@ -228,8 +229,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This event handler opens the CreateFolder pop-up window
         /// </summary>
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void OpenCreateFolderWindow(object sender, RoutedEventArgs e) {
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
@@ -241,8 +242,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This event handler opens the CreateDocument pop-up window
         /// </summary>
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void OpenCreateDocumentWindow(object sender, RoutedEventArgs e) {
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
@@ -254,8 +255,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This is the event handler for a right click (up event) in the Document Explorer
         /// </summary>
-        /// <param name="sender">The object that send the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that send the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void DocumentExplorerItemMouseRightButtonUp(object sender, ListableItemEventArgs e) {
             currentContextItem = e.Item;
             documentExplorer.ShowContextMenuForSelected(GetContextMenu(e.Item));
@@ -264,8 +265,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This is the event handler for a left click (up event) in the Document Explorer
         /// </summary>
-        /// <param name="sender">The sender of the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void DocumentExplorerItemMouseLeftButtonUp(object sender, ListableItemEventArgs e) {
             currentContextItem = e.Item;
             Open(e.Item);
@@ -274,8 +275,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This is the event handler for an enter key event in the Document Explorer
         /// </summary>
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void DocumentExplorerItemEnterKeyUp(object sender, ListableItemEventArgs e) {
             currentContextItem = e.Item;
             Open(e.Item);
@@ -284,8 +285,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This is the click handler for the Cancel button in the CreateProject pop-up
         /// </summary>
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void CreateProjectCancelButton_Click(object sender, RoutedEventArgs e) {
             currentActivePopUp = null;
             createProject.IsOpen = false;
@@ -296,8 +297,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This is the click handler for the Create button in the CreateProject pop-up
         /// </summary>
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void CreateProjectCreateButton_Click(object sender, RoutedEventArgs e) {
             Project project = controller.CreateProject(createProjectTextBox.Text, "local");
             currentActivePopUp = null;
@@ -310,8 +311,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This is the click handler for the Cancel button in the CreateFolder pop-up
         /// </summary>
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void CreateFolderCancelButton_Click(object sender, RoutedEventArgs e) {
             currentActivePopUp = null;
             createFolder.IsOpen = false;
@@ -322,8 +323,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This is the click handler for the Create button in the CreateFolder pop-up
         /// </summary>
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void CreateFolderCreateButton_Click(object sender, RoutedEventArgs e) {
             Folder folder = controller.CreateFolder(createFolderTextBox.Text, "local", currentContextItem as IItemContainer);
             currentActivePopUp = null;
@@ -336,8 +337,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This is the click handler for the Cancel button in the CreateDocument pop-up
         /// </summary>
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void CreateDocumentCancelButton_Click(object sender, RoutedEventArgs e) {
             currentActivePopUp = null;
             createDocument.IsOpen = false;
@@ -348,8 +349,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This is the click handler for the Create button in the CreateDocument pop-up
         /// </summary>
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void CreateDocumentCreateButton_Click(object sender, RoutedEventArgs e) {
             Document document = controller.CreateDocument(createDocumentTextBox.Text, "local", currentContextItem as IItemContainer);
             currentActivePopUp = null;
@@ -362,8 +363,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This is the click handler for the Cancel button in the ShareProject pop-up
         /// </summary>
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void ShareProjectCancelButton_Click(object sender, RoutedEventArgs e) {
             currentActivePopUp = null;
             shareProject.IsOpen = false;
@@ -374,8 +375,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This is the click handler for the Share button in the ShareProject pop-up
         /// </summary>
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void ShareProjectShareButton_Click(object sender, RoutedEventArgs e) {
             controller.ShareProject(currentContextItem as Project, shareProjectTextBox.Text.Split(','));
             currentActivePopUp = null;
@@ -387,8 +388,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This method is sent as a mouse event handler to the FolderContentView class.
         /// </summary>
-        /// <param name="sender">The sender of the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void FolderContentView_DoubleClick(object sender, ListableItemEventArgs e) {
             documentExplorer.ExpandTo(e.Item, Open);
         }
@@ -396,8 +397,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This is the click handler for the Sync button in the main window
         /// </summary>
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void Synchronize_Click(object sender, RoutedEventArgs e) {
             ReloadProjects();
         }
@@ -405,8 +406,8 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This is the click handler for the Save Document button in the Text Editor
         /// </summary>
-        /// <param name="sender">The object that sent the event</param>
-        /// <param name="e">The event arguments</param>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void SaveDocument_Click(object sender, RoutedEventArgs e) {
             controller.BeginSaveDocument(textEditor.Document, null, null);
         }

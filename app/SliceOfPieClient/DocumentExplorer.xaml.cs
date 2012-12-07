@@ -41,7 +41,7 @@ namespace SliceOfPie.Client {
 
         /// <summary>
         /// This is the collection of projects which contains the currently shown content.
-        /// Changing this will change what is shown.
+        /// Changing this will change what is shown (the top project will be selected in the Document Explorer)
         /// </summary>
         public IEnumerable<Project> Projects {
             get { return _projects; }
@@ -51,36 +51,21 @@ namespace SliceOfPie.Client {
             }
         }
 
+        /// <summary>
+        /// Creates a new instance of a DocumentExplorer.
+        /// For content to be shown, the Projects property must be set.
+        /// </summary>
         public DocumentExplorer() {
             InitializeComponent();
         }
 
-        private void OnItemMouseLeftButtonUp(ListableItemEventArgs e) {
-            if (ItemMouseLeftButtonUp != null) {
-                ItemMouseLeftButtonUp(this, e);
-            }
-        }
-
-        private void OnItemMouseRightButtonUp(ListableItemEventArgs e) {
-            if (ItemMouseRightButtonUp != null) {
-                ItemMouseRightButtonUp(this, e);
-            }
-        }
-
-        private void OnItemEnterKeyUp(ListableItemEventArgs e) {
-            if (ItemEnterKeyUp != null) {
-                ItemEnterKeyUp(this, e);
-            }
-        }
-
 
         /// <summary>
-        /// This is a helper method for creating an item in the document explorer.
+        /// This is a helper method for creating a  item in the document explorer.
         /// </summary>
-        /// <param name="text">The text to be shown in the item</param>
-        /// <param name="item">The type of the item. Can be either "project", "folder", or "document"</param>
-        /// <returns></returns>
-        private TreeViewItem CreateDocumentExplorerItem(IListableItem item) {
+        /// <param name="item">The IListableItem to associate with the TreeViewItem.</param>
+        /// <returns>The created TreeViewItem.</returns>
+        private TreeViewItem CreateTreeViewItem(IListableItem item) {
             TreeViewItem thisTreeViewItem = new TreeViewItem() { Tag = item };
             //StackPanel for image and text block
             StackPanel sp = new StackPanel() { Orientation = Orientation.Horizontal, IsHitTestVisible = false };
@@ -121,11 +106,11 @@ namespace SliceOfPie.Client {
             if (item is IItemContainer) {
                 //First add folders
                 foreach (Folder folder in (item as IItemContainer).GetFolders()) {
-                    thisTreeViewItem.Items.Add(CreateDocumentExplorerItem(folder));
+                    thisTreeViewItem.Items.Add(CreateTreeViewItem(folder));
                 }
                 //then documents
                 foreach (Document document in (item as IItemContainer).GetDocuments()) {
-                    thisTreeViewItem.Items.Add(CreateDocumentExplorerItem(document));
+                    thisTreeViewItem.Items.Add(CreateTreeViewItem(document));
                 }
             }
             return thisTreeViewItem;
@@ -134,13 +119,13 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This method refreshes the document explorer.
         /// </summary>
-        /// <param name="itemToOpen">The item to open, when the projects are reloaded</param>
+        /// <param name="itemToOpen">The item to open, when the projects are reloaded.</param>
         private void RefreshProjects() {
             treeView.Items.Clear();
             if (Projects != null) {
                 //Add each project
                 foreach (Project project in Projects) {
-                    TreeViewItem projectItem = CreateDocumentExplorerItem(project);
+                    TreeViewItem projectItem = CreateTreeViewItem(project);
                     treeView.Items.Add(projectItem);
                 }
                 TreeViewItem topProject = treeView.Items[0] as TreeViewItem;
@@ -149,17 +134,23 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
-        /// This method expands the DocumentExplorers items from a start container down to a given item.
+        /// This method expands the DocumentExplorers items down to a given item.
         /// </summary>
-        /// <param name="container">The starter container for the search</param>
-        /// <param name="item">The item to be found. This item is also expanded if found </param>
-        /// <returns>Returns true if the item was found</returns>
+        /// <param name="item">The item to be found. This item is also expanded if found (and selected).</param>
+        /// <param name="callback">This function will be called on the item if found. Null is allowed if no additional action is wanted.</param>
         public void ExpandTo(IListableItem item, Action<IListableItem> callback) {
             foreach (TreeViewItem project in treeView.Items) {
                 if (ExpandTo(project, item, callback)) return; //return when found
             }
         }
 
+        /// <summary>
+        /// This method expands the DocumentExplorers TreeViewItems from a start container down to a given item.
+        /// </summary>
+        /// <param name="containerItem">The starter container for the search.</param>
+        /// <param name="searchItem">The item to be found. This item is also expanded if found (and selected).</param>
+        /// <param name="callback">This function will be called on the item if found. Null is allowed if no additional action is wanted.</param>
+        /// <returns>Returns true if the item was found.</returns>
         private bool ExpandTo(TreeViewItem containerItem, IListableItem searchItem, Action<IListableItem> callback) {
             IListableItem containerListable = containerItem.Tag as IListableItem;
             if (containerListable == searchItem) {
@@ -181,6 +172,10 @@ namespace SliceOfPie.Client {
             return false;
         }
 
+        /// <summary>
+        /// Shows a specified context menu for the currently selected item.
+        /// </summary>
+        /// <param name="contextMenu">The Context Menu to be shown.</param>
         public void ShowContextMenuForSelected(ContextMenu contextMenu) {
             if (treeView.SelectedItem != null) {
                 (treeView.SelectedItem as TreeViewItem).ContextMenu = contextMenu;
@@ -188,8 +183,46 @@ namespace SliceOfPie.Client {
             }
         }
 
+        /// <summary>
+        /// Calls a callback on the currently selected item.
+        /// </summary>
+        /// <param name="callback">This function will be called on the currently selected item.</param>
         public void CallbackSelected(Action<IListableItem> callback) {
             callback((treeView.SelectedItem as TreeViewItem).Tag as IListableItem);
         }
+
+        #region Event triggers
+
+        /// <summary>
+        /// This method triggers the ItemMouseLeftButtonUp event
+        /// </summary>
+        /// <param name="e">The event arguments.</param>
+        private void OnItemMouseLeftButtonUp(ListableItemEventArgs e) {
+            if (ItemMouseLeftButtonUp != null) {
+                ItemMouseLeftButtonUp(this, e);
+            }
+        }
+
+        /// <summary>
+        /// This method triggers the ItemMouseRightButtonUp event
+        /// </summary>
+        /// <param name="e">The event arguments.</param>
+        private void OnItemMouseRightButtonUp(ListableItemEventArgs e) {
+            if (ItemMouseRightButtonUp != null) {
+                ItemMouseRightButtonUp(this, e);
+            }
+        }
+
+        /// <summary>
+        /// This method triggers the ItemEnterKeyUp event
+        /// </summary>
+        /// <param name="e">The event arguments.</param>
+        private void OnItemEnterKeyUp(ListableItemEventArgs e) {
+            if (ItemEnterKeyUp != null) {
+                ItemEnterKeyUp(this, e);
+            }
+        }
+
+        #endregion
     }
 }
