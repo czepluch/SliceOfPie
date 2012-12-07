@@ -182,9 +182,7 @@ namespace SliceOfPie.Client {
         }
 
         public void CallbackSelected(Action<IListableItem> callback) {
-            if (TreeView.SelectedItem != null) {
-                callback((TreeView.SelectedItem as TreeView).Tag as IListableItem);
-            }
+            callback((TreeView.SelectedItem as TreeViewItem).Tag as IListableItem);
         }
     }
 }

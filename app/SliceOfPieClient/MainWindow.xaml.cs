@@ -20,7 +20,6 @@ namespace SliceOfPie.Client {
     public partial class MainWindow : Window {
 
         private Controller controller;
-        private DocumentExplorer documentExplorer;
         private FolderContentView folderContentView;
         private TextEditor textEditor;
 
@@ -38,7 +37,7 @@ namespace SliceOfPie.Client {
 
             controller = Controller.Instance;
 
-            documentExplorer = new DocumentExplorer();
+            //documentexplorer is "instantiated" in the xaml
             documentExplorer.ItemMouseLeftButtonUp += DocumentExplorerItemMouseLeftButtonUp;
             documentExplorer.ItemMouseRightButtonUp += DocumentExplorerItemMouseRightButtonUp;
             documentExplorer.ItemEnterKeyUp += DocumentExplorerItemEnterKeyUp;
@@ -137,16 +136,24 @@ namespace SliceOfPie.Client {
         /// </summary>
         /// <param name="itemToOpen">The item to open, when the projects are reloaded</param>
         private void ReloadProjects(IListableItem itemToOpen = null) {
-            //Using controllers APM to load the projects into the Document Explorer
-            controller.BeginGetProjects("local", (iar) => {
-                documentExplorer.Projects = controller.EndGetProjects(iar);
-                if (itemToOpen != null) {
-                    documentExplorer.ExpandTo(itemToOpen, Open);
-                }
-                else {
-                    documentExplorer.CallbackSelected(Open);
-                }
-            }, null);
+            documentExplorer.Projects = controller.GetProjects("local").ToList();
+            if (itemToOpen != null) {
+                documentExplorer.ExpandTo(itemToOpen, Open);
+            }
+            else {
+                documentExplorer.CallbackSelected(Open);
+            }
+
+            ////Using controllers APM to load the projects into the Document Explorer
+            //controller.BeginGetProjects("local", (iar) => {
+            //    documentExplorer.Projects = controller.EndGetProjects(iar);
+            //    if (itemToOpen != null) {
+            //        documentExplorer.ExpandTo(itemToOpen, Open);
+            //    }
+            //    else {
+            //        documentExplorer.CallbackSelected(Open);
+            //    }
+            //}, null);
         }
 
         /// <summary>
