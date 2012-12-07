@@ -22,6 +22,7 @@ namespace SliceOfPie.Client {
         public event EventHandler<ListableItemEventArgs> ItemMouseLeftButtonUp, ItemMouseRightButtonUp, ItemEnterKeyUp;
 
         public IEnumerable<Project> Projects {
+            get { return _projects; }
             set {
                 _projects = value;
                 //reload?;
@@ -29,7 +30,7 @@ namespace SliceOfPie.Client {
         }
 
         public void ShowContextMenuForSelected(ContextMenu contextMenu) {
-            if(TreeView.SelectedItem != null) {
+            if (TreeView.SelectedItem != null) {
                 (TreeView.SelectedItem as TreeViewItem).ContextMenu = contextMenu;
                 contextMenu.IsOpen = true;
             }
@@ -159,7 +160,7 @@ namespace SliceOfPie.Client {
         }
 
 
-        
+
         /// <summary>
         /// Adds a subitem to the existing item
         /// </summary>
@@ -176,26 +177,32 @@ namespace SliceOfPie.Client {
         /// <param name="container">The starter container for the search</param>
         /// <param name="item">The item to be found. This item is also expanded if found </param>
         /// <returns>Returns true if the item was found</returns>
-        private bool ExpandToAndOpenItem(TreeViewItem container, IListableItem item) {
-            IListableItem containerListable = container.Tag as IListableItem;
-            if (containerListable == item) {
-                container.IsSelected = true;
-                container.IsExpanded = true;
-                currentContextItem = item;
-                Open(currentContextItem);
+        public void ExpandTo(IListableItem item, Action<IListableItem> callback) {
+            foreach (TreeViewItem project in TreeView.Items) {
+                if (ExpandTo(project, item, callback)) return; //return when found
+            }
+        }
+
+        private bool ExpandTo(TreeViewItem containerItem, IListableItem searchItem, Action<IListableItem> callback) {
+            IListableItem containerListable = containerItem.Tag as IListableItem;
+            if (containerListable == searchItem) {
+                containerItem.IsSelected = true;
+                containerItem.IsExpanded = true;
+                if (callback != null) callback(searchItem);
+                //currentContextItem = searchItem;
+                //Open(currentContextItem);
                 return true;
             }
             else if (containerListable is IItemContainer) { //possibility that it's in a subitem
-                foreach (TreeViewItem subItem in container.Items) { //repeat search for each subitem
-                    if (ExpandToAndOpenItem(subItem, item)) {
-                        container.IsExpanded = true;
+                foreach (TreeViewItem subItem in containerItem.Items) { //repeat search for each subitem
+                    if (ExpandTo(subItem, searchItem, callback)) {
+                        containerItem.IsExpanded = true;
                         return true;
                     }
                 }
-            }
+            }            
             return false;
         }
-
 
     }
 }
