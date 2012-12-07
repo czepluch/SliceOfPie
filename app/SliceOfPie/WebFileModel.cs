@@ -161,7 +161,8 @@ namespace SliceOfPie {
             Document d = new Document() {
                 Title = title,
                 Parent = parent,
-                CurrentRevision = revision
+                CurrentRevision = revision,
+                CurrentHash = revision.GetHashCode()
             };
             if(parent is Project) d.ProjectId = parent.Id;
             else d.FolderId = parent.Id;
@@ -174,7 +175,16 @@ namespace SliceOfPie {
         }
 
         public override void SaveDocument(Document document) {
-            throw new NotImplementedException();
+            using (var dbContext = new sliceofpieEntities2()) {
+                Document d = dbContext.Documents.First(doc => doc.Id == document.Id);
+                d.Revisions.Add(new Revision() {
+                    Content = document.CurrentRevision,
+                    ContentHash = document.CurrentHash
+                });
+                d.CurrentRevision = document.CurrentRevision;
+                d.CurrentHash = document.CurrentHash;
+                dbContext.SaveChanges();
+            }
         }
 
         public override void RemoveDocument(Document document) {
