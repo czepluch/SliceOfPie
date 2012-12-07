@@ -100,9 +100,20 @@ namespace SliceOfPie {
             Project p = new Project() {
                 Title = title
             };
-            if (id > 0) p.Id = id;
-            using (var dbContext = new sliceofpieEntities2()) {
+            using (var dbContext = new sliceofpieEntities2()) { //Insert project
                 dbContext.Projects.AddObject(p);
+                dbContext.SaveChanges();
+            }
+            User u = new User() {
+                Email = userMail
+            };
+            ProjectUser pu = new ProjectUser() {
+                UserEmail = userMail,
+                ProjectId = p.Id
+            };
+            using (var dbContext = new sliceofpieEntities2()) { //Insert projectUser
+                if(dbContext.Users.Count(dbUser => dbUser.Email.Equals(u.Email)) < 1) dbContext.Users.AddObject(u);
+                dbContext.ProjectUsers.AddObject(pu);
                 dbContext.SaveChanges();
             }
             return p;
