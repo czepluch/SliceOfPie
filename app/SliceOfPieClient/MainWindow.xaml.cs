@@ -118,20 +118,19 @@ namespace SliceOfPie.Client {
 
 
         /// <summary>
-        /// This generates and shows a context menu for the document explorer at runtime
+        /// This generates a suitable context menu for a given listable item
         /// </summary>
-        /// <param name="item">The item which was clicked on the document explorer</param>
-        private void ShowContextMenu(IListableItem item) {
+        /// <param name="item">The item to show a context menu for</param>
+        private ContextMenu GetContextMenu(IListableItem item) {
             if (item is Project) {
-                DocumentExplorer.ContextMenu = projectContextMenu;
+                return projectContextMenu;
             }
             else if (item is Folder) {
-                DocumentExplorer.ContextMenu = folderContextMenu;
+                return folderContextMenu;
             }
             else {
-                DocumentExplorer.ContextMenu = documentContextMenu;
+                return documentContextMenu;
             }
-            DocumentExplorer.ContextMenu.IsOpen = true;
         }
 
         /// <summary>
@@ -266,7 +265,7 @@ namespace SliceOfPie.Client {
         /// <param name="e">The MouseButtonEventArgs for the event</param>
         private void DocumentExplorerItemMouseRightButtonUp(object sender, ListableItemEventArgs e) {
             currentContextItem = e.Item;
-            ShowContextMenu(e.Item);
+            documentExplorer.ShowContextMenuForSelected(GetContextMenu(e.Item));
         }
 
         /// <summary>

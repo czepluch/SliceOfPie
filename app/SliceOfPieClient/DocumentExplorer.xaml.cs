@@ -28,6 +28,13 @@ namespace SliceOfPie.Client {
             }
         }
 
+        public void ShowContextMenuForSelected(ContextMenu contextMenu) {
+            if(TreeView.SelectedItem != null) {
+                (TreeView.SelectedItem as TreeViewItem).ContextMenu = contextMenu;
+                contextMenu.IsOpen = true;
+            }
+        }
+
 
         public DocumentExplorer() {
             InitializeComponent();
