@@ -47,7 +47,7 @@ namespace SliceOfPieTests {
 
         [TestMethod]
         public void TwoWaySplitDocTest() {
-            Assert.AreEqual(twoWaySplitDocReference.CurrentRevision, Merger.Merge(twoWaySplitDocB, twoWaySplitDocA).CurrentRevision);
+            Assert.AreEqual(twoWaySplitDocReference.CurrentRevision, Merger.Merge(twoWaySplitDocA, twoWaySplitDocB).CurrentRevision);
         }
 
         //Aaand here are the rest of te documents
