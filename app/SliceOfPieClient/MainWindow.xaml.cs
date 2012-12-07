@@ -38,9 +38,9 @@ namespace SliceOfPie.Client {
             controller = Controller.Instance;
 
             //documentexplorer is "instantiated" in the xaml
-            documentExplorer.ItemMouseLeftButtonUp += DocumentExplorerItemMouseLeftButtonUp;
-            documentExplorer.ItemMouseRightButtonUp += DocumentExplorerItemMouseRightButtonUp;
-            documentExplorer.ItemEnterKeyUp += DocumentExplorerItemEnterKeyUp;
+            documentExplorer.ItemMouseLeftButtonUp += new EventHandler<ListableItemEventArgs>(DocumentExplorerItemMouseLeftButtonUp);
+            documentExplorer.ItemMouseRightButtonUp += new EventHandler<ListableItemEventArgs>(DocumentExplorerItemMouseRightButtonUp);
+            documentExplorer.ItemEnterKeyUp += new EventHandler<ListableItemEventArgs>(DocumentExplorerItemEnterKeyUp);
 
             folderContentView = new FolderContentView();
             folderContentView.ItemDoubleClicked += new EventHandler<ListableItemEventArgs>(FolderContentView_DoubleClick);
@@ -48,9 +48,50 @@ namespace SliceOfPie.Client {
             folderContentView.CreateFolderButtonClicked += (new RoutedEventHandler(OpenCreateFolderWindow));
 
             textEditor = new TextEditor();
-            textEditor.SaveDocumentButtonClicked += (new RoutedEventHandler(SaveDocument));
+            textEditor.SaveDocumentButtonClicked += (new RoutedEventHandler(SaveDocument_Click));
 
             ReloadProjects();
+        }
+
+        /// <summary>
+        /// This method reloads projects from the controller
+        /// </summary>
+        /// <param name="itemToOpen">The item to open, when the projects are reloaded. Default is the top project</param>
+        private void ReloadProjects(IListableItem itemToOpen = null) {
+            documentExplorer.Projects = controller.GetProjects("local").ToList();
+            if (itemToOpen != null) {
+                documentExplorer.ExpandTo(itemToOpen, Open);
+            }
+            else {
+                documentExplorer.CallbackSelected(Open);
+            }
+
+            ////Using controllers APM to load the projects into the Document Explorer
+            //controller.BeginGetProjects("local", (iar) => {
+            //    documentExplorer.Projects = controller.EndGetProjects(iar);
+            //    if (itemToOpen != null) {
+            //        documentExplorer.ExpandTo(itemToOpen, Open);
+            //    }
+            //    else {
+            //        documentExplorer.CallbackSelected(Open);
+            //    }
+            //}, null);
+        }
+
+        /// <summary>
+        /// Fills the MainContent with useful information for the specific item
+        /// </summary>
+        /// <param name="item">The item which mainContent will use as a context</param>
+        private void Open(IListableItem item) {
+            currentContextItem = item;
+            if (item is IItemContainer) {
+                folderContentView.ItemContainer = item as IItemContainer;
+                MainContent.Content = folderContentView;
+            }
+            else {
+                textEditor.Document = item as Document;
+                MainContent.Content = textEditor;
+            }
         }
 
         /// <summary>
@@ -114,7 +155,6 @@ namespace SliceOfPie.Client {
             documentContextMenu.Items.Add(removeDocumentContext);
         }
 
-
         /// <summary>
         /// This generates a suitable context menu for a given listable item
         /// </summary>
@@ -130,49 +170,6 @@ namespace SliceOfPie.Client {
                 return documentContextMenu;
             }
         }
-
-        /// <summary>
-        /// This method refreshes the document explorer.
-        /// </summary>
-        /// <param name="itemToOpen">The item to open, when the projects are reloaded</param>
-        private void ReloadProjects(IListableItem itemToOpen = null) {
-            documentExplorer.Projects = controller.GetProjects("local").ToList();
-            if (itemToOpen != null) {
-                documentExplorer.ExpandTo(itemToOpen, Open);
-            }
-            else {
-                documentExplorer.CallbackSelected(Open);
-            }
-
-            ////Using controllers APM to load the projects into the Document Explorer
-            //controller.BeginGetProjects("local", (iar) => {
-            //    documentExplorer.Projects = controller.EndGetProjects(iar);
-            //    if (itemToOpen != null) {
-            //        documentExplorer.ExpandTo(itemToOpen, Open);
-            //    }
-            //    else {
-            //        documentExplorer.CallbackSelected(Open);
-            //    }
-            //}, null);
-        }
-
-        /// <summary>
-        /// Fills the MainContent with useful information for the specific item
-        /// </summary>
-        /// <param name="item">The item which mainContent will use as a context</param>
-        private void Open(IListableItem item) {
-            currentContextItem = item;
-            if (item is IItemContainer) {
-                folderContentView.ItemContainer = item as IItemContainer;
-                MainContent.Content = folderContentView;
-            }
-            else {
-                textEditor.Document = item as Document;
-                MainContent.Content = textEditor;
-            }
-        }
-
-
 
         #region EventHandlers
 
@@ -255,27 +252,27 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
-        /// This makes right click select an item in the Document Explorer and show the appropiate context menu for the item.
+        /// This is the event handler for a right click (up event) in the Document Explorer
         /// </summary>
         /// <param name="sender">The object that send the event</param>
-        /// <param name="e">The MouseButtonEventArgs for the event</param>
+        /// <param name="e">The event arguments</param>
         private void DocumentExplorerItemMouseRightButtonUp(object sender, ListableItemEventArgs e) {
             currentContextItem = e.Item;
             documentExplorer.ShowContextMenuForSelected(GetContextMenu(e.Item));
         }
 
         /// <summary>
-        /// This makes the main content in the main window change upon double-click on an item
+        /// This is the event handler for a left click (up event) in the Document Explorer
         /// </summary>
         /// <param name="sender">The sender of the event</param>
-        /// <param name="e">MouseButtonEventArgs</param>
+        /// <param name="e">The event arguments</param>
         private void DocumentExplorerItemMouseLeftButtonUp(object sender, ListableItemEventArgs e) {
             currentContextItem = e.Item;
             Open(e.Item);
         }
 
         /// <summary>
-        /// This is the event handler for key events in the Document Explorer
+        /// This is the event handler for an enter key event in the Document Explorer
         /// </summary>
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
@@ -381,7 +378,6 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments</param>
         private void ShareProjectShareButton_Click(object sender, RoutedEventArgs e) {
             controller.ShareProject(currentContextItem as Project, ShareProjectTextBox.Text.Split(','));
-            //Call to controller shares the project. Awaiting controller method before implementation
             currentActivePopUp = null;
             ShareProject.IsOpen = false;
             IsEnabled = true;
@@ -389,8 +385,7 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
-        /// This method is sent as a mouseeventhandler to the FolderContentView class.
-        /// Adds custom behaviour to that class.
+        /// This method is sent as a mouse event handler to the FolderContentView class.
         /// </summary>
         /// <param name="sender">The sender of the event</param>
         /// <param name="e">The event arguments</param>
@@ -404,7 +399,6 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
         private void Synchronize_Click(object sender, RoutedEventArgs e) {
-            //TODO sync current changes here
             ReloadProjects();
         }
 
@@ -413,7 +407,7 @@ namespace SliceOfPie.Client {
         /// </summary>
         /// <param name="sender">The object that sent the event</param>
         /// <param name="e">The event arguments</param>
-        private void SaveDocument(object sender, RoutedEventArgs e) {
+        private void SaveDocument_Click(object sender, RoutedEventArgs e) {
             controller.BeginSaveDocument(textEditor.Document, null, null);
         }
 
