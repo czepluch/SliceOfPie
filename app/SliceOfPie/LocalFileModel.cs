@@ -550,7 +550,7 @@ namespace SliceOfPie {
                 foreach (Project project in projects) {
                     project.AppPath = AppPath;
                     projectsContainer.Add(project);
-                    AddProject(project.Title, project.Id, true);
+                    AddProject(project.Title, email, project.Id, true);
                 }
             }
             foreach (Project project in projectsContainer) {
