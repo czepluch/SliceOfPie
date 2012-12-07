@@ -118,19 +118,53 @@ namespace SliceOfPie.Tests {
                 .GetFolders().Count(folder => folder.Id == f.Id) > 0);
         }
 
+        /// <summary>
+        /// Tests that documents returned by AddDocument are proper.
+        /// </summary>
         [TestMethod]
         public void TestAddDocument() {
+            Project testProject = model.AddProject("Common Test Project", "common@test.mail");
+            Document testDoc = model.AddDocument(testProject, "Test Document");
 
+            Assert.AreEqual("Test Document", testDoc.Title);
+            Assert.AreNotEqual(0, testDoc.Id);
+            Assert.AreEqual(testProject.Id, testDoc.Parent.Id);
         }
 
+        /// <summary>
+        /// Tests that documents are saved correctly
+        /// </summary>
         [TestMethod]
         public void TestSaveDocument() {
+            Project testProject = model.AddProject("Common Test Project", "common@test.mail");
+            Document testDoc = model.AddDocument(testProject, "Test Document");
 
+            testDoc.CurrentRevision = "Hello, party people";
+            model.SaveDocument(testDoc);
+
+            Assert.AreEqual("Hello, party people",
+                model.GetProjects("common@test.mail")
+                    .First(p => p.Id == testProject.Id)
+                    .GetDocuments().First(doc => doc.Id == testDoc.Id).CurrentRevision);
         }
 
+        /// <summary>
+        /// Tests that documents are removed properly
+        /// </summary>
         [TestMethod]
         public void TestRemoveDocument() {
+            Project p = model.AddProject("Shazam, hullu.", "me@hypesystem.dk");
+            Document d = model.AddDocument(p, "New Test Doc");
 
+            Assert.IsTrue(model.GetProjects("me@hypesystem.dk") //assert that the project now contains this folder
+                .First(project => project.Id == p.Id)
+                .GetFolders().Count(doc => doc.Id == d.Id) > 0);
+
+            model.RemoveDocument(d);
+
+            Assert.IsFalse(model.GetProjects("me@hypesystem.dk") //assert that the above is no longer true
+                .First(project => project.Id == p.Id)
+                .GetFolders().Count(doc => doc.Id == d.Id) > 0);
         }
     }
 }

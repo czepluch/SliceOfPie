@@ -158,7 +158,19 @@ namespace SliceOfPie {
         }
 
         public override Document AddDocument(IItemContainer parent, string title, string revision = "", int id = 0, bool db = false) {
-            throw new NotImplementedException();
+            Document d = new Document() {
+                Title = title,
+                Parent = parent,
+                CurrentRevision = revision
+            };
+            if(parent is Project) d.ProjectId = parent.Id;
+            else d.FolderId = parent.Id;
+
+            using(var dbContext = new sliceofpieEntities2()) {
+                dbContext.Documents.AddObject(d);
+                dbContext.SaveChanges();
+            }
+            return d;
         }
 
         public override void SaveDocument(Document document) {
