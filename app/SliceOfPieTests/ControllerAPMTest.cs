@@ -6,6 +6,10 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SliceOfPie;
 
 namespace SliceOfPie.Tests {
+    /// <summary>
+    /// tests that the APM implementation of the controller works. The primary purpose of these tests
+    /// is to assert that they work asynchronously.
+    /// </summary>
     [TestClass]
     public class ControllerAPMTest {
         private Controller controller = Controller.Instance;
@@ -70,8 +74,7 @@ namespace SliceOfPie.Tests {
         [TestMethod]
         public void TestDocumentSave() {
             Project p = controller.CreateProject("TestProj", "me@hypesystem.dk");
-            IAsyncResult ar = controller.BeginCreateDocument("NewDoc", "me@hypesystem.dk", p, null, null);
-            Document d = controller.EndCreateDocument(ar);
+            Document d = controller.CreateDocument("NewDoc", "me@hypesystem.dk", p);
 
             d.CurrentRevision = "New Text Here.";
 
@@ -85,9 +88,16 @@ namespace SliceOfPie.Tests {
             Assert.AreEqual("New Text Here.".Trim(), freshFetch.CurrentRevision.Trim());
         }
 
+        /// <summary>
+        /// Tests that documents may be removed asynchronously
+        /// </summary>
         [TestMethod]
         public void TestDocumentRemove() {
-            throw new NotImplementedException();
+            Project p = controller.CreateProject("TestProj", "me@hypesystem.dk");
+            Document d = controller.CreateDocument("NewDoc22", "me@hypesystem.dk", p);
+
+            IAsyncResult ar2 = controller.BeginRemoveDocument(d, null, null);
+            controller.EndRemoveDocument(ar2);
         }
 
         [TestMethod]
