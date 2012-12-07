@@ -42,11 +42,18 @@ namespace SliceOfPie.Tests {
             Assert.IsFalse(controller.EndGetProjects(getAllAgainAr).Contains(p));
         }
 
+        /// <summary>
+        /// Test that projects are shared correctly.
+        /// NOTICE: Not implemented yet (feature not implemented).
+        /// </summary>
         [TestMethod]
         public void TestProjectShare() {
-            throw new NotImplementedException("Shoop da woop");
+            throw new NotImplementedException("Sharing of projects is not yet implemented.");
         }
 
+        /// <summary>
+        /// Tests that documents may be created asynchronously.
+        /// </summary>
         [TestMethod]
         public void TestDocumentCreate() {
             string documentTitle = "Hello World";
@@ -57,9 +64,25 @@ namespace SliceOfPie.Tests {
             Assert.AreEqual(documentTitle, d.Title);
         }
 
+        /// <summary>
+        /// Tests that documents can be saved asynchronously
+        /// </summary>
         [TestMethod]
         public void TestDocumentSave() {
-            throw new NotImplementedException();
+            Project p = controller.CreateProject("TestProj", "me@hypesystem.dk");
+            IAsyncResult ar = controller.BeginCreateDocument("NewDoc", "me@hypesystem.dk", p, null, null);
+            Document d = controller.EndCreateDocument(ar);
+
+            d.CurrentRevision = "New Text Here.";
+
+            IAsyncResult ar2 = controller.BeginSaveDocument(d, null, null);
+            controller.EndSaveDocument(ar2);
+
+            Document freshFetch = controller.GetProjects("me@hypesystem.dk")
+                                        .First(proj => proj.Title.Equals("TestProj")).GetDocuments()
+                                        .First(doc => doc.Title.Equals("NewDoc"));
+
+            Assert.AreEqual("New Text Here.".Trim(), freshFetch.CurrentRevision.Trim());
         }
 
         [TestMethod]
