@@ -25,7 +25,7 @@ namespace SliceOfPie.Client {
             get { return _projects; }
             set {
                 _projects = value;
-                //reload?;
+                RefreshProjects();
             }
         }
 
@@ -128,7 +128,7 @@ namespace SliceOfPie.Client {
         /// This method refreshes the document explorer.
         /// </summary>
         /// <param name="itemToOpen">The item to open, when the projects are reloaded</param>
-        private void ReloadProjects() {
+        private void RefreshProjects() {
             TreeView.Items.Clear();
             if (Projects != null) {
                 //Add each project
@@ -178,6 +178,12 @@ namespace SliceOfPie.Client {
             if (TreeView.SelectedItem != null) {
                 (TreeView.SelectedItem as TreeViewItem).ContextMenu = contextMenu;
                 contextMenu.IsOpen = true;
+            }
+        }
+
+        public void CallbackSelected(Action<IListableItem> callback) {
+            if (TreeView.SelectedItem != null) {
+                callback((TreeView.SelectedItem as TreeView).Tag as IListableItem);
             }
         }
     }

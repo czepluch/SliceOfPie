@@ -51,8 +51,7 @@ namespace SliceOfPie.Client {
             textEditor = new TextEditor();
             textEditor.SaveDocumentButtonClicked += (new RoutedEventHandler(SaveDocument));
 
-            //Using controllers APM to load the projects DocumentExplorer
-            controller.BeginGetProjects("local", (iar) => documentExplorer.Projects = controller.EndGetProjects(iar), null);
+            ReloadProjects();
         }
 
         /// <summary>
@@ -138,26 +137,16 @@ namespace SliceOfPie.Client {
         /// </summary>
         /// <param name="itemToOpen">The item to open, when the projects are reloaded</param>
         private void ReloadProjects(IListableItem itemToOpen = null) {
-            DocumentExplorer.Items.Clear();
-            //Add each project
-            foreach (Project project in controller.GetProjects("local")) {
-                TreeViewItem projectItem = CreateDocumentExplorerItem(project);
-                AddProjectToDocExplorer(projectItem);
-            }
-            //Expand to the current context item
-            if (itemToOpen != null) {
-
-                foreach (TreeViewItem container in DocumentExplorer.Items) {
-                    ExpandToAndOpenItem(container, itemToOpen);
+            //Using controllers APM to load the projects into the Document Explorer
+            controller.BeginGetProjects("local", (iar) => {
+                documentExplorer.Projects = controller.EndGetProjects(iar);
+                if (itemToOpen != null) {
+                    documentExplorer.ExpandTo(itemToOpen, Open);
                 }
-            }
-            //or just select the top project (there will always be at least one project)
-            else {
-                TreeViewItem topProject = DocumentExplorer.Items[0] as TreeViewItem;
-                topProject.IsSelected = true;
-                currentContextItem = topProject.Tag as IListableItem;
-                Open(currentContextItem);
-            }
+                else {
+                    documentExplorer.CallbackSelected(Open);
+                }
+            }, null);
         }
 
         /// <summary>
@@ -399,10 +388,7 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The sender of the event</param>
         /// <param name="e">The event arguments</param>
         private void FolderContentView_DoubleClick(object sender, ListableItemEventArgs e) {
-            //Find the corresponding item in the document explorer and fold out tree, so it is visible
-            foreach (TreeViewItem project in DocumentExplorer.Items) {
-                ExpandToAndOpenItem(project, e.Item);
-            }
+            documentExplorer.ExpandTo(e.Item, Open);
         }
 
         /// <summary>
@@ -413,7 +399,6 @@ namespace SliceOfPie.Client {
         private void Synchronize_Click(object sender, RoutedEventArgs e) {
             //TODO sync current changes here
             ReloadProjects();
-            TreeViewItem topProject = DocumentExplorer.Items[0] as TreeViewItem; //Note there's always at least one project
         }
 
         /// <summary>
