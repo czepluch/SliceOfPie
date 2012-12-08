@@ -20,7 +20,7 @@ namespace MvcWebApp.Controllers
 
         public ActionResult Index()
         {
-            SliceOfPie.Project p = controller.GetProjects("me@michaelstorgaard.com").First(); 
+            Project p = controller.GetProjects("me@michaelstorgaard.com").First(); 
             ViewBag.Message = p.Title;
 
             return View();
@@ -30,11 +30,5 @@ namespace MvcWebApp.Controllers
         {
             return View();
         }
-
-        //public ActionResult Editor()
-        //{
-        //    return View(new Revision());
-        //}
-
     }
 }
