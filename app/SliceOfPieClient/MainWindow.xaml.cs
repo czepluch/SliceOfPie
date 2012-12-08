@@ -59,17 +59,10 @@ namespace SliceOfPie.Client {
         /// </summary>
         /// <param name="itemToOpen">The item to open, when the projects are reloaded. Default is the top project.</param>
         private void ReloadProjects(IListableItem itemToOpen = null) {
-            //documentExplorer.Projects = controller.GetProjects("local").ToList();
-            //if (itemToOpen != null) {
-            //    documentExplorer.ExpandTo(itemToOpen, Open);
-            //}
-            //else {
-            //    documentExplorer.CallbackSelected(Open);
-            //}
-
             //Using controllers APM to load the projects into the Document Explorer
             SynchronizationContext context = SynchronizationContext.Current; //Call callback on own thread.
             controller.BeginGetProjects("local", (iar) => {
+                //Callback posted in UI-context
                 context.Post((o) => {
                     documentExplorer.Projects = controller.EndGetProjects(iar).ToList();
                     if (itemToOpen != null) {
