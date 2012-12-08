@@ -129,14 +129,16 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestGetProjects() {
-            IAsyncResult ar = controller.BeginGetProjects("me@hypesystem.dk", null, null);
-            Project[] projects = controller.EndGetProjects(ar).ToArray();
+            IAsyncResult argh = controller.BeginGetProjects("me@hypesystem.dk", (ar) => {
+                Project[] projects = controller.EndGetProjects(ar).ToArray();
 
-            Assert.IsTrue(projects.Count() > 0);
+                Assert.IsTrue(projects.Count() > 0);
 
-            foreach (Project p in projects) {
-                Assert.IsTrue(!p.Title.Equals(string.Empty));
-            }
+                foreach (Project p in projects) {
+                    Assert.IsTrue(!p.Title.Equals(string.Empty));
+                }
+            }, null);
+            controller.EndGetProjects(argh);
         }
 
         /// <summary>

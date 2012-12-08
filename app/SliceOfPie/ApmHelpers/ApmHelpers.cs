@@ -6,6 +6,11 @@ using System.Threading;
 
 namespace SliceOfPie.ApmHelpers {
 
+    public class AsyncException : Exception {
+        public AsyncException(string msg) : base(msg) { }
+        public AsyncException(string msg, Exception e) : base(msg, e) { }
+    }
+
     #region AsyncResult without return
 
     /// <summary>
@@ -45,9 +50,6 @@ namespace SliceOfPie.ApmHelpers {
             int prevState = Interlocked.Exchange(ref m_CompletedState,
                completedSynchronously ? c_StateCompletedSynchronously :
                c_StateCompletedAsynchronously);
-            if (prevState != c_StatePending)
-                throw new InvalidOperationException(
-                    "You can set a result only once");
 
             // If the event exists, set it
             if (m_AsyncWaitHandle != null) m_AsyncWaitHandle.Set();
@@ -67,7 +69,7 @@ namespace SliceOfPie.ApmHelpers {
             }
 
             // Operation is done: if an exception occured, throw it
-            if (m_exception != null) throw m_exception;
+            if (m_exception != null) throw new AsyncException("An exception occured during APM execution", m_exception);
         }
 
         #region Implementation of IAsyncResult
