@@ -34,7 +34,7 @@ namespace SliceOfPie.Tests {
 
         [TestMethod]
         public void TestAddProject() {
-            Model.AddProject("TestProject");
+            Model.AddProject("TestProject", "me@michaelstorgaard.com");
 
             IEnumerable<Project> projects = Model.GetProjects("local");
             Assert.AreEqual(2, projects.Count());
@@ -55,7 +55,7 @@ namespace SliceOfPie.Tests {
 
         [TestMethod]
         public void TestRenameProject() {
-            Project testProject = Model.AddProject("TestProject");
+            Project testProject = Model.AddProject("TestProject", "me@michaelstorgaard.com");
             Model.RenameProject(testProject, "RenamedProject");
 
             Assert.AreEqual(testProject.Title, "RenamedProject");
@@ -63,7 +63,7 @@ namespace SliceOfPie.Tests {
 
         [TestMethod]
         public void TestRemoveProject() {
-            Project project = Model.AddProject("TestProject");
+            Project project = Model.AddProject("TestProject", "me@michaelstorgaar.com");
 
             Folder folder = Model.AddFolder(project, "TestFolder");
             Document document = Model.AddDocument(folder, "TestDocument");
@@ -190,12 +190,12 @@ namespace SliceOfPie.Tests {
             StreamReader streamReader = new StreamReader(fileStream);
             string contents = "";
             while (streamReader.Peek() >= 0) {
-                contents += streamReader.ReadLine() + "\n";
+                contents += streamReader.ReadLine();
             }
             streamReader.Close();
             fileStream.Close();
 
-            Assert.AreEqual("This is a test!\n", contents);
+            Assert.AreEqual("This is a test!", contents);
         }
 
         [TestMethod]
@@ -292,7 +292,7 @@ namespace SliceOfPie.Tests {
 
         [TestMethod]
         public void TestUploadStructure() {
-            //Assert.AreEqual(true, Model.UploadStructure("me@michaelstorgaard.com"));
+            //Model.SyncFiles("me@michaelstorgaard.com");
         }
 
         [TestInitialize]
