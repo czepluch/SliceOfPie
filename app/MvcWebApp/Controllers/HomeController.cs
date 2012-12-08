@@ -20,37 +20,98 @@ namespace MvcWebApp.Controllers
             controller = SliceOfPie.Controller.Instance;
         }
 
-        //public ActionResult Index()
-        //{
-        //    Project p = controller.GetProjects("me@michaelstorgaard.com").Last();
-        //    ViewBag.Id = p.Id;
-        //    ViewBag.Message = p.Title;
-            
-
-        //    return View();
-        //}
+        //
+        // GET: /Home(Projects)/
 
         public ViewResult Index()
         { 
             return View(controller.GetProjects("me@michaelstorgaard.com").ToList());
+            //return View(controller.Projects.ToList());
         }
 
         public ActionResult About()
         {
-            Project p = controller.GetProjects("me@michaelstorgaard.com").Last();
-            ViewBag.Id = p.Id;
-            ViewBag.Message = p.Title;
-
             return View();
         }
 
-        public ActionResult Project()
+        //
+        // GET: /Home/Create
+
+        public ActionResult Create()
         {
-            Project p = controller.GetProjects("me@michaelstorgaard.com").First();
-            ViewBag.Project = p.Title;
-
-
             return View();
+        }
+
+        //
+        // POST: /Home/Create
+
+        public ActionResult Create(Project project)
+        {
+            if (ModelState.IsValid)
+            {
+                controller.CreateProject("Fisk", "me@michaelstorgaard.com"); //Might need correction.
+                //controller.SaveChanges(); //No such method. Should there be?
+                return RedirectToAction("Index");
+            }
+
+            return View(project);
+        }
+
+        //
+        // GET: /Home(Projects)/Delete/1
+
+        public ActionResult Delete(int id = 0)
+        {
+            Project project = controller.Projects.Find(id);
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+            return View(project);
+        }
+
+        //
+        // POST: /Home(Projects)/Delete/5
+
+        [HttpPost, ActionName("Delete")]
+        public ActionResult DeleteConfirmed(int id = 0)
+        {
+            Project project = controller.Projects.Find(id);
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+            controller.Projects.Remove(project);
+            controller.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        //
+        // GET: /Home(Projects)/Edit/5
+
+        public ActionResult Edit(int id = 0)
+        {
+            Project project = controller.Projects.Find(id);
+            if (project == null)
+            {
+                return HttpNotFound();
+            }
+            return View(project);
+        }
+
+        //
+        // POST: /Home(Projects)/Edit/5
+
+        [HttpPost]
+        public ActionResult Edit(Project project)
+        {
+            if (ModelState.IsValid)
+            {
+                controller.Entry(project).State = EntityState.Modified;
+                controller.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(project);
         }
     }
 }
