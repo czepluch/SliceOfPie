@@ -57,9 +57,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApmMethodFactoryTest.cs" />
-    <Compile Include="AsyncResultNoResultTest.cs" />
-    <Compile Include="AsyncResultTest.cs" />
+    <Compile Include="ApmHelpersTest.cs" />
     <Compile Include="ControllerAPMTest.cs" />
     <Compile Include="MergerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -188,7 +188,9 @@ namespace SliceOfPie.Client {
         /// </summary>
         /// <param name="callback">This function will be called on the currently selected item.</param>
         public void CallbackSelected(Action<IListableItem> callback) {
-            callback((treeView.SelectedItem as TreeViewItem).Tag as IListableItem);
+            if (treeView.SelectedItem != null) {
+                callback((treeView.SelectedItem as TreeViewItem).Tag as IListableItem);
+            }
         }
 
         #region Event triggers
