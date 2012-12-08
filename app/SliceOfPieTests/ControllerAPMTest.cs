@@ -100,14 +100,28 @@ namespace SliceOfPie.Tests {
             controller.EndRemoveDocument(ar2);
         }
 
+        /// <summary>
+        /// Tests that folders can be created asynchronously
+        /// </summary>
         [TestMethod]
         public void TestFolderCreate() {
-            throw new NotImplementedException();
+            Project p = controller.CreateProject("TestProjzxx", "me@hypesystem.dk");
+            IAsyncResult ar = controller.BeginCreateFolder("FolderCoolSauce", "me@hypesystem.dk", p, null, null);
+            Folder f = controller.EndCreateFolder(ar);
+
+            Assert.AreEqual("FolderCoolSauce", f.Title);
         }
 
+        /// <summary>
+        /// Tests that folders can be removed asynchronously
+        /// </summary>
         [TestMethod]
         public void TestFolderRemove() {
-            throw new NotImplementedException();
+            Project p = controller.CreateProject("TestProjzxx", "me@hypesystem.dk");
+            Folder f = controller.CreateFolder("FolderLolz", "me@hypesystem.dk", p);
+
+            IAsyncResult ar = controller.BeginRemoveFolder(f, null, null);
+            controller.EndRemoveFolder(ar);
         }
 
         /// <summary>
@@ -116,11 +130,12 @@ namespace SliceOfPie.Tests {
         [TestMethod]
         public void TestGetProjects() {
             IAsyncResult ar = controller.BeginGetProjects("me@hypesystem.dk", null, null);
-            IEnumerable<Project> projects = controller.EndGetProjects(ar);
+            Project[] projects = controller.EndGetProjects(ar).ToArray();
 
             Assert.IsTrue(projects.Count() > 0);
+
             foreach (Project p in projects) {
-                Assert.IsTrue(p.Id > 0);
+                Assert.IsTrue(!p.Title.Equals(string.Empty));
             }
         }
 
@@ -135,8 +150,5 @@ namespace SliceOfPie.Tests {
 
             Assert.IsTrue(projectsSynced.Count() > 0);
         }
-        
-
-
     }
 }
