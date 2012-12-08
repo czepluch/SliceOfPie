@@ -149,7 +149,7 @@
     <Content Include="Views\Home\Folder.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Account\Project.cshtml" />
+    <Content Include="Views\Home\Project.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SliceOfPie\SliceOfPie.csproj">

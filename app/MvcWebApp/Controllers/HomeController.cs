@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MvcWebApp.Models;
+//using MvcWebApp.Models;
 using SliceOfPie;
+using System.Data;
+using System.Data.Entity;
 
 namespace MvcWebApp.Controllers
 {
@@ -18,16 +20,36 @@ namespace MvcWebApp.Controllers
             controller = SliceOfPie.Controller.Instance;
         }
 
-        public ActionResult Index()
+        //public ActionResult Index()
+        //{
+        //    Project p = controller.GetProjects("me@michaelstorgaard.com").Last();
+        //    ViewBag.Id = p.Id;
+        //    ViewBag.Message = p.Title;
+            
+
+        //    return View();
+        //}
+
+        public ViewResult Index()
+        { 
+            return View(controller.GetProjects("me@michaelstorgaard.com").ToList());
+        }
+
+        public ActionResult About()
         {
-            Project p = controller.GetProjects("me@michaelstorgaard.com").Last(); 
+            Project p = controller.GetProjects("me@michaelstorgaard.com").Last();
+            ViewBag.Id = p.Id;
             ViewBag.Message = p.Title;
 
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult Project()
         {
+            Project p = controller.GetProjects("me@michaelstorgaard.com").First();
+            ViewBag.Project = p.Title;
+
+
             return View();
         }
     }
