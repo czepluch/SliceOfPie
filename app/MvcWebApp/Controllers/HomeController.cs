@@ -20,7 +20,7 @@ namespace MvcWebApp.Controllers
 
         public ActionResult Index()
         {
-            Project p = controller.GetProjects("me@michaelstorgaard.com").First(); 
+            Project p = controller.GetProjects("me@michaelstorgaard.com").Last(); 
             ViewBag.Message = p.Title;
 
             return View();
