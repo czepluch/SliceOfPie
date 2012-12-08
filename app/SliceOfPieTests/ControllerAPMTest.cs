@@ -110,14 +110,30 @@ namespace SliceOfPie.Tests {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Tests that projects may be correctly retrieved from the model.
+        /// </summary>
         [TestMethod]
         public void TestGetProjects() {
-            throw new NotImplementedException();
+            IAsyncResult ar = controller.BeginGetProjects("me@hypesystem.dk", null, null);
+            IEnumerable<Project> projects = controller.EndGetProjects(ar);
+
+            Assert.IsTrue(projects.Count() > 0);
+            foreach (Project p in projects) {
+                Assert.IsTrue(p.Id > 0);
+            }
         }
 
+        /// <summary>
+        /// Tests that synchronization of projects works asynchronously
+        /// </summary>
         [TestMethod]
         public void TestSyncProjects() {
-            throw new NotImplementedException();
+            //TODO: Only test if it is NOT a web-controller.
+            IAsyncResult ar = controller.BeginSyncProjects("me@hypesystem.dk", null, null);
+            IEnumerable<Project> projectsSynced = controller.EndSyncProjects(ar);
+
+            Assert.IsTrue(projectsSynced.Count() > 0);
         }
         
 
