@@ -256,17 +256,45 @@ namespace SliceOfPie.ApmHelpers {
 
         #region No Result: End
 
-        private static  Action<IAsyncResult> noResultEndMethod = delegate(IAsyncResult asyncResult) {
-                AsyncResultNoResult ar = (AsyncResultNoResult)asyncResult;
-                ar.EndInvoke();
-            };
+        /// <summary>
+        /// Generic End method that can be used where there is no return value.
+        /// </summary>
+        /// <param name="asyncResult">ar from a Begin method</param>
+        public static void NoResultEndMethod(IAsyncResult asyncResult) {
+            AsyncResultNoResult ar = (AsyncResultNoResult)asyncResult;
+            ar.EndInvoke();
+        }
 
         /// <summary>
         /// Returns an End method for usage in APM where the backing method returns void, and takes however many parameters.
         /// </summary>
         /// <returns>APM end method</returns>
         public static Action<IAsyncResult> CreateNoResultEndMethod() {
-            return noResultEndMethod;
+            return NoResultEndMethod;
+        }
+
+        #endregion
+
+        #region With Result: End
+
+        /// <summary>
+        /// Generic end method that can be used wherever an end result is expected.
+        /// </summary>
+        /// <typeparam name="TResult">Return type</typeparam>
+        /// <param name="asyncResult">ar from Begin method</param>
+        /// <returns>Method to handle asyncResult from Begin method, returning the result.</returns>
+        public static TResult WithResultEndMethod<TResult>(IAsyncResult asyncResult) {
+            AsyncResult<TResult> ar = (AsyncResult<TResult>)asyncResult;
+            return ar.EndInvoke();
+        }
+
+        /// <summary>
+        /// Creates a method to handle End APM requests, generic with the return type.
+        /// </summary>
+        /// <typeparam name="TResult">Return type</typeparam>
+        /// <returns>A method to handle End requests.</returns>
+        public static Func<IAsyncResult, TResult> CreateWithResultEndMethod<TResult>() {
+            return WithResultEndMethod<TResult>;
         }
 
         #endregion
