@@ -60,10 +60,10 @@ namespace SliceOfPie.Client {
             InitializeComponent();
             //On button clicks
             createDocumentButton.Click += new RoutedEventHandler(
-                (sender, e) => OnCreateDocumentButtonClicked(e) //fire own event
+                (sender, e) => OnCreateDocumentButtonClicked(e) //fire the externally added event(s)
             );
             createFolderButton.Click += new RoutedEventHandler(
-                (sender, e) => OnCreateFolderButtonClicked(e) //fire own event
+                (sender, e) => OnCreateFolderButtonClicked(e) //fire the externally added event(s)
             );
             
         }

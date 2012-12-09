@@ -20,6 +20,7 @@ namespace SliceOfPie.Client {
     /// </summary>
     public partial class TextEditor : UserControl {
         private Document _document; //backing field
+        private int caretIndex;
 
         /// <summary>
         /// This is the Document currently shown in the Text Editor
@@ -33,6 +34,11 @@ namespace SliceOfPie.Client {
                 return _document;
             }
             set {
+                //remove potential open popups
+                insertImagePopUp.IsOpen = false;
+                IsEnabled = true;
+                insertImagePopUpTextBox.Clear();
+                //update ui to the new document
                 _document = value;
                 textField.Text = _document.CurrentRevision;
             }
@@ -50,9 +56,47 @@ namespace SliceOfPie.Client {
         public TextEditor() {
             InitializeComponent();
 
-            SaveDocumentButton.Click += new RoutedEventHandler(
-                (sender, e) => OnSaveDocumentButtonClicked(e) //fire own event
+            saveDocumentButton.Click += new RoutedEventHandler(
+                (sender, e) => OnSaveDocumentButtonClicked(e) //fire the externally added event(s)
             );
+
+            insertImageButton.Click += new RoutedEventHandler(OpenInsertImagePopUp);
+        }
+
+        /// <summary>
+        /// This event handler opens the Insert Image pop-up window
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OpenInsertImagePopUp(object sender, RoutedEventArgs e) {
+            caretIndex = textField.CaretIndex;
+            //note that the textbox is cleared when the popups were last closed
+            IsEnabled = false;
+            insertImagePopUp.IsOpen = true;
+            insertImagePopUpTextBox.Focus();
+        }
+
+        /// <summary>
+        /// This is the click handler for the Cancel button in the Insert Image pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void InsertImagePopUpCancelButton_Click(object sender, RoutedEventArgs e) {
+            insertImagePopUp.IsOpen = false;
+            IsEnabled = true;
+            insertImagePopUpTextBox.Clear();
+        }
+
+        /// <summary>
+        /// This is the click handler for the Insert button in the Insert Image pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void InsertImagePopUpInsertButton_Click(object sender, RoutedEventArgs e) {
+            textField.Text = textField.Text.Insert(textField.CaretIndex, "<IMAGEURL{" + insertImagePopUpTextBox.Text + "}>");
+            insertImagePopUp.IsOpen = false;
+            IsEnabled = true;            
+            insertImagePopUpTextBox.Clear();
         }
 
         #region Event triggers
