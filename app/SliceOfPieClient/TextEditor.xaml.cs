@@ -105,11 +105,20 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments.</param>
         private void OpenHistoryPopUp(object sender, RoutedEventArgs e) {
             //setup history popup
+            SetUpHistoryPopUp();
             historyPopUpTopLabel.Content = "History for " + Document.Title;
-            //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
             historyPopUp.IsOpen = true;
             //Select top entry
+        }
+
+        private void SetUpHistoryPopUp() {
+            historyList.Items.Clear();
+            foreach (Revision revision in Document.Revisions) {
+                ListBoxItem item = new ListBoxItem() { Content = revision.Timestamp};
+                item.MouseLeftButtonUp += new MouseButtonEventHandler((sender, e) => historyTextBox.Text = revision.Content);
+                historyList.Items.Add(item);
+            }
         }
 
         /// <summary>

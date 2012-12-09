@@ -67,16 +67,17 @@ namespace SliceOfPie.Client {
             bool succesfullySynced = false;
             //Using controllers APM to load the projects into the Document Explorer
             controller.BeginSyncProjects(userMail, password, (iar) => {
-                try {
-                    Refresh(controller.EndSyncProjects(iar), itemToOpen);
-                    succesfullySynced = true;
-                }
-                catch (AsyncException ex) {
-                    //The APM method encountered an exception.
-                    //bool = false will be returned - this catch just prevents the program crashing.
-                }
+                Refresh(controller.EndSyncProjects(iar), itemToOpen);
+                //try {
+                //    Refresh(controller.EndSyncProjects(iar), itemToOpen);
+                //    succesfullySynced = true;
+                //}
+                //catch (AsyncException ex) {
+                //    //The APM method encountered an exception.
+                //    //bool = false will be returned - this catch just prevents the program crashing.
+                //}
             } , null);
-            return succesfullySynced;
+            return true; //REMOVE THIS
         }
 
          
