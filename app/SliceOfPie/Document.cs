@@ -8,6 +8,7 @@ namespace SliceOfPie {
     public partial class Document : IItem, IListableItem {
 
         public IItemContainer Parent { get; set; }
+        public bool IsMerged { get; set; }
 
         public IEnumerable<string> GetRevisions()
         {
