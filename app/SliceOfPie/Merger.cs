@@ -92,6 +92,25 @@ namespace SliceOfPie {
             return Merge(arrC, arrO);
         }
 
+        #region comments
+        /// <summary>
+        /// Produces a merge of current and old. Lines from current will take precedence.
+        /// </summary>
+        /// <param name="current">"newest" Document</param>
+        /// <param name="old">"oldest" Document</param>
+        /// <returns>Merged document</returns>
+        #endregion
+        public static String Merge(String current, String old) {
+            //Null checks
+            if (current == null && old == null) return null;
+            if (current == null) return old;
+            if (old == null) return current;
+
+            String[] arrC = current.Split('\n');
+            String[] arrO = old.Split('\n');
+            return Merge(arrC, arrO).CurrentRevision;
+        }
+
         /// <summary>
         /// Used as a demonstration only.
         /// </summary>
