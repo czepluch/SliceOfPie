@@ -6,10 +6,9 @@ using System.IO;
 
 namespace SliceOfPie.Tests {
     public static class TestHelper {
-        public static void ClearDatabase(string email) {
-            using (var dbContext = new sliceofpieEntities2()) {
 
-            }
+        public static void ClearDatabase(string email) {
+            
         }
 
         public static void ClearFolder(string path) {
