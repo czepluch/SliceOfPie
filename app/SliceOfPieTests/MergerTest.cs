@@ -9,13 +9,14 @@ namespace SliceOfPieTests {
     [TestClass]
     public class MergerTest {
         Document nullRevDoc = new Document() { CurrentRevision = null };
-
+        Document nullDoc = null;
         Document emptyDoc = new Document() { CurrentRevision = "" };
 
         //rest of the test documents declared in the bottom of file, because they are butt-ugly
 
+        //Because the two interfaces (String and Document) use the same underlying method, they are tested together here
         //Test for null texts
-        [TestMethod]
+        [TestMethod] 
         public void BothNullRevDocsTest() {
             Assert.IsNull(Merger.Merge(nullRevDoc, nullRevDoc));
         }
@@ -33,7 +34,7 @@ namespace SliceOfPieTests {
         //Tests for null documents
         [TestMethod]
         public void BothNullDocTest() {
-            Assert.IsNull(Merger.Merge(null, null));
+            Assert.IsNull(Merger.Merge(nullDoc, nullDoc));
         }
 
         [TestMethod]
