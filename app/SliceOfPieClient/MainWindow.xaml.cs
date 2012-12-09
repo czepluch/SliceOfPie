@@ -383,7 +383,7 @@ namespace SliceOfPie.Client {
 
 
         /// <summary>
-        /// This is the click handler for the Cancel button in the ShareProject pop-up
+        /// This is the click handler for the Cancel button in the Login pop-up
         /// </summary>
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
@@ -395,7 +395,7 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
-        /// This is the click handler for the Share button in the ShareProject pop-up
+        /// This is the click handler for the Share button in the Login pop-up
         /// </summary>
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>

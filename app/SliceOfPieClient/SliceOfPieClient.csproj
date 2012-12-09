@@ -108,14 +108,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Icons\document-icon.bmp" />
-    <Resource Include="Icons\folder-icon.bmp" />
-    <Resource Include="Icons\project-icon.bmp" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Icons\document-icon.png" />
     <Resource Include="Icons\folder-icon.png" />
     <Resource Include="Icons\project-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\document-icon-conflict.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
