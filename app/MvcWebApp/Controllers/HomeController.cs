@@ -45,11 +45,12 @@ namespace MvcWebApp.Controllers
         //
         // POST: /Home/Create
 
-        public ActionResult Create(Project project)
+        [HttpPost]
+        public ActionResult Create(SliceOfPie.Project project)
         {
             if (ModelState.IsValid)
             {
-                controller.CreateProject("Fisk", "me@michaelstorgaard.com"); //Might need correction.
+                controller.CreateProject("Lolpopz", "me@michaelstorgaard.com"); //Might need correction.
                 //controller.SaveChanges(); //No such method. Should there be?
                 return RedirectToAction("Index");
             }
