@@ -3,7 +3,7 @@
     ViewBag.Title = "Home Page";
 }
 
-<h2>This is the project with the title: @ViewBag.Message and it has the ID: @ViewBag.Id</h2>
+<h2>Here is a list of all current projects. </h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -28,11 +28,11 @@
         <td>
             @Html.DisplayFor(ModelItem => item.Id)
         </td>
-        @*<td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>*@
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @*@Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
     </tr>
 }
 

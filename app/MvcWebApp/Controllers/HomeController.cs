@@ -24,7 +24,7 @@ namespace MvcWebApp.Controllers
         // GET: /Home(Projects)/
 
         public ViewResult Index()
-        { 
+        {
             return View(controller.GetProjects("me@michaelstorgaard.com").ToList());
             //return View(controller.Projects.ToList());
         }
