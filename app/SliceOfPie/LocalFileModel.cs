@@ -310,11 +310,17 @@ namespace SliceOfPie {
                     int id = int.Parse(parts[0]);
                     string title = pathName.Replace(parts[0] + "-", "");
 
+                    var dbFolders = from dFolder in dbContext.Folders
+                                    where dFolder.Id == id
+                                    select dFolder;
+                    if (dbFolders.Count() == 0) {
+                        if (Directory.Exists(Path.Combine(parentPath, Helper.GenerateName(id, title)))) {
+                            Directory.Move(Path.Combine(parentPath, Helper.GenerateName(id, title)), Path.Combine(parentPath, Helper.GenerateName(0, title)));
+                        }
+                        id = 0;
+                    }
                     if (id > 0) {
                         // Updating folder
-                        var dbFolders = from dFolder in dbContext.Folders
-                                        where dFolder.Id == id
-                                        select dFolder;
                         dbFolder = dbFolders.First();
                         dbFolder.Title = title;
                         if (container == Container.Project) {
@@ -385,11 +391,17 @@ namespace SliceOfPie {
                     revision = revision.Trim();
                     streamReader.Close();
 
+                    var dbDocuments = from dDocument in dbContext.Documents
+                                      where dDocument.Id == id
+                                      select dDocument;
+                    if (dbDocuments.Count() == 0) {
+                        if (Directory.Exists(Path.Combine(parentPath, Helper.GenerateName(id, title)) + ".txt")) {
+                            Directory.Move(Path.Combine(parentPath, Helper.GenerateName(id, title)) + ".txt", Path.Combine(parentPath, Helper.GenerateName(0, title)) + ".txt");
+                        }
+                        id = 0;
+                    }
                     if (id > 0) {
                         // Updating document
-                        var dbDocuments = from dDocument in dbContext.Documents
-                                          where dDocument.Id == id
-                                          select dDocument;
                         dbDocument = dbDocuments.First();
                         dbDocument.Title = title;
                         if (container == Container.Project) {
