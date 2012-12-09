@@ -21,10 +21,10 @@
 @foreach (var item in Model.GetFolders()) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Id)
+            @Html.DisplayFor(modelItem => modelItem.Id)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Title)
+            @Html.DisplayFor(modelItem => modelItem.Title)
         </td>
         <td>
             @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |*@
