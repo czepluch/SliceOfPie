@@ -12,6 +12,8 @@ namespace SliceOfPieTests {
         Document nullDoc = null;
         Document emptyDoc = new Document() { CurrentRevision = "" };
 
+        String nullString = null;
+
         //rest of the test documents declared in the bottom of file, because they are butt-ugly
 
         //Because the two interfaces (String and Document) use the same underlying method, they are tested together here
@@ -35,16 +37,19 @@ namespace SliceOfPieTests {
         [TestMethod]
         public void BothNullDocTest() {
             Assert.IsNull(Merger.Merge(nullDoc, nullDoc));
+            Assert.IsNull(Merger.Merge(nullString, nullString));
         }
 
         [TestMethod]
         public void CurrNullDocTest() {
             Assert.AreEqual(originalDoc.CurrentRevision, Merger.Merge(null, originalDoc).CurrentRevision);
+            Assert.AreEqual(originalDoc.CurrentRevision, Merger.Merge(nullString, originalDoc.CurrentRevision));
         }
 
         [TestMethod]
         public void OldNullDocTest() {
             Assert.AreEqual(originalDoc.CurrentRevision, Merger.Merge(originalDoc, null).CurrentRevision);
+            Assert.AreEqual(originalDoc.CurrentRevision, Merger.Merge(originalDoc.CurrentRevision, nullString));
         }
 
         //Test for null documents and null texts
@@ -58,30 +63,36 @@ namespace SliceOfPieTests {
             Assert.IsNull(Merger.Merge(null, nullRevDoc));
         }
 
+        //Test for empty texts
         [TestMethod]
         public void EmptyDocTest() {
             String emptyReference = "";
             Assert.AreEqual(emptyReference, Merger.Merge(emptyDoc, emptyDoc).CurrentRevision);
+            Assert.AreEqual(emptyReference, Merger.Merge(emptyReference, emptyReference));
         }
 
         [TestMethod]
         public void InsertionDocTest() {
             Assert.AreEqual(insertionDoc.CurrentRevision, Merger.Merge(insertionDoc, originalDoc).CurrentRevision);
+            Assert.AreEqual(insertionDoc.CurrentRevision, Merger.Merge(insertionDoc.CurrentRevision, originalDoc.CurrentRevision));
         }
 
         [TestMethod]
         public void AlterationDocTest() {
             Assert.AreEqual(alterationDoc.CurrentRevision, Merger.Merge(alterationDoc, originalDoc).CurrentRevision);
+            Assert.AreEqual(alterationDoc.CurrentRevision, Merger.Merge(alterationDoc.CurrentRevision, originalDoc.CurrentRevision));
         }
 
         [TestMethod]
         public void SameDocTest() {
             Assert.AreEqual(originalDoc.CurrentRevision, Merger.Merge(originalDoc, originalDoc).CurrentRevision);
+            Assert.AreEqual(originalDoc.CurrentRevision, Merger.Merge(originalDoc.CurrentRevision, originalDoc.CurrentRevision));
         }
 
         [TestMethod]
         public void TwoWaySplitDocTest() {
             Assert.AreEqual(twoWaySplitDocReference.CurrentRevision, Merger.Merge(twoWaySplitDocA, twoWaySplitDocB).CurrentRevision);
+            Assert.AreEqual(twoWaySplitDocReference.CurrentRevision, Merger.Merge(twoWaySplitDocA.CurrentRevision, twoWaySplitDocB.CurrentRevision));
         }
 
         //Aaand here are the rest of the documents
