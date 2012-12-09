@@ -285,43 +285,7 @@ namespace SliceOfPie {
                 }
 
                 // Folders
-                string[] subFolders = Directory.GetDirectories(Path.Combine(AppPath, Helper.GenerateName(dbProject.Id, dbProject.Title)));
-                foreach (string subFolderName in subFolders) {
-                    Folder dbFolder = null;
-                    using (var dbContext = new sliceofpieEntities2()) {
-                        string pathName = Path.GetFileName(subFolderName);
-                        string[] parts = pathName.Split('-');
-                        int id = int.Parse(parts[0]);
-                        string title = pathName.Replace(parts[0] + "-", "");
-
-                        if (id > 0) {
-                            // Updating folder
-                            var dbFolders = from dFolder in dbContext.Folders
-                                              where dFolder.Id == id
-                                              select dFolder;
-                            dbFolder = dbFolders.First();
-                            dbFolder.Title = title;
-                            dbFolder.ProjectId = dbProject.Id;
-                            dbFolder.FolderId = null;
-                        } else {
-                            // Creating folder
-                            dbFolder = new Folder {
-                                Title = title,
-                                ProjectId = dbProject.Id,
-                                FolderId = null
-                            };
-                            dbContext.Folders.AddObject(dbFolder);
-                        }
-                        dbContext.SaveChanges();
-                    }
-                    // Rename folder directory
-                    if (Directory.Exists(Path.Combine(projectPath, Helper.GenerateName(0, dbFolder.Title)))) {
-                        Directory.Move(Path.Combine(projectPath, Helper.GenerateName(0, dbFolder.Title)), Path.Combine(projectPath, Helper.GenerateName(dbFolder.Id, dbFolder.Title)));
-                    }
-
-                    UploadFolders(Path.Combine(projectPath, Helper.GenerateName(dbFolder.Id, dbFolder.Title)), dbFolder.Id);
-                    UploadDocuments(Path.Combine(projectPath, Helper.GenerateName(dbFolder.Id, dbFolder.Title)), dbFolder.Id);
-                }
+                UploadFolders(Path.Combine(AppPath, Helper.GenerateName(dbProject.Id, dbProject.Title)), dbProject.Id, Container.Project);
 
                 // Documents
                 string[] files = Directory.GetFiles(Path.Combine(AppPath, Helper.GenerateName(dbProject.Id, dbProject.Title)));
@@ -420,12 +384,12 @@ namespace SliceOfPie {
             }
         }
 
-        public void UploadFolders(string folderPath, int folderId) {
-            string[] subFolders = Directory.GetDirectories(folderPath);
-            foreach (string subFolderName in subFolders) {
+        public void UploadFolders(string parentPath, int parentId, Container container = Container.Folder) {
+            string[] folders = Directory.GetDirectories(parentPath);
+            foreach (string folderName in folders) {
                 Folder dbFolder = null;
                 using (var dbContext = new sliceofpieEntities2()) {
-                    string pathName = Path.GetFileName(subFolderName);
+                    string pathName = Path.GetFileName(folderName);
                     string[] parts = pathName.Split('-');
                     int id = int.Parse(parts[0]);
                     string title = pathName.Replace(parts[0] + "-", "");
@@ -437,23 +401,32 @@ namespace SliceOfPie {
                                         select dFolder;
                         dbFolder = dbFolders.First();
                         dbFolder.Title = title;
-                        dbFolder.ProjectId = null;
-                        dbFolder.FolderId = folderId;
+                        if (container == Container.Project) {
+                            dbFolder.ProjectId = parentId;
+                            dbFolder.FolderId = null;
+                        } else {
+                            dbFolder.ProjectId = null;
+                            dbFolder.FolderId = parentId;
+                        }
                     } else {
                         // Creating folder
                         dbFolder = new Folder {
                             Title = title,
                             ProjectId = null,
-                            FolderId = folderId
+                            FolderId = parentId
                         };
                         dbContext.Folders.AddObject(dbFolder);
                     }
                     dbContext.SaveChanges();
                 }
                 // Rename folder directory
-                if (Directory.Exists(Path.Combine(folderPath, Helper.GenerateName(0, dbFolder.Title)))) {
-                    Directory.Move(Path.Combine(folderPath, Helper.GenerateName(0, dbFolder.Title)), Path.Combine(folderPath, Helper.GenerateName(dbFolder.Id, dbFolder.Title)));
+                string folderPath = Path.Combine(parentPath, Helper.GenerateName(dbFolder.Id, dbFolder.Title));
+                if (Directory.Exists(Path.Combine(parentPath, Helper.GenerateName(0, dbFolder.Title)))) {
+                    Directory.Move(Path.Combine(parentPath, Helper.GenerateName(0, dbFolder.Title)), folderPath);
                 }
+                // Recursively
+                UploadFolders(folderPath, dbFolder.Id);
+                UploadDocuments(folderPath, dbFolder.Id);
             }
         }
 
