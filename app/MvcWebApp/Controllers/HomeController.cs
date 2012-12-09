@@ -13,6 +13,7 @@ namespace MvcWebApp.Controllers
     public class HomeController : System.Web.Mvc.Controller
     {
         private SliceOfPie.Controller controller;
+        public String mail = "me@michaelstorgaard.com";
 
         public HomeController()
         {
@@ -25,7 +26,7 @@ namespace MvcWebApp.Controllers
 
         public ViewResult Index()
         {
-            return View(controller.GetProjects("me@michaelstorgaard.com").ToList());
+            return View(controller.GetProjects(mail).ToList());
             //return View(controller.Projects.ToList());
         }
 
@@ -46,55 +47,45 @@ namespace MvcWebApp.Controllers
         // POST: /Home/Create
 
         [HttpPost]
-        public ActionResult Create(SliceOfPie.Project project)
+        public ActionResult Create(Project project)
         {
             if (ModelState.IsValid)
             {
-                controller.CreateProject("Lolpopz", "me@michaelstorgaard.com"); //Might need correction.
-                //controller.SaveChanges(); //No such method. Should there be?
+                controller.CreateProject(project.Title, "me@michaelstorgaard.com"); //Might need correction.
                 return RedirectToAction("Index");
             }
 
             return View(project);
         }
 
-        ////
-        //// GET: /Home(Projects)/Delete/1
+        //
+        // GET: /Home(Projects)/Delete/1
 
-        //public ActionResult Delete(int id = 0)
-        //{
-        //    Project project = controller.Projects.Find(id);
-        //    if (project == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(project);
-        //}
+        public ActionResult Delete(Project p) {
+            if (p == null) {
+                return HttpNotFound();
+            }
+            return View(p);
+        }
 
-        ////
-        //// POST: /Home(Projects)/Delete/5
+        //
+        // POST: /Home(Projects)/Delete/5
 
-        //[HttpPost, ActionName("Delete")]
-        //public ActionResult DeleteConfirmed(int id = 0)
-        //{
-        //    Project project = controller.Projects.Find(id);
-        //    if (project == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    controller.Projects.Remove(project);
-        //    controller.SaveChanges();
-        //    return RedirectToAction("Index");
-        //}
+        [HttpPost, ActionName("Delete")]
+        public ActionResult DeleteConfirmed(Project p) {
+            controller.RemoveProject(p);
+            if (p == null) {
+                return HttpNotFound();
+            }
+            return RedirectToAction("Index");
+        }
 
         ////
         //// GET: /Home(Projects)/Edit/5
 
-        //public ActionResult Edit(int id = 0)
-        //{
-        //    Project project = controller.Projects.Find(id);
-        //    if (project == null)
-        //    {
+        //public ActionResult Edit(Project p) {
+        //    controller.RenameProject(p);
+        //    if (project == null) {
         //        return HttpNotFound();
         //    }
         //    return View(project);
@@ -104,10 +95,8 @@ namespace MvcWebApp.Controllers
         //// POST: /Home(Projects)/Edit/5
 
         //[HttpPost]
-        //public ActionResult Edit(Project project)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
+        //public ActionResult Edit(Project project) {
+        //    if (ModelState.IsValid) {
         //        controller.Entry(project).State = EntityState.Modified;
         //        controller.SaveChanges();
         //        return RedirectToAction("Index");
