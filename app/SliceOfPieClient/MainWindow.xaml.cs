@@ -27,7 +27,6 @@ namespace SliceOfPie.Client {
         private ContextMenu projectContextMenu, folderContextMenu, documentContextMenu;
 
         private IListableItem currentContextItem;
-        private Popup currentActivePopUp;
 
         /// <summary>
         /// Creates the Main Window for the Slice of Pie application
@@ -206,7 +205,6 @@ namespace SliceOfPie.Client {
         private void OpenCreateProjectWindow(object sender, RoutedEventArgs e) {
             IsEnabled = false;
             createProjectPopUp.IsOpen = true;
-            currentActivePopUp = createProjectPopUp;
             createProjectPopUPTextBox.Focus();
         }
 
@@ -219,7 +217,6 @@ namespace SliceOfPie.Client {
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
             shareProjectPopUP.IsOpen = true;
-            currentActivePopUp = shareProjectPopUP;
             shareProjectPopUPTextBox.Focus();
         }
 
@@ -232,7 +229,6 @@ namespace SliceOfPie.Client {
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
             createFolderPopUP.IsOpen = true;
-            currentActivePopUp = createFolderPopUP;
             createFolderPopUPTextBox.Focus();
         }
 
@@ -245,7 +241,6 @@ namespace SliceOfPie.Client {
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
             createDocumentPopUP.IsOpen = true;
-            currentActivePopUp = createDocumentPopUP;
             createDocumentPopUPTextBox.Focus();
         }
 
@@ -258,7 +253,6 @@ namespace SliceOfPie.Client {
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
             loginPopUp.IsOpen = true;
-            currentActivePopUp = loginPopUp;
             loginPopUPUserTextBox.Focus();
         }
 
@@ -298,7 +292,6 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void CreateProjectPopUpCancelButton_Click(object sender, RoutedEventArgs e) {
-            currentActivePopUp = null;
             createProjectPopUp.IsOpen = false;
             IsEnabled = true;
             createProjectPopUPTextBox.Clear();
@@ -311,7 +304,6 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments.</param>
         private void CreateProjectPopUpCreateButton_Click(object sender, RoutedEventArgs e) {
             Project project = controller.CreateProject(createProjectPopUPTextBox.Text, "local");
-            currentActivePopUp = null;
             createProjectPopUp.IsOpen = false;
             IsEnabled = true;
             createProjectPopUPTextBox.Clear();
@@ -324,7 +316,6 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void CreateFolderPopUpCancelButton_Click(object sender, RoutedEventArgs e) {
-            currentActivePopUp = null;
             createFolderPopUP.IsOpen = false;
             IsEnabled = true;
             createFolderPopUPTextBox.Clear();
@@ -337,7 +328,6 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments.</param>
         private void CreateFolderPopUpCreateButton_Click(object sender, RoutedEventArgs e) {
             Folder folder = controller.CreateFolder(createFolderPopUPTextBox.Text, "local", currentContextItem as IItemContainer);
-            currentActivePopUp = null;
             createFolderPopUP.IsOpen = false;
             IsEnabled = true;
             createFolderPopUPTextBox.Clear();
@@ -350,7 +340,6 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void CreateDocumentPopUpCancelButton_Click(object sender, RoutedEventArgs e) {
-            currentActivePopUp = null;
             createDocumentPopUP.IsOpen = false;
             IsEnabled = true;
             createDocumentPopUPTextBox.Clear();
@@ -363,7 +352,6 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments.</param>
         private void CreateDocumentPopUpCreateButton_Click(object sender, RoutedEventArgs e) {
             Document document = controller.CreateDocument(createDocumentPopUPTextBox.Text, "local", currentContextItem as IItemContainer);
-            currentActivePopUp = null;
             createDocumentPopUP.IsOpen = false;
             IsEnabled = true;
             createDocumentPopUPTextBox.Clear();
@@ -376,7 +364,6 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void ShareProjectPopUpCancelButton_Click(object sender, RoutedEventArgs e) {
-            currentActivePopUp = null;
             shareProjectPopUP.IsOpen = false;
             IsEnabled = true;
             shareProjectPopUPTextBox.Clear();
@@ -389,7 +376,6 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments.</param>
         private void ShareProjectPopUpShareButton_Click(object sender, RoutedEventArgs e) {
             controller.ShareProject(currentContextItem as Project, shareProjectPopUPTextBox.Text.Split(','));
-            currentActivePopUp = null;
             shareProjectPopUP.IsOpen = false;
             IsEnabled = true;
             shareProjectPopUPTextBox.Clear();
@@ -402,7 +388,6 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void LoginPopUpCancelButton_Click(object sender, RoutedEventArgs e) {
-            currentActivePopUp = null;
             loginPopUp.IsOpen = false;
             IsEnabled = true;
             loginPopUPUserTextBox.Clear();
@@ -418,7 +403,6 @@ namespace SliceOfPie.Client {
             //controller.SyncProjects(loginPopUPUserTextBox.Text);
             ReloadProjects();
            
-            currentActivePopUp = null;
             loginPopUp.IsOpen = false;
             IsEnabled = true;
             loginPopUPUserTextBox.Clear();
