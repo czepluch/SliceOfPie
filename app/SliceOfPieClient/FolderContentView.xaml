@@ -6,14 +6,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel>
-        <WrapPanel DockPanel.Dock="Top" Height="50" Background="#FFDDDDDD">
-            <Button Name="createDocumentButton" Margin="10,0,10,0">
+        <WrapPanel DockPanel.Dock="Top" Height="60" Background="#FFDDDDDD">
+            <Button Name="createDocumentButton" Margin="10,5,10,0">
                 <StackPanel Orientation="Vertical">
                     <Image Width="30" Source="Icons/document-icon.png"/>
                     <TextBlock>Create document</TextBlock>
                 </StackPanel>
             </Button>
-            <Button Name="createFolderButton" Margin="10,0,10,0">
+            <Button Name="createFolderButton" Margin="10,5,10,0">
                 <StackPanel Orientation="Vertical">
                     <Image Width="30" Source="Icons/folder-icon.png"/>
                     <TextBlock>Create folder</TextBlock>

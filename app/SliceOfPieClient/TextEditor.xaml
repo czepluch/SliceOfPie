@@ -20,14 +20,14 @@
             </DockPanel>
         </Popup>
         <DockPanel>
-            <WrapPanel DockPanel.Dock="Top" Height="50" Background="#FFDDDDDD">
-                <Button Name="saveDocumentButton"  Margin="10,0,10,0">
+            <WrapPanel DockPanel.Dock="Top" Height="60" Background="#FFDDDDDD">
+                <Button Name="saveDocumentButton"  Margin="10,5,10,0">
                     <StackPanel Orientation="Vertical">
                         <Image Width="30" Source="Icons/document-icon.png"/>
                         <TextBlock>Save Document</TextBlock>
                     </StackPanel>
                 </Button>
-                <Button Name="insertImageButton"  Margin="10,0,10,0">
+                <Button Name="insertImageButton"  Margin="10,5,10,0">
                     <StackPanel Orientation="Vertical">
                         <Image Width="30"/>
                         <TextBlock>Insert Image</TextBlock>
