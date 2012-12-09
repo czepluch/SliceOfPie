@@ -13,12 +13,15 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Controls.Primitives;
 using System.Threading;
+using SliceOfPie.ApmHelpers;
 
 namespace SliceOfPie.Client {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
+
+        private static SynchronizationContext syncContext = SynchronizationContext.Current; //for callbacks to be called on the UI thread
 
         private Controller controller;
         private FolderContentView folderContentView;
@@ -50,30 +53,59 @@ namespace SliceOfPie.Client {
             textEditor = new TextEditor();
             textEditor.SaveDocumentButtonClicked += (new RoutedEventHandler(SaveDocument_Click));
 
-            ReloadProjects();
+            RefreshLocalProjects();
         }
 
         /// <summary>
-        /// This method reloads projects from the controller
+        /// This method syncs with the server and updates the ui
         /// </summary>
-        /// <param name="itemToOpen">The item to open, when the projects are reloaded. Default is the top project.</param>
-        private void ReloadProjects(IListableItem itemToOpen = null) {
+        /// <param name="userMail">The users mail</param>
+        /// <param name="password">The users password</param>
+        /// <param name="itemToOpen">The item to open, when the projects are reloaded. If this is null, the top project will be opened.</param>
+        private bool SyncProjects(string userMail, string password, IListableItem itemToOpen = null) {
+            bool succesfullySynced = false;
             //Using controllers APM to load the projects into the Document Explorer
-            SynchronizationContext context = SynchronizationContext.Current; //Call callback on own thread.
-            controller.BeginGetProjects("local", (iar) => {
-                //Callback posted in UI-context
-                context.Post((o) => {
-                    documentExplorer.Projects = controller.EndGetProjects(iar).ToList();
-                    if (itemToOpen != null) {
-                        documentExplorer.ExpandTo(itemToOpen, Open);
-                    }
-                    else {
-                        documentExplorer.CallbackSelected(Open);
-                    }
-                }, null);
-            }, null);
+            controller.BeginSyncProjects(userMail, (iar) => {
+                try {
+                    Refresh(controller.EndSyncProjects(iar), itemToOpen);
+                    succesfullySynced = true;
+                }
+                catch (AsyncException ex) {
+                    //bool = false will be returned
+                }
+            } , null);
+            return succesfullySynced;
         }
 
+        /// <summary>
+        /// This method refreshes the projects (local only)
+        /// </summary>
+        /// <param name="itemToOpen">The item to open, when the projects are reloaded. If this is null, the top project will be opened.</param>
+        private void RefreshLocalProjects(IListableItem itemToOpen = null) {
+            //Using controllers APM to load the projects into the Document Explorer
+            controller.BeginGetProjects("local", (iar) =>
+                Refresh(controller.EndGetProjects(iar), itemToOpen)
+            , null);
+        }
+
+        /// <summary>
+        /// This method refreshes the ui based on projects.
+        /// </summary>
+        /// <param name="projects">The projects to update the ui with</param>
+        /// <param name="itemToOpen">The item to open, when the projects are reloaded. If this is null, the top project will be opened.</param>
+        private void Refresh(IEnumerable<Project> projects, IListableItem itemToOpen = null) {
+            //Callback posted in UI-context
+            syncContext.Post((o) => {
+                documentExplorer.Projects = projects;
+                if (itemToOpen != null) {
+                    documentExplorer.ExpandTo(itemToOpen, Open);
+                }
+                else {
+                    documentExplorer.CallbackSelected(Open);
+                }
+            }, null);
+        }
+        
         /// <summary>
         /// Fills the MainContent with useful information for the specific item
         /// </summary>
@@ -194,7 +226,7 @@ namespace SliceOfPie.Client {
             else {
                 controller.RemoveDocument(currentContextItem as Document);
             }
-            ReloadProjects();
+            RefreshLocalProjects();
         }
 
         /// <summary>
@@ -253,7 +285,7 @@ namespace SliceOfPie.Client {
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
             loginPopUp.IsOpen = true;
-            loginPopUPUserTextBox.Focus();
+            loginPopUpUserTextBox.Focus();
         }
 
         /// <summary>
@@ -307,7 +339,7 @@ namespace SliceOfPie.Client {
             createProjectPopUp.IsOpen = false;
             IsEnabled = true;
             createProjectPopUPTextBox.Clear();
-            ReloadProjects(project);
+            RefreshLocalProjects(project);
         }
 
         /// <summary>
@@ -331,7 +363,7 @@ namespace SliceOfPie.Client {
             createFolderPopUP.IsOpen = false;
             IsEnabled = true;
             createFolderPopUPTextBox.Clear();
-            ReloadProjects(folder);
+            RefreshLocalProjects(folder);
         }
 
         /// <summary>
@@ -355,7 +387,7 @@ namespace SliceOfPie.Client {
             createDocumentPopUP.IsOpen = false;
             IsEnabled = true;
             createDocumentPopUPTextBox.Clear();
-            ReloadProjects(document);
+            RefreshLocalProjects(document);
         }
 
         /// <summary>
@@ -390,8 +422,8 @@ namespace SliceOfPie.Client {
         private void LoginPopUpCancelButton_Click(object sender, RoutedEventArgs e) {
             loginPopUp.IsOpen = false;
             IsEnabled = true;
-            loginPopUPUserTextBox.Clear();
-            loginPopUPPasswordTextBox.Clear();
+            loginPopUpUserTextBox.Clear();
+            loginPopUpPasswordTextBox.Clear();
         }
 
         /// <summary>
@@ -400,13 +432,15 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void loginPopUpLoginButton_Click(object sender, RoutedEventArgs e) {
-            //controller.SyncProjects(loginPopUPUserTextBox.Text);
-            ReloadProjects();
-           
-            loginPopUp.IsOpen = false;
-            IsEnabled = true;
-            loginPopUPUserTextBox.Clear();
-            loginPopUPPasswordTextBox.Clear();
+            if(SyncProjects(loginPopUpUserTextBox.Text, loginPopUpPasswordTextBox.Text)) {
+                loginPopUp.IsOpen = false;
+                IsEnabled = true;
+                loginPopUpUserTextBox.Clear();
+                loginPopUpPasswordTextBox.Clear();
+            }
+            else {
+                loginPopUpErrorLabel.Content = "An error occured. Please check your username and password.";
+            }
         }
 
         /// <summary>

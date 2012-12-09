@@ -64,12 +64,13 @@
                     <Label>You must enter your login information to continue this operation</Label>
                     <StackPanel Orientation="Horizontal">
                         <Label Margin="0,0,22,0">Email</Label>
-                        <TextBox Name="loginPopUPUserTextBox" Width="250"/>
+                        <TextBox Name="loginPopUpUserTextBox" Width="250"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Label>Password</Label>
-                        <TextBox Name="loginPopUPPasswordTextBox" Width="250"/>
+                        <TextBox Name="loginPopUpPasswordTextBox" Width="250"/>
                     </StackPanel>
+                    <Label Foreground="DarkRed" Name="loginPopUpErrorLabel"/>
                 </StackPanel>
             </DockPanel>
         </Popup>
