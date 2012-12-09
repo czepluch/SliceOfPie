@@ -116,7 +116,7 @@ namespace SliceOfPie {
                 ProjectId = p.Id
             };
             using (var dbContext = new sliceofpieEntities2()) { //Insert projectUser
-                if(dbContext.Users.Count(dbUser => dbUser.Email.Equals(u.Email)) < 1) dbContext.Users.AddObject(u);
+                if (dbContext.Users.Count(dbUser => dbUser.Email.Equals(u.Email)) < 1) throw new ArgumentException("No user with email " + u.Email + " exists!");
                 dbContext.ProjectUsers.AddObject(pu);
                 dbContext.SaveChanges();
             }

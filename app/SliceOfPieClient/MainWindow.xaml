@@ -5,51 +5,71 @@
         xmlns:local="clr-namespace:SliceOfPie.Client"
         Title="Slice of Pie" Height="500" Width="800" MinHeight="300" MinWidth="400" Icon="/SliceOfPieClient;component/grin.ico">
     <Grid>
-        <Popup Name="CreateProject" Height="200" Width="500" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
+        <Popup Name="createProjectPopUP" Height="200" Width="500" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
             <DockPanel Background="#FF949494">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-                    <Button Padding="5" Margin="5,2,5,2" Click="CreateProjectCreateButton_Click" IsDefault="True" >Create Project</Button>
-                    <Button Padding="5" Margin="5,2,5,2" Click="CreateProjectCancelButton_Click">Cancel</Button>
+                    <Button Padding="5" Margin="5,2,5,2" Click="CreateProjectPopUpCreateButton_Click" IsDefault="True" >Create Project</Button>
+                    <Button Padding="5" Margin="5,2,5,2" Click="CreateProjectPopUpCancelButton_Click">Cancel</Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label>Name your project</Label>
-                    <TextBox Name="CreateProjectTextBox" Width="250"></TextBox>
+                    <TextBox Name="createProjectPopUPTextBox" Width="250"/>
                 </StackPanel>
             </DockPanel>
         </Popup>
-        <Popup Name="CreateFolder" Height="200" Width="500" Placement="Center" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
+        <Popup Name="createFolderPopUP" Height="200" Width="500" Placement="Center" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
             <DockPanel Background="#FF949494">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-                    <Button Padding="5" Margin="5,2,5,2" Click="CreateFolderCreateButton_Click" IsDefault="True">Create Folder</Button>
-                    <Button Padding="5" Margin="5,2,5,2" Click="CreateFolderCancelButton_Click">Cancel</Button>
+                    <Button Padding="5" Margin="5,2,5,2" Click="CreateFolderPopUpCreateButton_Click" IsDefault="True">Create Folder</Button>
+                    <Button Padding="5" Margin="5,2,5,2" Click="CreateFolderPopUpCancelButton_Click">Cancel</Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label>Name your folder</Label>
-                    <TextBox Name="CreateFolderTextBox" Width="250"></TextBox>
+                    <TextBox Name="createFolderPopUPTextBox" Width="250"/>
                 </StackPanel>
             </DockPanel>
         </Popup>
-        <Popup Name="CreateDocument" Height="200" Width="500" Placement="Center" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
+        <Popup Name="createDocumentPopUP" Height="200" Width="500" Placement="Center" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
             <DockPanel Background="#FF949494">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-                    <Button Padding="5" Margin="5,2,5,2" Click="CreateDocumentCreateButton_Click" IsDefault="True">Create Document</Button>
-                    <Button Padding="5" Margin="5,2,5,2" Click="CreateDocumentCancelButton_Click">Cancel</Button>
+                    <Button Padding="5" Margin="5,2,5,2" Click="CreateDocumentPopUpCreateButton_Click" IsDefault="True">Create Document</Button>
+                    <Button Padding="5" Margin="5,2,5,2" Click="CreateDocumentPopUpCancelButton_Click">Cancel</Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label>Name your document</Label>
-                    <TextBox Name="CreateDocumentTextBox" Width="250"></TextBox>
+                    <TextBox Name="createDocumentPopUPTextBox" Width="250"/>
                 </StackPanel>
             </DockPanel>
         </Popup>
-        <Popup Name="ShareProject" Height="200" Width="500" Placement="Center" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
+        <Popup Name="shareProjectPopUP" Height="200" Width="500" Placement="Center" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
             <DockPanel Background="#FF949494">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-                    <Button Padding="5" Margin="5,2,5,2" Click="ShareProjectShareButton_Click" IsDefault="True">Share Project</Button>
-                    <Button Padding="5" Margin="5,2,5,2" Click="ShareProjectCancelButton_Click">Cancel</Button>
+                    <Button Padding="5" Margin="5,2,5,2" Click="ShareProjectPopUpShareButton_Click" IsDefault="True">Share Project</Button>
+                    <Button Padding="5" Margin="5,2,5,2" Click="ShareProjectPopUpCancelButton_Click">Cancel</Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label>List emails to invite</Label>
-                    <TextBox Name="ShareProjectTextBox" Width="250"></TextBox>
+                    <TextBox Name="shareProjectPopUPTextBox" Width="250"/>
+                </StackPanel>
+            </DockPanel>
+        </Popup>
+
+        <Popup Name="loginPopUp" Height="200" Width="500" Placement="Center" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
+            <DockPanel Background="#FF949494">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+                    <Button Padding="5" Margin="5,2,5,2" Click="loginPopUpLoginButton_Click"  IsDefault="True">Login</Button>
+                    <Button Padding="5" Margin="5,2,5,2" Click="LoginPopUpCancelButton_Click">Cancel</Button>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Label>You must enter your login information to continue this operation</Label>
+                    <StackPanel Orientation="Horizontal">
+                        <Label Margin="0,0,22,0">Email</Label>
+                        <TextBox Name="loginPopUPUserTextBox" Width="250"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Label>Password</Label>
+                        <TextBox Name="loginPopUPPasswordTextBox" Width="250"/>
+                    </StackPanel>
                 </StackPanel>
             </DockPanel>
         </Popup>
@@ -64,11 +84,11 @@
                     <Button Height="70" Click="OpenCreateProjectWindow">Create new project</Button>
                     <Button Grid.Column="1" Height="70" Click="Synchronize_Click">Sync.</Button>
                 </Grid>
-                <ScrollViewer  Width="170" Height="auto" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Name="scrollViewer1">
-                    <TreeView Name="DocumentExplorer" FontSize="13" FontWeight="DemiBold"/>
+                <ScrollViewer  Width="170" Height="auto" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <local:DocumentExplorer x:Name="documentExplorer"/>
                 </ScrollViewer>
             </DockPanel>
-            <ContentControl Name="MainContent"/>
+            <ContentControl Name="mainContent"/>
         </DockPanel>
     </Grid>
 </Window>

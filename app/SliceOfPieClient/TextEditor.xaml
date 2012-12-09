@@ -14,6 +14,6 @@
                 </StackPanel>
             </Button>
         </WrapPanel>
-        <TextBox Name="TextField" FontFamily="Consolas" FontSize="11" Padding="5" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Background="#FFFFFFDB" />
+        <TextBox Name="textField" FontFamily="Consolas" FontSize="11" Padding="5" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Background="#FFFFFFDB" />
     </DockPanel>
 </UserControl>

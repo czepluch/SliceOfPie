@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 namespace SliceOfPie.Client {
     /// <summary>
     /// Interaction logic for the FolderContentView User Control.
+    /// This UserControl shows a list of subfolders based on its ItemContainer property.
     /// </summary>
     public partial class FolderContentView : UserControl {
 
@@ -22,6 +23,7 @@ namespace SliceOfPie.Client {
 
         /// <summary>
         /// This is the IItemContainer which contains the currently shown content
+        /// Changing this will change what is shown.
         /// </summary>
         public IItemContainer ItemContainer {
             get { return _container; }
@@ -42,20 +44,25 @@ namespace SliceOfPie.Client {
         /// This event is fired when the button to create a Folder is clicked
         /// </summary>
         public event RoutedEventHandler CreateFolderButtonClicked;
+
+        /// <summary>
+        /// This event is fired when an item is double clicked
+        /// </summary>
         public event EventHandler<ListableItemEventArgs> ItemDoubleClicked;
         
         #endregion
 
         /// <summary>
-        /// This UserControl shows a list of subfolders based on its ItemContainer property.
+        /// Creates a new instance of a FolderContentView.
+        /// For content to be shown, the ItemContainer property must be set.
         /// </summary>
         public FolderContentView() {
             InitializeComponent();
             //On button clicks
-            CreateDocumentButton.Click += new RoutedEventHandler(
+            createDocumentButton.Click += new RoutedEventHandler(
                 (sender, e) => OnCreateDocumentButtonClicked(e) //fire own event
             );
-            CreateFolderButton.Click += new RoutedEventHandler(
+            createFolderButton.Click += new RoutedEventHandler(
                 (sender, e) => OnCreateFolderButtonClicked(e) //fire own event
             );
             
@@ -65,23 +72,23 @@ namespace SliceOfPie.Client {
         /// This reloads the entire FolderListView based on the current ItemContainer
         /// </summary>
         private void ReloadItemContainerContents() {
-            FolderListView.Items.Clear();
+            folderListView.Items.Clear();
             foreach (Folder folder in ItemContainer.GetFolders()) { //Add folders first
-                FolderListView.Items.Add(CreateListViewItem(folder));
+                folderListView.Items.Add(CreateListViewItem(folder));
             }
             foreach (Document document in ItemContainer.GetDocuments()) { //Then documents
-                FolderListView.Items.Add(CreateListViewItem(document));
+                folderListView.Items.Add(CreateListViewItem(document));
             }
         }
 
         /// <summary>
-        /// This method creates a ListViewItem based on a given ListableItem
+        /// This method creates a ListViewItem based on a given IListableItem
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
+        /// <param name="item">The item to generate a ListViewItem for.</param>
+        /// <returns>The created ListViewItem.</returns>
         private ListViewItem CreateListViewItem(IListableItem item) {
             StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical, IsHitTestVisible = false };
-            sp.Children.Add(new Image() { Source = ((item is Folder) ? IconFactory.FolderIcon : IconFactory.DocumentIcon), Width = 24, Height = 24 });
+            sp.Children.Add(new Image() { Source = item.GetIcon(), Width = 24, Height = 24 });
             sp.Children.Add(new TextBlock() { Text = item.Title, MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center });
             ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
             listViewItem.Content = sp;
@@ -97,7 +104,7 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This method triggers the CreateDocumentButtonClicked event
         /// </summary>
-        /// <param name="e">The event arguments</param>
+        /// <param name="e">The event arguments.</param>
         private void OnCreateDocumentButtonClicked(RoutedEventArgs e) {
             if (CreateDocumentButtonClicked != null) {
                 //Invoke the delegates attached to this event
@@ -108,7 +115,7 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This method triggers the CreateFolderButtonClicked event
         /// </summary>
-        /// <param name="e">The event arguments</param>
+        /// <param name="e">The event arguments.</param>
         private void OnCreateFolderButtonClicked(RoutedEventArgs e) {
             if (CreateFolderButtonClicked != null) {
                 //Invoke the delegates attached to this event
@@ -119,7 +126,7 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This method triggers the ItemDoubleClicked event
         /// </summary>
-        /// <param name="e">The event arguments</param>
+        /// <param name="e">The event arguments.</param>
         private void OnItemDoubleClicked(ListableItemEventArgs e) {
             if (ItemDoubleClicked != null) {
                 //Invoke the delegates attached to this event
