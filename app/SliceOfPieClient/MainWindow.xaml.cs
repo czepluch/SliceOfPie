@@ -205,8 +205,8 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments.</param>
         private void OpenCreateProjectWindow(object sender, RoutedEventArgs e) {
             IsEnabled = false;
-            createProjectPopUP.IsOpen = true;
-            currentActivePopUp = createProjectPopUP;
+            createProjectPopUp.IsOpen = true;
+            currentActivePopUp = createProjectPopUp;
             createProjectPopUPTextBox.Focus();
         }
 
@@ -299,7 +299,7 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments.</param>
         private void CreateProjectPopUpCancelButton_Click(object sender, RoutedEventArgs e) {
             currentActivePopUp = null;
-            createProjectPopUP.IsOpen = false;
+            createProjectPopUp.IsOpen = false;
             IsEnabled = true;
             createProjectPopUPTextBox.Clear();
         }
@@ -312,7 +312,7 @@ namespace SliceOfPie.Client {
         private void CreateProjectPopUpCreateButton_Click(object sender, RoutedEventArgs e) {
             Project project = controller.CreateProject(createProjectPopUPTextBox.Text, "local");
             currentActivePopUp = null;
-            createProjectPopUP.IsOpen = false;
+            createProjectPopUp.IsOpen = false;
             IsEnabled = true;
             createProjectPopUPTextBox.Clear();
             ReloadProjects(project);
