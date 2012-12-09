@@ -152,6 +152,18 @@ namespace SliceOfPie.Tests {
                 model.GetProjects("common@test.mail")
                     .First(p => p.Id == testProject.Id)
                     .GetDocuments().First(doc => doc.Id == testDoc.Id).CurrentRevision);
+
+            testDoc.CurrentRevision += "Shoop da woop da";
+            model.SaveDocument(testDoc);
+
+            Document freshFetchDoc = model.GetProjects("common@test.mail")
+                    .First(p => p.Id == testProject.Id)
+                    .GetDocuments().First(doc => doc.Id == testDoc.Id);
+
+            Assert.AreEqual(testDoc.CurrentRevision,
+                freshFetchDoc.CurrentRevision);
+
+            Assert.IsTrue(testDoc.GetRevisions().Count() > 1);
         }
 
         /// <summary>
