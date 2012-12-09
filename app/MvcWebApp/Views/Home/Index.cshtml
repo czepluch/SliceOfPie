@@ -3,12 +3,14 @@
     ViewBag.Title = "Home Page";
 }
 
-<h2>Here is a list of all current projects. @User.Identity.Name </h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table>
+
+@if (Request.IsAuthenticated) {
+    <h2>Here is a list of all current projects for <strong>@User.Identity.Name</strong></h2>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+    <table>
     <tr>
         <th>
             Title
@@ -31,9 +33,12 @@
         <td>
             @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |*@
             @*@Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
         </td>
     </tr>
 }
 
 </table>
+} else {
+    <h2>Are you new here?</h2>
+}

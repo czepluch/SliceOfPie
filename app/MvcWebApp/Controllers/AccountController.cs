@@ -48,14 +48,14 @@ namespace MvcWebApp.Controllers {
             return View(user);
         }
 
-        ////
-        //// GET: /Account/LogOff
+        //
+        // GET: /Account/LogOff
 
-        //public ActionResult LogOff() {
-        //    FormsAuthentication.SignOut();
+        public ActionResult LogOff() {
+            FormsAuthentication.SignOut();
 
-        //    return RedirectToAction("Index", "Home");
-        //}
+            return RedirectToAction("Index", "Home");
+        }
 
         ////
         //// GET: /Account/Register
