@@ -59,6 +59,9 @@ namespace SliceOfPie {
         }
 
         public override void RemoveProject(Project project) {
+            if (Projects.Count() == 1) {
+                throw new ArgumentException("You cannot delete all projects");
+            }
             if (!Directory.Exists(project.GetPath())) {
                 throw new ArgumentException("Project folder does not exist (" + project.GetPath() + ")");
             }
