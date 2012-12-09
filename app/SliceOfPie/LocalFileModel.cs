@@ -569,21 +569,23 @@ namespace SliceOfPie {
                 foreach (Document document in documents) {
                     document.Parent = parent;
                     document.IsMerged = false;
-                    FileStream fileStream = new FileStream(document.GetPath(), FileMode.Open, FileAccess.Read);
-                    StreamReader streamReader = new StreamReader(fileStream);
-                    string line;
-                    int i = 0;
-                    while ((line = streamReader.ReadLine()) != null) {
-                        if (i == 0) {
-                            if (line.Length > 0) {
-                                if (line.Substring(0, 3).Equals("rev")) {
-                                    document.IsMerged = true;
+                    if (File.Exists(document.GetPath())) {
+                        FileStream fileStream = new FileStream(document.GetPath(), FileMode.Open, FileAccess.Read);
+                        StreamReader streamReader = new StreamReader(fileStream);
+                        string line;
+                        int i = 0;
+                        while ((line = streamReader.ReadLine()) != null) {
+                            if (i == 0) {
+                                if (line.Length > 0) {
+                                    if (line.Substring(0, 3).Equals("rev")) {
+                                        document.IsMerged = true;
+                                    }
                                 }
                             }
+                            i++;
                         }
-                        i++;
+                        streamReader.Close();
                     }
-                    streamReader.Close();
                     if (!document.IsMerged) {
                         AddDocument(parent, document.Title, document.CurrentHash + "\n" + document.CurrentRevision, document.Id, true);
                     }
