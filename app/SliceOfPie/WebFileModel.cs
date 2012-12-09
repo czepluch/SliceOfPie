@@ -95,6 +95,25 @@ namespace SliceOfPie {
             }
             foreach (Document document in docList) {
                 parent.Documents.Add(document);
+                GetRevisions(document);
+            }
+        }
+
+        private void GetRevisions(Document document) {
+            List<Revision> revList = new List<Revision>();
+            using (var dbContext = new sliceofpieEntities2()) {
+                var revisions = dbContext.Revisions.Where(rev => rev.DocumentId == document.Id);
+                foreach (Revision r in revisions) {
+                    revList.Add(new Revision() {
+                        Document = document,
+                        Content = r.Content,
+                        ContentHash = r.Content.GetHashCode(),
+                        Id = r.Id
+                    });
+                }
+            }
+            foreach (Revision r in revList) {
+                document.Revisions.Add(r);
             }
         }
 
@@ -120,12 +139,19 @@ namespace SliceOfPie {
                 dbContext.ProjectUsers.AddObject(pu);
                 dbContext.SaveChanges();
             }
-            GetFolders(p);
-            GetDocuments(p);
-            return p;
+            return new Project() {
+                Title = p.Title,
+                Id = p.Id
+            };
         }
 
         public override void RemoveProject(Project project) {
+            foreach (Folder f in project.GetFolders()) {
+                RemoveFolder(f);
+            }
+            foreach (Document d in project.GetDocuments()) {
+                RemoveDocument(d);
+            }
             using (var dbContext = new sliceofpieEntities2()) {
                 Project p = dbContext.Projects.First(proj => project.Id == proj.Id);
                 ProjectUser pu = dbContext.ProjectUsers.First(user => project.Id == user.ProjectId);
@@ -146,10 +172,22 @@ namespace SliceOfPie {
                 dbContext.Folders.AddObject(f);
                 dbContext.SaveChanges();
             }
-            return f;
+            return new Folder() {
+                Title = title,
+                Parent = parent,
+                Id = f.Id,
+                ProjectId = f.ProjectId,
+                FolderId = f.FolderId
+            };
         }
 
         public override void RemoveFolder(Folder folder) {
+            foreach (Folder f in folder.GetFolders()) {
+                RemoveFolder(f);
+            }
+            foreach (Document d in folder.GetDocuments()) {
+                RemoveDocument(d);
+            }
             using (var dbContext = new sliceofpieEntities2()) {
                 Folder f = dbContext.Folders.First(fold => fold.Id == folder.Id);
                 dbContext.Folders.DeleteObject(f);
