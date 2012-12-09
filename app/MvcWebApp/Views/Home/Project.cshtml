@@ -1,17 +1,21 @@
-﻿@{
+﻿@model  SliceOfPie.Project
+@{
     ViewBag.Title = "Project";
 }
 
-<h2>Project</h2>
-<p>Create new project!</p>
+<h2>@Model.Title</h2>
+<table>
+@foreach (SliceOfPie.Folder item in Model.GetFolders()) {
+    <tr>
+        <td>
+            @Html.DisplayFor(Folder => item.Title)
+        </td>
+        <td>
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+        </td>
+    </tr>
+}
 
-@*@model SliceOfPie.Project
-@using (Html.BeginForm())
-{
-    @Html.EditorFor(x => x.Title)
-    <input type="submit" value="Create" />
-}*@
+</table>
 
 
-<p>Here will be a list of all projects.</p>
-<li>@Html.ActionLink("@title", "Project", "Home")</li>
