@@ -1,19 +1,40 @@
 ﻿<UserControl x:Class="SliceOfPie.Client.TextEditor"
+             Name="SliceOfPieTextEditor"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <DockPanel>
-        <WrapPanel DockPanel.Dock="Top" Height="50" Background="#FFDDDDDD">
-            <Button Name="SaveDocumentButton"  Margin="10,0,10,0">
-                <StackPanel Orientation="Vertical">
-                    <Image Width="30" Source="Icons/document-icon.png"/>
-                    <TextBlock>Save Document</TextBlock>
+    <Grid>
+        <Popup Name="insertImagePopUp" Height="200" Width="400" Placement="Center" AllowsTransparency="True" IsOpen="True" PlacementTarget="{Binding ElementName=SliceOfPieTextEditor}">
+            <DockPanel Background="#FF949494">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+                    <Button Padding="5" Margin="5,2,5,2" Click="InsertImagePopUpInsertButton_Click"  IsDefault="True" >Insert</Button>
+                    <Button Padding="5" Margin="5,2,5,2" Click="InsertImagePopUpCancelButton_Click">Cancel</Button>
                 </StackPanel>
-            </Button>
-        </WrapPanel>
-        <TextBox Name="textField" FontFamily="Consolas" FontSize="11" Padding="5" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Background="#FFFFFFDB" />
-    </DockPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Label>Insert Image URL: </Label>
+                    <TextBox Name="insertImagePopUpTextBox" Width="250"/>
+                </StackPanel>
+            </DockPanel>
+        </Popup>
+        <DockPanel>
+            <WrapPanel DockPanel.Dock="Top" Height="60" Background="#FFDDDDDD">
+                <Button Name="saveDocumentButton"  Margin="10,5,10,0">
+                    <StackPanel Orientation="Vertical">
+                        <Image Width="30" Source="Icons/document-icon.png"/>
+                        <TextBlock>Save Document</TextBlock>
+                    </StackPanel>
+                </Button>
+                <Button Name="insertImageButton"  Margin="10,5,10,0">
+                    <StackPanel Orientation="Vertical">
+                        <Image Width="30"/>
+                        <TextBlock>Insert Image</TextBlock>
+                    </StackPanel>
+                </Button>
+            </WrapPanel>
+            <TextBox Name="textField" FontFamily="Consolas" FontSize="11" Padding="5" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" Background="#FFFFFFDB" />
+        </DockPanel>
+    </Grid>
 </UserControl>
