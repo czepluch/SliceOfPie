@@ -51,6 +51,7 @@ namespace SliceOfPie {
         }
 
         private IFileModel fileModel;
+        private UserModel userModel;
 
         /// <summary>
         /// Create a new instance of a controller. Made private as to only allow one instance
@@ -60,6 +61,7 @@ namespace SliceOfPie {
         private Controller(IFileModel model = null) {
             if (model == null) model = new LocalFileModel();
             fileModel = model;
+            userModel = new UserModel();
         }
 
         /// <summary>
@@ -79,7 +81,7 @@ namespace SliceOfPie {
         /// <returns>The new project</returns>
         /// <seealso cref="BeginCreateProject"/>
         public Project CreateProject(string name, string userMail) {
-            return fileModel.AddProject(name);
+            return fileModel.AddProject(name, userMail);
         }
 
         /// <summary>
@@ -485,11 +487,14 @@ namespace SliceOfPie {
         #region Sync Projects
 
         /// <summary>
-        /// Synchronize all files with the remote version.
+        /// Synchronize all files of a user with the remote version.
         /// </summary>
-        /// <param name="p">Updated collection of projects.</param>
+        /// <param name="userMail">Email of user whose projects to sync</param>
+        /// <param name="password">Password of user</param>
+        /// <returns>Updated collection of projects.</returns>
         /// <seealso cref="BeginSyncProjects"/>
-        public IEnumerable<Project> SyncProjects(string userMail) {
+        public IEnumerable<Project> SyncProjects(string userMail, string password) {
+            if (!userModel.ValidateLogin(userMail, password)) throw new ArgumentException("Invalid login provided for SynProjects");
             fileModel.SyncFiles(userMail);
             return GetProjects(userMail);
         }
@@ -499,9 +504,9 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="asyncResult">AsyncResult&lt;IEnumerable&ltProject&gt;,string&gt;</param>
         private void SyncProjectsAsyncHelper(object asyncResult) {
-            AsyncResult<IEnumerable<Project>, string> ar = (AsyncResult<IEnumerable<Project>, string>)asyncResult;
+            AsyncResult<IEnumerable<Project>, string, string> ar = (AsyncResult<IEnumerable<Project>, string, string>)asyncResult;
             try {
-                IEnumerable<Project> result = SyncProjects(ar.Parameter1);
+                IEnumerable<Project> result = SyncProjects(ar.Parameter1, ar.Parameter2);
                 ar.SetAsCompleted(result, false);
             }
             catch (Exception e) {
@@ -514,12 +519,13 @@ namespace SliceOfPie {
         /// Programming Model pattern.
         /// </summary>
         /// <param name="userMail">Email of user</param>
+        /// <param name="password">Password of user</param>
         /// <param name="callback">Callback called when synchronization finishes</param>
         /// <param name="state">State object, passed to callback</param>
         /// <returns>IAsyncResult for EndSyncProjects</returns>
         /// <seealso cref="EndSyncProjects"/>
-        public IAsyncResult BeginSyncProjects(string userMail, AsyncCallback callback, object state) {
-            AsyncResult<IEnumerable<Project>, string> ar = new AsyncResult<IEnumerable<Project>, string>(callback, state, userMail);
+        public IAsyncResult BeginSyncProjects(string userMail, string password, AsyncCallback callback, object state) {
+            AsyncResult<IEnumerable<Project>, string, string> ar = new AsyncResult<IEnumerable<Project>, string, string>(callback, state, userMail, password);
             ThreadPool.QueueUserWorkItem(SyncProjectsAsyncHelper, ar);
 
             return ar;
@@ -532,7 +538,7 @@ namespace SliceOfPie {
         /// <returns>Updated enumerable of projects</returns>
         /// <seealso cref="BeginSyncProjects"/>
         public IEnumerable<Project> EndSyncProjects(IAsyncResult asyncResult) {
-            AsyncResult<IEnumerable<Project>, string> ar = (AsyncResult<IEnumerable<Project>, string>)asyncResult;
+            AsyncResult<IEnumerable<Project>, string, string> ar = (AsyncResult<IEnumerable<Project>, string, string>)asyncResult;
             return ar.EndInvoke();
         }
 
