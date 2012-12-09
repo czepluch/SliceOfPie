@@ -57,61 +57,61 @@ namespace MvcWebApp.Controllers
             return View(project);
         }
 
-        //
-        // GET: /Home(Projects)/Delete/1
+        ////
+        //// GET: /Home(Projects)/Delete/1
 
-        public ActionResult Delete(int id = 0)
-        {
-            Project project = controller.Projects.Find(id);
-            if (project == null)
-            {
-                return HttpNotFound();
-            }
-            return View(project);
-        }
+        //public ActionResult Delete(int id = 0)
+        //{
+        //    Project project = controller.Projects.Find(id);
+        //    if (project == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(project);
+        //}
 
-        //
-        // POST: /Home(Projects)/Delete/5
+        ////
+        //// POST: /Home(Projects)/Delete/5
 
-        [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(int id = 0)
-        {
-            Project project = controller.Projects.Find(id);
-            if (project == null)
-            {
-                return HttpNotFound();
-            }
-            controller.Projects.Remove(project);
-            controller.SaveChanges();
-            return RedirectToAction("Index");
-        }
+        //[HttpPost, ActionName("Delete")]
+        //public ActionResult DeleteConfirmed(int id = 0)
+        //{
+        //    Project project = controller.Projects.Find(id);
+        //    if (project == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    controller.Projects.Remove(project);
+        //    controller.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
 
-        //
-        // GET: /Home(Projects)/Edit/5
+        ////
+        //// GET: /Home(Projects)/Edit/5
 
-        public ActionResult Edit(int id = 0)
-        {
-            Project project = controller.Projects.Find(id);
-            if (project == null)
-            {
-                return HttpNotFound();
-            }
-            return View(project);
-        }
+        //public ActionResult Edit(int id = 0)
+        //{
+        //    Project project = controller.Projects.Find(id);
+        //    if (project == null)
+        //    {
+        //        return HttpNotFound();
+        //    }
+        //    return View(project);
+        //}
 
-        //
-        // POST: /Home(Projects)/Edit/5
+        ////
+        //// POST: /Home(Projects)/Edit/5
 
-        [HttpPost]
-        public ActionResult Edit(Project project)
-        {
-            if (ModelState.IsValid)
-            {
-                controller.Entry(project).State = EntityState.Modified;
-                controller.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(project);
-        }
+        //[HttpPost]
+        //public ActionResult Edit(Project project)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        controller.Entry(project).State = EntityState.Modified;
+        //        controller.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(project);
+        //}
     }
 }
