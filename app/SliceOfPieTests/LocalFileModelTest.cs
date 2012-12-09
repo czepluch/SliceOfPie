@@ -297,26 +297,15 @@ namespace SliceOfPie.Tests {
 
         [TestInitialize]
         public void Initialize() {
-            ClearFolder(AppPath);
+            TestHelper.ClearDatabase("common@test.mail");
+            TestHelper.ClearFolder(AppPath);
             Model = new LocalFileModel();
         }
 
         [TestCleanup]
         public void Cleanup() {
-            ClearFolder(AppPath);
-        }
-
-        private void ClearFolder(string path) {
-            if (Directory.Exists(path)) {
-                DirectoryInfo dir = new DirectoryInfo(path);
-                foreach (FileInfo file in dir.GetFiles()) {
-                    file.Delete();
-                }
-                foreach (DirectoryInfo folder in dir.GetDirectories()) {
-                    ClearFolder(folder.FullName);
-                    folder.Delete();
-                }
-            }
+            TestHelper.ClearDatabase("common@test.mail");
+            TestHelper.ClearFolder(AppPath);
         }
     }
 }

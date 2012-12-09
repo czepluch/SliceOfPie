@@ -13,7 +13,8 @@ namespace SliceOfPie {
         private static BitmapImage
             projectIcon = createBitmapImage("project-icon"),
             folderIcon = createBitmapImage("folder-icon"),
-            documentIcon = createBitmapImage("document-icon");
+            documentIcon = createBitmapImage("document-icon"),
+            documentConflictIcon = createBitmapImage("document-icon-conflict");
 
         /// <summary>
         /// Returns the icon for this IListabeItem
@@ -28,7 +29,7 @@ namespace SliceOfPie {
                 return folderIcon;
             }
             else {
-                return documentIcon;
+                return (item as Document).IsMerged? documentConflictIcon : documentIcon;
             }
         }
 

@@ -59,6 +59,9 @@ namespace SliceOfPie {
         }
 
         public override void RemoveProject(Project project) {
+            if (Projects.Count() == 1) {
+                throw new ArgumentException("You cannot delete all projects");
+            }
             if (!Directory.Exists(project.GetPath())) {
                 throw new ArgumentException("Project folder does not exist (" + project.GetPath() + ")");
             }
@@ -291,6 +294,12 @@ namespace SliceOfPie {
             }
         }
 
+        /// <summary>
+        /// Upload folders to db for project or folder.
+        /// </summary>
+        /// <param name="parentPath"></param>
+        /// <param name="parentId"></param>
+        /// <param name="container"></param>
         public void UploadFolders(string parentPath, int parentId, Container container = Container.Folder) {
             string[] folders = Directory.GetDirectories(parentPath);
             foreach (string folderName in folders) {
@@ -337,6 +346,12 @@ namespace SliceOfPie {
             }
         }
 
+        /// <summary>
+        /// Upload documents to db for project or folder.
+        /// </summary>
+        /// <param name="parentPath"></param>
+        /// <param name="parentId"></param>
+        /// <param name="container"></param>
         public void UploadDocuments(string parentPath, int parentId, Container container = Container.Folder) {
             string[] files = Directory.GetFiles(parentPath);
             foreach (string fileName in files) {
@@ -443,6 +458,11 @@ namespace SliceOfPie {
             }
         }
 
+        /// <summary>
+        /// Update the hash of a file (rewriting first line).
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="hash"></param>
         public void UpdateHash(string fileName, int hash) {
             List<string> lines = new List<string>();
             lines.Add(hash + "");
@@ -484,49 +504,8 @@ namespace SliceOfPie {
                 }
             }
             foreach (Project project in projectsContainer) {
-                List<Folder> foldersContainer = new List<Folder>();
-                using (var dbContext = new sliceofpieEntities2()) {
-                    var folders = from folder in dbContext.Folders
-                                  where folder.ProjectId == project.Id
-                                  select folder;
-                    foreach (Folder folder in folders) {
-                        folder.Parent = project;
-                        AddFolder(project, folder.Title, folder.Id, true);
-                        foldersContainer.Add(folder);
-                    }
-                }
-                foreach (Folder folder in foldersContainer) {
-                    DownloadFolders(folder);
-                    DownloadDocuments(folder);
-                }
-                using (var dbContext = new sliceofpieEntities2()) {
-                    var documents = from document in dbContext.Documents
-                                    where document.ProjectId == project.Id
-                                    select document;
-                    foreach (Document document in documents) {
-                        document.Parent = project;
-
-                        bool isRevision = false;
-                        FileStream fileStream = new FileStream(document.GetPath(), FileMode.Open, FileAccess.Read);
-                        StreamReader streamReader = new StreamReader(fileStream);
-                        string line;
-                        int i = 0;
-                        while ((line = streamReader.ReadLine()) != null) {
-                            if (i == 0) {
-                                if (line.Length > 0) {
-                                    if (line.Substring(0, 3).Equals("rev")) {
-                                        isRevision = true;
-                                    }
-                                }
-                            }
-                            i++;
-                        }
-                        streamReader.Close();
-                        if (!isRevision) {
-                            AddDocument(project, document.Title, document.CurrentHash + "\n" + document.CurrentRevision, document.Id, true);
-                        }
-                    }
-                }
+                DownloadFolders(project, Container.Project);
+                DownloadDocuments(project, Container.Project);
             }
         }
 
@@ -534,12 +513,19 @@ namespace SliceOfPie {
         /// Download all folders for a specific parent folder. Do this recursively.
         /// </summary>
         /// <param name="parent"></param>
-        public void DownloadFolders(Folder parent) {
+        public void DownloadFolders(IItemContainer parent, Container container = Container.Folder) {
             List<Folder> foldersContainer = new List<Folder>();
             using (var dbContext = new sliceofpieEntities2()) {
-                var folders = from folder in dbContext.Folders
+                IEnumerable<Folder> folders;
+                if (container == Container.Project) {
+                    folders = from folder in dbContext.Folders
+                              where folder.ProjectId == parent.Id
+                              select folder;
+                } else {
+                    folders = from folder in dbContext.Folders
                               where folder.FolderId == parent.Id
                               select folder;
+                }
                 foreach (Folder folder in folders) {
                     folder.Parent = parent;
                     AddFolder(parent, folder.Title, folder.Id, true);
@@ -556,13 +542,21 @@ namespace SliceOfPie {
         /// Download all documents for a specific parent folder.
         /// </summary>
         /// <param name="parent"></param>
-        public void DownloadDocuments(Folder parent) {
+        public void DownloadDocuments(IItemContainer parent, Container container = Container.Folder) {
             using (var dbContext = new sliceofpieEntities2()) {
-                var documents = from document in dbContext.Documents
+                IEnumerable<Document> documents;
+                if (container == Container.Project) {
+                    documents = from document in dbContext.Documents
+                                where document.ProjectId == parent.Id
+                                select document;
+                } else {
+                    documents = from document in dbContext.Documents
                                 where document.FolderId == parent.Id
                                 select document;
+                }
                 foreach (Document document in documents) {
                     document.Parent = parent;
+                    document.IsMerged = false;
                     FileStream fileStream = new FileStream(document.GetPath(), FileMode.Open, FileAccess.Read);
                     StreamReader streamReader = new StreamReader(fileStream);
                     string line;

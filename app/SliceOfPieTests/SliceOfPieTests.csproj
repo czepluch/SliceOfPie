@@ -64,6 +64,7 @@
     <Compile Include="LocalFileModelTest.cs" />
     <Compile Include="UserModelTest.cs" />
     <Compile Include="WebFileModelTest.cs" />
+    <Compile Include="TestHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SliceOfPie\SliceOfPie.csproj">
