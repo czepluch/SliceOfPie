@@ -131,7 +131,6 @@
     <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Account\LogOn.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_LogOnPartial.cshtml" />
@@ -145,12 +144,6 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Home\Editor.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Home\Project.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\SliceOfPie\SliceOfPie.csproj">
       <Project>{DA9495C3-18C2-491D-8AA6-5BD9A4BEA9C7}</Project>
       <Name>SliceOfPie</Name>
@@ -161,9 +154,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Delete.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Home\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Project\Index.cshtml" />

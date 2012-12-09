@@ -5,7 +5,7 @@
 
 <h2>Contents of @Model.Title</h2>
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New Folder", "Create")
 </p>
 <table>
     <tr>
@@ -21,10 +21,10 @@
 @foreach (var item in Model.GetFolders()) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => modelItem.Id)
+            @Html.DisplayText(item.Id.ToString())
         </td>
         <td>
-            @Html.DisplayFor(modelItem => modelItem.Title)
+           @Html.ActionLink(item.Title, "../Folder/Index", item)
         </td>
         <td>
             @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |*@
