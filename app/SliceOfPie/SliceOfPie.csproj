@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApmHelpers\ApmHelpers.cs" />
+    <Compile Include="Container.cs" />
     <Compile Include="Document.cs" />
     <Compile Include="Folder.cs" />
     <Compile Include="Helper.cs" />

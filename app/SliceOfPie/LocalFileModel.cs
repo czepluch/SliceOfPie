@@ -10,6 +10,7 @@ namespace SliceOfPie {
         private string AppPath;
         private string DefaultProjectPath;
         private List<Project> Projects = new List<Project>();
+        private List<Document> ReviewDocuments = new List<Document>();
 
         public LocalFileModel() {
             AppPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie");
@@ -206,7 +207,6 @@ namespace SliceOfPie {
             }
             streamWriter.Flush();
             streamWriter.Close();
-            fileStream.Close();
         }
 
         public override void RemoveDocument(Document document) {
@@ -224,6 +224,8 @@ namespace SliceOfPie {
         public override void SyncFiles(string email) {
             UploadStructure(email);
             DownloadStructure(email);
+            Projects = new List<Project>();
+            FindProjects();
         }
 
         /// <summary>
@@ -241,11 +243,17 @@ namespace SliceOfPie {
                     int id = int.Parse(parts[0]);
                     string title = pathName.Replace(parts[0] + "-", "");
 
+                    var dbProjects = from dProject in dbContext.Projects
+                                     where dProject.Id == id
+                                     select dProject;
+                    if (dbProjects.Count() == 0) {
+                        if (Directory.Exists(Path.Combine(AppPath, Helper.GenerateName(id, title)))) {
+                            Directory.Move(Path.Combine(AppPath, Helper.GenerateName(id, title)), Path.Combine(AppPath, Helper.GenerateName(0, title)));
+                        }
+                        id = 0;
+                    }
                     if (id > 0) {
                         // Updating project
-                        var dbProjects = from dProject in dbContext.Projects
-                                         where dProject.Id == id
-                                         select dProject;
                         dbProject = dbProjects.First();
                         dbProject.Title = title;
                     } else {
@@ -276,132 +284,19 @@ namespace SliceOfPie {
                     }
                 }
 
-                // Folders
-                string[] subFolders = Directory.GetDirectories(Path.Combine(AppPath, Helper.GenerateName(dbProject.Id, dbProject.Title)));
-                foreach (string subFolderName in subFolders) {
-                    Folder dbFolder = null;
-                    using (var dbContext = new sliceofpieEntities2()) {
-                        string pathName = Path.GetFileName(subFolderName);
-                        string[] parts = pathName.Split('-');
-                        int id = int.Parse(parts[0]);
-                        string title = pathName.Replace(parts[0] + "-", "");
-
-                        if (id > 0) {
-                            // Updating folder
-                            var dbFolders = from dFolder in dbContext.Folders
-                                              where dFolder.Id == id
-                                              select dFolder;
-                            dbFolder = dbFolders.First();
-                            dbFolder.Title = title;
-                            dbFolder.ProjectId = dbProject.Id;
-                            dbFolder.FolderId = null;
-                        } else {
-                            // Creating folder
-                            dbFolder = new Folder {
-                                Title = title,
-                                ProjectId = dbProject.Id,
-                                FolderId = null
-                            };
-                            dbContext.Folders.AddObject(dbFolder);
-                        }
-                        dbContext.SaveChanges();
-                    }
-                    // Rename folder directory
-                    if (Directory.Exists(Path.Combine(projectPath, Helper.GenerateName(0, dbFolder.Title)))) {
-                        Directory.Move(Path.Combine(projectPath, Helper.GenerateName(0, dbFolder.Title)), Path.Combine(projectPath, Helper.GenerateName(dbFolder.Id, dbFolder.Title)));
-                    }
-
-                    UploadFolders(Path.Combine(projectPath, Helper.GenerateName(dbFolder.Id, dbFolder.Title)), dbFolder.Id);
-                    UploadDocuments(Path.Combine(projectPath, Helper.GenerateName(dbFolder.Id, dbFolder.Title)), dbFolder.Id);
-                }
-
-                // Documents
-                string[] files = Directory.GetFiles(Path.Combine(AppPath, Helper.GenerateName(dbProject.Id, dbProject.Title)));
-                foreach (string fileName in files) {
-                    Document dbDocument = null;
-                    using (var dbContext = new sliceofpieEntities2()) {
-                        string pathName = Path.GetFileName(fileName);
-                        string[] parts = pathName.Split('-');
-                        int id = int.Parse(parts[0]);
-                        string title = pathName.Replace(parts[0] + "-", "").Replace(".txt", "");
-                        int hash = "".GetHashCode();
-                        string revision = "";
-                        FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
-                        StreamReader streamReader = new StreamReader(fileStream);
-                        string line;
-                        int i = 0;
-                        while ((line = streamReader.ReadLine()) != null) {
-                            if (i == 0) {
-                                if (line.Length > 0) {
-                                    hash = int.Parse(line);
-                                }
-                            } else {
-                                revision += line + "\n";
-                            }
-                            i++;
-                        }
-                        revision = revision.Trim();
-                        streamReader.Close();
-
-                        if (id > 0) {
-                            // Updating document
-                            var dbDocuments = from dDocument in dbContext.Documents
-                                             where dDocument.Id == id
-                                             select dDocument;
-                            dbDocument = dbDocuments.First();
-                            dbDocument.Title = title;
-                            dbDocument.ProjectId = dbProject.Id;
-                            dbDocument.FolderId = null;
-                            if (dbDocument.CurrentHash == hash) {
-                                dbDocument.CurrentRevision = revision;
-                                dbDocument.CurrentHash = revision.GetHashCode();
-                                UpdateHash(fileName, revision.GetHashCode());
-                            } else {
-                                // Handle merge (and conflicts)
-                            }
-                        } else {
-                            // Creating document
-                            dbDocument = new Document {
-                                Title = title,
-                                ProjectId = dbProject.Id,
-                                FolderId = null,
-                                CurrentRevision = revision,
-                                CurrentHash = revision.GetHashCode()
-                            };
-                            UpdateHash(fileName, revision.GetHashCode());
-                            dbContext.Documents.AddObject(dbDocument);
-                        }
-                        dbContext.SaveChanges();
-                    }
-                    // Rename document file
-                    if (File.Exists(Path.Combine(projectPath, Helper.GenerateName(0, dbDocument.Title + ".txt")))) {
-                        File.Move(Path.Combine(projectPath, Helper.GenerateName(0, dbDocument.Title + ".txt")), Path.Combine(projectPath, Helper.GenerateName(dbDocument.Id, dbDocument.Title + ".txt")));
-                    }
-                    // Create revision
-                    using (var dbContext = new sliceofpieEntities2()) {
-                        var dbRevisions = from dRevision in dbContext.Revisions
-                                          where dRevision.DocumentId == dbDocument.Id && dRevision.ContentHash == dbDocument.CurrentHash
-                                          select dRevision;
-                        if (dbRevisions.Count() == 0) {
-                            dbContext.Revisions.AddObject(new Revision {
-                                DocumentId = dbDocument.Id,
-                                Content = dbDocument.CurrentRevision,
-                                ContentHash = dbDocument.CurrentHash,
-                                Timestamp = DateTime.Now
-                            });
-                            dbContext.SaveChanges();
-                        }
-                    }
-                }
+                // Upload folders and documents
+                var path = Path.Combine(AppPath, Helper.GenerateName(dbProject.Id, dbProject.Title));
+                UploadFolders(path, dbProject.Id, Container.Project);
+                UploadDocuments(path, dbProject.Id, Container.Project);
             }
         }
 
-        public void UploadFolders(string folderPath, int folderId) {
-            string[] subFolders = Directory.GetDirectories(folderPath);
-            foreach (string subFolderName in subFolders) {
+        public void UploadFolders(string parentPath, int parentId, Container container = Container.Folder) {
+            string[] folders = Directory.GetDirectories(parentPath);
+            foreach (string folderName in folders) {
                 Folder dbFolder = null;
                 using (var dbContext = new sliceofpieEntities2()) {
-                    string pathName = Path.GetFileName(subFolderName);
+                    string pathName = Path.GetFileName(folderName);
                     string[] parts = pathName.Split('-');
                     int id = int.Parse(parts[0]);
                     string title = pathName.Replace(parts[0] + "-", "");
@@ -413,28 +308,37 @@ namespace SliceOfPie {
                                         select dFolder;
                         dbFolder = dbFolders.First();
                         dbFolder.Title = title;
-                        dbFolder.ProjectId = null;
-                        dbFolder.FolderId = folderId;
+                        if (container == Container.Project) {
+                            dbFolder.ProjectId = parentId;
+                            dbFolder.FolderId = null;
+                        } else {
+                            dbFolder.ProjectId = null;
+                            dbFolder.FolderId = parentId;
+                        }
                     } else {
                         // Creating folder
                         dbFolder = new Folder {
                             Title = title,
                             ProjectId = null,
-                            FolderId = folderId
+                            FolderId = parentId
                         };
                         dbContext.Folders.AddObject(dbFolder);
                     }
                     dbContext.SaveChanges();
                 }
                 // Rename folder directory
-                if (Directory.Exists(Path.Combine(folderPath, Helper.GenerateName(0, dbFolder.Title)))) {
-                    Directory.Move(Path.Combine(folderPath, Helper.GenerateName(0, dbFolder.Title)), Path.Combine(folderPath, Helper.GenerateName(dbFolder.Id, dbFolder.Title)));
+                string folderPath = Path.Combine(parentPath, Helper.GenerateName(dbFolder.Id, dbFolder.Title));
+                if (Directory.Exists(Path.Combine(parentPath, Helper.GenerateName(0, dbFolder.Title)))) {
+                    Directory.Move(Path.Combine(parentPath, Helper.GenerateName(0, dbFolder.Title)), folderPath);
                 }
+                // Recursively
+                UploadFolders(folderPath, dbFolder.Id);
+                UploadDocuments(folderPath, dbFolder.Id);
             }
         }
 
-        public void UploadDocuments(string folderPath, int folderId) {
-            string[] files = Directory.GetFiles(folderPath);
+        public void UploadDocuments(string parentPath, int parentId, Container container = Container.Folder) {
+            string[] files = Directory.GetFiles(parentPath);
             foreach (string fileName in files) {
                 Document dbDocument = null;
                 using (var dbContext = new sliceofpieEntities2()) {
@@ -444,6 +348,7 @@ namespace SliceOfPie {
                     string title = pathName.Replace(parts[0] + "-", "").Replace(".txt", "");
                     int hash = "".GetHashCode();
                     string revision = "";
+                    bool isRevision = false;
                     FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
                     StreamReader streamReader = new StreamReader(fileStream);
                     string line;
@@ -451,6 +356,10 @@ namespace SliceOfPie {
                     while ((line = streamReader.ReadLine()) != null) {
                         if (i == 0) {
                             if (line.Length > 0) {
+                                if (line.Substring(0, 3).Equals("rev")) {
+                                    isRevision = true;
+                                    line = line.Substring(3);
+                                }
                                 hash = int.Parse(line);
                             }
                         } else {
@@ -468,32 +377,53 @@ namespace SliceOfPie {
                                           select dDocument;
                         dbDocument = dbDocuments.First();
                         dbDocument.Title = title;
-                        dbDocument.ProjectId = null;
-                        dbDocument.FolderId = folderId;
+                        if (container == Container.Project) {
+                            dbDocument.ProjectId = parentId;
+                            dbDocument.FolderId = null;
+                        } else {
+                            dbDocument.ProjectId = null;
+                            dbDocument.FolderId = parentId;
+                        }
+                        dbDocument.IsMerged = isRevision;
                         if (dbDocument.CurrentHash == hash) {
                             dbDocument.CurrentRevision = revision;
                             dbDocument.CurrentHash = revision.GetHashCode();
                             UpdateHash(fileName, revision.GetHashCode());
                         } else {
                             // Handle merge (and conflicts)
+                            string merge = Merger.Merge(revision, dbDocument.CurrentRevision);
+                            FileStream fs = new FileStream(fileName, FileMode.Create, FileAccess.Write);
+                            StreamWriter streamWriter = new StreamWriter(fs);
+                            string[] lines = merge.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None);
+                            streamWriter.WriteLine("rev" + dbDocument.CurrentHash);
+                            foreach (string l in lines) {
+                                streamWriter.WriteLine(l);
+                            }
+                            streamWriter.Flush();
+                            streamWriter.Close();
                         }
                     } else {
                         // Creating document
                         dbDocument = new Document {
                             Title = title,
-                            ProjectId = null,
-                            FolderId = folderId,
                             CurrentRevision = revision,
                             CurrentHash = revision.GetHashCode()
                         };
+                        if (container == Container.Project) {
+                            dbDocument.ProjectId = parentId;
+                            dbDocument.FolderId = null;
+                        } else {
+                            dbDocument.ProjectId = null;
+                            dbDocument.FolderId = parentId;
+                        }
                         UpdateHash(fileName, revision.GetHashCode());
                         dbContext.Documents.AddObject(dbDocument);
                     }
                     dbContext.SaveChanges();
                 }
                 // Rename document file
-                if (File.Exists(Path.Combine(folderPath, Helper.GenerateName(0, dbDocument.Title + ".txt")))) {
-                    File.Move(Path.Combine(folderPath, Helper.GenerateName(0, dbDocument.Title + ".txt")), Path.Combine(folderPath, Helper.GenerateName(dbDocument.Id, dbDocument.Title + ".txt")));
+                if (File.Exists(Path.Combine(parentPath, Helper.GenerateName(0, dbDocument.Title + ".txt")))) {
+                    File.Move(Path.Combine(parentPath, Helper.GenerateName(0, dbDocument.Title + ".txt")), Path.Combine(parentPath, Helper.GenerateName(dbDocument.Id, dbDocument.Title + ".txt")));
                 }
                 // Create revision
                 using (var dbContext = new sliceofpieEntities2()) {
@@ -575,7 +505,26 @@ namespace SliceOfPie {
                                     select document;
                     foreach (Document document in documents) {
                         document.Parent = project;
-                        AddDocument(project, document.Title, document.CurrentHash + "\n" + document.CurrentRevision, document.Id, true);
+
+                        bool isRevision = false;
+                        FileStream fileStream = new FileStream(document.GetPath(), FileMode.Open, FileAccess.Read);
+                        StreamReader streamReader = new StreamReader(fileStream);
+                        string line;
+                        int i = 0;
+                        while ((line = streamReader.ReadLine()) != null) {
+                            if (i == 0) {
+                                if (line.Length > 0) {
+                                    if (line.Substring(0, 3).Equals("rev")) {
+                                        isRevision = true;
+                                    }
+                                }
+                            }
+                            i++;
+                        }
+                        streamReader.Close();
+                        if (!isRevision) {
+                            AddDocument(project, document.Title, document.CurrentHash + "\n" + document.CurrentRevision, document.Id, true);
+                        }
                     }
                 }
             }
@@ -614,7 +563,24 @@ namespace SliceOfPie {
                                 select document;
                 foreach (Document document in documents) {
                     document.Parent = parent;
-                    AddDocument(parent, document.Title, document.CurrentHash + "\n" + document.CurrentRevision, document.Id, true);
+                    FileStream fileStream = new FileStream(document.GetPath(), FileMode.Open, FileAccess.Read);
+                    StreamReader streamReader = new StreamReader(fileStream);
+                    string line;
+                    int i = 0;
+                    while ((line = streamReader.ReadLine()) != null) {
+                        if (i == 0) {
+                            if (line.Length > 0) {
+                                if (line.Substring(0, 3).Equals("rev")) {
+                                    document.IsMerged = true;
+                                }
+                            }
+                        }
+                        i++;
+                    }
+                    streamReader.Close();
+                    if (!document.IsMerged) {
+                        AddDocument(parent, document.Title, document.CurrentHash + "\n" + document.CurrentRevision, document.Id, true);
+                    }
                 }
             }
         }
@@ -686,6 +652,7 @@ namespace SliceOfPie {
                 string pathName = Path.GetFileName(documentName);
                 string[] parts = pathName.Split('-');
                 int id = int.Parse(parts[0]);
+                bool isRevision = false;
                 int hash = "".GetHashCode();
                 string revision = "";
                 FileStream fileStream = new FileStream(documentName, FileMode.Open, FileAccess.Read);
@@ -695,6 +662,10 @@ namespace SliceOfPie {
                 while ((line = streamReader.ReadLine()) != null) {
                     if (i == 0) {
                         if (line.Length > 0) {
+                            if (line.Substring(0, 3).Equals("rev")) {
+                                isRevision = true;
+                                line = line.Substring(3);
+                            }
                             hash = int.Parse(line);
                         }
                     } else {
@@ -709,7 +680,8 @@ namespace SliceOfPie {
                     Title = pathName.Replace(parts[0] + "-", "").Replace(".txt", ""),
                     Parent = parent,
                     CurrentRevision = revision,
-                    CurrentHash = (id == 0 ? revision.GetHashCode() : hash)
+                    CurrentHash = (id == 0 ? revision.GetHashCode() : hash),
+                    IsMerged = isRevision
                 };
                 parent.Documents.Add(document);
             }
