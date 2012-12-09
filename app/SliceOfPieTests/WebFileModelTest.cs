@@ -9,20 +9,6 @@ namespace SliceOfPie.Tests {
     public class WebFileModelTest {
         WebFileModel model;
 
-        private TestContext testContextInstance;
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext {
-            get {
-                return testContextInstance;
-            }
-            set {
-                testContextInstance = value;
-            }
-        }
-
         [TestInitialize]
         public void Initialize() {
             model = new WebFileModel();
@@ -87,6 +73,16 @@ namespace SliceOfPie.Tests {
         }
 
         /// <summary>
+        /// Tests that trying to remove a project results in an exception
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestRemoveProjectNonexistingProject() {
+            Project p = new Project();
+            model.RemoveProject(p);
+        }
+
+        /// <summary>
         /// Tests that folders are added correctly with reference to their parent.
         /// </summary>
         [TestMethod]
@@ -116,6 +112,16 @@ namespace SliceOfPie.Tests {
             Assert.IsFalse(model.GetProjects("me@hypesystem.dk") //assert that the above is no longer true
                 .First(project => project.Id == p.Id)
                 .GetFolders().Count(folder => folder.Id == f.Id) > 0);
+        }
+
+        /// <summary>
+        /// Test that trying to remove a non-existing folder will result in an exception.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestRemoveFolderNonexistingFolder() {
+            Folder f = new Folder();
+            model.RemoveFolder(f);
         }
 
         /// <summary>
@@ -149,6 +155,16 @@ namespace SliceOfPie.Tests {
         }
 
         /// <summary>
+        /// Asserts that saving a document that does not exist throws an exception
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestSaveDocumentNonexistingDocument() {
+            Document d = new Document();
+            model.SaveDocument(d);
+        }
+
+        /// <summary>
         /// Tests that documents are removed properly
         /// </summary>
         [TestMethod]
@@ -165,6 +181,17 @@ namespace SliceOfPie.Tests {
             Assert.IsFalse(model.GetProjects("me@hypesystem.dk") //assert that the above is no longer true
                 .First(project => project.Id == p.Id)
                 .GetDocuments().Count(doc => doc.Id == d.Id) > 0);
+        }
+
+        /// <summary>
+        /// Asserts that deleting a document that does not exist throws an exception
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestRemoveDocumentNonexistingDocument() {
+            Document d = new Document() { Title = "Fake it 'til you make it!" };
+
+            model.RemoveDocument(d);
         }
     }
 }

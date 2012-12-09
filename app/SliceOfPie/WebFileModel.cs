@@ -179,7 +179,8 @@ namespace SliceOfPie {
                 Document d = dbContext.Documents.First(doc => doc.Id == document.Id);
                 d.Revisions.Add(new Revision() {
                     Content = document.CurrentRevision,
-                    ContentHash = document.CurrentHash
+                    ContentHash = document.CurrentHash,
+                    Timestamp = DateTime.Now
                 });
                 d.CurrentRevision = document.CurrentRevision;
                 d.CurrentHash = document.CurrentHash;
