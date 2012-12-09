@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-//using MvcWebApp.Models;
 using SliceOfPie;
 using System.Data;
 using System.Data.Entity;
@@ -13,7 +12,6 @@ namespace MvcWebApp.Controllers
     public class HomeController : System.Web.Mvc.Controller
     {
         private SliceOfPie.Controller controller;
-        public String mail = "me@michaelstorgaard.com";
 
         public HomeController()
         {
@@ -26,7 +24,7 @@ namespace MvcWebApp.Controllers
 
         public ViewResult Index()
         {
-            return View(controller.GetProjects(mail).ToList());
+            return View(controller.GetProjects(User.Identity.Name).ToList());
             //return View(controller.Projects.ToList());
         }
 
@@ -51,7 +49,7 @@ namespace MvcWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                controller.CreateProject(project.Title, "me@michaelstorgaard.com"); //Might need correction.
+                controller.CreateProject(project.Title, User.Identity.Name);
                 return RedirectToAction("Index");
             }
 
