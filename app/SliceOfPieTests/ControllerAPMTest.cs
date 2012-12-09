@@ -147,7 +147,7 @@ namespace SliceOfPie.Tests {
         [TestMethod]
         public void TestSyncProjects() {
             //TODO: Only test if it is NOT a web-controller.
-            IAsyncResult ar = controller.BeginSyncProjects("me@hypesystem.dk", null, null);
+            IAsyncResult ar = controller.BeginSyncProjects("me@hypesystem.dk", "pw", null, null);
             IEnumerable<Project> projectsSynced = controller.EndSyncProjects(ar);
 
             Assert.IsTrue(projectsSynced.Count() > 0);
