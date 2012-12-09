@@ -292,18 +292,18 @@ namespace SliceOfPie.Tests {
 
         [TestMethod]
         public void TestUploadStructure() {
-            //Model.SyncFiles("me@michaelstorgaard.com");
+            Model.SyncFiles("me@michaelstorgaard.com");
         }
 
         [TestInitialize]
         public void Initialize() {
-            ClearFolder(AppPath);
+            //ClearFolder(AppPath);
             Model = new LocalFileModel();
         }
 
         [TestCleanup]
         public void Cleanup() {
-            ClearFolder(AppPath);
+            //ClearFolder(AppPath);
         }
 
         private void ClearFolder(string path) {
