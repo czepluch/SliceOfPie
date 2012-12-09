@@ -60,7 +60,6 @@ namespace SliceOfPie.Client {
                 (sender, e) => OnSaveDocumentButtonClicked(e) //fire the externally added event(s)
             );
 
-            insertImageButton.Click += new RoutedEventHandler(OpenInsertImagePopUp);
         }
 
         /// <summary>
@@ -97,6 +96,30 @@ namespace SliceOfPie.Client {
             insertImagePopUp.IsOpen = false;
             IsEnabled = true;            
             insertImagePopUpTextBox.Clear();
+        }
+
+        /// <summary>
+        /// This event handler opens the History pop-up window
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OpenHistoryPopUp(object sender, RoutedEventArgs e) {
+            //setup history popup
+            historyPopUpTopLabel.Content = "History for " + Document.Title;
+            //note that the textbox is cleared when the popups were last closed
+            IsEnabled = false;
+            historyPopUp.IsOpen = true;
+            //Select top entry
+        }
+
+        /// <summary>
+        /// This is the click handler for the Close button in the History pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void HistoryPopUpCloseButton_Click(object sender, RoutedEventArgs e) {
+            historyPopUp.IsOpen = false;
+            IsEnabled = true;
         }
 
         #region Event triggers
