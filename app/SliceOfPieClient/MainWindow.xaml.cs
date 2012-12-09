@@ -62,6 +62,7 @@ namespace SliceOfPie.Client {
         /// <param name="userMail">The users mail</param>
         /// <param name="password">The users password</param>
         /// <param name="itemToOpen">The item to open, when the projects are reloaded. If this is null, the top project will be opened.</param>
+        /// <returns>Whether or not the syncing was succesfull</returns>
         private bool SyncProjects(string userMail, string password, IListableItem itemToOpen = null) {
             bool succesfullySynced = false;
             //Using controllers APM to load the projects into the Document Explorer
@@ -76,6 +77,8 @@ namespace SliceOfPie.Client {
             } , null);
             return succesfullySynced;
         }
+
+         
 
         /// <summary>
         /// This method refreshes the projects (local only)
@@ -284,6 +287,7 @@ namespace SliceOfPie.Client {
         private void OpenLoginWindow(object sender, RoutedEventArgs e) {
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
+            loginPopUpErrorLabel.Content = " "; //to prevent the lines jumping when the error label gets set and changes height
             loginPopUp.IsOpen = true;
             loginPopUpUserTextBox.Focus();
         }
@@ -423,7 +427,8 @@ namespace SliceOfPie.Client {
             loginPopUp.IsOpen = false;
             IsEnabled = true;
             loginPopUpUserTextBox.Clear();
-            loginPopUpPasswordTextBox.Clear();
+            loginPopUpPasswordBox.Clear();
+            loginPopUpErrorLabel.Content = "";
         }
 
         /// <summary>
@@ -432,11 +437,12 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void loginPopUpLoginButton_Click(object sender, RoutedEventArgs e) {
-            if(SyncProjects(loginPopUpUserTextBox.Text, loginPopUpPasswordTextBox.Text)) {
+            if(SyncProjects(loginPopUpUserTextBox.Text, loginPopUpPasswordBox.Password)) {
                 loginPopUp.IsOpen = false;
                 IsEnabled = true;
                 loginPopUpUserTextBox.Clear();
-                loginPopUpPasswordTextBox.Clear();
+                loginPopUpPasswordBox.Clear();
+                loginPopUpErrorLabel.Content = "";
             }
             else {
                 loginPopUpErrorLabel.Content = "An error occured. Please check your username and password.";
