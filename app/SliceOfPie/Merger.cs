@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SliceOfPie;
+using System.Diagnostics;
 
 namespace SliceOfPie {
     public class Merger {
@@ -55,7 +56,7 @@ namespace SliceOfPie {
                         ++o; //not necessary, but it lets us skip a round (without this, the next run would end in step 7.b)
                     }
                 }
-                //PrintArray(merged);
+                PrintArray(merged);
             }
             Document ret = new Document();
             for (int i = 0; i < merged.Length; i++) {
@@ -78,13 +79,36 @@ namespace SliceOfPie {
         #endregion
         public static Document Merge(Document current, Document old) {
             //Null checks
-            if (current.CurrentRevision == null && old.CurrentRevision == null) return null;
-            if (current.CurrentRevision == null) return old;
-            if (current.CurrentRevision == null) return current;
+            if (current == null || current.CurrentRevision == null) {
+                if (old == null || old.CurrentRevision == null) return null;
+                return old;
+            } 
+            if (old == null || old.CurrentRevision == null) {
+                return current;
+            }
 
             String[] arrC = current.CurrentRevision.Split('\n');
             String[] arrO = old.CurrentRevision.Split('\n');
             return Merge(arrC, arrO);
+        }
+
+        #region comments
+        /// <summary>
+        /// Produces a merge of current and old. Lines from current will take precedence.
+        /// </summary>
+        /// <param name="current">"newest" Document</param>
+        /// <param name="old">"oldest" Document</param>
+        /// <returns>Merged document</returns>
+        #endregion
+        public static String Merge(String current, String old) {
+            //Null checks
+            if (current == null && old == null) return null;
+            if (current == null) return old;
+            if (old == null) return current;
+
+            String[] arrC = current.Split('\n');
+            String[] arrO = old.Split('\n');
+            return Merge(arrC, arrO).CurrentRevision;
         }
 
         /// <summary>
@@ -105,10 +129,10 @@ JONATHAN BARKER'S JOURNAL
 3 May. Bistritz. Left Munich at 8:35 p. M., on ist May, ar- 
 riving at Vienna early next morning; should have arrived at 
 6:46, but train was an hour late. Buda-Pesth seems a wonderful 
+IMMAH FIRING MAH LAZOR
 place, from the glimpse which I got of it from the train and the 
 little I could walk through the streets. I feared to go very far 
 from the station, as we had arrived late and would start as near 
-the correct time as possible. The impression I had was that we 
 were leaving the West and entering the East; the most western 
 of splendid bridges over the Danube, which is here of noble width 
 and depth, took us among the traditions of Turkish rule. "
@@ -125,14 +149,12 @@ JONATHAN BARKER'S JOURNAL
 
 3 May. Bistritz. Left Munich at 8:35 p. M., on ist May, ar- 
 riving at Vienna early next morning; should have arrived at 
-6:46, but train was an hour late. Buda-Pesth seems a wonderful 
+6:46, but train wars an raptors, raptors everywhere! Buda-Pesth seems a wonderful 
 place, from the glimpse which I got of it from the train and the 
 little I could walk through the streets. I feared to go very far 
-I'VE BEEN WORKING ON THE RAILROAD, ALL THE LIFE-LONG DAYAYAYAY 
 from the station, as we had arrived late and would start as near 
 the correct time as possible. The impression I had was that we 
 were leaving the West and entering the East; the most western 
-of splendid bridges over the Danube, which is here of noble width 
 and depth, took us among the traditions of Turkish rule. ";
 
             Document merged = Merger.Merge(c, o);
@@ -142,13 +164,14 @@ and depth, took us among the traditions of Turkish rule. ";
             Console.ReadLine();
         }
 
-        private static void PrintDoc(Document d) {
+        public static void PrintDoc(Document d) {
             PrintArray(d.CurrentRevision.Split('\n'));
         }
-        
-        private static void PrintArray(String[] arr) {
+
+        //Only runs during debug runs
+        [Conditional("DEBUG")] private static void PrintArray(String[] arr) {
             for (int i = 0; i < arr.Length; i++) {
-                Console.WriteLine("[{0}] {1}", i, arr[i]);
+                System.Diagnostics.Debug.WriteLine("[{0}] {1}", i, arr[i]);
             }
         }
     }

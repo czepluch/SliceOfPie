@@ -49,16 +49,23 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="DocumentExplorer.xaml.cs">
+      <DependentUpon>DocumentExplorer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="FolderContentView.xaml.cs">
       <DependentUpon>FolderContentView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IconFactory.cs" />
+    <Compile Include="IListableItemIconExtension.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TextEditor.xaml.cs">
       <DependentUpon>TextEditor.xaml</DependentUpon>
     </Compile>
+    <Page Include="DocumentExplorer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="TextEditor.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

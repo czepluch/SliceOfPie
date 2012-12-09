@@ -7,20 +7,20 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <DockPanel>
         <WrapPanel DockPanel.Dock="Top" Height="50" Background="#FFDDDDDD">
-            <Button Name="CreateDocumentButton" Margin="10,0,10,0">
+            <Button Name="createDocumentButton" Margin="10,0,10,0">
                 <StackPanel Orientation="Vertical">
                     <Image Width="30" Source="Icons/document-icon.png"/>
                     <TextBlock>Create document</TextBlock>
                 </StackPanel>
             </Button>
-            <Button Name="CreateFolderButton" Margin="10,0,10,0">
+            <Button Name="createFolderButton" Margin="10,0,10,0">
                 <StackPanel Orientation="Vertical">
                     <Image Width="30" Source="Icons/folder-icon.png"/>
                     <TextBlock>Create folder</TextBlock>
                 </StackPanel>
             </Button>
         </WrapPanel>
-        <ListView Name="FolderListView" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <ListView Name="folderListView" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <WrapPanel Orientation="Horizontal"/>

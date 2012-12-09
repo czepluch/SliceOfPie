@@ -16,23 +16,25 @@ using SliceOfPie;
 namespace SliceOfPie.Client {
     /// <summary>
     /// Interaction logic for the Text Editor User Control.
+    /// This UserControl shows a Text Editor based on its Document property.
     /// </summary>
     public partial class TextEditor : UserControl {
         private Document _document; //backing field
 
         /// <summary>
         /// This is the Document currently shown in the Text Editor
+        /// Changing this will change what is shown.
         /// </summary>
         public Document Document {
             get {
                 if (_document != null) { //if it has been set at least once
-                    _document.CurrentRevision = TextField.Text; //Update revision based on text before returning
+                    _document.CurrentRevision = textField.Text; //Update revision based on text before returning
                 }
                 return _document;
             }
             set {
                 _document = value;
-                TextField.Text = _document.CurrentRevision;
+                textField.Text = _document.CurrentRevision;
             }
         }
 
@@ -43,6 +45,7 @@ namespace SliceOfPie.Client {
 
         /// <summary>
         /// Creates a Text Editor with the functionality to show and edit Documents
+        /// For content to be shown, the Document property must be set.
         /// </summary>
         public TextEditor() {
             InitializeComponent();
@@ -57,7 +60,7 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This method triggers the SaveDocumentButtonClicked event
         /// </summary>
-        /// <param name="e">The event arguments</param>
+        /// <param name="e">The event arguments.</param>
         private void OnSaveDocumentButtonClicked(RoutedEventArgs e) {
             if (SaveDocumentButtonClicked != null) {
                 SaveDocumentButtonClicked(this, e);
