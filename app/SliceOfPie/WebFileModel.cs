@@ -214,14 +214,17 @@ namespace SliceOfPie {
 
         public override void SaveDocument(Document document) {
             using (var dbContext = new sliceofpieEntities2()) {
+                Revision latestRevFromWeb = dbContext.Revisions.First(rev => rev.DocumentId == document.Id);
+                string merge = Merger.Merge(document.CurrentRevision, latestRevFromWeb.Content); //Merrrrrge
+
                 Document d = dbContext.Documents.First(doc => doc.Id == document.Id);
                 d.Revisions.Add(new Revision() {
-                    Content = document.CurrentRevision,
-                    ContentHash = document.CurrentHash,
+                    Content = merge,
+                    ContentHash = merge.GetHashCode(),
                     Timestamp = DateTime.Now
                 });
-                d.CurrentRevision = document.CurrentRevision;
-                d.CurrentHash = document.CurrentHash;
+                d.CurrentRevision = merge;
+                d.CurrentHash = merge.GetHashCode();
                 dbContext.SaveChanges();
             }
         }
