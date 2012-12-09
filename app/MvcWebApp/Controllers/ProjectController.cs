@@ -4,93 +4,105 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using SliceOfPie;
+using System.Data;
+using System.Data.Entity;
 
-namespace MvcWebApp.Controllers {
-    public class ProjectController : System.Web.Mvc.Controller {
+namespace MvcWebApp.Controllers
+{
+    public class ProjectController : System.Web.Mvc.Controller
+    {
         private SliceOfPie.Controller controller;
 
-        public ProjectController() {
+        public ProjectController()
+        {
             SliceOfPie.Controller.IsWebController = true;
             controller = SliceOfPie.Controller.Instance;
         }
-        //
-        // GET: /Folder/
 
-        public ActionResult Index(int id) {
-            return View(controller.GetProjects(User.Identity.Name).First(p => p.Id == id));
+        //
+        // GET: /Home(Projects)/
+
+        public ActionResult Index()
+        {
+            if (Request.IsAuthenticated)
+                return View(controller.GetProjects(User.Identity.Name).ToList());
+            else
+                return RedirectToAction("LogOn", "Account");
+            //return View(controller.Projects.ToList());
         }
 
-        //
-        // GET: /Folder/Details/5
-
-        public ActionResult Details(int id) {
+        public ActionResult About()
+        {
             return View();
         }
 
         //
-        // GET: /Folder/Create
+        // GET: /Home/Create
 
-        public ActionResult Create() {
+        public ActionResult Create()
+        {
             return View();
         }
 
         //
-        // POST: /Folder/Create
+        // POST: /Home/Create
 
         [HttpPost]
-        public ActionResult Create(FormCollection collection) {
-            try {
-                // TODO: Add insert logic here
-
+        public ActionResult Create(Project project)
+        {
+            if (ModelState.IsValid)
+            {
+                controller.CreateProject(project.Title, User.Identity.Name);
                 return RedirectToAction("Index");
             }
-            catch {
-                return View();
-            }
+
+            return View(project);
         }
 
         //
-        // GET: /Folder/Edit/5
+        // GET: /Home(Projects)/Delete/1
 
-        public ActionResult Edit(int id) {
-            return View();
+        public ActionResult Delete(Project p) {
+            if (p == null) {
+                return HttpNotFound();
+            }
+            return View(p);
         }
 
         //
-        // POST: /Folder/Edit/5
+        // POST: /Home(Projects)/Delete/5
 
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection) {
-            try {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+        [HttpPost, ActionName("Delete")]
+        public ActionResult DeleteConfirmed(Project p) {
+            controller.RemoveProject(p);
+            if (p == null) {
+                return HttpNotFound();
             }
-            catch {
-                return View();
-            }
+            return RedirectToAction("Index");
         }
 
-        //
-        // GET: /Folder/Delete/5
+        ////
+        //// GET: /Home(Projects)/Edit/5
 
-        public ActionResult Delete(int id) {
-            return View();
-        }
+        //public ActionResult Edit(Project p) {
+        //    controller.RenameProject(p);
+        //    if (project == null) {
+        //        return HttpNotFound();
+        //    }
+        //    return View(project);
+        //}
 
-        //
-        // POST: /Folder/Delete/5
+        ////
+        //// POST: /Home(Projects)/Edit/5
 
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection) {
-            try {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch {
-                return View();
-            }
-        }
+        //[HttpPost]
+        //public ActionResult Edit(Project project) {
+        //    if (ModelState.IsValid) {
+        //        controller.Entry(project).State = EntityState.Modified;
+        //        controller.SaveChanges();
+        //        return RedirectToAction("Index");
+        //    }
+        //    return View(project);
+        //}
     }
 }

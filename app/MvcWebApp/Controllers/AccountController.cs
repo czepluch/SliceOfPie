@@ -37,7 +37,7 @@ namespace MvcWebApp.Controllers {
                     //    && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\")) {
                     //    return Redirect(returnUrl);
                     //} else {
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Project");
                     //}
                 } else {
                     ModelState.AddModelError("", "The user name or password provided is incorrect.");
