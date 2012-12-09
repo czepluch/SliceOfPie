@@ -214,8 +214,13 @@ namespace SliceOfPie {
 
         public override void SaveDocument(Document document) {
             using (var dbContext = new sliceofpieEntities2()) {
-                Revision latestRevFromWeb = dbContext.Revisions.First(rev => rev.DocumentId == document.Id);
-                string merge = Merger.Merge(document.CurrentRevision, latestRevFromWeb.Content); //Merrrrrge
+                Revision latestRevFromWeb = dbContext.Revisions.FirstOrDefault(rev => rev.DocumentId == document.Id);
+
+                string merge;
+
+                if (latestRevFromWeb != null)
+                    merge = Merger.Merge(document.CurrentRevision, latestRevFromWeb.Content); //Merrrrrge
+                else merge = document.CurrentRevision;
 
                 Document d = dbContext.Documents.First(doc => doc.Id == document.Id);
                 d.Revisions.Add(new Revision() {

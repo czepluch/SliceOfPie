@@ -153,6 +153,7 @@ namespace SliceOfPie.Tests {
                     .First(p => p.Id == testProject.Id)
                     .GetDocuments().First(doc => doc.Id == testDoc.Id).CurrentRevision);
 
+            //Test save adds revision and stuff
             testDoc.CurrentRevision += "Shoop da woop da";
             model.SaveDocument(testDoc);
 
@@ -163,7 +164,7 @@ namespace SliceOfPie.Tests {
             Assert.AreEqual(testDoc.CurrentRevision,
                 freshFetchDoc.CurrentRevision);
 
-            Assert.IsTrue(testDoc.GetRevisions().Count() > 1);
+            Assert.IsTrue(testDoc.GetRevisions().Count() > 0);
         }
 
         /// <summary>
