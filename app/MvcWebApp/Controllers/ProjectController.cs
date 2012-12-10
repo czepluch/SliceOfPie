@@ -33,7 +33,7 @@ namespace MvcWebApp.Controllers
         public ActionResult Index(int id)
         {
             if (Request.IsAuthenticated)
-                return View(controller.GetProjects(User.Identity.Name).First(p => p.Id == id));
+                return View(controller.GetProjectDirectly(id));
             else
                 return RedirectToAction("LogOn", "Account");
         }

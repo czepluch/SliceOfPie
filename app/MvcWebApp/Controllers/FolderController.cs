@@ -16,8 +16,8 @@ namespace MvcWebApp.Controllers {
         //
         // GET: /Folder/
 
-        public ActionResult Index(int id) { //TODO: Does not work recursively
-            return View(controller.GetProjects(User.Identity.Name).First(p => p.GetFolders().Count(f => f.Id == id) > 0).GetFolders().First(f => f.Id == id));
+        public ActionResult Index(int id) {
+            return View(controller.GetFolderDirectly(id));
         }
 
         //

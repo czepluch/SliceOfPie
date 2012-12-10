@@ -14,8 +14,8 @@ namespace MvcWebApp.Controllers {
             controller = SliceOfPie.Controller.Instance;
         }
 
-        public ActionResult Edit(int id) { //TODO: How to make work recursively?
-            return View();
+        public ActionResult Edit(int id) {
+            return View(controller.GetDocumentDirectly(id));
         }
 
         public ActionResult Create() {
