@@ -100,7 +100,7 @@
                         <ListBoxItem>22-10-2012</ListBoxItem>
                         <ListBoxItem>10-12-1954</ListBoxItem>
                     </ListBox>
-                    <TextBox Name="historyTextBox" Grid.Column="1" Background="#FFFED162" FontFamily="Consolas" FontSize="11" Padding="5" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Name="historyPopUpTextBox" Grid.Column="1" Background="#FFFED162" FontFamily="Consolas" FontSize="11" Padding="5" AcceptsReturn="True" TextWrapping="Wrap"/>
                 </Grid>
             </DockPanel>
         </Popup>

@@ -551,9 +551,10 @@ namespace SliceOfPie.Client {
 
         private void SetUpHistoryPopUp() {
             historyList.Items.Clear();
-            foreach (Revision revision in textEditor.Document.Revisions) {
+            foreach (Revision revision in controller.DownloadRevisions(textEditor.Document)) {
                 ListBoxItem item = new ListBoxItem() { Content = revision.Timestamp };
-                item.MouseLeftButtonUp += new MouseButtonEventHandler((sender, e) => historyTextBox.Text = revision.Content);
+                string revisionContent = revision.Content;
+                item.MouseLeftButtonUp += new MouseButtonEventHandler((sender, e) => historyPopUpTextBox.Text = revisionContent);
                 historyList.Items.Add(item);
             }
         }
