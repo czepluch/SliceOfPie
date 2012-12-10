@@ -24,12 +24,14 @@ namespace SliceOfPie.Client {
         private static SynchronizationContext syncContext = SynchronizationContext.Current; //for callbacks to be called on the UI thread
 
         private Controller controller;
+        private ContentWrapper folderContentViewWrapper, textEditorWrapper;
         private FolderContentView folderContentView;
         private TextEditor textEditor;
 
         private ContextMenu projectContextMenu, folderContextMenu, documentContextMenu;
 
         private IListableItem currentContextItem;
+        private string imageStartTag = "<IMAGEURL{" , imageEndTag = "}>";
 
         /// <summary>
         /// Creates the Main Window for the Slice of Pie application
@@ -45,12 +47,31 @@ namespace SliceOfPie.Client {
             documentExplorer.ItemMouseRightButtonUp += new EventHandler<ListableItemEventArgs>(DocumentExplorerItemMouseRightButtonUp);
             documentExplorer.ItemEnterKeyUp += new EventHandler<ListableItemEventArgs>(DocumentExplorerItemEnterKeyUp);
 
+            //FolderContentViewWrapper
+            folderContentViewWrapper = new ContentWrapper();
+            folderContentViewWrapper.addMenuButton("Create document", "/Images/new-document.png", new RoutedEventHandler(OpenCreateDocumentWindow));
+            folderContentViewWrapper.addMenuButton("Create folder", "/Images/new-folder.png", new RoutedEventHandler(OpenCreateFolderWindow));
+            
+            //Create the underlying folderContentView
             folderContentView = new FolderContentView();
             folderContentView.ItemDoubleClicked += new EventHandler<ListableItemEventArgs>(FolderContentView_DoubleClick);
-            folderContentView.CreateDocumentButtonClicked += (new RoutedEventHandler(OpenCreateDocumentWindow));
-            folderContentView.CreateFolderButtonClicked += (new RoutedEventHandler(OpenCreateFolderWindow));
+            //Add to wrapper
+            folderContentViewWrapper.Content = folderContentView;
 
+            //TextEditorViewWrapper
+            textEditorWrapper = new ContentWrapper();
+            textEditorWrapper.addMenuButton("Save document", "/Images/save-document.png", new RoutedEventHandler(SaveDocumentButton_Click));
+            textEditorWrapper.addMenuButton("Insert image", "/Images/insert-image.png", new RoutedEventHandler(OpenInsertImagePopUp));
+            textEditorWrapper.addMenuButton("Show history", "/Images/show-history.png", new RoutedEventHandler(OpenHistoryPopUp));
+
+            //Create the underlying text editor
             textEditor = new TextEditor();
+            //Add to wrapper
+            textEditorWrapper.Content = textEditor;
+
+
+            
+
 
             RefreshLocalProjects();
         }
@@ -118,11 +139,11 @@ namespace SliceOfPie.Client {
             currentContextItem = item;
             if (item is IItemContainer) {
                 folderContentView.ItemContainer = item as IItemContainer;
-                mainContent.Content = folderContentView;
+                mainContent.Content = folderContentViewWrapper;
             }
             else {
                 textEditor.Document = item as Document;
-                mainContent.Content = textEditor;
+                mainContent.Content = textEditorWrapper;
             }
         }
 
@@ -469,5 +490,92 @@ namespace SliceOfPie.Client {
         }
 
         #endregion
+
+
+
+
+        /// <summary>
+        /// This event handler opens the Insert Image pop-up window
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OpenInsertImagePopUp(object sender, RoutedEventArgs e) {
+            //note that the textbox is cleared when the popups were last closed
+            IsEnabled = false;
+            insertImagePopUp.IsOpen = true;
+            insertImagePopUpTextBox.Focus();
+        }
+
+        /// <summary>
+        /// This is the click handler for the Cancel button in the Insert Image pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void InsertImagePopUpCancelButton_Click(object sender, RoutedEventArgs e) {
+            insertImagePopUp.IsOpen = false;
+            IsEnabled = true;
+            insertImagePopUpTextBox.Clear();
+        }
+
+
+
+        /// <summary>
+        /// This is the click handler for the Insert button in the Insert Image pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void InsertImagePopUpInsertButton_Click(object sender, RoutedEventArgs e) {
+            string link = insertImagePopUpTextBox.Text;
+            int caretIndex = textEditor.CaretIndex;
+            textEditor.Text = textEditor.Text.Insert(caretIndex, imageStartTag + link + imageEndTag);
+            textEditor.CaretIndex = caretIndex + imageStartTag.Length + link.Length + imageEndTag.Length;
+            insertImagePopUp.IsOpen = false;
+            IsEnabled = true;
+            insertImagePopUpTextBox.Clear();
+            textEditor.FocusText();
+        }
+
+        /// <summary>
+        /// This event handler opens the History pop-up window
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OpenHistoryPopUp(object sender, RoutedEventArgs e) {
+            //setup history popup
+            SetUpHistoryPopUp();
+            historyPopUpTopLabel.Content = "History for " + textEditor.Document.Title;
+            IsEnabled = false;
+            historyPopUp.IsOpen = true;
+            //Select top entry
+        }
+
+        private void SetUpHistoryPopUp() {
+            historyList.Items.Clear();
+            foreach (Revision revision in textEditor.Document.Revisions) {
+                ListBoxItem item = new ListBoxItem() { Content = revision.Timestamp };
+                item.MouseLeftButtonUp += new MouseButtonEventHandler((sender, e) => historyTextBox.Text = revision.Content);
+                historyList.Items.Add(item);
+            }
+        }
+
+        /// <summary>
+        /// This is the click handler for the Close button in the History pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void HistoryPopUpCloseButton_Click(object sender, RoutedEventArgs e) {
+            historyPopUp.IsOpen = false;
+            IsEnabled = true;
+        }
+
+
+        /// <summary>
+        /// Saves the current document
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void SaveDocumentButton_Click(object sender, RoutedEventArgs e) {
+            controller.BeginSaveDocument(textEditor.Document, null, null);
+        }
     }
 }

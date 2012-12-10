@@ -129,7 +129,19 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Images\" />
+    <Resource Include="Images\new-document.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\new-folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\save-document.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\insert-image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\show-history.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

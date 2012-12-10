@@ -17,9 +17,9 @@ namespace SliceOfPie.Client {
     /// Interaction logic for ContentWrapper.xaml
     /// </summary>
     public partial class ContentWrapper : UserControl {
-        public ContentControl Content {
-            get { return _content; }
-            set { _content = value; }
+        
+        public new object Content {
+            set { _contentControl.Content = value; }
         }
 
         public ContentWrapper() {
@@ -28,7 +28,7 @@ namespace SliceOfPie.Client {
 
         public void addMenuButton(string text, string relativeImagePath, RoutedEventHandler clickHandler) {
             //Create the button and set the click handler
-            Button button = new Button() { Margin = new Thickness(10, 5, 10, 5) };
+            Button button = new Button() { Margin = new Thickness(10, 5, 0, 5) };
             button.Click += new RoutedEventHandler(clickHandler);
             //Create a stackpanel to hold image and text and add it to button
             StackPanel sp = new StackPanel() { Orientation = Orientation.Vertical };
@@ -37,7 +37,7 @@ namespace SliceOfPie.Client {
             Image image = new Image() { Width = 30, Height = 30, Source = ImageUtil.CreateBitmapImage(relativeImagePath) };
             sp.Children.Add(image);
             //create and add label to stackpanel
-            Label label = new Label() { Content = text };
+            Label label = new Label() { Padding = new Thickness(0), Content = text };
             sp.Children.Add(label);
             //Setup done - add the button to the menubar
             menu.Children.Add(button);

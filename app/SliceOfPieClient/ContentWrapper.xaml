@@ -6,9 +6,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="400">
     <DockPanel>
-        <StackPanel Name="menu" Orientation="Horizontal" DockPanel.Dock="Top" MinWidth="350" Height="60" Background="#FFDDDDDD">
+        <StackPanel x:Name="menu" x:FieldModifier="private" Orientation="Horizontal" DockPanel.Dock="Top" MinWidth="350" Height="60" Background="#FFDDDDDD">
             
         </StackPanel>
-        <ContentControl Name="_content"/>
+        <ContentControl x:Name="_contentControl" x:FieldModifier="private" />
     </DockPanel>
 </UserControl>

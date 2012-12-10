@@ -36,16 +36,6 @@ namespace SliceOfPie.Client {
         #region Events
 
         /// <summary>
-        /// This event is fired when the button to create a Document is clicked
-        /// </summary>
-        public event RoutedEventHandler CreateDocumentButtonClicked;
-        
-        /// <summary>
-        /// This event is fired when the button to create a Folder is clicked
-        /// </summary>
-        public event RoutedEventHandler CreateFolderButtonClicked;
-
-        /// <summary>
         /// This event is fired when an item is double clicked
         /// </summary>
         public event EventHandler<ListableItemEventArgs> ItemDoubleClicked;
