@@ -58,7 +58,7 @@
     <Compile Include="FolderContentView.xaml.cs">
       <DependentUpon>FolderContentView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IListableItemIconExtension.cs" />
+    <Compile Include="IListableItemExtension.cs" />
     <Compile Include="ImageUtil.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -142,6 +142,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\show-history.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\folder-icon-conflict.png" />
+    <Resource Include="Icons\project-icon-conflict.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
