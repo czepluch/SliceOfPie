@@ -53,9 +53,9 @@ namespace MvcWebApp.Controllers {
         // POST: /Folder/Delete/5
 
         [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(Folder f) {
-            controller.RemoveFolder(f);
-            if (f == null) {
+        public ActionResult DeleteConfirmed(int id) {
+            controller.RemoveFolder(controller.GetFolderDirectly(id));
+            if (id == null) {
                 return HttpNotFound();
             }
             return RedirectToAction("Index");
