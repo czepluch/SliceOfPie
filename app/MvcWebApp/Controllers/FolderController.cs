@@ -23,7 +23,7 @@ namespace MvcWebApp.Controllers {
         //
         // GET: /Folder/Create
 
-        public ActionResult Create() {
+        public ActionResult Create(int id, Type parentType) {
             return View();
         }
 
@@ -31,12 +31,13 @@ namespace MvcWebApp.Controllers {
         // POST: /Folder/Create
 
         [HttpPost]
-        public ActionResult Create(Folder folder, Project p) {
+        public ActionResult Create(string folderTitle, string parentType, int parentId) {
             if (ModelState.IsValid){
-                controller.CreateFolder(folder.Title, User.Identity.Name, folder.Parent);
-                return RedirectToAction("Index");
+                var parent = new Folder();
+                Folder result = controller.CreateFolder(folderTitle, User.Identity.Name, parent);
+                return RedirectToAction("Index", result);
             }
-                return View(p);
+            return View();
         }
 
         //
@@ -55,10 +56,7 @@ namespace MvcWebApp.Controllers {
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(int id) {
             controller.RemoveFolder(controller.GetFolderDirectly(id));
-            if (id == null) {
-                return HttpNotFound();
-            }
-            return RedirectToAction("Index");
+            return RedirectToAction("Overview","Project");
         }
     }
 }
