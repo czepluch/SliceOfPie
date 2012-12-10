@@ -597,7 +597,7 @@ namespace SliceOfPie {
         /// Download revisions for a document.
         /// </summary>
         /// <param name="document"></param>
-        public void DownloadRevisions(Document document) {
+        public override void DownloadRevisions(Document document) {
             using (var dbContext = new sliceofpieEntities2()) {
                 var revisions = from revision in dbContext.Revisions
                                 where revision.DocumentId == document.Id
