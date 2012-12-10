@@ -6,22 +6,17 @@ using System.Web.Mvc;
 using SliceOfPie;
 
 namespace MvcWebApp.Controllers {
-    public class FolderController : System.Web.Mvc.Controller {
+    public class DocumentController : System.Web.Mvc.Controller {
         private SliceOfPie.Controller controller;
 
-        public FolderController() {
+        public DocumentController() {
             SliceOfPie.Controller.IsWebController = true;
             controller = SliceOfPie.Controller.Instance;
         }
-        //
-        // GET: /Folder/
 
-        public ActionResult Index(int id) { //TODO: Does not work recursively
-            return View(controller.GetProjects(User.Identity.Name).First(p => p.GetFolders().Count(f => f.Id == id) > 0).GetFolders().First(f => f.Id == id));
+        public ActionResult Edit(int id) { //TODO: How to make work recursively?
+            return View();
         }
-
-        //
-        // GET: /Folder/Create
 
         public ActionResult Create() {
             return View();
@@ -42,8 +37,6 @@ namespace MvcWebApp.Controllers {
             }
         }
 
-        //
-        // GET: /Folder/Delete/5
 
         public ActionResult Delete(int id) {
             return View();
