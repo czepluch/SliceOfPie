@@ -197,7 +197,9 @@ namespace SliceOfPie {
         /// <param name="p">Project to share</param>
         /// <param name="emails">Emails as an iterable of strings</param>
         public void ShareProject(Project p, IEnumerable<string> emails) {
-            throw new NotImplementedException();
+            foreach (string email in emails) {
+                userModel.ShareProject(p.Id, email);
+            }
         }
 
         #endregion
@@ -364,6 +366,20 @@ namespace SliceOfPie {
         /// <seealso cref="BeginRemoveDocument"/>
         public void EndRemoveDocument(IAsyncResult asyncResult) {
             apmNoResultHelper(asyncResult);
+        }
+
+        #endregion
+
+        #region Download Revisions
+
+        /// <summary>
+        /// Download revisions for a specific Document and add them to internal collection.
+        /// </summary>
+        /// <param name="d"></param>
+        public IEnumerable<Revision> DownloadRevisions(Document d) {
+            foreach (Revision r in fileModel.DownloadRevisions(d)) {
+                yield return r;
+            }
         }
 
         #endregion

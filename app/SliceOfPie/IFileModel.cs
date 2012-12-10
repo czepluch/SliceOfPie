@@ -81,5 +81,11 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="userMail">Email of user</param>
         public abstract void SyncFiles(string userMail);
+
+        /// <summary>
+        /// Download revisions for a specific document and save them in internal collection.
+        /// </summary>
+        /// <param name="document"></param>
+        public abstract IEnumerable<Revision> DownloadRevisions(Document document);
     }
 }

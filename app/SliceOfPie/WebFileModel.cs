@@ -245,5 +245,9 @@ namespace SliceOfPie {
         public override void SyncFiles(string userMail) {
             throw new NotSupportedException("Synchronization is not supported from web, as you should simply GetProjects ever time...");
         }
+
+        public override IEnumerable<Revision> DownloadRevisions(Document document) {
+            throw new NotImplementedException();
+        }
     }
 }

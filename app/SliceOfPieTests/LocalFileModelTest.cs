@@ -292,7 +292,56 @@ namespace SliceOfPie.Tests {
 
         [TestMethod]
         public void TestUploadStructure() {
-            //Model.SyncFiles("me@michaelstorgaard.com");
+            //IEnumerable<Project> projects = Model.GetProjects("local");
+            //Project project = projects.First();
+
+            //Folder folder1 = Model.AddFolder(project, "TestFolder1");
+            //Document document1 = Model.AddDocument(project, "TestDocument1");
+
+            //Folder folder2 = Model.AddFolder(folder1, "TestFolder2");
+            //Document document2 = Model.AddDocument(folder1, "TestDocument2");
+
+            //Model.UploadStructure("common@test.mail");
+        }
+
+        [TestMethod]
+        public void TestDownloadRevisions() {
+            IEnumerable<Project> projects = Model.GetProjects("local");
+            Project project = projects.First();
+
+            Document document1 = Model.AddDocument(project, "TestDocument1");
+
+            Model.UploadStructure("common@test.mail");
+            Model.FindProjects();
+            projects = Model.GetProjects("local");
+            project = projects.First();
+            document1 = project.Documents.First();
+
+            document1.CurrentRevision = "Testcontent";
+            Model.SaveDocument(document1);
+
+            Model.UploadStructure("common@test.mail");
+            Model.FindProjects();
+            projects = Model.GetProjects("local");
+            project = projects.First();
+            document1 = project.Documents.First();
+
+            IEnumerable<Revision> revisions = Model.DownloadRevisions(document1);
+
+            Assert.AreEqual(2, revisions.Count());
+
+            int i = 0;
+            foreach (Revision revision in revisions) {
+                switch (i) {
+                    case 0:
+                        Assert.AreEqual("", revision.Content);
+                        break;
+                    case 1:
+                        Assert.AreEqual("Testcontent", revision.Content);
+                        break;
+                }
+                i++;
+            }
         }
 
         [TestInitialize]
