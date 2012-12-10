@@ -288,5 +288,9 @@ namespace SliceOfPie {
             GetRevisions(result);
             return result;
         }
+
+        public override IEnumerable<Revision> DownloadRevisions(Document document) {
+            throw new InvalidOperationException("Not supported in web");
+        }
     }
 }

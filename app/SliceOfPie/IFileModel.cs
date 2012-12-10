@@ -104,5 +104,10 @@ namespace SliceOfPie {
         /// <param name="id">id of document</param>
         /// <returns>document</returns>
         public abstract Document GetDocument(int id);
+
+        /// Download revisions for a specific document and save them in internal collection.
+        /// </summary>
+        /// <param name="document"></param>
+        public abstract IEnumerable<Revision> DownloadRevisions(Document document);
     }
 }

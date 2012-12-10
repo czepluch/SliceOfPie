@@ -38,5 +38,36 @@ namespace SliceOfPie {
             return userValid;
         }
 
+        public void ShareProject(int projectId, string userMail) {
+            bool userExists = false;
+            using (var dbContext = new sliceofpieEntities2()) {
+                if (dbContext.Users.Count(dbUser => dbUser.Email.Equals(userMail)) > 0) {
+                    userExists = true;
+                }
+            }
+            if (!userExists) {
+                throw new ArgumentException("User does not exist");
+            }
+            bool projectUserExists = true;
+            using (var dbContext = new sliceofpieEntities2()) {
+                var projectUsers = from projectUser in dbContext.ProjectUsers
+                                   where projectUser.ProjectId == projectId && projectUser.UserEmail == userMail
+                                   select projectUser;
+                if (projectUsers.Count() == 0) {
+                    projectUserExists = false;
+                }
+            }
+            if (projectUserExists) {
+                throw new ArgumentException("User is already sharing this project");
+            }
+            using (var dbContext = new sliceofpieEntities2()) {
+                ProjectUser projectUser = new ProjectUser();
+                projectUser.ProjectId = projectId;
+                projectUser.UserEmail = userMail;
+                dbContext.ProjectUsers.AddObject(projectUser);
+                dbContext.SaveChanges();
+            }
+        }
+
     }
 }

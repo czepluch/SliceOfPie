@@ -197,7 +197,50 @@ namespace SliceOfPie {
         /// <param name="p">Project to share</param>
         /// <param name="emails">Emails as an iterable of strings</param>
         public void ShareProject(Project p, IEnumerable<string> emails) {
-            throw new NotImplementedException();
+            foreach (string email in emails) {
+                userModel.ShareProject(p.Id, email);
+            }
+        }
+
+        /// <summary>
+        /// Helper facilitating asynchronous sharing of projects
+        /// </summary>
+        /// <param name="asyncResult">AsyncResultNoResult&lt;Project, IEnumerable&lt;string&gt;&gt;</param>
+        private void ShareProjectAsyncHelper(object asyncResult) {
+            AsyncResultNoResult<Project, IEnumerable<string>> ar = (AsyncResultNoResult<Project, IEnumerable<string>>)asyncResult;
+            try {
+                ShareProject(ar.Parameter1, ar.Parameter2);
+                ar.SetAsCompleted(null, false);
+            }
+            catch (Exception e) {
+                ar.SetAsCompleted(e, false);
+            }
+        }
+
+        /// <summary>
+        /// Starts sharing a project using APM.
+        /// </summary>
+        /// <param name="p">Project to share</param>
+        /// <param name="emails">Emails to share the project with</param>
+        /// <param name="callback">Callback called upon conclusion of sharing</param>
+        /// <param name="stateObject">state object woopdashoopfloop</param>
+        /// <returns>IAsyncResult for EnShareProject</returns>
+        /// <seealso cref="EndShareProject"/>
+        public IAsyncResult BeginShareProject(Project p, IEnumerable<string> emails, AsyncCallback callback, object stateObject) {
+            AsyncResultNoResult<Project, IEnumerable<string>> ar = new AsyncResultNoResult<Project, IEnumerable<string>>(callback, stateObject, p, emails);
+            ThreadPool.QueueUserWorkItem(CreateDocumentAsyncHelper, ar);
+
+            return ar;
+        }
+
+        /// <summary>
+        /// Wait for asynchronous project sharing to finish, then return it
+        /// </summary>
+        /// <param name="asyncResult">IAsyncResult from BeginShareProject</param>
+        /// <seealso cref="BeginShareProject"/>
+        public void EndShareProject(IAsyncResult asyncResult) {
+            AsyncResultNoResult<Project, IEnumerable<string>> ar = (AsyncResultNoResult<Project, IEnumerable<string>>)asyncResult;
+            ar.EndInvoke();
         }
 
         #endregion
@@ -364,6 +407,20 @@ namespace SliceOfPie {
         /// <seealso cref="BeginRemoveDocument"/>
         public void EndRemoveDocument(IAsyncResult asyncResult) {
             apmNoResultHelper(asyncResult);
+        }
+
+        #endregion
+
+        #region Download Revisions
+
+        /// <summary>
+        /// Download revisions for a specific Document and add them to internal collection.
+        /// </summary>
+        /// <param name="d"></param>
+        public IEnumerable<Revision> DownloadRevisions(Document d) {
+            foreach (Revision r in fileModel.DownloadRevisions(d)) {
+                yield return r;
+            }
         }
 
         #endregion

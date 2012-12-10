@@ -136,6 +136,29 @@ namespace SliceOfPie.ApmHelpers {
         }
     }
 
+    /// <summary>
+    /// AsyncResultNoResult representing method with two parameters
+    /// </summary>
+    /// <typeparam name="TParameter1">First parameter type</typeparam>
+    /// <typeparam name="TParameter2">Second parameter type</typeparam>
+    public class AsyncResultNoResult<TParameter1, TParameter2> : AsyncResultNoResult<TParameter1> {
+        private TParameter2 param2;
+
+        public AsyncResultNoResult(AsyncCallback asyncCallback, object state, TParameter1 parameter1, TParameter2 parameter2)
+            : base(asyncCallback, state, parameter1) {
+            param2 = parameter2;
+        }
+
+        /// <summary>
+        /// Second parameter of represented method
+        /// </summary>
+        public TParameter2 Parameter2 {
+            get {
+                return param2;
+            }
+        }
+    }
+
     #endregion
 
     #region AsyncResult with return

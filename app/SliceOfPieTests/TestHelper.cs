@@ -26,9 +26,11 @@ namespace SliceOfPie.Tests {
                 ClearDatabaseDocuments(project, Container.Project);
                 using (var dbContext = new sliceofpieEntities2()) {
                     var projectUsers = from projectUser in dbContext.ProjectUsers
-                                       where projectUser.UserEmail == email && projectUser.ProjectId == project.Id
+                                       where projectUser.ProjectId == project.Id
                                        select projectUser;
-                    dbContext.ProjectUsers.DeleteObject(projectUsers.First());
+                    foreach (ProjectUser user in projectUsers) {
+                        dbContext.ProjectUsers.DeleteObject(user);
+                    }
                     dbContext.SaveChanges();
                 }
                 using (var dbContext = new sliceofpieEntities2()) {
