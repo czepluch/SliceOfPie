@@ -27,7 +27,6 @@ namespace MvcWebApp.Controllers
                 return View(controller.GetProjects(User.Identity.Name).ToList());
             else
                 return RedirectToAction("LogOn", "Account");
-            //return View(controller.Projects.ToList());
         }
 
         public ActionResult Index(int id)
