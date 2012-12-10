@@ -247,15 +247,46 @@ namespace SliceOfPie {
         }
 
         public override Project GetProject(int id) {
-            throw new InvalidOperationException("Not supported in local file system");
+            Project result;
+            using (var dbContext = new sliceofpieEntities2()) {
+                Project dbProj = dbContext.Projects.First(p => p.Id == id);
+                result = new Project() {
+                    Id = dbProj.Id,
+                    Title = dbProj.Title
+                };
+            }
+            GetFolders(result);
+            GetDocuments(result);
+            return result;
         }
 
         public override Folder GetFolder(int id) {
-            throw new InvalidOperationException("Not supported in local file system");
+            Folder result;
+            using (var dbContext = new sliceofpieEntities2()) {
+                Folder dbFolder = dbContext.Folders.First(f => f.Id == id);
+                result = new Folder() {
+                    Id = dbFolder.Id,
+                    Title = dbFolder.Title
+                };
+            }
+            GetFolders(result);
+            GetDocuments(result);
+            return result;
         }
 
         public override Document GetDocument(int id) {
-            throw new InvalidOperationException("Not supported in local file system");
+            Document result;
+            using (var dbContext = new sliceofpieEntities2()) {
+                Document dbDoc = dbContext.Documents.First(d => d.Id == id);
+                result = new Document() {
+                    Id = dbDoc.Id,
+                    CurrentRevision = dbDoc.CurrentRevision,
+                    CurrentHash = dbDoc.CurrentRevision.GetHashCode(),
+                    Title = dbDoc.Title
+                };
+            }
+            GetRevisions(result);
+            return result;
         }
     }
 }

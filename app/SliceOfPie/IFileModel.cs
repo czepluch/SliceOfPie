@@ -87,20 +87,22 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="id">id of project</param>
         /// <returns>project</returns>
-        public Project GetProject(int id);
+        public abstract Project GetProject(int id);
 
         /// <summary>
         /// Get a folder by its id. Used for when sessions are lost, to recover at the needed point.
+        /// This is not expected to include the parent.
         /// </summary>
         /// <param name="id">id of folder</param>
         /// <returns>folder</returns>
-        public Folder GetFolder(int id);
+        public abstract Folder GetFolder(int id);
 
         /// <summary>
         /// Get a document by its id. Used for when sessions are lost, to recover at the needed point.
+        /// This is not expected to include the parent.
         /// </summary>
         /// <param name="id">id of document</param>
         /// <returns>document</returns>
-        public Document GetDocument(int id);
+        public abstract Document GetDocument(int id);
     }
 }
