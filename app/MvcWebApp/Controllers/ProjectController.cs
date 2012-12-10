@@ -22,8 +22,7 @@ namespace MvcWebApp.Controllers
         //
         // GET: /Home(Projects)/
 
-        public ActionResult Index()
-        {
+        public ActionResult Overview() {
             if (Request.IsAuthenticated)
                 return View(controller.GetProjects(User.Identity.Name).ToList());
             else
@@ -31,9 +30,12 @@ namespace MvcWebApp.Controllers
             //return View(controller.Projects.ToList());
         }
 
-        public ActionResult About()
+        public ActionResult Index(int id)
         {
-            return View();
+            if (Request.IsAuthenticated)
+                return View(controller.GetProjects(User.Identity.Name).First(p => p.Id == id));
+            else
+                return RedirectToAction("LogOn", "Account");
         }
 
         //
@@ -80,29 +82,5 @@ namespace MvcWebApp.Controllers
             }
             return RedirectToAction("Index");
         }
-
-        ////
-        //// GET: /Home(Projects)/Edit/5
-
-        //public ActionResult Edit(Project p) {
-        //    controller.RenameProject(p);
-        //    if (project == null) {
-        //        return HttpNotFound();
-        //    }
-        //    return View(project);
-        //}
-
-        ////
-        //// POST: /Home(Projects)/Edit/5
-
-        //[HttpPost]
-        //public ActionResult Edit(Project project) {
-        //    if (ModelState.IsValid) {
-        //        controller.Entry(project).State = EntityState.Modified;
-        //        controller.SaveChanges();
-        //        return RedirectToAction("Index");
-        //    }
-        //    return View(project);
-        //}
     }
 }

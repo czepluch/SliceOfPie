@@ -1,36 +1,48 @@
-﻿@model IEnumerable<SliceOfPie.Project>
+﻿@model SliceOfPie.Project
 @{
-    ViewBag.Title = "My Projects";
+    ViewBag.Title = "Index of Project "+Model.Title;
 }
 
-    <h2>My Projects (@User.Identity.Name)</h2>
+    <h2>Index of Project @Model.Title</h2>
     <p>
-        @Html.ActionLink("Create New Project", "Create")
+        @Html.ActionLink("Create New Folder", "../Folder/Create", Model) | 
+        @Html.ActionLink("Create New Document", "../Document/Create", Model)
     </p>
     <table>
     <tr>
         <th>
-            Title
+            ID
         </th>
         <th>
-            ID
+            Title
         </th>
         
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
+@foreach (var item in Model.GetFolders()) {
     <tr>
+        <td>
+            @Html.DisplayText(""+item.Id)
+        </td>
         <td>
             @Html.ActionLink(item.Title, "../Folder/Index", item)
         </td>
         <td>
-            @Html.DisplayFor(ModelItem => item.Id)
+            @Html.ActionLink("Delete", "../Folder/Delete", item)
+        </td>
+    </tr>
+}
+@foreach (var item in Model.GetDocuments()) {
+    <tr>
+        <td>
+            @Html.DisplayText(""+item.Id)
         </td>
         <td>
-            @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |*@
-            @*@Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
-            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            @Html.ActionLink(item.Title, "../Document/Edit", item)
+        </td>
+        <td>
+            @Html.ActionLink("Delete", "../Document/Delete", item)
         </td>
     </tr>
 }

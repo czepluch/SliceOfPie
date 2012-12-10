@@ -17,14 +17,7 @@ namespace MvcWebApp.Controllers {
         // GET: /Folder/
 
         public ActionResult Index(int id) {
-            return View(controller.GetProjects(User.Identity.Name).First(p => p.Id == id));
-        }
-
-        //
-        // GET: /Folder/Details/5
-
-        public ActionResult Details(int id) {
-            return View();
+            return View(controller.GetProjects(User.Identity.Name).First(p => p.GetFolders().Count(f => f.Id == id) > 0).GetFolders().First(f => f.Id == id));
         }
 
         //
@@ -41,28 +34,6 @@ namespace MvcWebApp.Controllers {
         public ActionResult Create(FormCollection collection) {
             try {
                 // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch {
-                return View();
-            }
-        }
-
-        //
-        // GET: /Folder/Edit/5
-
-        public ActionResult Edit(int id) {
-            return View();
-        }
-
-        //
-        // POST: /Folder/Edit/5
-
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection) {
-            try {
-                // TODO: Add update logic here
 
                 return RedirectToAction("Index");
             }
