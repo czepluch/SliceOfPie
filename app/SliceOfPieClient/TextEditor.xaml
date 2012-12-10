@@ -38,7 +38,7 @@
         </Popup>
         <DockPanel>
             <WrapPanel DockPanel.Dock="Top" MinWidth="350" Height="60" Background="#FFDDDDDD">
-                <Button Name="saveDocumentButton"  Margin="10,5,10,0">
+                <Button Name="saveDocumentButton" Click="SaveDocumentButton_Click" Margin="10,5,10,0">
                     <StackPanel Orientation="Vertical">
                         <Image Width="30" Source="Icons/document-icon.png"/>
                         <TextBlock>Save Document</TextBlock>

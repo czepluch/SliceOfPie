@@ -20,7 +20,7 @@ namespace SliceOfPie.Client {
     /// </summary>
     public partial class TextEditor : UserControl {
         private Document _document; //backing field
-        private int caretIndex;
+        private Controller controller;
 
         /// <summary>
         /// This is the Document currently shown in the Text Editor
@@ -47,19 +47,25 @@ namespace SliceOfPie.Client {
         /// <summary>
         /// This event is fired when the button to save the active document is clicked
         /// </summary>
-        public event RoutedEventHandler SaveDocumentButtonClicked;
-
+        public event RoutedEventHandler SaveDocumentButtonClicked, InsertImageButtonClicked, ShowHistoryButtonClicked;
+        
         /// <summary>
         /// Creates a Text Editor with the functionality to show and edit Documents
         /// For content to be shown, the Document property must be set.
         /// </summary>
         public TextEditor() {
             InitializeComponent();
+            controller = Controller.Instance;
+        }
 
-            saveDocumentButton.Click += new RoutedEventHandler(
-                (sender, e) => OnSaveDocumentButtonClicked(e) //fire the externally added event(s)
-            );
-
+        /// <summary>
+        /// Saves the current document
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void SaveDocumentButton_Click(object sender, RoutedEventArgs e) {
+            controller.BeginSaveDocument(Document, null, null);
+            OnSaveDocumentButtonClicked(e); //fire the externally added event(s)
         }
 
         /// <summary>
@@ -68,7 +74,6 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void OpenInsertImagePopUp(object sender, RoutedEventArgs e) {
-            caretIndex = textField.CaretIndex;
             //note that the textbox is cleared when the popups were last closed
             IsEnabled = false;
             insertImagePopUp.IsOpen = true;
@@ -140,6 +145,26 @@ namespace SliceOfPie.Client {
         private void OnSaveDocumentButtonClicked(RoutedEventArgs e) {
             if (SaveDocumentButtonClicked != null) {
                 SaveDocumentButtonClicked(this, e);
+            }
+        }
+
+        /// <summary>
+        /// This method triggers the InsertImageButtonClicked event
+        /// </summary>
+        /// <param name="e">The event arguments.</param>
+        private void OnInsertImageButtonClicked(RoutedEventArgs e) {
+            if (InsertImageButtonClicked != null) {
+                InsertImageButtonClicked(this, e);
+            }
+        }
+
+        /// <summary>
+        /// This method triggers the ShowHistoryButtonClicked event
+        /// </summary>
+        /// <param name="e">The event arguments.</param>
+        private void OnShowHistoryButtonClicked(RoutedEventArgs e) {
+            if (ShowHistoryButtonClicked != null) {
+                ShowHistoryButtonClicked(this, e);
             }
         }
 

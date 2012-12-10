@@ -51,7 +51,6 @@ namespace SliceOfPie.Client {
             folderContentView.CreateFolderButtonClicked += (new RoutedEventHandler(OpenCreateFolderWindow));
 
             textEditor = new TextEditor();
-            textEditor.SaveDocumentButtonClicked += (new RoutedEventHandler(SaveDocument_Click));
 
             RefreshLocalProjects();
         }
@@ -467,15 +466,6 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments.</param>
         private void Synchronize_Click(object sender, RoutedEventArgs e) {
             OpenLoginWindow(sender, e);
-        }
-
-        /// <summary>
-        /// This is the click handler for the Save Document button in the Text Editor
-        /// </summary>
-        /// <param name="sender">The object that sent the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void SaveDocument_Click(object sender, RoutedEventArgs e) {
-            controller.BeginSaveDocument(textEditor.Document, null, null);
         }
 
         #endregion
