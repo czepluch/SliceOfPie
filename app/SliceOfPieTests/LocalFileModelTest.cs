@@ -326,12 +326,12 @@ namespace SliceOfPie.Tests {
             project = projects.First();
             document1 = project.Documents.First();
 
-            Model.DownloadRevisions(document1);
+            IEnumerable<Revision> revisions = Model.DownloadRevisions(document1);
 
-            Assert.AreEqual(2, document1.Revisions.Count());
+            Assert.AreEqual(2, revisions.Count());
 
             int i = 0;
-            foreach (Revision revision in document1.Revisions) {
+            foreach (Revision revision in revisions) {
                 switch (i) {
                     case 0:
                         Assert.AreEqual("", revision.Content);

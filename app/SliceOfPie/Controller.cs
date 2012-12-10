@@ -376,8 +376,10 @@ namespace SliceOfPie {
         /// Download revisions for a specific Document and add them to internal collection.
         /// </summary>
         /// <param name="d"></param>
-        public void DownloadRevisions(Document d) {
-            fileModel.DownloadRevisions(d);
+        public IEnumerable<Revision> DownloadRevisions(Document d) {
+            foreach (Revision r in fileModel.DownloadRevisions(d)) {
+                yield return r;
+            }
         }
 
         #endregion

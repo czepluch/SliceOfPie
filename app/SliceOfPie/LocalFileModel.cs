@@ -597,15 +597,19 @@ namespace SliceOfPie {
         /// Download revisions for a document.
         /// </summary>
         /// <param name="document"></param>
-        public override void DownloadRevisions(Document document) {
+        public override IEnumerable<Revision> DownloadRevisions(Document document) {
+            List<Revision> documentRevisions = new List<Revision>();
             using (var dbContext = new sliceofpieEntities2()) {
                 var revisions = from revision in dbContext.Revisions
                                 where revision.DocumentId == document.Id
                                 orderby revision.Timestamp ascending
                                 select revision;
                 foreach (Revision revision in revisions) {
-                    document.Revisions.Add(revision);
+                    documentRevisions.Add(revision);
                 }
+            }
+            foreach (Revision revision in documentRevisions) {
+                yield return revision;
             }
         }
 
