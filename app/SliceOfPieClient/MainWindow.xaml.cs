@@ -359,11 +359,11 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void CreateFolderPopUpCreateButton_Click(object sender, RoutedEventArgs e) {
-            Folder folder = controller.CreateFolder(createFolderPopUPTextBox.Text, "local", currentContextItem as IItemContainer);
+            controller.BeginCreateFolder(createFolderPopUPTextBox.Text, "local", currentContextItem as IItemContainer, (iar) => RefreshLocalProjects(controller.EndCreateFolder(iar)), null);
             createFolderPopUP.IsOpen = false;
             IsEnabled = true;
             createFolderPopUPTextBox.Clear();
-            RefreshLocalProjects(folder);
+            
         }
 
         /// <summary>
@@ -383,11 +383,10 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void CreateDocumentPopUpCreateButton_Click(object sender, RoutedEventArgs e) {
-            Document document = controller.CreateDocument(createDocumentPopUPTextBox.Text, "local", currentContextItem as IItemContainer);
+            controller.BeginCreateDocument(createDocumentPopUPTextBox.Text, "local", currentContextItem as IItemContainer, (iar) => RefreshLocalProjects(controller.EndCreateDocument(iar)), null);
             createDocumentPopUP.IsOpen = false;
             IsEnabled = true;
             createDocumentPopUPTextBox.Clear();
-            RefreshLocalProjects(document);
         }
 
         /// <summary>
@@ -407,7 +406,7 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void ShareProjectPopUpShareButton_Click(object sender, RoutedEventArgs e) {
-            controller.ShareProject(currentContextItem as Project, shareProjectPopUPTextBox.Text.Split(','));
+            controller.BeginShareProject(currentContextItem as Project, shareProjectPopUPTextBox.Text.Split(','), null, null);
             shareProjectPopUP.IsOpen = false;
             IsEnabled = true;
             shareProjectPopUPTextBox.Clear();
