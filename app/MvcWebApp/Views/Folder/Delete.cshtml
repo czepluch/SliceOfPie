@@ -1,4 +1,4 @@
-﻿@model SliceOfPie.Project
+﻿@model SliceOfPie.Folder
 
 @{
     ViewBag.Title = "Delete";
@@ -15,10 +15,10 @@
         @Html.DisplayFor(model => model.Title)
     </div>
 
-    <div class="display-label">AppPath</div>
+    @*<div class="display-label">AppPath</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.AppPath)
-    </div>
+    </div>*@
 </fieldset>
 @using (Html.BeginForm()) {
     <p>

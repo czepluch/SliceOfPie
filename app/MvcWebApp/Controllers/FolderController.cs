@@ -31,37 +31,34 @@ namespace MvcWebApp.Controllers {
         // POST: /Folder/Create
 
         [HttpPost]
-        public ActionResult Create(FormCollection collection) {
-            try {
-                // TODO: Add insert logic here
-
+        public ActionResult Create(Folder folder, Project p) {
+            if (ModelState.IsValid){
+                controller.CreateFolder(folder.Title, User.Identity.Name, folder.Parent);
                 return RedirectToAction("Index");
             }
-            catch {
-                return View();
-            }
+                return View(p);
         }
 
         //
         // GET: /Folder/Delete/5
 
-        public ActionResult Delete(int id) {
-            return View();
+        public ActionResult Delete(Folder f) {
+            if (f == null) {
+                return HttpNotFound();
+            }
+            return View(f);
         }
 
         //
         // POST: /Folder/Delete/5
 
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection) {
-            try {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+        [HttpPost, ActionName("Delete")]
+        public ActionResult DeleteConfirmed(Folder f) {
+            controller.RemoveFolder(f);
+            if (f == null) {
+                return HttpNotFound();
             }
-            catch {
-                return View();
-            }
+            return RedirectToAction("Index");
         }
     }
 }
