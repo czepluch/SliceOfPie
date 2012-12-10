@@ -22,10 +22,10 @@
 @foreach (var item in Model.GetFolders()) {
     <tr>
         <td>
-            @Html.DisplayText(item.Id.ToString())
+            @Html.AttributeEncode(item.Id)
         </td>
         <td>
-           @Html.ActionLink(item.Title, "Index", item)
+            @Html.ActionLink(item.Title, "Index", item)
         </td>
         <td>
             @Html.ActionLink("Delete", "Delete", item)
@@ -35,10 +35,10 @@
 @foreach (var item in Model.GetDocuments()) {
     <tr>
         <td>
-            @Html.DisplayText(item.Id.ToString())
+            @Html.AttributeEncode(item.Id)
         </td>
         <td>
-           @Html.ActionLink(item.Title, "../Document/Edit", item)
+            @Html.ActionLink(item.Title, "../Document/Edit", item)
         </td>
         <td>
             @Html.ActionLink("Delete", "../Document/Delete", item)

@@ -22,14 +22,12 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayText("" + item.Id)
+            @Html.AttributeEncode(item.Id)
         </td>
         <td>
             @Html.ActionLink(item.Title, "../Project/Index", item)
         </td>
         <td>
-            @*@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |*@
-            @*@Html.ActionLink("Details", "Details", new { id=item.Id }) |*@
             @Html.ActionLink("Delete", "Delete", item)
         </td>
     </tr>

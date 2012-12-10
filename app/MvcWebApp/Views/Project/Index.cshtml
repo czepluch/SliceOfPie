@@ -23,7 +23,7 @@
 @foreach (var item in Model.GetFolders()) {
     <tr>
         <td>
-            @Html.DisplayText(""+item.Id)
+            @Html.AttributeEncode(item.Id)
         </td>
         <td>
             @Html.ActionLink(item.Title, "../Folder/Index", item)
@@ -36,7 +36,7 @@
 @foreach (var item in Model.GetDocuments()) {
     <tr>
         <td>
-            @Html.DisplayText(""+item.Id)
+            @Html.AttributeEncode(item.Id)
         </td>
         <td>
             @Html.ActionLink(item.Title, "../Document/Edit", item)
