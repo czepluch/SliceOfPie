@@ -480,6 +480,37 @@ namespace SliceOfPie {
 
         #endregion
 
+        #region Get Directly
+
+        /// <summary>
+        /// Get a project directly by its id
+        /// </summary>
+        /// <param name="projectId">Id of project to get</param>
+        /// <returns>Project corresponding to id</returns>
+        public Project GetProjectDirectly(int projectId) {
+            return fileModel.GetProject(projectId);
+        }
+
+        /// <summary>
+        /// Get a folder directly by its id
+        /// </summary>
+        /// <param name="folderId">Id of folder</param>
+        /// <returns>Folder corresponding to id</returns>
+        public Folder GetFolderDirectly(int folderId) {
+            return fileModel.GetFolder(folderId);
+        }
+
+        /// <summary>
+        /// Get a document directly by its id
+        /// </summary>
+        /// <param name="documentId">Id of document</param>
+        /// <returns>Document corresponding to id</returns>
+        public Document GetDocumentDirectly(int documentId) {
+            return fileModel.GetDocument(documentId);
+        }
+
+        #endregion
+
         #endregion
 
         #region All

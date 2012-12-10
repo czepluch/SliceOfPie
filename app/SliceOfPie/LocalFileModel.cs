@@ -707,5 +707,17 @@ namespace SliceOfPie {
             }
             return GetAvailableName(title + "-1", id, path, ext);
         }
+
+        public override Project GetProject(int id) {
+            throw new InvalidOperationException("Not supported in local file system");
+        }
+
+        public override Folder GetFolder(int id) {
+            throw new InvalidOperationException("Not supported in local file system");
+        }
+
+        public override Document GetDocument(int id) {
+            throw new InvalidOperationException("Not supported in local file system");
+        }
     }
 }
