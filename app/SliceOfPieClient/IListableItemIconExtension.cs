@@ -4,23 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media.Imaging;
 
-namespace SliceOfPie {
+namespace SliceOfPie.Client {
     /// <summary>
     /// This is a factory for standard icons in the SliceOfPie user interface.
     /// </summary>
     public static class IListableItemIconExtension {
 
         private static BitmapImage
-            projectIcon = createBitmapImage("project-icon"),
-            folderIcon = createBitmapImage("folder-icon"),
-            documentIcon = createBitmapImage("document-icon"),
-            documentConflictIcon = createBitmapImage("document-icon-conflict");
+            projectIcon = ImageUtil.CreateBitmapImage("/Icons/project-icon.png"),
+            folderIcon = ImageUtil.CreateBitmapImage("/Icons/folder-icon.png"),
+            documentIcon = ImageUtil.CreateBitmapImage("/Icons/document-icon.png"),
+            documentConflictIcon = ImageUtil.CreateBitmapImage("/Icons/document-icon-conflict.png");
 
         /// <summary>
         /// Returns the icon for this IListabeItem
         /// </summary>
-        /// <param name="?">The IListableItem this method is invoked on.</am>
-        /// <returns></returns>
+        /// <param name="item">The IListableItem this method is invoked on.</param>
+        /// <returns>The icon of the item</returns>
         public static BitmapImage GetIcon(this IListableItem item) {
             if (item is Project) {
                 return projectIcon;
@@ -33,18 +33,6 @@ namespace SliceOfPie {
             }
         }
 
-        /// <summary>
-        /// This helper method returns a BitmapImage based on a filename.
-        /// Note that this method only works with .bmp files.
-        /// </summary>
-        /// <param name="iconFileName">The name of the file without file extension.</am>
-        /// <returns>A BitmapImage version of the icon</returns>
-        private static BitmapImage createBitmapImage(string iconFileName) {
-            BitmapImage icon = new BitmapImage();
-            icon.BeginInit();
-            icon.UriSource = new Uri("pack://application:,,,/Icons/" + iconFileName + ".png");
-            icon.EndInit();
-            return icon;
-        }
+        
     }
 }
