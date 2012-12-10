@@ -297,7 +297,7 @@ namespace SliceOfPie.Tests {
 
         [TestInitialize]
         public void Initialize() {
-            //TestHelper.ClearDatabase("common@test.mail");
+            TestHelper.ClearDatabase("common@test.mail");
             TestHelper.ClearFolder(AppPath);
             Model = new LocalFileModel();
         }

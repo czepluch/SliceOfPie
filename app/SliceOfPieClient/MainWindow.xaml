@@ -3,7 +3,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:SliceOfPie.Client"
-        Title="Slice of Pie" Height="500" Width="800" MinHeight="300" MinWidth="400" Icon="/SliceOfPieClient;component/grin.ico">
+        Title="Slice of Pie" Height="500" Width="800" MinHeight="300" MinWidth="500" Icon="/SliceOfPieClient;component/grin.ico">
     <Grid>
         <Popup Name="createProjectPopUp" Height="200" Width="500" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
             <DockPanel Background="#FF949494">

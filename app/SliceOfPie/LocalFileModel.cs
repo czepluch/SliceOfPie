@@ -249,7 +249,7 @@ namespace SliceOfPie {
                     var dbProjects = from dProject in dbContext.Projects
                                      where dProject.Id == id
                                      select dProject;
-                    if (dbProjects.Count() == 0) {
+                    if (id > 0 && dbProjects.Count() == 0) {
                         if (Directory.Exists(Path.Combine(AppPath, Helper.GenerateName(id, title)))) {
                             Directory.Move(Path.Combine(AppPath, Helper.GenerateName(id, title)), Path.Combine(AppPath, Helper.GenerateName(0, title)));
                         }
@@ -313,7 +313,7 @@ namespace SliceOfPie {
                     var dbFolders = from dFolder in dbContext.Folders
                                     where dFolder.Id == id
                                     select dFolder;
-                    if (dbFolders.Count() == 0) {
+                    if (id > 0 && dbFolders.Count() == 0) {
                         if (Directory.Exists(Path.Combine(parentPath, Helper.GenerateName(id, title)))) {
                             Directory.Move(Path.Combine(parentPath, Helper.GenerateName(id, title)), Path.Combine(parentPath, Helper.GenerateName(0, title)));
                         }
@@ -394,7 +394,7 @@ namespace SliceOfPie {
                     var dbDocuments = from dDocument in dbContext.Documents
                                       where dDocument.Id == id
                                       select dDocument;
-                    if (dbDocuments.Count() == 0) {
+                    if (id > 0 && dbDocuments.Count() == 0) {
                         if (Directory.Exists(Path.Combine(parentPath, Helper.GenerateName(id, title)) + ".txt")) {
                             Directory.Move(Path.Combine(parentPath, Helper.GenerateName(id, title)) + ".txt", Path.Combine(parentPath, Helper.GenerateName(0, title)) + ".txt");
                         }
