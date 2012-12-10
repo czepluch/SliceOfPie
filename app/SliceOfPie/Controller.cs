@@ -197,7 +197,9 @@ namespace SliceOfPie {
         /// <param name="p">Project to share</param>
         /// <param name="emails">Emails as an iterable of strings</param>
         public void ShareProject(Project p, IEnumerable<string> emails) {
-            throw new NotImplementedException();
+            foreach (string email in emails) {
+                userModel.ShareProject(p.Id, email);
+            }
         }
 
         #endregion
