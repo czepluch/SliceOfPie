@@ -58,14 +58,6 @@ namespace SliceOfPie.Client {
         /// </summary>
         public FolderContentView() {
             InitializeComponent();
-            //On button clicks
-            createDocumentButton.Click += new RoutedEventHandler(
-                (sender, e) => OnCreateDocumentButtonClicked(e) //fire the externally added event(s)
-            );
-            createFolderButton.Click += new RoutedEventHandler(
-                (sender, e) => OnCreateFolderButtonClicked(e) //fire the externally added event(s)
-            );
-            
         }
 
         /// <summary>
@@ -100,28 +92,6 @@ namespace SliceOfPie.Client {
         }
 
         #region Event triggers
-
-        /// <summary>
-        /// This method triggers the CreateDocumentButtonClicked event
-        /// </summary>
-        /// <param name="e">The event arguments.</param>
-        private void OnCreateDocumentButtonClicked(RoutedEventArgs e) {
-            if (CreateDocumentButtonClicked != null) {
-                //Invoke the delegates attached to this event
-                CreateDocumentButtonClicked(this, e);
-            }
-        }
-
-        /// <summary>
-        /// This method triggers the CreateFolderButtonClicked event
-        /// </summary>
-        /// <param name="e">The event arguments.</param>
-        private void OnCreateFolderButtonClicked(RoutedEventArgs e) {
-            if (CreateFolderButtonClicked != null) {
-                //Invoke the delegates attached to this event
-                CreateFolderButtonClicked(this, e);
-            }
-        }
 
         /// <summary>
         /// This method triggers the ItemDoubleClicked event
