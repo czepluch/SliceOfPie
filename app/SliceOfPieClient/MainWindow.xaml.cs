@@ -75,33 +75,7 @@ namespace SliceOfPie.Client {
 
             RefreshLocalProjects();
         }
-
-        /// <summary>
-        /// This method syncs with the server and updates the ui
-        /// </summary>
-        /// <param name="userMail">The users mail</param>
-        /// <param name="password">The users password</param>
-        /// <param name="itemToOpen">The item to open, when the projects are reloaded. If this is null, the top project will be opened.</param>
-        /// <returns>Whether or not the syncing was succesfull</returns>
-        private bool SyncProjects(string userMail, string password, IListableItem itemToOpen = null) {
-            bool succesfullySynced = false;
-            //Using controllers APM to load the projects into the Document Explorer
-            controller.BeginSyncProjects(userMail, password, (iar) => {
-                Refresh(controller.EndSyncProjects(iar), itemToOpen);
-                //try {
-                //    Refresh(controller.EndSyncProjects(iar), itemToOpen);
-                //    succesfullySynced = true;
-                //}
-                //catch (AsyncException ex) {
-                //    //The APM method encountered an exception.
-                //    //bool = false will be returned - this catch just prevents the program crashing.
-                //}
-            } , null);
-            return true; //REMOVE THIS
-        }
-
-         
-
+              
         /// <summary>
         /// This method refreshes the projects (local only)
         /// </summary>
@@ -459,16 +433,13 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void loginPopUpLoginButton_Click(object sender, RoutedEventArgs e) {
-            if(SyncProjects(loginPopUpUserTextBox.Text, loginPopUpPasswordBox.Password)) {
+                controller.BeginSyncProjects(loginPopUpUserTextBox.Text, loginPopUpPasswordBox.Password, (iar) => Refresh(controller.EndSyncProjects(iar)), null);
                 loginPopUp.IsOpen = false;
                 IsEnabled = true;
                 loginPopUpUserTextBox.Clear();
                 loginPopUpPasswordBox.Clear();
                 loginPopUpErrorLabel.Content = "";
-            }
-            else {
-                loginPopUpErrorLabel.Content = "An error occured. Please check your username and password.";
-            }
+                //TODO consider setting error label/ stalling with popup "SYNCING"
         }
 
         /// <summary>
