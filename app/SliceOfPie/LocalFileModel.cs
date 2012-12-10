@@ -594,6 +594,22 @@ namespace SliceOfPie {
         }
 
         /// <summary>
+        /// Download revisions for a document.
+        /// </summary>
+        /// <param name="document"></param>
+        public void DownloadRevisions(Document document) {
+            using (var dbContext = new sliceofpieEntities2()) {
+                var revisions = from revision in dbContext.Revisions
+                                where revision.DocumentId == document.Id
+                                orderby revision.Timestamp ascending
+                                select revision;
+                foreach (Revision revision in revisions) {
+                    document.Revisions.Add(revision);
+                }
+            }
+        }
+
+        /// <summary>
         /// Create basic structure if not found already. This includes SliceOfPie-folder and default project folder.
         /// </summary>
         public void CreateStructure() {

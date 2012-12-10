@@ -368,6 +368,18 @@ namespace SliceOfPie {
 
         #endregion
 
+        #region Download Revisions
+
+        /// <summary>
+        /// Download revisions for a specific Document and add them to internal collection.
+        /// </summary>
+        /// <param name="d"></param>
+        public void DownloadRevisions(Document d) {
+            fileModel.DownloadRevisions(d);
+        }
+
+        #endregion
+
         #endregion
 
         #region Folder
