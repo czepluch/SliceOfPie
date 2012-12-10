@@ -37,7 +37,7 @@ namespace MvcWebApp.Controllers {
                     //    && !returnUrl.StartsWith("//") && !returnUrl.StartsWith("/\\")) {
                     //    return Redirect(returnUrl);
                     //} else {
-                    return RedirectToAction("Index", "Project");
+                    return RedirectToAction("Overview", "Project");
                     //}
                 } else {
                     ModelState.AddModelError("", "The user name or password provided is incorrect.");
@@ -54,7 +54,7 @@ namespace MvcWebApp.Controllers {
         public ActionResult LogOff() {
             FormsAuthentication.SignOut();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("LogOn", "Account");
         }
 
 
