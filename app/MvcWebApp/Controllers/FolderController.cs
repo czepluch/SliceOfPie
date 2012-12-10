@@ -23,17 +23,17 @@ namespace MvcWebApp.Controllers {
         //
         // GET: /Folder/Create
 
-        public ActionResult Create(int id, Type parentType) {
-            return View();
+        public ActionResult CreateInFolder(int id) {
+            return View(new Folder() { Id = id });
         }
 
         //
         // POST: /Folder/Create
 
         [HttpPost]
-        public ActionResult Create(string folderTitle, string parentType, int parentId) {
-            if (ModelState.IsValid){
-                var parent = new Folder();
+        public ActionResult CreateInFolder(string folderTitle, int parentId) {
+            if (ModelState.IsValid) {
+                Folder parent = controller.GetFolderDirectly(parentId);
                 Folder result = controller.CreateFolder(folderTitle, User.Identity.Name, parent);
                 return RedirectToAction("Index", result);
             }

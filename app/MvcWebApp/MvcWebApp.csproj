@@ -160,7 +160,7 @@
     <Content Include="Views\Folder\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Folder\Create.cshtml" />
+    <Content Include="Views\Folder\CreateInFolder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Folder\Delete.cshtml" />
@@ -176,6 +176,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Project\Overview.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Folder\CreateInProject.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
