@@ -65,7 +65,7 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments.</param>
         private void SaveDocumentButton_Click(object sender, RoutedEventArgs e) {
             controller.BeginSaveDocument(Document, null, null);
-            OnSaveDocumentButtonClicked(e); //fire the externally added event(s)
+           
         }
 
         /// <summary>
@@ -135,39 +135,5 @@ namespace SliceOfPie.Client {
             historyPopUp.IsOpen = false;
             IsEnabled = true;
         }
-
-        #region Event triggers
-
-        /// <summary>
-        /// This method triggers the SaveDocumentButtonClicked event
-        /// </summary>
-        /// <param name="e">The event arguments.</param>
-        private void OnSaveDocumentButtonClicked(RoutedEventArgs e) {
-            if (SaveDocumentButtonClicked != null) {
-                SaveDocumentButtonClicked(this, e);
-            }
-        }
-
-        /// <summary>
-        /// This method triggers the InsertImageButtonClicked event
-        /// </summary>
-        /// <param name="e">The event arguments.</param>
-        private void OnInsertImageButtonClicked(RoutedEventArgs e) {
-            if (InsertImageButtonClicked != null) {
-                InsertImageButtonClicked(this, e);
-            }
-        }
-
-        /// <summary>
-        /// This method triggers the ShowHistoryButtonClicked event
-        /// </summary>
-        /// <param name="e">The event arguments.</param>
-        private void OnShowHistoryButtonClicked(RoutedEventArgs e) {
-            if (ShowHistoryButtonClicked != null) {
-                ShowHistoryButtonClicked(this, e);
-            }
-        }
-
-        #endregion
     }
 }
