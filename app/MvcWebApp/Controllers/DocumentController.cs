@@ -14,6 +14,7 @@ namespace MvcWebApp.Controllers {
             controller = SliceOfPie.Controller.Instance;
         }
 
+        [ValidateInput(false)] // Allow html rendering
         public ActionResult Edit(Document d) {
             return View(controller.GetDocumentDirectly(d.Id));
         }

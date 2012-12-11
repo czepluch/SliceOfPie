@@ -21,14 +21,14 @@ namespace MvcWebApp.Controllers {
         }
 
         //
-        // GET: /Folder/Create
+        // GET: /Folder/CreateInFolder
         [HttpGet]
         public ActionResult CreateInFolder(Folder f) {
             return View(f);
         }
 
         //
-        // POST: /Folder/Create
+        // POST: /Folder/CreateInFolder
 
         [HttpPost]
         public ActionResult CreateInFolder(Folder newFolder, string text) {
@@ -41,14 +41,14 @@ namespace MvcWebApp.Controllers {
         }
 
         //
-        // GET: /Folder/Create
+        // GET: /Folder/CreateInProject
         [HttpGet]
         public ActionResult CreateInProject(Folder f) {
             return View(f);
         }
 
         //
-        // POST: /Folder/Create
+        // POST: /Folder/CreateInProject
 
         [HttpPost]
         public ActionResult CreateInProject(Folder newFolder, string text) {
