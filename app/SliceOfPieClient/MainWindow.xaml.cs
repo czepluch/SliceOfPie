@@ -524,7 +524,7 @@ namespace SliceOfPie.Client {
             foreach (Revision revision in controller.DownloadRevisions(textEditor.Document)) {
                 ListBoxItem item = new ListBoxItem() { Content = revision.Timestamp };
                 string revisionContent = revision.Content;
-                item.MouseLeftButtonUp += new MouseButtonEventHandler((sender, e) => historyPopUpTextBox.Text = revisionContent);
+                item.Selected += new RoutedEventHandler((sender, e) => historyPopUpTextBox.Text = revisionContent);
                 historyList.Items.Add(item);
             }
         }
