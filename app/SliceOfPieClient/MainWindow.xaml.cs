@@ -31,7 +31,7 @@ namespace SliceOfPie.Client {
         private ContextMenu projectContextMenu, folderContextMenu, documentContextMenu;
 
         private IListableItem currentContextItem;
-        private string imageStartTag = "<IMAGEURL{", imageEndTag = "}>";
+        private string imageStartTag = "<img src=\"", imageEndTag = "\" alt=\"\">";
 
         /// <summary>
         /// Creates the Main Window for the Slice of Pie application
@@ -435,10 +435,10 @@ namespace SliceOfPie.Client {
                 controller.BeginSyncProjects(loginPopUpUserTextBox.Text, loginPopUpPasswordBox.Password,
                     (iar) => {
                         //Callback posted in UI-context
-                        syncContext.Post((o) => {
-                            try {
-                                Refresh(controller.EndSyncProjects(iar));
 
+                        try {
+                            Refresh(controller.EndSyncProjects(iar));
+                            syncContext.Post((o) => {
                                 syncingPopUp.IsOpen = false;
                                 loginPopUpCancelButton.IsEnabled = true;
                                 loginPopUpLoginButton.IsEnabled = true;
@@ -447,14 +447,16 @@ namespace SliceOfPie.Client {
                                 loginPopUpUserTextBox.Clear();
                                 loginPopUpPasswordBox.Clear();
                                 loginPopUpErrorLabel.Content = "";
-                            }
-                            catch (AsyncException ex) {
+                            }, null);
+                        }
+                        catch (AsyncException ex) {
+                            syncContext.Post((o) => {
                                 loginPopUpErrorLabel.Content = "Synchronization failed.";
                                 syncingPopUp.IsOpen = false;
                                 loginPopUpCancelButton.IsEnabled = true;
                                 loginPopUpLoginButton.IsEnabled = true;
-                            }
-                        }, null);
+                            }, null);
+                        }
                     }, null);
             }
             else {
@@ -529,28 +531,36 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void OpenHistoryPopUp(object sender, RoutedEventArgs e) {
+            Document documentWhenClicked = textEditor.Document;
             //setup history popup
-            try {
-                SetUpHistoryPopUp();
-                historyPopUpTopLabel.Content = "History for " + textEditor.Document.Title;
-                IsEnabled = false;
-                historyPopUp.IsOpen = true;
-                //Select top entry
-            }
-            catch (System.Data.EntityException ex) {
-                OpenNoInternetPopUp();
-            }
+            syncingPopUp.IsOpen = true;
+            controller.BeginDownloadRevisions(documentWhenClicked,
+                (iar) => {
+                    syncContext.Post((o) => historyList.Items.Clear(), null);
+                    try {
+                        IEnumerable<Revision> revisions = controller.EndDownloadRevisions(iar);
+                        foreach (Revision revision in revisions) {
+                            ListBoxItem item = new ListBoxItem() { Content = revision.Timestamp };
+                            string revisionContent = revision.Content;
+                            item.Selected += new RoutedEventHandler((itemSelected, eventArgs) => historyPopUpTextBox.Text = revisionContent);
+                            syncContext.Post((o) => historyList.Items.Add(item), null);
+                        }
+                        syncContext.Post((o) => {
+                            historyPopUpTopLabel.Content = "History for " + documentWhenClicked.Title;
+                            IsEnabled = false;
+                            syncingPopUp.IsOpen = false;
+                            historyPopUp.IsOpen = true;
+                        }, null);
+                    }
+                    catch (Exception ex) {
+                        syncContext.Post((o) => {
+                            syncingPopUp.IsOpen = false;
+                            OpenNoInternetPopUp();
+                        }, null);
+                    }
+                }, null);
         }
 
-        private void SetUpHistoryPopUp() {
-            historyList.Items.Clear();
-            foreach (Revision revision in controller.DownloadRevisions(textEditor.Document)) {
-                ListBoxItem item = new ListBoxItem() { Content = revision.Timestamp };
-                string revisionContent = revision.Content;
-                item.Selected += new RoutedEventHandler((sender, e) => historyPopUpTextBox.Text = revisionContent);
-                historyList.Items.Add(item);
-            }
-        }
 
         /// <summary>
         /// This is the click handler for the Close button in the History pop-up
