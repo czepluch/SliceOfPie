@@ -330,3 +330,13 @@ div#title {
 .tri-state {
     width: 6em;
 }
+
+.document-revisions table td
+{
+    border-bottom: 3px solid black;
+}
+
+.document-revisions table td:nth-child(2) 
+{
+    border-right: 3px solid black;
+}
