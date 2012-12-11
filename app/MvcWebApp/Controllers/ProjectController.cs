@@ -53,8 +53,8 @@ namespace MvcWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                controller.CreateProject(project.Title, User.Identity.Name);
-                return RedirectToAction("Index");
+                Project result = controller.CreateProject(project.Title, User.Identity.Name);
+                return RedirectToAction("Index", result);
             }
 
             return View(project);
@@ -79,7 +79,7 @@ namespace MvcWebApp.Controllers
             if (p == null) {
                 return HttpNotFound();
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Overview");
         }
     }
 }
