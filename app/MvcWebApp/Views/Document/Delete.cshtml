@@ -1,0 +1,24 @@
+﻿@model SliceOfPie.Document
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this document?</h3>
+<fieldset>
+    <legend>Document to delete:</legend>
+
+    <div class="display-field">
+        <h3>
+            @Html.DisplayFor(model => Model.Title)
+        </h3>
+    </div>
+</fieldset>
+@using (Html.BeginForm(null,null,FormMethod.Post)) {
+    @Html.HiddenFor(model => Model.Id)
+    <p>
+        <input type="submit" value="Delete" />
+    </p>
+}

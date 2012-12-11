@@ -1,0 +1,53 @@
+﻿@model SliceOfPie.Folder
+@{
+    ViewBag.Title = "Contents of Folder";
+}
+
+<h2><img src="@Url.Content("~/Icons/folder-icon.png")" style="vertical-align: middle;" /><span style="vertical-align: middle;">Contents of Folder @Model.Title</span></h2>
+<p>
+    @Html.ActionLink("Create New Folder", "../Folder/CreateInFolder", new SliceOfPie.Folder() { FolderId = Model.Id }) | 
+    @Html.ActionLink("Create New Document", "../Document/Create", new SliceOfPie.Document() { FolderId = Model.Id })
+</p>
+<table>
+    <tr>
+        <th>
+            ID
+        </th>
+        <th>
+            Title
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.GetFolders()) {
+    <tr>
+        <td>
+            @Html.AttributeEncode(item.Id)
+        </td>
+        <td>
+            @Html.ActionLink(item.Title, "Index", item)
+        </td>
+        <td>
+            @Html.ActionLink("Delete", "Delete", item)
+        </td>
+    </tr>
+}
+@foreach (var item in Model.GetDocuments()) {
+    <tr>
+        <td>
+            @Html.AttributeEncode(item.Id)
+        </td>
+        
+        <td>
+            @Html.ActionLink(item.Title, "../Document/Edit", item)
+        </td>
+        <td>
+            @Html.ActionLink("Show", "../Document/Show", item)    
+        </td>
+        <td>
+            @Html.ActionLink("Delete", "../Document/Delete", item)
+        </td>
+    </tr>
+}
+
+</table>

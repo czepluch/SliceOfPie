@@ -83,6 +83,28 @@ namespace SliceOfPie {
         public abstract void SyncFiles(string userMail);
 
         /// <summary>
+        /// Get a project by its id. Used for when sessions are lost, to recover at the needed point.
+        /// </summary>
+        /// <param name="id">id of project</param>
+        /// <returns>project</returns>
+        public abstract Project GetProject(int id);
+
+        /// <summary>
+        /// Get a folder by its id. Used for when sessions are lost, to recover at the needed point.
+        /// This is not expected to include the parent.
+        /// </summary>
+        /// <param name="id">id of folder</param>
+        /// <returns>folder</returns>
+        public abstract Folder GetFolder(int id);
+
+        /// <summary>
+        /// Get a document by its id. Used for when sessions are lost, to recover at the needed point.
+        /// This is not expected to include the parent.
+        /// </summary>
+        /// <param name="id">id of document</param>
+        /// <returns>document</returns>
+        public abstract Document GetDocument(int id);
+
         /// Download revisions for a specific document and save them in internal collection.
         /// </summary>
         /// <param name="document"></param>

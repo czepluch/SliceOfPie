@@ -1,0 +1,28 @@
+﻿@model SliceOfPie.Document
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2><img src="@Url.Content("~/Icons/document-icon.png")" style="vertical-align: middle;" /><span style="vertical-align: middle;">Contents of @Model.Title <sup style="font-weight: normal;">(@(((int)Model.CurrentHash).ToString("X").ToLower()))</sup></span></h2>
+
+@using (Html.BeginForm(null,null,FormMethod.Post)) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend><img src="@Url.Content("~/Icons/document-icon.png")" style="vertical-align: middle;" /><span style="vertical-align: middle;">Edit Document</span></legend>
+        @Html.HiddenFor(model => Model.Id)
+        @Html.HiddenFor(model => Model.Title)
+        @Html.HiddenFor(model => Model.CurrentHash)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => Model.Title)
+        </div>
+        <textarea style="width: 700px; height: 400px;" name="NewContent">@Model.CurrentRevision</textarea>
+
+        <p>
+            <input type="submit" value="Edit" />
+        </p>
+    </fieldset>
+}
+
+
+

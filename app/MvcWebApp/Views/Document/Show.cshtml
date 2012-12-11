@@ -1,0 +1,17 @@
+﻿@model SliceOfPie.Document
+
+@{
+    ViewBag.Title = "Show";
+}
+
+<fieldset>
+    <legend><img src="@Url.Content("~/Icons/document-icon.png")" style="vertical-align: middle;" /> <span style="vertical-align: middle;">@Model.Title <sup style="font-weight: normal;">(@(((int)Model.CurrentHash).ToString("X").ToLower()))</sup></span></legend>
+
+    <div class="display-field">
+        @Html.Raw(Model.CurrentRevision)
+    </div>
+
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id })
+</p>

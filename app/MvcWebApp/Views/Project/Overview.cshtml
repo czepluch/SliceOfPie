@@ -1,0 +1,41 @@
+﻿@model IEnumerable<SliceOfPie.Project>
+@{
+    ViewBag.Title = "My Projects";
+}
+
+    <h2>My Projects (@User.Identity.Name)</h2>
+    <p>
+        @Html.ActionLink("Create New Project", "Create")
+    </p>
+    <table>
+    <tr>
+        <th></th>
+        <th>
+            ID
+        </th>
+        <th>
+            Title
+        </th>
+        
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            <img src="@Url.Content("~/Icons/project-icon.png")" />
+        </td>
+        <td style="text-align: right;">
+            @Html.AttributeEncode(item.Id)
+        </td>
+        <td>
+            @Html.ActionLink(item.Title, "../Project/Index", item)
+        </td>
+        <td>
+            @Html.ActionLink("Share", "Share", item) |
+            @Html.ActionLink("Delete", "Delete", item)
+        </td>
+    </tr>
+}
+
+</table>
