@@ -541,8 +541,9 @@ namespace SliceOfPie.Client {
                         IEnumerable<Revision> revisions = controller.EndDownloadRevisions(iar);
                         foreach (Revision revision in revisions) {
                             string revisionContent = revision.Content;
+                            DateTime? revisionTimeStamp = revision.Timestamp;
                             syncContext.Post((o) => {
-                                ListBoxItem item = new ListBoxItem() { Content = revision.Timestamp };
+                                ListBoxItem item = new ListBoxItem() { Content = revisionTimeStamp };
                                 item.Selected += new RoutedEventHandler((itemSelected, eventArgs) => historyPopUpTextBox.Text = revisionContent);
                                 historyList.Items.Add(item);
                             }, null);
