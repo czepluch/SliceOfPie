@@ -113,7 +113,9 @@
                         <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
                     <Button Height="70" Click="OpenCreateProjectWindow">Create new project</Button>
-                    <Button Grid.Column="1" Height="70" Click="Synchronize_Click">Sync.</Button>
+                    <Button  Grid.Column="1" Height="70" Click="Synchronize_Click">
+                        <Image Height="40" Width="40" Source="/Images/sync.png"/>
+                    </Button>
                 </Grid>
                 <ScrollViewer  Width="170" Height="auto" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <local:DocumentExplorer x:Name="documentExplorer"/>
