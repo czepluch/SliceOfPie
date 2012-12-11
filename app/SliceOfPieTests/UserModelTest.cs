@@ -8,7 +8,12 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace SliceOfPie.Tests {
     [TestClass]
     public class UserModelTest {
+        string AppPath;
         UserModel userModel = new UserModel();
+
+        public UserModelTest() {
+            AppPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie");
+        }
 
         /// <summary>
         /// Assert that a known user can login correctly.
@@ -50,6 +55,18 @@ namespace SliceOfPie.Tests {
                                    select projectUser;
                 Assert.AreEqual(1, projectUsers.Count());
             }
+        }
+
+        [TestInitialize]
+        public void Initialize() {
+            TestHelper.ClearDatabase("common@test.mail");
+            TestHelper.ClearFolder(AppPath);
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup() {
+            TestHelper.ClearDatabase("common@test.mail");
+            TestHelper.ClearFolder(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie"));
         }
     }
 }

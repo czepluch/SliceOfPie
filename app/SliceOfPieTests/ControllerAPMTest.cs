@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.IO;
 using SliceOfPie;
 
 namespace SliceOfPie.Tests {
@@ -16,7 +17,7 @@ namespace SliceOfPie.Tests {
         private string AppPath;
 
         public ControllerAPMTest() {
-            AppPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie");
+            AppPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie");
         }
 
         /// <summary>
@@ -183,6 +184,12 @@ namespace SliceOfPie.Tests {
         public void Initialize() {
             TestHelper.ClearDatabase("common@test.mail");
             TestHelper.ClearFolder(AppPath);
+        }
+
+        [ClassCleanup]
+        public static void ClassCleanup() {
+            TestHelper.ClearDatabase("common@test.mail");
+            TestHelper.ClearFolder(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie"));
         }
     }
 }
