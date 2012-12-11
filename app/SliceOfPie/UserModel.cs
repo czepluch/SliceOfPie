@@ -42,6 +42,12 @@ namespace SliceOfPie {
         }
 
         public void ShareProject(int projectId, string userMail) {
+            if (projectId == 0) {
+                throw new ArgumentException("Project has to be synced, before it can be shared");
+            }
+            if (userMail.Length < 1) {
+                throw new ArgumentException("User email cannot be blank");
+            }
             userMail = userMail.Trim();
             bool userExists = false;
             using (var dbContext = new sliceofpieEntities2()) {
