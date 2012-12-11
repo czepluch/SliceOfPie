@@ -4,7 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:local="clr-namespace:SliceOfPie.Client"
-        Title="Slice of Pie" Height="500" Width="800" MinHeight="300" MinWidth="500" Icon="/SliceOfPieClient;component/grin.ico">
+        Title="Slice of Pie" Height="500" Width="800" MinHeight="300" MinWidth="500" Icon="/SliceOfPieClient;component/localui-icon.ico">
     <Grid>
         <Popup Name="createProjectPopUp" Height="200" Width="500" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
             <DockPanel Background="#FF949494">
