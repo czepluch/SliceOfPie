@@ -92,7 +92,7 @@
                 <Button Padding="5" Margin="5,2,5,2" DockPanel.Dock="Bottom" IsDefault="True" Click="HistoryPopUpCloseButton_Click">Close</Button>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="3*"/>
                         <ColumnDefinition Width="7*"/>
                     </Grid.ColumnDefinitions>
 
@@ -100,7 +100,7 @@
                         <ListBoxItem>22-10-2012</ListBoxItem>
                         <ListBoxItem>10-12-1954</ListBoxItem>
                     </ListBox>
-                    <TextBox Name="historyPopUpTextBox" Grid.Column="1" Background="#FFFED162" FontFamily="Consolas" FontSize="11" Padding="5" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Name="historyPopUpTextBox" Grid.Column="1" Background="#FFFFFFDB" FontFamily="Consolas" FontSize="11" Padding="5" AcceptsReturn="True" TextWrapping="Wrap"/>
                 </Grid>
             </DockPanel>
         </Popup>
