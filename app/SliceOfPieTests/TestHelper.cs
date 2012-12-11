@@ -8,31 +8,30 @@ namespace SliceOfPie.Tests {
     public static class TestHelper {
         public static void ClearDatabase(string email) {
             List<Project> projectsContainer = new List<Project>();
-            List<ProjectUser> projectUsersContainer = new List<ProjectUser>();
             using (var dbContext = new sliceofpieEntities2()) {
                 var projects = from projectUser in dbContext.ProjectUsers
                                from project in dbContext.Projects
                                where projectUser.UserEmail == email && projectUser.ProjectId == project.Id
-                               select new { projectUser, project };
-                foreach (var project in projects) {
-                    projectsContainer.Add(project.project);
-                    projectUsersContainer.Add(project.projectUser);
+                               select project;
+                foreach (Project project in projects) {
+                    projectsContainer.Add(project);
                 }
             }
-            foreach (ProjectUser projectUser in projectUsersContainer) {
+            List<ProjectUser> projectUsersContainer = new List<ProjectUser>();
+            foreach (Project project in projectsContainer) {
+                using (var dbContext = new sliceofpieEntities2()) {
+                    var projectUsers = from dbProjectUser in dbContext.ProjectUsers
+                                       where dbProjectUser.ProjectId == project.Id
+                                       select dbProjectUser;
+                    foreach (ProjectUser projectUser in projectUsers) {
+                        dbContext.ProjectUsers.DeleteObject(projectUser);
+                    }
+                    dbContext.SaveChanges();
+                }
             }
             foreach (Project project in projectsContainer) {
                 ClearDatabaseFolders(project, Container.Project);
                 ClearDatabaseDocuments(project, Container.Project);
-                using (var dbContext = new sliceofpieEntities2()) {
-                    var projectUsers = from projectUser in dbContext.ProjectUsers
-                                       where projectUser.ProjectId == project.Id
-                                       select projectUser;
-                    foreach (ProjectUser user in projectUsers) {
-                        dbContext.ProjectUsers.DeleteObject(user);
-                    }
-                    dbContext.SaveChanges();
-                }
                 using (var dbContext = new sliceofpieEntities2()) {
                     var projects = from dbProject in dbContext.Projects
                                    where dbProject.Id == project.Id
