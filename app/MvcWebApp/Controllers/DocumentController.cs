@@ -18,23 +18,26 @@ namespace MvcWebApp.Controllers {
             return View(controller.GetDocumentDirectly(id));
         }
 
-        public ActionResult Create() {
-            return View();
+        public ActionResult Create(Document d) {
+            return View(d);
         }
 
         //
         // POST: /Folder/Create
 
-        [HttpPost]
-        public ActionResult Create(FormCollection collection) {
-            try {
-                // TODO: Add insert logic here
+        [HttpPost, ActionName("Create")]
+        public ActionResult CreateCompleted(Document newDocument) {
+                //Get parent
+                IItemContainer parent;
+                if (newDocument.ProjectId != null) {
+                    parent = controller.GetProjectDirectly((int)newDocument.ProjectId);
+                }
+                else {
+                    parent = controller.GetFolderDirectly((int)newDocument.FolderId);
+                }
 
-                return RedirectToAction("Index");
-            }
-            catch {
-                return View();
-            }
+                Document result = controller.CreateDocument(newDocument.Title, User.Identity.Name, parent);
+                return RedirectToAction("Edit", result);
         }
 
 
@@ -48,9 +51,8 @@ namespace MvcWebApp.Controllers {
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection) {
             try {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
+                controller.RemoveDocument(controller.GetDocumentDirectly(id));
+                return RedirectToAction("Overview","Project");
             }
             catch {
                 return View();

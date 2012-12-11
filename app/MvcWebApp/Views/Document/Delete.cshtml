@@ -8,21 +8,15 @@
 
 <h3>Are you sure you want to delete this?</h3>
 <fieldset>
-    <legend>Project</legend>
+    <legend>Document</legend>
 
     <div class="display-label">Title</div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Title)
     </div>
-
-    <div class="display-label">AppPath</div>
-    <div class="display-field">
-        @Html.DisplayFor(model => model.AppPath)
-    </div>
 </fieldset>
-@using (Html.BeginForm()) {
+@using (Html.BeginForm(null,null,FormMethod.Post)) {
     <p>
-        <input type="submit" value="Delete" /> |
-        @Html.ActionLink("Back to List", "Index")
+        <input type="submit" value="Delete" />
     </p>
 }

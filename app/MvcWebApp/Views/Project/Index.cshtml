@@ -6,7 +6,7 @@
     <h2>Index of Project @Model.Title</h2>
     <p>
         @Html.ActionLink("Create New Folder", "../Folder/CreateInProject", new SliceOfPie.Folder() { ProjectId = Model.Id }) | 
-        @Html.ActionLink("Create New Document", "../Document/Create", Model)
+        @Html.ActionLink("Create New Document", "../Document/Create", new SliceOfPie.Document() { ProjectId = Model.Id })
     </p>
     <table>
     <tr>

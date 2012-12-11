@@ -6,7 +6,7 @@
 <h2>Contents of Folder @Model.Title</h2>
 <p>
     @Html.ActionLink("Create New Folder", "../Folder/CreateInFolder", new SliceOfPie.Folder() { FolderId = Model.Id }) | 
-    @Html.ActionLink("Create New Document", "../Document/Create", Model)
+    @Html.ActionLink("Create New Document", "../Document/Create", new SliceOfPie.Document() { FolderId = Model.Id })
 </p>
 <table>
     <tr>
