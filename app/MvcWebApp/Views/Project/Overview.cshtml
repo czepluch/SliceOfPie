@@ -9,6 +9,7 @@
     </p>
     <table>
     <tr>
+        <th></th>
         <th>
             ID
         </th>
@@ -22,6 +23,9 @@
 @foreach (var item in Model) {
     <tr>
         <td>
+            <img src="@Url.Content("~/Icons/project-icon.png")" />
+        </td>
+        <td style="text-align: right;">
             @Html.AttributeEncode(item.Id)
         </td>
         <td>

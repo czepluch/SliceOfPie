@@ -10,6 +10,7 @@
     </p>
     <table>
     <tr>
+        <th></th>
         <th>
             ID
         </th>
@@ -24,6 +25,9 @@
 @foreach (var item in Model.GetFolders()) {
     <tr>
         <td>
+            <img src="@Url.Content("~/Icons/folder-icon.png")" />
+        </td>
+        <td>
             @Html.AttributeEncode(item.Id)
         </td>
         <td>
@@ -37,6 +41,9 @@
 }
 @foreach (var item in Model.GetDocuments()) {
     <tr>
+        <td>
+            <img src="@Url.Content("~/Icons/document-icon.png")" />
+        </td>
         <td>
             @Html.AttributeEncode(item.Id)
         </td>
