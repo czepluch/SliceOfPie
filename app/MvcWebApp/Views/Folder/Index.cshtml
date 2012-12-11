@@ -3,7 +3,7 @@
     ViewBag.Title = "Contents of Folder";
 }
 
-<h2>Contents of Folder @Model.Title</h2>
+<h2><img src="@Url.Content("~/Icons/folder-icon.png")" style="vertical-align: middle;" /><span style="vertical-align: middle;">Contents of Folder @Model.Title</span></h2>
 <p>
     @Html.ActionLink("Create New Folder", "../Folder/CreateInFolder", new SliceOfPie.Folder() { FolderId = Model.Id }) | 
     @Html.ActionLink("Create New Document", "../Document/Create", new SliceOfPie.Document() { FolderId = Model.Id })

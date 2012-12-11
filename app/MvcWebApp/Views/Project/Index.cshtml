@@ -3,7 +3,7 @@
     ViewBag.Title = "Index of Project "+Model.Title;
 }
 
-    <h2>Index of Project @Model.Title</h2>
+    <h2><img src="@Url.Content("~/Icons/project-icon.png")" style="vertical-align: middle;" /><span style="vertical-align: middle;">Index of Project @Model.Title</span></h2>
     <p>
         @Html.ActionLink("Create New Folder", "../Folder/CreateInProject", new SliceOfPie.Folder() { ProjectId = Model.Id }) | 
         @Html.ActionLink("Create New Document", "../Document/Create", new SliceOfPie.Document() { ProjectId = Model.Id })
@@ -27,7 +27,7 @@
         <td>
             <img src="@Url.Content("~/Icons/folder-icon.png")" />
         </td>
-        <td>
+        <td style="text-align: right;">
             @Html.AttributeEncode(item.Id)
         </td>
         <td>
