@@ -31,7 +31,7 @@ namespace SliceOfPie.Client {
         private ContextMenu projectContextMenu, folderContextMenu, documentContextMenu;
 
         private IListableItem currentContextItem;
-        private string imageStartTag = "<IMAGEURL{", imageEndTag = "}>";
+        private string imageStartTag = "<img src=\"", imageEndTag = "\" alt=\"\">";
 
         /// <summary>
         /// Creates the Main Window for the Slice of Pie application
