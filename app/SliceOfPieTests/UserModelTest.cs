@@ -15,7 +15,7 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestValidateLoginSuccess() {
-            Assert.IsTrue(userModel.ValidateLogin("me@hypesystem.dk", "pw"));
+            Assert.IsTrue(userModel.ValidateLogin("common@test.mail", "pw"));
         }
 
         /// <summary>
@@ -23,7 +23,7 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestValidateLoginFailure() {
-            Assert.IsFalse(userModel.ValidateLogin("me@hypesystem.dk", "WrongPassword"));
+            Assert.IsFalse(userModel.ValidateLogin("common@test.mail", "WrongPassword"));
         }
 
         [TestMethod]

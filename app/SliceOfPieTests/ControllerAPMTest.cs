@@ -13,6 +13,11 @@ namespace SliceOfPie.Tests {
     [TestClass]
     public class ControllerAPMTest {
         private Controller controller = Controller.Instance;
+        private string AppPath;
+
+        public ControllerAPMTest() {
+            AppPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie");
+        }
 
         /// <summary>
         /// Tests that projects may be created asynchronously
@@ -20,7 +25,7 @@ namespace SliceOfPie.Tests {
         [TestMethod]
         public void TestProjectCreate() {
             string projectName = "New Project";
-            IAsyncResult ar = controller.BeginCreateProject(projectName, "user@mail.com", null, null);
+            IAsyncResult ar = controller.BeginCreateProject(projectName, "common@test.mail", null, null);
 
             Project p = controller.EndCreateProject(ar);
 
@@ -33,16 +38,16 @@ namespace SliceOfPie.Tests {
         [TestMethod]
         public void TestProjectRemove() {
             string projectName = "AProject";
-            IAsyncResult createAr = controller.BeginCreateProject(projectName, "user@mail.com", null, null);
+            IAsyncResult createAr = controller.BeginCreateProject(projectName, "common@test.mail", null, null);
             Project p = controller.EndCreateProject(createAr);
 
-            IAsyncResult getAllAr = controller.BeginGetProjects("user@mail.com", null, null);
+            IAsyncResult getAllAr = controller.BeginGetProjects("common@test.mail", null, null);
             Assert.IsTrue(controller.EndGetProjects(getAllAr).Contains(p));
 
             IAsyncResult removeAr = controller.BeginRemoveProject(p, null, null);
             controller.EndRemoveProject(removeAr);
 
-            IAsyncResult getAllAgainAr = controller.BeginGetProjects("user@mail.com", null, null);
+            IAsyncResult getAllAgainAr = controller.BeginGetProjects("common@test.mail", null, null);
             Assert.IsFalse(controller.EndGetProjects(getAllAgainAr).Contains(p));
         }
 
@@ -51,8 +56,6 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestProjectShare() {
-            TestHelper.ClearFolder(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie"));
-
             LocalFileModel model = new LocalFileModel();
 
             IEnumerable<Project> projects = model.GetProjects("local");
@@ -83,8 +86,8 @@ namespace SliceOfPie.Tests {
         [TestMethod]
         public void TestDocumentCreate() {
             string documentTitle = "Hello World";
-            Project p = controller.CreateProject("New Pruhjekt", "user@mail.com");
-            IAsyncResult ar = controller.BeginCreateDocument(documentTitle, "user@mail.com", p, null, null);
+            Project p = controller.CreateProject("New Pruhjekt", "common@test.mail");
+            IAsyncResult ar = controller.BeginCreateDocument(documentTitle, "common@test.mail", p, null, null);
             Document d = controller.EndCreateDocument(ar);
 
             Assert.AreEqual(documentTitle, d.Title);
@@ -95,8 +98,8 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestDocumentSave() {
-            Project p = controller.CreateProject("TestProj", "me@hypesystem.dk");
-            Document d = controller.CreateDocument("NewDoc", "me@hypesystem.dk", p);
+            Project p = controller.CreateProject("TestProj", "common@test.mail");
+            Document d = controller.CreateDocument("NewDoc", "common@test.mail", p);
 
             d.CurrentRevision = "New Text Here.";
 
@@ -115,8 +118,8 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestDocumentRemove() {
-            Project p = controller.CreateProject("TestProj", "me@hypesystem.dk");
-            Document d = controller.CreateDocument("NewDoc22", "me@hypesystem.dk", p);
+            Project p = controller.CreateProject("TestProj", "common@test.mail");
+            Document d = controller.CreateDocument("NewDoc22", "common@test.mail", p);
 
             IAsyncResult ar2 = controller.BeginRemoveDocument(d, null, null);
             controller.EndRemoveDocument(ar2);
@@ -127,8 +130,8 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestFolderCreate() {
-            Project p = controller.CreateProject("TestProjzxx", "me@hypesystem.dk");
-            IAsyncResult ar = controller.BeginCreateFolder("FolderCoolSauce", "me@hypesystem.dk", p, null, null);
+            Project p = controller.CreateProject("TestProjzxx", "common@test.mail");
+            IAsyncResult ar = controller.BeginCreateFolder("FolderCoolSauce", "common@test.mail", p, null, null);
             Folder f = controller.EndCreateFolder(ar);
 
             Assert.AreEqual("FolderCoolSauce", f.Title);
@@ -139,8 +142,8 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestFolderRemove() {
-            Project p = controller.CreateProject("TestProjzxx", "me@hypesystem.dk");
-            Folder f = controller.CreateFolder("FolderLolz", "me@hypesystem.dk", p);
+            Project p = controller.CreateProject("TestProjzxx", "common@test.mail");
+            Folder f = controller.CreateFolder("FolderLolz", "common@test.mail", p);
 
             IAsyncResult ar = controller.BeginRemoveFolder(f, null, null);
             controller.EndRemoveFolder(ar);
@@ -151,7 +154,7 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestGetProjects() {
-            IAsyncResult argh = controller.BeginGetProjects("me@hypesystem.dk", (ar) => {
+            IAsyncResult argh = controller.BeginGetProjects("common@test.mail", (ar) => {
                 Project[] projects = controller.EndGetProjects(ar).ToArray();
 
                 Assert.IsTrue(projects.Count() > 0);
@@ -168,11 +171,18 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestSyncProjects() {
-            //TODO: Only test if it is NOT a web-controller.
-            IAsyncResult ar = controller.BeginSyncProjects("me@hypesystem.dk", "pw", null, null);
+            LocalFileModel model = new LocalFileModel();
+
+            IAsyncResult ar = controller.BeginSyncProjects("common@test.mail", "pw", null, null);
             IEnumerable<Project> projectsSynced = controller.EndSyncProjects(ar);
 
             Assert.IsTrue(projectsSynced.Count() > 0);
+        }
+
+        [TestInitialize]
+        public void Initialize() {
+            TestHelper.ClearDatabase("common@test.mail");
+            TestHelper.ClearFolder(AppPath);
         }
     }
 }

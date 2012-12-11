@@ -350,11 +350,5 @@ namespace SliceOfPie.Tests {
             TestHelper.ClearFolder(AppPath);
             Model = new LocalFileModel();
         }
-
-        [TestCleanup]
-        public void Cleanup() {
-            //TestHelper.ClearDatabase("common@test.mail");
-            TestHelper.ClearFolder(AppPath);
-        }
     }
 }
