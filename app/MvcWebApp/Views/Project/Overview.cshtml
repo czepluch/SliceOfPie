@@ -28,6 +28,7 @@
             @Html.ActionLink(item.Title, "../Project/Index", item)
         </td>
         <td>
+            @Html.ActionLink("Share", "Share", item) |
             @Html.ActionLink("Delete", "Delete", item)
         </td>
     </tr>
