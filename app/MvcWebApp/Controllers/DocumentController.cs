@@ -57,13 +57,16 @@ namespace MvcWebApp.Controllers {
                 return RedirectToAction("Edit", result);
         }
 
+        //
+        // GET: /Document/Delete
 
+        [ValidateInput(false)] // Allow html rendering
         public ActionResult Delete(Document d) {
             return View(d);
         }
 
         //
-        // POST: /Folder/Delete/5
+        // POST: /Document/Delete/:id
 
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(Document d) {
