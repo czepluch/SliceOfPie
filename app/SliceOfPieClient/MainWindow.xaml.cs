@@ -31,7 +31,7 @@ namespace SliceOfPie.Client {
         private ContextMenu projectContextMenu, folderContextMenu, documentContextMenu;
 
         private IListableItem currentContextItem;
-        private string imageStartTag = "<IMAGEURL{" , imageEndTag = "}>";
+        private string imageStartTag = "<IMAGEURL{", imageEndTag = "}>";
 
         /// <summary>
         /// Creates the Main Window for the Slice of Pie application
@@ -51,7 +51,7 @@ namespace SliceOfPie.Client {
             folderContentViewWrapper = new ContentWrapper();
             folderContentViewWrapper.addMenuButton("Create document", "/Images/new-document.png", new RoutedEventHandler(OpenCreateDocumentWindow));
             folderContentViewWrapper.addMenuButton("Create folder", "/Images/new-folder.png", new RoutedEventHandler(OpenCreateFolderWindow));
-            
+
             //Create the underlying folderContentView
             folderContentView = new FolderContentView();
             folderContentView.ItemDoubleClicked += new EventHandler<ListableItemEventArgs>(FolderContentView_DoubleClick);
@@ -70,12 +70,12 @@ namespace SliceOfPie.Client {
             textEditorWrapper.Content = textEditor;
 
 
-            
+
 
 
             RefreshLocalProjects();
         }
-              
+
         /// <summary>
         /// This method refreshes the projects (local only)
         /// </summary>
@@ -104,7 +104,7 @@ namespace SliceOfPie.Client {
                 }
             }, null);
         }
-        
+
         /// <summary>
         /// Fills the MainContent with useful information for the specific item
         /// </summary>
@@ -363,7 +363,7 @@ namespace SliceOfPie.Client {
             createFolderPopUP.IsOpen = false;
             IsEnabled = true;
             createFolderPopUPTextBox.Clear();
-            
+
         }
 
         /// <summary>
@@ -432,13 +432,13 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void loginPopUpLoginButton_Click(object sender, RoutedEventArgs e) {
-                controller.BeginSyncProjects(loginPopUpUserTextBox.Text, loginPopUpPasswordBox.Password, (iar) => Refresh(controller.EndSyncProjects(iar)), null);
-                loginPopUp.IsOpen = false;
-                IsEnabled = true;
-                loginPopUpUserTextBox.Clear();
-                loginPopUpPasswordBox.Clear();
-                loginPopUpErrorLabel.Content = "";
-                //TODO consider setting error label/ stalling with popup "SYNCING"
+            controller.BeginSyncProjects(loginPopUpUserTextBox.Text, loginPopUpPasswordBox.Password, (iar) => Refresh(controller.EndSyncProjects(iar)), null);
+            loginPopUp.IsOpen = false;
+            IsEnabled = true;
+            loginPopUpUserTextBox.Clear();
+            loginPopUpPasswordBox.Clear();
+            loginPopUpErrorLabel.Content = "";
+            //TODO consider setting error label/ stalling with popup "SYNCING"
         }
 
         /// <summary>
@@ -512,11 +512,16 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments.</param>
         private void OpenHistoryPopUp(object sender, RoutedEventArgs e) {
             //setup history popup
-            SetUpHistoryPopUp();
-            historyPopUpTopLabel.Content = "History for " + textEditor.Document.Title;
-            IsEnabled = false;
-            historyPopUp.IsOpen = true;
-            //Select top entry
+            try {
+                SetUpHistoryPopUp();
+                historyPopUpTopLabel.Content = "History for " + textEditor.Document.Title;
+                IsEnabled = false;
+                historyPopUp.IsOpen = true;
+                //Select top entry
+            }
+            catch (System.Data.EntityException ex) {
+                OpenNoInternetPopUp();
+            }
         }
 
         private void SetUpHistoryPopUp() {
@@ -536,6 +541,22 @@ namespace SliceOfPie.Client {
         /// <param name="e">The event arguments.</param>
         private void HistoryPopUpCloseButton_Click(object sender, RoutedEventArgs e) {
             historyPopUp.IsOpen = false;
+            IsEnabled = true;
+        }
+
+        private void OpenNoInternetPopUp() {
+            IsEnabled = false;
+            noInternetPopUp.IsOpen = true;
+            noInternetPopUp.Focus();
+        }
+
+        /// <summary>
+        /// This is the click handler for the Close button in the No internet pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void NoInternetPopUpOkButton_Click(object sender, RoutedEventArgs e) {
+            noInternetPopUp.IsOpen = false;
             IsEnabled = true;
         }
 

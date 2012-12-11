@@ -74,7 +74,7 @@
                 </StackPanel>
             </DockPanel>
         </Popup>
-        <Popup Name="insertImagePopUp" Height="200" Width="400" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieTextEditor}">
+        <Popup Name="insertImagePopUp" Height="200" Width="400" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
             <DockPanel Background="#FF949494">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
                     <Button Padding="5" Margin="5,2,5,2" Click="InsertImagePopUpInsertButton_Click"  IsDefault="True" >Insert</Button>
@@ -86,7 +86,7 @@
                 </StackPanel>
             </DockPanel>
         </Popup>
-        <Popup Name="historyPopUp" Height="400" Width="450" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieTextEditor}">
+        <Popup Name="historyPopUp" Height="400" Width="450" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
             <DockPanel Background="#FF949494">
                 <Label Name="historyPopUpTopLabel" DockPanel.Dock="Top"/>
                 <Button Padding="5" Margin="5,2,5,2" DockPanel.Dock="Bottom" IsDefault="True" Click="HistoryPopUpCloseButton_Click">Close</Button>
@@ -102,6 +102,16 @@
                     </ListBox>
                     <TextBox Name="historyPopUpTextBox" Grid.Column="1" Background="#FFFFFFDB" FontFamily="Consolas" FontSize="11" Padding="5" AcceptsReturn="True" TextWrapping="Wrap"/>
                 </Grid>
+            </DockPanel>
+        </Popup>
+
+        <Popup Name="noInternetPopUp" Height="100" Width="400" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
+            <DockPanel Background="#FF949494">
+                <Button Padding="5" Margin="5,2,5,2" DockPanel.Dock="Bottom" IsDefault="True" Click="NoInternetPopUpOkButton_Click">OK</Button>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical">
+                    <Label>There was an error accessing the server.</Label>
+                    <Label>Please check your internet connection.</Label>
+                </StackPanel>
             </DockPanel>
         </Popup>
 
