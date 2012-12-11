@@ -39,6 +39,7 @@ namespace SliceOfPie {
         }
 
         public void ShareProject(int projectId, string userMail) {
+            userMail = userMail.Trim();
             bool userExists = false;
             using (var dbContext = new sliceofpieEntities2()) {
                 if (dbContext.Users.Count(dbUser => dbUser.Email.Equals(userMail)) > 0) {
