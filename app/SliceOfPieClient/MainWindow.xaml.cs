@@ -69,10 +69,6 @@ namespace SliceOfPie.Client {
             //Add to wrapper
             textEditorWrapper.Content = textEditor;
 
-
-
-
-
             RefreshLocalProjects();
         }
 
@@ -432,13 +428,38 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void loginPopUpLoginButton_Click(object sender, RoutedEventArgs e) {
-            controller.BeginSyncProjects(loginPopUpUserTextBox.Text, loginPopUpPasswordBox.Password, (iar) => Refresh(controller.EndSyncProjects(iar)), null);
-            loginPopUp.IsOpen = false;
-            IsEnabled = true;
-            loginPopUpUserTextBox.Clear();
-            loginPopUpPasswordBox.Clear();
-            loginPopUpErrorLabel.Content = "";
-            //TODO consider setting error label/ stalling with popup "SYNCING"
+            if (loginPopUpUserTextBox.Text.Length > 0 && loginPopUpPasswordBox.Password.Length > 0) {
+                loginPopUpCancelButton.IsEnabled = false;
+                loginPopUpLoginButton.IsEnabled = false;
+                syncingPopUp.IsOpen = true;
+                controller.BeginSyncProjects(loginPopUpUserTextBox.Text, loginPopUpPasswordBox.Password,
+                    (iar) => {
+                        //Callback posted in UI-context
+                        syncContext.Post((o) => {
+                            try {
+                                Refresh(controller.EndSyncProjects(iar));
+
+                                syncingPopUp.IsOpen = false;
+                                loginPopUpCancelButton.IsEnabled = true;
+                                loginPopUpLoginButton.IsEnabled = true;
+                                loginPopUp.IsOpen = false;
+                                IsEnabled = true;
+                                loginPopUpUserTextBox.Clear();
+                                loginPopUpPasswordBox.Clear();
+                                loginPopUpErrorLabel.Content = "";
+                            }
+                            catch (AsyncException ex) {
+                                loginPopUpErrorLabel.Content = "Synchronization failed.";
+                                syncingPopUp.IsOpen = false;
+                                loginPopUpCancelButton.IsEnabled = true;
+                                loginPopUpLoginButton.IsEnabled = true;
+                            }
+                        }, null);
+                    }, null);
+            }
+            else {
+                loginPopUpErrorLabel.Content = "Please enter both email and password.";
+            }
         }
 
         /// <summary>
@@ -460,9 +481,6 @@ namespace SliceOfPie.Client {
         }
 
         #endregion
-
-
-
 
         /// <summary>
         /// This event handler opens the Insert Image pop-up window
@@ -547,7 +565,6 @@ namespace SliceOfPie.Client {
         private void OpenNoInternetPopUp() {
             IsEnabled = false;
             noInternetPopUp.IsOpen = true;
-            noInternetPopUp.Focus();
         }
 
         /// <summary>

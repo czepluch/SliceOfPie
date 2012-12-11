@@ -2,6 +2,7 @@
         Name="SliceOfPieMainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:local="clr-namespace:SliceOfPie.Client"
         Title="Slice of Pie" Height="500" Width="800" MinHeight="300" MinWidth="500" Icon="/SliceOfPieClient;component/grin.ico">
     <Grid>
@@ -57,8 +58,8 @@
         <Popup Name="loginPopUp" Height="200" Width="500" Placement="Center" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
             <DockPanel Background="#FF949494">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-                    <Button Padding="5" Margin="5,2,5,2" Click="loginPopUpLoginButton_Click"  IsDefault="True">Login</Button>
-                    <Button Padding="5" Margin="5,2,5,2" Click="LoginPopUpCancelButton_Click">Cancel</Button>
+                    <Button Name="loginPopUpLoginButton"  Padding="5" Margin="5,2,5,2" Click="loginPopUpLoginButton_Click"  IsDefault="True">Login</Button>
+                    <Button Name="loginPopUpCancelButton" Padding="5" Margin="5,2,5,2" Click="LoginPopUpCancelButton_Click">Cancel</Button>
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label>You must enter your login information to continue this operation</Label>
@@ -113,6 +114,14 @@
                     <Label>Please check your internet connection.</Label>
                 </StackPanel>
             </DockPanel>
+        </Popup>
+
+        <Popup Name="syncingPopUp" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
+            <Border BorderThickness="4" CornerRadius="4" BorderBrush="Black">
+                <StackPanel Height="40" Width="110" Background="#FF949494" VerticalAlignment="Center">
+                    <Image Height="40" Width="40" gif:ImageBehavior.AnimatedSource="/Animations/sync-spinner.gif" />
+                </StackPanel>
+            </Border>
         </Popup>
 
         <DockPanel LastChildFill="True">
