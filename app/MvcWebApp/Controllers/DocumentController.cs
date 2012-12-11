@@ -32,7 +32,7 @@ namespace MvcWebApp.Controllers {
         public ActionResult EditSave(Document d, string NewContent) {
             d.CurrentRevision = NewContent;
             controller.SaveDocument(d);
-            return View(d);
+            return RedirectToAction("Show", d);
         }
 
         public ActionResult Create(Document d) {
@@ -58,22 +58,17 @@ namespace MvcWebApp.Controllers {
         }
 
 
-        public ActionResult Delete(int id) {
-            return View();
+        public ActionResult Delete(Document d) {
+            return View(d);
         }
 
         //
         // POST: /Folder/Delete/5
 
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection) {
-            try {
-                controller.RemoveDocument(controller.GetDocumentDirectly(id));
-                return RedirectToAction("Overview","Project");
-            }
-            catch {
-                return View();
-            }
+        [HttpPost, ActionName("Delete")]
+        public ActionResult DeleteConfirmed(Document d) {
+            controller.RemoveDocument(d);
+            return RedirectToAction("Overview","Project");
         }
     }
 }

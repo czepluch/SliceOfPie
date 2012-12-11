@@ -1,4 +1,4 @@
-﻿@model SliceOfPie.Project
+﻿@model SliceOfPie.Document
 
 @{
     ViewBag.Title = "Delete";
@@ -12,10 +12,11 @@
 
     <div class="display-label">Title</div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.Title)
+        @Html.DisplayFor(model => Model.Title)
     </div>
 </fieldset>
 @using (Html.BeginForm(null,null,FormMethod.Post)) {
+    @Html.HiddenFor(model => Model.Id)
     <p>
         <input type="submit" value="Delete" />
     </p>
