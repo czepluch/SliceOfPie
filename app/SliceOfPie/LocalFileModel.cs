@@ -333,10 +333,15 @@ namespace SliceOfPie {
                     } else {
                         // Creating folder
                         dbFolder = new Folder {
-                            Title = title,
-                            ProjectId = null,
-                            FolderId = parentId
+                            Title = title
                         };
+                        if (container == Container.Project) {
+                            dbFolder.ProjectId = parentId;
+                            dbFolder.FolderId = null;
+                        } else {
+                            dbFolder.ProjectId = null;
+                            dbFolder.FolderId = parentId;
+                        }
                         dbContext.Folders.AddObject(dbFolder);
                     }
                     dbContext.SaveChanges();
@@ -598,6 +603,9 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="document"></param>
         public override IEnumerable<Revision> DownloadRevisions(Document document) {
+            if (document.Id == 0) {
+                throw new ArgumentException("Document has to be synced, before being able to retrieve revisions");
+            }
             List<Revision> documentRevisions = new List<Revision>();
             using (var dbContext = new sliceofpieEntities2()) {
                 var revisions = from revision in dbContext.Revisions

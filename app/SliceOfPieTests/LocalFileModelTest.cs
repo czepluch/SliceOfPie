@@ -291,20 +291,6 @@ namespace SliceOfPie.Tests {
         }
 
         [TestMethod]
-        public void TestUploadStructure() {
-            //IEnumerable<Project> projects = Model.GetProjects("local");
-            //Project project = projects.First();
-
-            //Folder folder1 = Model.AddFolder(project, "TestFolder1");
-            //Document document1 = Model.AddDocument(project, "TestDocument1");
-
-            //Folder folder2 = Model.AddFolder(folder1, "TestFolder2");
-            //Document document2 = Model.AddDocument(folder1, "TestDocument2");
-
-            //Model.UploadStructure("common@test.mail");
-        }
-
-        [TestMethod]
         public void TestDownloadRevisions() {
             IEnumerable<Project> projects = Model.GetProjects("local");
             Project project = projects.First();
@@ -351,10 +337,10 @@ namespace SliceOfPie.Tests {
             Model = new LocalFileModel();
         }
 
-        [TestCleanup]
-        public void Cleanup() {
-            //TestHelper.ClearDatabase("common@test.mail");
-            TestHelper.ClearFolder(AppPath);
+        [ClassCleanup]
+        public static void ClassCleanup() {
+            TestHelper.ClearDatabase("common@test.mail");
+            TestHelper.ClearFolder(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie"));
         }
     }
 }

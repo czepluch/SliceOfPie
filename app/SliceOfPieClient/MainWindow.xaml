@@ -2,6 +2,7 @@
         Name="SliceOfPieMainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:local="clr-namespace:SliceOfPie.Client"
         Title="Slice of Pie" Height="500" Width="800" MinHeight="300" MinWidth="500" Icon="/SliceOfPieClient;component/grin.ico">
     <Grid>
@@ -57,8 +58,8 @@
         <Popup Name="loginPopUp" Height="200" Width="500" Placement="Center" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
             <DockPanel Background="#FF949494">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
-                    <Button Padding="5" Margin="5,2,5,2" Click="loginPopUpLoginButton_Click"  IsDefault="True">Login</Button>
-                    <Button Padding="5" Margin="5,2,5,2" Click="LoginPopUpCancelButton_Click">Cancel</Button>
+                    <Button Name="loginPopUpLoginButton"  Padding="5" Margin="5,2,5,2" Click="loginPopUpLoginButton_Click"  IsDefault="True">Login</Button>
+                    <Button Name="loginPopUpCancelButton" Padding="5" Margin="5,2,5,2" Click="LoginPopUpCancelButton_Click">Cancel</Button>
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Label>You must enter your login information to continue this operation</Label>
@@ -74,7 +75,7 @@
                 </StackPanel>
             </DockPanel>
         </Popup>
-        <Popup Name="insertImagePopUp" Height="200" Width="400" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieTextEditor}">
+        <Popup Name="insertImagePopUp" Height="200" Width="400" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
             <DockPanel Background="#FF949494">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
                     <Button Padding="5" Margin="5,2,5,2" Click="InsertImagePopUpInsertButton_Click"  IsDefault="True" >Insert</Button>
@@ -86,13 +87,13 @@
                 </StackPanel>
             </DockPanel>
         </Popup>
-        <Popup Name="historyPopUp" Height="400" Width="450" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieTextEditor}">
+        <Popup Name="historyPopUp" Height="400" Width="450" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
             <DockPanel Background="#FF949494">
                 <Label Name="historyPopUpTopLabel" DockPanel.Dock="Top"/>
                 <Button Padding="5" Margin="5,2,5,2" DockPanel.Dock="Bottom" IsDefault="True" Click="HistoryPopUpCloseButton_Click">Close</Button>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="3*"/>
                         <ColumnDefinition Width="7*"/>
                     </Grid.ColumnDefinitions>
 
@@ -100,9 +101,27 @@
                         <ListBoxItem>22-10-2012</ListBoxItem>
                         <ListBoxItem>10-12-1954</ListBoxItem>
                     </ListBox>
-                    <TextBox Name="historyPopUpTextBox" Grid.Column="1" Background="#FFFED162" FontFamily="Consolas" FontSize="11" Padding="5" AcceptsReturn="True" TextWrapping="Wrap"/>
+                    <TextBox Name="historyPopUpTextBox" Grid.Column="1" Background="#FFFFFFDB" FontFamily="Consolas" FontSize="11" Padding="5" AcceptsReturn="True" TextWrapping="Wrap"/>
                 </Grid>
             </DockPanel>
+        </Popup>
+
+        <Popup Name="noInternetPopUp" Height="100" Width="400" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
+            <DockPanel Background="#FF949494">
+                <Button Padding="5" Margin="5,2,5,2" DockPanel.Dock="Bottom" IsDefault="True" Click="NoInternetPopUpOkButton_Click">OK</Button>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical">
+                    <Label>There was an error accessing the server.</Label>
+                    <Label>Please check your internet connection.</Label>
+                </StackPanel>
+            </DockPanel>
+        </Popup>
+
+        <Popup Name="syncingPopUp" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
+            <Border BorderThickness="4" CornerRadius="4" BorderBrush="Black">
+                <StackPanel Height="40" Width="110" Background="#FF949494" VerticalAlignment="Center">
+                    <Image Height="40" Width="40" gif:ImageBehavior.AnimatedSource="/Animations/sync-spinner.gif" />
+                </StackPanel>
+            </Border>
         </Popup>
 
         <DockPanel LastChildFill="True">
@@ -113,7 +132,9 @@
                         <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
                     <Button Height="70" Click="OpenCreateProjectWindow">Create new project</Button>
-                    <Button Grid.Column="1" Height="70" Click="Synchronize_Click">Sync.</Button>
+                    <Button  Grid.Column="1" Height="70" Click="Synchronize_Click">
+                        <Image Height="40" Width="40" Source="/Images/sync.png"/>
+                    </Button>
                 </Grid>
                 <ScrollViewer  Width="170" Height="auto" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
                     <local:DocumentExplorer x:Name="documentExplorer"/>

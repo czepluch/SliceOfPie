@@ -146,12 +146,22 @@ namespace SliceOfPie {
         }
 
         public override void RemoveProject(Project project) {
-            foreach (Folder f in project.GetFolders()) {
-                RemoveFolder(f);
+            IEnumerable<Document> documents;
+            IEnumerable<Folder> folders;
+            using (var dbContext = new sliceofpieEntities2()) {
+                Project projectToGetFrom = dbContext.Projects.First(proj => project.Id == proj.Id);
+                documents = projectToGetFrom.Documents.ToList();
+                folders = projectToGetFrom.Folders.ToList();
             }
-            foreach (Document d in project.GetDocuments()) {
+
+            foreach (Document d in documents) {
                 RemoveDocument(d);
             }
+
+            foreach (Folder f in folders) {
+                RemoveFolder(f);
+            }
+         
             using (var dbContext = new sliceofpieEntities2()) {
                 Project p = dbContext.Projects.First(proj => project.Id == proj.Id);
                 ProjectUser pu = dbContext.ProjectUsers.First(user => project.Id == user.ProjectId);
@@ -182,12 +192,22 @@ namespace SliceOfPie {
         }
 
         public override void RemoveFolder(Folder folder) {
-            foreach (Folder f in folder.GetFolders()) {
-                RemoveFolder(f);
+            IEnumerable<Document> documents;
+            IEnumerable<Folder> folders;
+            using (var dbContext = new sliceofpieEntities2()) {
+                Folder folderToGetFrom = dbContext.Folders.First(fold => folder.Id == fold.Id);
+                documents = folderToGetFrom.Documents.ToList();
+                folders = folderToGetFrom.Folders.ToList();
             }
-            foreach (Document d in folder.GetDocuments()) {
+
+            foreach (Document d in documents) {
                 RemoveDocument(d);
             }
+
+            foreach (Folder f in folders) {
+                RemoveFolder(f);
+            }
+            
             using (var dbContext = new sliceofpieEntities2()) {
                 Folder f = dbContext.Folders.First(fold => fold.Id == folder.Id);
                 dbContext.Folders.DeleteObject(f);
@@ -236,14 +256,17 @@ namespace SliceOfPie {
 
         public override void RemoveDocument(Document document) {
             using (var dbContext = new sliceofpieEntities2()) {
+                IEnumerable<Revision> revisions = dbContext.Documents.First(doc => doc.Id == document.Id).Revisions.ToList();
+                foreach (Revision r in revisions) {
+                    dbContext.Revisions.DeleteObject(r);
+                }
+                dbContext.SaveChanges();
+            }
+            using (var dbContext = new sliceofpieEntities2()) {
                 Document d = dbContext.Documents.First(doc => doc.Id == document.Id);
                 dbContext.Documents.DeleteObject(d);
                 dbContext.SaveChanges();
             }
-        }
-
-        public override void SyncFiles(string userMail) {
-            throw new NotSupportedException("Synchronization is not supported from web, as you should simply GetProjects ever time...");
         }
 
         public override Project GetProject(int id) {
@@ -287,6 +310,10 @@ namespace SliceOfPie {
             }
             GetRevisions(result);
             return result;
+        }
+
+        public override void SyncFiles(string userMail) {
+            throw new NotSupportedException("Synchronization is not supported from web, as you should simply GetProjects ever time...");
         }
 
         public override IEnumerable<Revision> DownloadRevisions(Document document) {
