@@ -37,8 +37,12 @@
         <td>
             @Html.AttributeEncode(item.Id)
         </td>
+        
         <td>
             @Html.ActionLink(item.Title, "../Document/Edit", item)
+        </td>
+        <td>
+            @Html.ActionLink("Show", "../Document/Show", item)    
         </td>
         <td>
             @Html.ActionLink("Delete", "../Document/Delete", item)

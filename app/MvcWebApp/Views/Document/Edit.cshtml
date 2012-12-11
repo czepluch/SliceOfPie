@@ -5,6 +5,24 @@
 
 <h2>Contents of @Model.Title (@(((int)Model.CurrentHash).ToString("X").ToLower()))</h2>
 
-@Model.CurrentRevision
+@using (Html.BeginForm(null,null,FormMethod.Post)) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>Edit Document</legend>
+        @Html.HiddenFor(model => Model.Id)
+        @Html.HiddenFor(model => Model.Title)
+        @Html.HiddenFor(model => Model.CurrentHash)
 
-</table>
+        <div class="editor-label">
+            @Html.LabelFor(model => Model.Title)
+        </div>
+        <textarea style="width: 700px; height: 400px;" name="NewContent">@Model.CurrentRevision</textarea>
+
+        <p>
+            <input type="submit" value="Edit" />
+        </p>
+    </fieldset>
+}
+
+
+

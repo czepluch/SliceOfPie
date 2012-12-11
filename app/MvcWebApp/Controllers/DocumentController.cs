@@ -14,15 +14,25 @@ namespace MvcWebApp.Controllers {
             controller = SliceOfPie.Controller.Instance;
         }
 
+        //
+        // GET: /Document/Show
+
+        [ValidateInput(false)] // Allow html rendering
+        public ActionResult Show(Document d) {
+            return View(controller.GetDocumentDirectly(d.Id));
+        }
+
         [ValidateInput(false)] // Allow html rendering
         public ActionResult Edit(Document d) {
             return View(controller.GetDocumentDirectly(d.Id));
         }
 
         [HttpPost, ActionName("Edit")]
-        public ActionResult EditSave(Document d) {
+        [ValidateInput(false)] // Allow html rendering
+        public ActionResult EditSave(Document d, string NewContent) {
+            d.CurrentRevision = NewContent;
             controller.SaveDocument(d);
-            return View(d.Id);
+            return View(d);
         }
 
         public ActionResult Create(Document d) {
