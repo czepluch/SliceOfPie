@@ -134,7 +134,7 @@ ul#menu {
 }
 
 ul#menu li {
-    display: inline;
+    display: inline-block;
     list-style: none;
 }
 
