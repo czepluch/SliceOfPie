@@ -603,6 +603,9 @@ namespace SliceOfPie {
         /// </summary>
         /// <param name="document"></param>
         public override IEnumerable<Revision> DownloadRevisions(Document document) {
+            if (document.Id == 0) {
+                throw new ArgumentException("Document has to be synced, before being able to retrieve revisions");
+            }
             List<Revision> documentRevisions = new List<Revision>();
             using (var dbContext = new sliceofpieEntities2()) {
                 var revisions = from revision in dbContext.Revisions

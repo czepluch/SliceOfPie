@@ -180,6 +180,26 @@ namespace SliceOfPie.Tests {
             Assert.IsTrue(projectsSynced.Count() > 0);
         }
 
+        /// <summary>
+        /// Tests that download revisions works asynchronously
+        /// </summary>
+        [TestMethod]
+        public void TestDownloadRevisions() {
+            LocalFileModel model = new LocalFileModel(); //To reinitialize the underlying filesystem
+
+            Project p = controller.CreateProject("Thirteen-Thirtyseven", "common@test.mail");
+            Document d = controller.CreateDocument("Fourty-Two", "common@test.mail", p);
+            d.CurrentRevision = "Noget ordentligt";
+            controller.SaveDocument(d);
+            IEnumerable<Project> projects = controller.SyncProjects("common@test.mail", "pw");
+            p = projects.First(project => project.Title.Equals(p.Title));
+            d = p.GetDocuments().First();
+            IAsyncResult ar = controller.BeginDownloadRevisions(d, null, null);
+            IEnumerable<Revision> result = controller.EndDownloadRevisions(ar);
+
+            Assert.IsTrue(result.Count() > 0);
+        }
+
         [TestInitialize]
         public void Initialize() {
             TestHelper.ClearDatabase("common@test.mail");

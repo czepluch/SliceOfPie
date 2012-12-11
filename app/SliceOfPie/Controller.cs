@@ -423,6 +423,46 @@ namespace SliceOfPie {
             }
         }
 
+        /// <summary>
+        /// Helper method to asynchronously download revisions
+        /// </summary>
+        /// <param name="asyncResult">AsyncResult&lt;IEnumerable&lt;Revision&gt;, Document&gt;</param>
+        private void DownloadRevisionsAsyncHelper(object asyncResult) {
+            AsyncResult<IEnumerable<Revision>, Document> ar = (AsyncResult<IEnumerable<Revision>, Document>)asyncResult;
+            try {
+                var result = DownloadRevisions(ar.Parameter1);
+                ar.SetAsCompleted(result, false);
+            }
+            catch (Exception e) {
+                ar.SetAsCompleted(e, false);
+            }
+        }
+
+        /// <summary>
+        /// Start downloading revisions asynchronously in accordance with the Asynchronous Programming Model.
+        /// </summary>
+        /// <param name="d">Document whose revisions to get</param>
+        /// <param name="callback">Callback called when download of revisions finishes</param>
+        /// <param name="state">State object, passed to callback</param>
+        /// <returns>IAsyncResult for EndDownloadRevisions</returns>
+        /// <seealso cref="EndDownloadRevisions"/>
+        public IAsyncResult BeginDownloadRevisions(Document d, AsyncCallback callback, object state) {
+            AsyncResult <IEnumerable<Revision>, Document> ar = new AsyncResult<IEnumerable<Revision>, Document>(callback, state, d);
+            ThreadPool.QueueUserWorkItem(DownloadRevisionsAsyncHelper, ar);
+
+            return ar;
+        }
+
+        /// <summary>
+        /// Block until the download of revisions concludes, then continue.
+        /// </summary>
+        /// <param name="asyncResult">IAsyncResult from BeginDownloadRevisions</param>
+        /// <seealso cref="BeginDownloadRevisions"/>
+        public IEnumerable<Revision> EndDownloadRevisions(IAsyncResult asyncResult) {
+            AsyncResult<IEnumerable<Revision>, Document> ar = (AsyncResult<IEnumerable<Revision>, Document>)asyncResult;
+            return ar.EndInvoke();
+        }
+
         #endregion
 
         #endregion
