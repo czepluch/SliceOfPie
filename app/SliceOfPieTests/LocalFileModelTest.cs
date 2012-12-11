@@ -320,10 +320,10 @@ namespace SliceOfPie.Tests {
             foreach (Revision revision in revisions) {
                 switch (i) {
                     case 0:
-                        Assert.AreEqual("", revision.Content);
+                        Assert.AreEqual("Testcontent", revision.Content);
                         break;
                     case 1:
-                        Assert.AreEqual("Testcontent", revision.Content);
+                        Assert.AreEqual("", revision.Content);
                         break;
                 }
                 i++;

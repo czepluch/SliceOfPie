@@ -90,7 +90,7 @@ namespace SliceOfPie.Client {
         /// <param name="itemToOpen">The item to open, when the projects are reloaded. If this is null, the top project will be opened.</param>
         private void Refresh(IEnumerable<Project> projects, IListableItem itemToOpen = null) {
             //Callback posted in UI-context
-            syncContext.Post((o) => {
+           CallOnUIThread(() => {
                 documentExplorer.Projects = projects;
                 if (itemToOpen != null) {
                     documentExplorer.ExpandTo(itemToOpen, Open);
@@ -98,7 +98,16 @@ namespace SliceOfPie.Client {
                 else {
                     documentExplorer.CallbackSelected(Open);
                 }
-            }, null);
+            });
+        }
+
+        /// <summary>
+        /// Calls a delegate on the UI thread.
+        /// </summary>
+        /// <param name="action">The delegate to call</param>
+        private void CallOnUIThread(Action action) {
+            //Callback posted in UI-context
+            syncContext.Post((o) => action(), null);
         }
 
         /// <summary>
@@ -434,11 +443,9 @@ namespace SliceOfPie.Client {
                 syncingPopUp.IsOpen = true;
                 controller.BeginSyncProjects(loginPopUpUserTextBox.Text, loginPopUpPasswordBox.Password,
                     (iar) => {
-                        //Callback posted in UI-context
-
                         try {
                             Refresh(controller.EndSyncProjects(iar));
-                            syncContext.Post((o) => {
+                            CallOnUIThread(() => {
                                 syncingPopUp.IsOpen = false;
                                 loginPopUpCancelButton.IsEnabled = true;
                                 loginPopUpLoginButton.IsEnabled = true;
@@ -447,15 +454,15 @@ namespace SliceOfPie.Client {
                                 loginPopUpUserTextBox.Clear();
                                 loginPopUpPasswordBox.Clear();
                                 loginPopUpErrorLabel.Content = "";
-                            }, null);
+                            });
                         }
                         catch (AsyncException ex) {
-                            syncContext.Post((o) => {
+                            CallOnUIThread(() => {
                                 loginPopUpErrorLabel.Content = "Synchronization failed.";
                                 syncingPopUp.IsOpen = false;
                                 loginPopUpCancelButton.IsEnabled = true;
                                 loginPopUpLoginButton.IsEnabled = true;
-                            }, null);
+                            });
                         }
                     }, null);
             }
@@ -536,30 +543,36 @@ namespace SliceOfPie.Client {
             syncingPopUp.IsOpen = true;
             controller.BeginDownloadRevisions(documentWhenClicked,
                 (iar) => {
-                    syncContext.Post((o) => historyList.Items.Clear(), null);
+                    CallOnUIThread(()=> historyList.Items.Clear());
                     try {
                         IEnumerable<Revision> revisions = controller.EndDownloadRevisions(iar);
                         foreach (Revision revision in revisions) {
                             string revisionContent = revision.Content;
                             DateTime? revisionTimeStamp = revision.Timestamp;
-                            syncContext.Post((o) => {
+                            CallOnUIThread(() => {
                                 ListBoxItem item = new ListBoxItem() { Content = revisionTimeStamp };
                                 item.Selected += new RoutedEventHandler((itemSelected, eventArgs) => historyPopUpTextBox.Text = revisionContent);
                                 historyList.Items.Add(item);
-                            }, null);
+                            });
                         }
-                        syncContext.Post((o) => {
+                        //If there was any revisions - select the first
+                        if (revisions.Count() > 0) {
+                            CallOnUIThread(() => {
+                                (historyList.Items[0] as ListBoxItem).IsSelected = true;
+                            });    
+                        }
+                        CallOnUIThread(() => {
                             historyPopUpTopLabel.Content = "History for " + documentWhenClicked.Title;
                             IsEnabled = false;
                             syncingPopUp.IsOpen = false;
                             historyPopUp.IsOpen = true;
-                        }, null);
+                        });
                     }
                     catch (Exception ex) {
-                        syncContext.Post((o) => {
+                        CallOnUIThread(() => {
                             syncingPopUp.IsOpen = false;
                             OpenNoInternetPopUp();
-                        }, null);
+                        });
                     }
                 }, null);
         }
