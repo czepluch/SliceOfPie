@@ -228,7 +228,7 @@ namespace SliceOfPie {
         /// <seealso cref="EndShareProject"/>
         public IAsyncResult BeginShareProject(Project p, IEnumerable<string> emails, AsyncCallback callback, object stateObject) {
             AsyncResultNoResult<Project, IEnumerable<string>> ar = new AsyncResultNoResult<Project, IEnumerable<string>>(callback, stateObject, p, emails);
-            ThreadPool.QueueUserWorkItem(CreateDocumentAsyncHelper, ar);
+            ThreadPool.QueueUserWorkItem(ShareProjectAsyncHelper, ar);
 
             return ar;
         }

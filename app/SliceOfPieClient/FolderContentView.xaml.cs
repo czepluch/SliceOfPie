@@ -36,16 +36,6 @@ namespace SliceOfPie.Client {
         #region Events
 
         /// <summary>
-        /// This event is fired when the button to create a Document is clicked
-        /// </summary>
-        public event RoutedEventHandler CreateDocumentButtonClicked;
-        
-        /// <summary>
-        /// This event is fired when the button to create a Folder is clicked
-        /// </summary>
-        public event RoutedEventHandler CreateFolderButtonClicked;
-
-        /// <summary>
         /// This event is fired when an item is double clicked
         /// </summary>
         public event EventHandler<ListableItemEventArgs> ItemDoubleClicked;
@@ -58,14 +48,6 @@ namespace SliceOfPie.Client {
         /// </summary>
         public FolderContentView() {
             InitializeComponent();
-            //On button clicks
-            createDocumentButton.Click += new RoutedEventHandler(
-                (sender, e) => OnCreateDocumentButtonClicked(e) //fire the externally added event(s)
-            );
-            createFolderButton.Click += new RoutedEventHandler(
-                (sender, e) => OnCreateFolderButtonClicked(e) //fire the externally added event(s)
-            );
-            
         }
 
         /// <summary>
@@ -89,7 +71,7 @@ namespace SliceOfPie.Client {
         private ListViewItem CreateListViewItem(IListableItem item) {
             StackPanel sp = new StackPanel() { Width = 50, Height = 50, Orientation = Orientation.Vertical, IsHitTestVisible = false };
             sp.Children.Add(new Image() { Source = item.GetIcon(), Width = 24, Height = 24 });
-            sp.Children.Add(new TextBlock() { Text = item.Title, MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center });
+            sp.Children.Add(new Label() { Content = item.Title, MaxWidth = 50, HorizontalAlignment = HorizontalAlignment.Center });
             ListViewItem listViewItem = new ListViewItem() { Margin = new Thickness(2) };
             listViewItem.Content = sp;
             listViewItem.Tag = item;
@@ -100,28 +82,6 @@ namespace SliceOfPie.Client {
         }
 
         #region Event triggers
-
-        /// <summary>
-        /// This method triggers the CreateDocumentButtonClicked event
-        /// </summary>
-        /// <param name="e">The event arguments.</param>
-        private void OnCreateDocumentButtonClicked(RoutedEventArgs e) {
-            if (CreateDocumentButtonClicked != null) {
-                //Invoke the delegates attached to this event
-                CreateDocumentButtonClicked(this, e);
-            }
-        }
-
-        /// <summary>
-        /// This method triggers the CreateFolderButtonClicked event
-        /// </summary>
-        /// <param name="e">The event arguments.</param>
-        private void OnCreateFolderButtonClicked(RoutedEventArgs e) {
-            if (CreateFolderButtonClicked != null) {
-                //Invoke the delegates attached to this event
-                CreateFolderButtonClicked(this, e);
-            }
-        }
 
         /// <summary>
         /// This method triggers the ItemDoubleClicked event

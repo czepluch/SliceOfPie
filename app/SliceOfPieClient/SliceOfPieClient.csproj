@@ -49,19 +49,27 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ContentWrapper.xaml.cs">
+      <DependentUpon>ContentWrapper.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DocumentExplorer.xaml.cs">
       <DependentUpon>DocumentExplorer.xaml</DependentUpon>
     </Compile>
     <Compile Include="FolderContentView.xaml.cs">
       <DependentUpon>FolderContentView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IListableItemIconExtension.cs" />
+    <Compile Include="IListableItemExtension.cs" />
+    <Compile Include="ImageUtil.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TextEditor.xaml.cs">
       <DependentUpon>TextEditor.xaml</DependentUpon>
     </Compile>
+    <Page Include="ContentWrapper.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="DocumentExplorer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -119,6 +127,25 @@
     <None Include="App.Config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\new-document.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\new-folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\save-document.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\insert-image.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\show-history.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\folder-icon-conflict.png" />
+    <Resource Include="Icons\project-icon-conflict.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

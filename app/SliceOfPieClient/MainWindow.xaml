@@ -74,6 +74,36 @@
                 </StackPanel>
             </DockPanel>
         </Popup>
+        <Popup Name="insertImagePopUp" Height="200" Width="400" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieTextEditor}">
+            <DockPanel Background="#FF949494">
+                <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+                    <Button Padding="5" Margin="5,2,5,2" Click="InsertImagePopUpInsertButton_Click"  IsDefault="True" >Insert</Button>
+                    <Button Padding="5" Margin="5,2,5,2" Click="InsertImagePopUpCancelButton_Click">Cancel</Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Label>Insert Image URL:</Label>
+                    <TextBox Name="insertImagePopUpTextBox" Width="250"/>
+                </StackPanel>
+            </DockPanel>
+        </Popup>
+        <Popup Name="historyPopUp" Height="400" Width="450" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieTextEditor}">
+            <DockPanel Background="#FF949494">
+                <Label Name="historyPopUpTopLabel" DockPanel.Dock="Top"/>
+                <Button Padding="5" Margin="5,2,5,2" DockPanel.Dock="Bottom" IsDefault="True" Click="HistoryPopUpCloseButton_Click">Close</Button>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="7*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <ListBox Name="historyList" Grid.Column="0">
+                        <ListBoxItem>22-10-2012</ListBoxItem>
+                        <ListBoxItem>10-12-1954</ListBoxItem>
+                    </ListBox>
+                    <TextBox Name="historyPopUpTextBox" Grid.Column="1" Background="#FFFED162" FontFamily="Consolas" FontSize="11" Padding="5" AcceptsReturn="True" TextWrapping="Wrap"/>
+                </Grid>
+            </DockPanel>
+        </Popup>
 
         <DockPanel LastChildFill="True">
             <DockPanel DockPanel.Dock="Left">

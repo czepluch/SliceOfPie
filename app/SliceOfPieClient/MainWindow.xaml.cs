@@ -24,12 +24,14 @@ namespace SliceOfPie.Client {
         private static SynchronizationContext syncContext = SynchronizationContext.Current; //for callbacks to be called on the UI thread
 
         private Controller controller;
+        private ContentWrapper folderContentViewWrapper, textEditorWrapper;
         private FolderContentView folderContentView;
         private TextEditor textEditor;
 
         private ContextMenu projectContextMenu, folderContextMenu, documentContextMenu;
 
         private IListableItem currentContextItem;
+        private string imageStartTag = "<IMAGEURL{" , imageEndTag = "}>";
 
         /// <summary>
         /// Creates the Main Window for the Slice of Pie application
@@ -45,43 +47,35 @@ namespace SliceOfPie.Client {
             documentExplorer.ItemMouseRightButtonUp += new EventHandler<ListableItemEventArgs>(DocumentExplorerItemMouseRightButtonUp);
             documentExplorer.ItemEnterKeyUp += new EventHandler<ListableItemEventArgs>(DocumentExplorerItemEnterKeyUp);
 
+            //FolderContentViewWrapper
+            folderContentViewWrapper = new ContentWrapper();
+            folderContentViewWrapper.addMenuButton("Create document", "/Images/new-document.png", new RoutedEventHandler(OpenCreateDocumentWindow));
+            folderContentViewWrapper.addMenuButton("Create folder", "/Images/new-folder.png", new RoutedEventHandler(OpenCreateFolderWindow));
+            
+            //Create the underlying folderContentView
             folderContentView = new FolderContentView();
             folderContentView.ItemDoubleClicked += new EventHandler<ListableItemEventArgs>(FolderContentView_DoubleClick);
-            folderContentView.CreateDocumentButtonClicked += (new RoutedEventHandler(OpenCreateDocumentWindow));
-            folderContentView.CreateFolderButtonClicked += (new RoutedEventHandler(OpenCreateFolderWindow));
+            //Add to wrapper
+            folderContentViewWrapper.Content = folderContentView;
 
+            //TextEditorViewWrapper
+            textEditorWrapper = new ContentWrapper();
+            textEditorWrapper.addMenuButton("Save document", "/Images/save-document.png", new RoutedEventHandler(SaveDocumentButton_Click));
+            textEditorWrapper.addMenuButton("Insert image", "/Images/insert-image.png", new RoutedEventHandler(OpenInsertImagePopUp));
+            textEditorWrapper.addMenuButton("Show history", "/Images/show-history.png", new RoutedEventHandler(OpenHistoryPopUp));
+
+            //Create the underlying text editor
             textEditor = new TextEditor();
-            textEditor.SaveDocumentButtonClicked += (new RoutedEventHandler(SaveDocument_Click));
+            //Add to wrapper
+            textEditorWrapper.Content = textEditor;
+
+
+            
+
 
             RefreshLocalProjects();
         }
-
-        /// <summary>
-        /// This method syncs with the server and updates the ui
-        /// </summary>
-        /// <param name="userMail">The users mail</param>
-        /// <param name="password">The users password</param>
-        /// <param name="itemToOpen">The item to open, when the projects are reloaded. If this is null, the top project will be opened.</param>
-        /// <returns>Whether or not the syncing was succesfull</returns>
-        private bool SyncProjects(string userMail, string password, IListableItem itemToOpen = null) {
-            bool succesfullySynced = false;
-            //Using controllers APM to load the projects into the Document Explorer
-            controller.BeginSyncProjects(userMail, password, (iar) => {
-                Refresh(controller.EndSyncProjects(iar), itemToOpen);
-                //try {
-                //    Refresh(controller.EndSyncProjects(iar), itemToOpen);
-                //    succesfullySynced = true;
-                //}
-                //catch (AsyncException ex) {
-                //    //The APM method encountered an exception.
-                //    //bool = false will be returned - this catch just prevents the program crashing.
-                //}
-            } , null);
-            return true; //REMOVE THIS
-        }
-
-         
-
+              
         /// <summary>
         /// This method refreshes the projects (local only)
         /// </summary>
@@ -119,11 +113,11 @@ namespace SliceOfPie.Client {
             currentContextItem = item;
             if (item is IItemContainer) {
                 folderContentView.ItemContainer = item as IItemContainer;
-                mainContent.Content = folderContentView;
+                mainContent.Content = folderContentViewWrapper;
             }
             else {
                 textEditor.Document = item as Document;
-                mainContent.Content = textEditor;
+                mainContent.Content = textEditorWrapper;
             }
         }
 
@@ -365,11 +359,11 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void CreateFolderPopUpCreateButton_Click(object sender, RoutedEventArgs e) {
-            Folder folder = controller.CreateFolder(createFolderPopUPTextBox.Text, "local", currentContextItem as IItemContainer);
+            controller.BeginCreateFolder(createFolderPopUPTextBox.Text, "local", currentContextItem as IItemContainer, (iar) => RefreshLocalProjects(controller.EndCreateFolder(iar)), null);
             createFolderPopUP.IsOpen = false;
             IsEnabled = true;
             createFolderPopUPTextBox.Clear();
-            RefreshLocalProjects(folder);
+            
         }
 
         /// <summary>
@@ -389,11 +383,10 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void CreateDocumentPopUpCreateButton_Click(object sender, RoutedEventArgs e) {
-            Document document = controller.CreateDocument(createDocumentPopUPTextBox.Text, "local", currentContextItem as IItemContainer);
+            controller.BeginCreateDocument(createDocumentPopUPTextBox.Text, "local", currentContextItem as IItemContainer, (iar) => RefreshLocalProjects(controller.EndCreateDocument(iar)), null);
             createDocumentPopUP.IsOpen = false;
             IsEnabled = true;
             createDocumentPopUPTextBox.Clear();
-            RefreshLocalProjects(document);
         }
 
         /// <summary>
@@ -413,7 +406,7 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void ShareProjectPopUpShareButton_Click(object sender, RoutedEventArgs e) {
-            controller.ShareProject(currentContextItem as Project, shareProjectPopUPTextBox.Text.Split(','));
+            controller.BeginShareProject(currentContextItem as Project, shareProjectPopUPTextBox.Text.Split(','), null, null);
             shareProjectPopUP.IsOpen = false;
             IsEnabled = true;
             shareProjectPopUPTextBox.Clear();
@@ -439,16 +432,13 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void loginPopUpLoginButton_Click(object sender, RoutedEventArgs e) {
-            if(SyncProjects(loginPopUpUserTextBox.Text, loginPopUpPasswordBox.Password)) {
+                controller.BeginSyncProjects(loginPopUpUserTextBox.Text, loginPopUpPasswordBox.Password, (iar) => Refresh(controller.EndSyncProjects(iar)), null);
                 loginPopUp.IsOpen = false;
                 IsEnabled = true;
                 loginPopUpUserTextBox.Clear();
                 loginPopUpPasswordBox.Clear();
                 loginPopUpErrorLabel.Content = "";
-            }
-            else {
-                loginPopUpErrorLabel.Content = "An error occured. Please check your username and password.";
-            }
+                //TODO consider setting error label/ stalling with popup "SYNCING"
         }
 
         /// <summary>
@@ -469,15 +459,94 @@ namespace SliceOfPie.Client {
             OpenLoginWindow(sender, e);
         }
 
+        #endregion
+
+
+
+
         /// <summary>
-        /// This is the click handler for the Save Document button in the Text Editor
+        /// This event handler opens the Insert Image pop-up window
         /// </summary>
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void SaveDocument_Click(object sender, RoutedEventArgs e) {
-            controller.BeginSaveDocument(textEditor.Document, null, null);
+        private void OpenInsertImagePopUp(object sender, RoutedEventArgs e) {
+            //note that the textbox is cleared when the popups were last closed
+            IsEnabled = false;
+            insertImagePopUp.IsOpen = true;
+            insertImagePopUpTextBox.Focus();
         }
 
-        #endregion
+        /// <summary>
+        /// This is the click handler for the Cancel button in the Insert Image pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void InsertImagePopUpCancelButton_Click(object sender, RoutedEventArgs e) {
+            insertImagePopUp.IsOpen = false;
+            IsEnabled = true;
+            insertImagePopUpTextBox.Clear();
+        }
+
+
+
+        /// <summary>
+        /// This is the click handler for the Insert button in the Insert Image pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void InsertImagePopUpInsertButton_Click(object sender, RoutedEventArgs e) {
+            string link = insertImagePopUpTextBox.Text;
+            int caretIndex = textEditor.CaretIndex;
+            textEditor.Text = textEditor.Text.Insert(caretIndex, imageStartTag + link + imageEndTag);
+            textEditor.CaretIndex = caretIndex + imageStartTag.Length + link.Length + imageEndTag.Length;
+            insertImagePopUp.IsOpen = false;
+            IsEnabled = true;
+            insertImagePopUpTextBox.Clear();
+            textEditor.FocusText();
+        }
+
+        /// <summary>
+        /// This event handler opens the History pop-up window
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OpenHistoryPopUp(object sender, RoutedEventArgs e) {
+            //setup history popup
+            SetUpHistoryPopUp();
+            historyPopUpTopLabel.Content = "History for " + textEditor.Document.Title;
+            IsEnabled = false;
+            historyPopUp.IsOpen = true;
+            //Select top entry
+        }
+
+        private void SetUpHistoryPopUp() {
+            historyList.Items.Clear();
+            foreach (Revision revision in controller.DownloadRevisions(textEditor.Document)) {
+                ListBoxItem item = new ListBoxItem() { Content = revision.Timestamp };
+                string revisionContent = revision.Content;
+                item.MouseLeftButtonUp += new MouseButtonEventHandler((sender, e) => historyPopUpTextBox.Text = revisionContent);
+                historyList.Items.Add(item);
+            }
+        }
+
+        /// <summary>
+        /// This is the click handler for the Close button in the History pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void HistoryPopUpCloseButton_Click(object sender, RoutedEventArgs e) {
+            historyPopUp.IsOpen = false;
+            IsEnabled = true;
+        }
+
+
+        /// <summary>
+        /// Saves the current document
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void SaveDocumentButton_Click(object sender, RoutedEventArgs e) {
+            controller.BeginSaveDocument(textEditor.Document, null, null);
+        }
     }
 }
