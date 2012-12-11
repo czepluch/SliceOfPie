@@ -15,6 +15,9 @@ namespace SliceOfPie {
         /// <param name="password">Password corresponding to email</param>
         /// <returns>Whether the user is valid</returns>
         public bool ValidateLogin(string userMail, string password) {
+            if (!(userMail.Length > 0 && password.Length > 0)) {
+                throw new ArgumentException("Email or password cannot be blank");
+            }
             bool userValid;
             using (var dbContext = new sliceofpieEntities2()) {
                 if (dbContext.Users.Count(dbUser => dbUser.Email.Equals(userMail)) > 0) { //user exists
@@ -39,6 +42,13 @@ namespace SliceOfPie {
         }
 
         public void ShareProject(int projectId, string userMail) {
+            if (projectId == 0) {
+                throw new ArgumentException("Project has to be synced, before it can be shared");
+            }
+            if (userMail.Length < 1) {
+                throw new ArgumentException("User email cannot be blank");
+            }
+            userMail = userMail.Trim();
             bool userExists = false;
             using (var dbContext = new sliceofpieEntities2()) {
                 if (dbContext.Users.Count(dbUser => dbUser.Email.Equals(userMail)) > 0) {

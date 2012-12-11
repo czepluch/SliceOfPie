@@ -108,6 +108,9 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WpfAnimatedGif">
+      <HintPath>WpfAnimatedGif-1.3.5\WpfAnimatedGif.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SliceOfPie\SliceOfPie.csproj">
@@ -146,6 +149,12 @@
   <ItemGroup>
     <Resource Include="Icons\folder-icon-conflict.png" />
     <Resource Include="Icons\project-icon-conflict.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\sync.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Animations\sync-spinner.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
