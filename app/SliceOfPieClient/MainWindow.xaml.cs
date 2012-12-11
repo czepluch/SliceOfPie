@@ -555,6 +555,12 @@ namespace SliceOfPie.Client {
                                 historyList.Items.Add(item);
                             });
                         }
+                        //If there was any revisions - select the first
+                        if (revisions.Count() > 0) {
+                            CallOnUIThread(() => {
+                                (historyList.Items[0] as ListBoxItem).IsSelected = true;
+                            });    
+                        }
                         CallOnUIThread(() => {
                             historyPopUpTopLabel.Content = "History for " + documentWhenClicked.Title;
                             IsEnabled = false;
