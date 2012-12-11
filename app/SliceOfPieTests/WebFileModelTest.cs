@@ -7,11 +7,33 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace SliceOfPie.Tests {
     [TestClass]
     public class WebFileModelTest {
-        WebFileModel model;
+        static readonly String user = "common@test.mail";
+        WebFileModel model = new WebFileModel();
+        Project proj;
+        Folder projFolder;
+        Document projFolderDoc;
 
         [TestInitialize]
-        public void Initialize() {
-            model = new WebFileModel();
+        public void TestInitialize() {
+            proj = model.AddProject("WFMTestProj", user);
+            projFolder = model.AddFolder(proj, "WFMTestFolder");
+            projFolderDoc = model.AddDocument(projFolder, "WFMTestDocument");
+            projFolderDoc.CurrentRevision = @"3 May. Bistritz. Left Munich at 8:35 p. M., on ist May, ar- 
+riving at Vienna early next morning; should have arrived at 
+6:46, but train was an hour late. Buda-Pesth seems a wonderful 
+place, from the glimpse which I got of it from the train and the 
+little I could walk through the streets.";
+            model.SaveDocument(projFolderDoc);
+        }
+
+        [TestCleanup]
+        public void TestCleanup() {
+            if (proj != null) {
+                model.RemoveProject(proj);
+                proj = null;
+            }
+            projFolder = null;
+            projFolderDoc = null;
         }
 
         /// <summary>
@@ -19,32 +41,29 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestGetProjects() {
-            //Assumes that me@michaelstorgaard.com has at least one project with both folders and documents
-            IEnumerable<Project> projects = model.GetProjects("me@michaelstorgaard.com");
+            IEnumerable<Project> projects = model.GetProjects(user);
 
             if (projects.Count() < 1) throw new AssertFailedException("No projects returned from model");
 
-            Project p = projects.First(proj => proj.Id == 1); //get first project
+            Project p = projects.First(projectToGet => projectToGet.Id == proj.Id); //get first project
             if (p.Id < 1) throw new AssertFailedException("Project has id below allowed value");
             if (p.Title.Equals(string.Empty)) throw new AssertFailedException("Project title has not been set");
 
-            if (p.GetFolders().Count() < 1) throw new AssertFailedException("No folders were contained in the project, "+p.Title);
+            if (p.GetFolders().Count() < 1) throw new AssertFailedException("No folders were contained in the project, " + p.Title);
 
-            Folder f = p.GetFolders().First(fold => fold.Id == 1);
+            Folder f = p.GetFolders().First();
             if (f.Id < 1) throw new AssertFailedException("Folder has id below allowed value");
             if (f.Title.Equals(string.Empty)) throw new AssertFailedException("Folder title has not been set");
 
-            if (f.GetDocuments().Count() < 1) throw new AssertFailedException("No documents were contained in the folder, "+f.Title+" in "+p.Title);
+            if (f.GetDocuments().Count() < 1) throw new AssertFailedException("No documents were contained in the folder, " + f.Title + " in " + p.Title);
 
-            Document d = f.GetDocuments().First(doc => doc.Id == 1);
+            Document d = f.GetDocuments().First();
             if (d.Id < 1) throw new AssertFailedException("Document has id below allowed value");
             if (d.Title.Equals(string.Empty)) throw new AssertFailedException("Document title has not been set");
             if (d.CurrentRevision.Equals(string.Empty)) throw new AssertFailedException("Document CurrentRevision is empty!!!");
             if (d.CurrentHash == 0) throw new AssertFailedException("Document Hash has not been set");
 
-            if (d.GetRevisions().Count() < 1) throw new AssertFailedException("No revisions were contained in the document, "+d.Title+" in "+f.Title);
-
-            string s = d.GetRevisions().First();
+            if (d.GetRevisions().Count() < 1) throw new AssertFailedException("No revisions were contained in the document, " + d.Title + " in " + f.Title);
         }
 
         /// <summary>
@@ -52,10 +71,13 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestAddProject() {
-            Project p = model.AddProject("Hello Kitty", "me@hypesystem.dk");
+            String name = "WFMNewAddProject";
+            Project p = model.AddProject(name, user);
 
             Assert.AreNotEqual(0, p.Id);
-            Assert.AreEqual("Hello Kitty", p.Title);
+            Assert.AreEqual(name, p.Title);
+            //cleanup
+            model.RemoveProject(p);
         }
 
         /// <summary>
@@ -63,17 +85,14 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestRemoveProject() {
-            Project p = model.AddProject("Shazam, hullu.", "me@hypesystem.dk");
-
-            Assert.IsTrue(model.GetProjects("me@hypesystem.dk").Count(project => project.Id == p.Id) > 0);
-
+            Project p = model.AddProject("WFMNewRemoveProject", user);
+            Assert.IsTrue(model.GetProjects(user).Count(project => project.Id == p.Id) == 1);
             model.RemoveProject(p);
-
-            Assert.IsFalse(model.GetProjects("me@hypesystem.dk").Count(project => project.Id == p.Id) > 0);
+            Assert.IsFalse(model.GetProjects(user).Count(project => project.Id == p.Id) > 0);
         }
 
         /// <summary>
-        /// Tests that trying to remove a project results in an exception
+        /// Tests that trying to remove a non-existing project results in an exception
         /// </summary>
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
@@ -87,11 +106,11 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestAddFolder() {
-            Project p = model.AddProject("Hello World", "me@hypesystem.dk");
-            Folder f = model.AddFolder(p, "Test Folder");
+            String name = "WFMNewAddedFolder";
+            Folder f = model.AddFolder(proj, name);
 
-            Assert.AreEqual("Test Folder", f.Title);
-            Assert.AreEqual(p.Id, f.Parent.Id);
+            Assert.AreEqual(name, f.Title);
+            Assert.AreEqual(proj.Id, f.Parent.Id);
             Assert.AreNotEqual(0, f.Id);
         }
 
@@ -100,18 +119,13 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestRemoveFolder() {
-            Project p = model.AddProject("Shazam, hullu.", "me@hypesystem.dk");
-            Folder f = model.AddFolder(p, "New Test Folder");
-
-            Assert.IsTrue(model.GetProjects("me@hypesystem.dk") //assert that the project now contains this folder
-                .First(project => project.Id == p.Id)
-                .GetFolders().Count(folder => folder.Id == f.Id) > 0);
-
+            Folder f = model.AddFolder(proj, "New Test Folder");
+            
+            //assert that the project now contains this folder
+            Assert.IsTrue(model.GetProjects(user).First(project => project.Id == proj.Id).GetFolders().Count(folder => folder.Id == f.Id) > 0);
             model.RemoveFolder(f);
-
-            Assert.IsFalse(model.GetProjects("me@hypesystem.dk") //assert that the above is no longer true
-                .First(project => project.Id == p.Id)
-                .GetFolders().Count(folder => folder.Id == f.Id) > 0);
+            //assert that the above is no longer true
+            Assert.IsFalse(model.GetProjects(user).First(project => project.Id == proj.Id).GetFolders().Count(folder => folder.Id == f.Id) > 0);
         }
 
         /// <summary>
@@ -129,12 +143,12 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestAddDocument() {
-            Project testProject = model.AddProject("Common Test Project", "common@test.mail");
-            Document testDoc = model.AddDocument(testProject, "Test Document");
+            String name = "Test Document";
+            Document testDoc = model.AddDocument(proj, name);
 
-            Assert.AreEqual("Test Document", testDoc.Title);
+            Assert.AreEqual(name, testDoc.Title);
             Assert.AreNotEqual(0, testDoc.Id);
-            Assert.AreEqual(testProject.Id, testDoc.Parent.Id);
+            Assert.AreEqual(proj.Id, testDoc.Parent.Id);
         }
 
         /// <summary>
@@ -142,29 +156,30 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestSaveDocument() {
-            Project testProject = model.AddProject("Common Test Project", "common@test.mail");
-            Document testDoc = model.AddDocument(testProject, "Test Document");
+            String rev = @"the crucifix round my neck! for it is a comfort and a strength 
+to me whenever I touch it. It is odd that a thing which I have 
+been taught to regard with disfavour and as idolatrous should 
+in a time of loneliness and trouble be of help.".Trim();
+                String rev2 = @"Midnight. I have had a long talk with the Count. I asked 
+him a few questions on Transylvania history, and he warmed 
+up to the subject wonderfully.".Trim();
+            Document testDoc = model.AddDocument(proj, "Test Document");
 
-            testDoc.CurrentRevision = "Hello, party people";
+            testDoc.CurrentRevision = rev;
             model.SaveDocument(testDoc);
 
-            Assert.AreEqual("Hello, party people",
-                model.GetProjects("common@test.mail")
-                    .First(p => p.Id == testProject.Id)
-                    .GetDocuments().First(doc => doc.Id == testDoc.Id).CurrentRevision);
+            Assert.AreEqual(rev, model.GetProjects(user).First(p => p.Id == proj.Id).GetDocuments().First(doc => doc.Id == testDoc.Id).CurrentRevision);
 
-            //Test save adds revision and stuff
-            testDoc.CurrentRevision += "Shoop da woop da";
+            //Test that save adds revision and stuff
+            testDoc.CurrentRevision = rev2;
             model.SaveDocument(testDoc);
 
-            Document freshFetchDoc = model.GetProjects("common@test.mail")
-                    .First(p => p.Id == testProject.Id)
-                    .GetDocuments().First(doc => doc.Id == testDoc.Id);
+            Document freshFetchDoc = model.GetProjects(user).First(p => p.Id == proj.Id).GetDocuments().First(doc => doc.Id == testDoc.Id);
 
-            Assert.AreEqual(testDoc.CurrentRevision,
-                freshFetchDoc.CurrentRevision);
+            Assert.AreEqual(rev2.Trim(), freshFetchDoc.CurrentRevision.Trim());
 
-            Assert.IsTrue(testDoc.GetRevisions().Count() > 0);
+            Assert.IsTrue(testDoc.GetRevisions().Last() == rev);
+            Assert.IsTrue(testDoc.GetRevisions().First() == rev2);
         }
 
         /// <summary>
@@ -182,18 +197,13 @@ namespace SliceOfPie.Tests {
         /// </summary>
         [TestMethod]
         public void TestRemoveDocument() {
-            Project p = model.AddProject("Shazam, hullu.", "me@hypesystem.dk");
-            Document d = model.AddDocument(p, "New Test Doc");
+            Document d = model.AddDocument(proj, "WFMNewRemoveDocumentDocument");
 
-            Assert.IsTrue(model.GetProjects("me@hypesystem.dk") //assert that the project now contains this document
-                .First(project => project.Id == p.Id)
-                .GetDocuments().Count(doc => doc.Id == d.Id) > 0);
-
+            //assert that the project now contains this document
+            Assert.IsTrue(model.GetProjects(user).First(project => project.Id == proj.Id).GetDocuments().Count(doc => doc.Id == d.Id) > 0);
             model.RemoveDocument(d);
-
-            Assert.IsFalse(model.GetProjects("me@hypesystem.dk") //assert that the above is no longer true
-                .First(project => project.Id == p.Id)
-                .GetDocuments().Count(doc => doc.Id == d.Id) > 0);
+            //assert that the above is no longer true
+            Assert.IsFalse(model.GetProjects(user) .First(project => project.Id == proj.Id).GetDocuments().Count(doc => doc.Id == d.Id) > 0);
         }
 
         /// <summary>
@@ -202,8 +212,7 @@ namespace SliceOfPie.Tests {
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestRemoveDocumentNonexistingDocument() {
-            Document d = new Document() { Title = "Fake it 'til you make it!" };
-
+            Document d = new Document() { Title = "WFMRemoveNonexistingDocumentDocument" };
             model.RemoveDocument(d);
         }
     }
