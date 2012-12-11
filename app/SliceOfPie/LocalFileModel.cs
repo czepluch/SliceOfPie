@@ -610,7 +610,7 @@ namespace SliceOfPie {
             using (var dbContext = new sliceofpieEntities2()) {
                 var revisions = from revision in dbContext.Revisions
                                 where revision.DocumentId == document.Id
-                                orderby revision.Timestamp ascending
+                                orderby revision.Timestamp descending
                                 select revision;
                 foreach (Revision revision in revisions) {
                     documentRevisions.Add(revision);
