@@ -98,6 +98,7 @@ header h1, #header h1 {
     line-height: 2em;
     font-size: 32px !important;
     text-shadow: 1px 1px 2px #111;
+    float: left;
 }
 
 #main {
@@ -159,6 +160,7 @@ ul#menu li#greeting {
 ul#menu li img 
 {
     margin-right: 4px;
+    margin-left: -4px;
 }
 
 ul#menu li a {
@@ -246,7 +248,7 @@ table th {
 
 nav, 
 #menucontainer {
-    margin-top: 40px;
+    margin-top: 5px;
     clear: both;
     float: left;
 }
@@ -263,6 +265,7 @@ div#title {
     text-align: right;
     margin: 10px;
     color: White;
+    float: right;
 }
 
 #logindisplay a:link {
