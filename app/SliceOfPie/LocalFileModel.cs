@@ -333,10 +333,15 @@ namespace SliceOfPie {
                     } else {
                         // Creating folder
                         dbFolder = new Folder {
-                            Title = title,
-                            ProjectId = null,
-                            FolderId = parentId
+                            Title = title
                         };
+                        if (container == Container.Project) {
+                            dbFolder.ProjectId = parentId;
+                            dbFolder.FolderId = null;
+                        } else {
+                            dbFolder.ProjectId = null;
+                            dbFolder.FolderId = parentId;
+                        }
                         dbContext.Folders.AddObject(dbFolder);
                     }
                     dbContext.SaveChanges();
