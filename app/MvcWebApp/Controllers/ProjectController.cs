@@ -81,5 +81,15 @@ namespace MvcWebApp.Controllers
             }
             return RedirectToAction("Overview");
         }
+
+        public ActionResult Share(Project p) {
+            return View(p);
+        }
+
+        [HttpPost, ActionName("Share")]
+        public ActionResult ShareComplete(Project p, string emailsAsString) {
+            controller.ShareProject(p, emailsAsString);
+            return RedirectToAction("Overview");
+        }
     }
 }
