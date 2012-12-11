@@ -14,8 +14,14 @@ namespace MvcWebApp.Controllers {
             controller = SliceOfPie.Controller.Instance;
         }
 
-        public ActionResult Edit(int id) {
-            return View(controller.GetDocumentDirectly(id));
+        public ActionResult Edit(Document d) {
+            return View(controller.GetDocumentDirectly(d.Id));
+        }
+
+        [HttpPost, ActionName("Edit")]
+        public ActionResult EditSave(Document d) {
+            controller.SaveDocument(d);
+            return View(d.Id);
         }
 
         public ActionResult Create(Document d) {
