@@ -421,6 +421,8 @@ namespace SliceOfPie {
                             dbDocument.CurrentRevision = revision;
                             dbDocument.CurrentHash = revision.GetHashCode();
                             UpdateHash(fileName, revision.GetHashCode());
+                        } else if (revision.GetHashCode() == hash) {
+                            UpdateHash(fileName, (int)dbDocument.CurrentHash);
                         } else {
                             // Handle merge (and conflicts)
                             string merge = Merger.Merge(revision, dbDocument.CurrentRevision);
