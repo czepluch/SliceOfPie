@@ -48,11 +48,33 @@ namespace SliceOfPie.Tests {
 
         /// <summary>
         /// Test that projects are shared correctly.
-        /// NOTICE: Not implemented yet (feature not implemented).
         /// </summary>
         [TestMethod]
         public void TestProjectShare() {
-            throw new NotImplementedException("Sharing of projects is not yet implemented.");
+            TestHelper.ClearFolder(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie"));
+
+            LocalFileModel model = new LocalFileModel();
+
+            IEnumerable<Project> projects = model.GetProjects("local");
+            Project project = projects.First();
+
+            model.UploadStructure("common@test.mail");
+            model.FindProjects();
+            projects = model.GetProjects("local");
+            project = projects.First();
+
+            Assert.AreEqual(1, projects.Count());
+
+            string[] emails = {"me@hypesystem.dk"};
+            IAsyncResult shareAr = controller.BeginShareProject(project, emails, null, null);
+            controller.EndShareProject(shareAr);
+
+            using (var dbContext = new sliceofpieEntities2()) {
+                var projectUsers = from projectUser in dbContext.ProjectUsers
+                                   where projectUser.ProjectId == project.Id && projectUser.UserEmail == "me@hypesystem.dk"
+                                   select projectUser;
+                Assert.AreEqual(1, projectUsers.Count());
+            }
         }
 
         /// <summary>
