@@ -98,6 +98,7 @@ header h1, #header h1 {
     line-height: 2em;
     font-size: 32px !important;
     text-shadow: 1px 1px 2px #111;
+    float: left;
 }
 
 #main {
@@ -131,11 +132,21 @@ ul#menu {
     position: relative;
     margin: 0;
     text-align: right;
+    margin-left: 3px;
 }
 
 ul#menu li {
     display: inline-block;
     list-style: none;
+    padding: 4px 12px;
+    font-weight: bold;
+    text-decoration: none;
+    background-color: #e8eef4;
+    border-radius: 4px 4px 0 0;
+    -webkit-border-radius: 4px 4px 0 0;
+    -moz-border-radius: 4px 4px 0 0;
+    text-decoration: none;
+    color: #034af3;
 }
 
 ul#menu li#greeting {
@@ -146,29 +157,22 @@ ul#menu li#greeting {
     color: #fff;
 }
 
+ul#menu li img 
+{
+    margin-right: 4px;
+    margin-left: -4px;
+}
+
 ul#menu li a {
-    padding: 10px 20px;
-    font-weight: bold;
-    text-decoration: none;
-    line-height: 2.8em;
-    background-color: #e8eef4;
-    color: #034af3;
-    border-radius: 4px 4px 0 0;
-    -webkit-border-radius: 4px 4px 0 0;
-    -moz-border-radius: 4px 4px 0 0;
+    color: inherit;
+    text-decoration: inherit;
 }
 
-ul#menu li a:hover {
+ul#menu li:hover {
     background-color: #fff;
-    text-decoration: none;
 }
 
-ul#menu li a:active {
-    background-color: #a6e2a6;
-    text-decoration: none;
-}
-
-ul#menu li.selected a {
+ul#menu li.selected {
     background-color: #fff;
     color: #000;
 }
@@ -244,7 +248,7 @@ table th {
 
 nav, 
 #menucontainer {
-    margin-top: 40px;
+    margin-top: 5px;
     clear: both;
     float: left;
 }
@@ -261,6 +265,7 @@ div#title {
     text-align: right;
     margin: 10px;
     color: White;
+    float: right;
 }
 
 #logindisplay a:link {
@@ -324,4 +329,14 @@ div#title {
 
 .tri-state {
     width: 6em;
+}
+
+.document-revisions table td
+{
+    border-bottom: 3px solid black;
+}
+
+.document-revisions table td:nth-child(2) 
+{
+    border-right: 3px solid black;
 }

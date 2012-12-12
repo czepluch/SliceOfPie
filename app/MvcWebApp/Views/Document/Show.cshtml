@@ -15,3 +15,30 @@
 <p>
     @Html.ActionLink("Edit", "Edit", new { id=Model.Id })
 </p>
+<section class="document-revisions">
+    <h2>Revisions</h2>
+    <table>
+        <thead>
+            <th>Timestamp</th>
+            <th>Hash</th>
+            <th>Content</th>
+        </thead>
+        <tbody>
+            @foreach (SliceOfPie.Revision r in Model.Revisions) {
+                <tr>
+                    <td>@Html.AttributeEncode(r.Timestamp)</td>
+                    <td style="vertical-align: top;">@(((int)r.ContentHash).ToString("X").ToLower())</td>
+                    <td>@Html.Raw(r.Content)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+<script type="text/javascript">
+    $('.document-revisions').hide();
+    $('<a href="#">Display revisions</a>').appendTo('#main').wrap('<p />').click(function () {
+        $('.document-revisions').slideDown('slow');
+        $(this).fadeOut('slow');
+        return false;
+    });
+</script>
