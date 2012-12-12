@@ -12,7 +12,8 @@ namespace SliceOfPie {
 
         public IEnumerable<string> GetRevisions()
         {
-            yield return CurrentRevision;
+            foreach (Revision r in Revisions)
+                yield return r.Content;
         }
 
         public string GetPath() {
