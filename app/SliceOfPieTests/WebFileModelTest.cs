@@ -46,24 +46,38 @@ little I could walk through the streets.";
             if (projects.Count() < 1) throw new AssertFailedException("No projects returned from model");
 
             Project p = projects.First(projectToGet => projectToGet.Id == proj.Id); //get first project
+            Project pi = model.GetProject(proj.id);
+
             if (p.Id < 1) throw new AssertFailedException("Project has id below allowed value");
+            if (pi.Id < 1) throw new AssertFailedException("Project has id below allowed value");
             if (p.Title.Equals(string.Empty)) throw new AssertFailedException("Project title has not been set");
+            if (pi.Title.Equals(string.Empty)) throw new AssertFailedException("Project title has not been set");
 
             if (p.GetFolders().Count() < 1) throw new AssertFailedException("No folders were contained in the project, " + p.Title);
+            if (pi.GetFolders().Count() < 1) throw new AssertFailedException("No folders were contained in the project, " + p.Title);
 
             Folder f = p.GetFolders().First();
+            Folder fi = p.GetFolders().First();
             if (f.Id < 1) throw new AssertFailedException("Folder has id below allowed value");
-            if (f.Title.Equals(string.Empty)) throw new AssertFailedException("Folder title has not been set");
+            if (fi.Id < 1) throw new AssertFailedException("Folder has id below allowed value");
+            if (fi.Title.Equals(string.Empty)) throw new AssertFailedException("Folder title has not been set");
 
             if (f.GetDocuments().Count() < 1) throw new AssertFailedException("No documents were contained in the folder, " + f.Title + " in " + p.Title);
+            if (fi.GetDocuments().Count() < 1) throw new AssertFailedException("No documents were contained in the folder, " + f.Title + " in " + p.Title);
 
             Document d = f.GetDocuments().First();
+            Document di = f.GetDocuments().First();
             if (d.Id < 1) throw new AssertFailedException("Document has id below allowed value");
+            if (di.Id < 1) throw new AssertFailedException("Document has id below allowed value");
             if (d.Title.Equals(string.Empty)) throw new AssertFailedException("Document title has not been set");
+            if (di.Title.Equals(string.Empty)) throw new AssertFailedException("Document title has not been set");
             if (d.CurrentRevision.Equals(string.Empty)) throw new AssertFailedException("Document CurrentRevision is empty!!!");
+            if (di.CurrentRevision.Equals(string.Empty)) throw new AssertFailedException("Document CurrentRevision is empty!!!");
             if (d.CurrentHash == 0) throw new AssertFailedException("Document Hash has not been set");
+            if (di.CurrentHash == 0) throw new AssertFailedException("Document Hash has not been set");
 
             if (d.GetRevisions().Count() < 1) throw new AssertFailedException("No revisions were contained in the document, " + d.Title + " in " + f.Title);
+            if (di.GetRevisions().Count() < 1) throw new AssertFailedException("No revisions were contained in the document, " + d.Title + " in " + f.Title);
         }
 
         /// <summary>
@@ -154,7 +168,7 @@ little I could walk through the streets.";
         /// </summary>
         [TestMethod]
 
-        public void TestRemoveProjectsRecursiely() {
+        public void TestRemoveProjectsRecursively() {
 
             Folder f = model.AddFolder(projFolder, "WFMTestNewFolderRemoeProjet");
             model.RemoveProject(proj);
@@ -199,6 +213,20 @@ little I could walk through the streets.";
         }
 
         /// <summary>
+        /// Tests that folders can have the same name, though they are in the same parent
+        /// </summary>
+        [TestMethod]
+        public void TestAddFolderWithExistingName() {
+            String name = "WFMNewAddedFolder";
+            Folder f = model.AddFolder(proj, name);
+            Folder f2 = model.AddFolder(proj, name);
+
+            Assert.AreEqual(f.Title, f2.Title);
+            Assert.AreEqual(f2.Parent.Id, f.Parent.Id);
+            Assert.AreNotEqual(f2.Id, f.Id);
+        }
+
+        /// <summary>
         /// Tests that folders with null for a name cannot be added
         /// </summary>
         [TestMethod]
@@ -233,16 +261,58 @@ little I could walk through the streets.";
         }
 
         /// <summary>
+        /// Test that trying to remove a null folder will result in an exception.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestRemoveFolderNonexistingFolder() {
+            Folder f = null;
+            model.RemoveFolder(f);
+        }
+
+        /// <summary>
         /// Tests that documents returned by AddDocument are proper.
         /// </summary>
         [TestMethod]
         public void TestAddDocument() {
-            String name = "Test Document";
+            String name = "WFMTestAddDocumentNewDocument";
             Document testDoc = model.AddDocument(proj, name);
 
             Assert.AreEqual(name, testDoc.Title);
             Assert.AreNotEqual(0, testDoc.Id);
             Assert.AreEqual(proj.Id, testDoc.Parent.Id);
+        }
+
+        /// <summary>
+        /// Tests that documents with null parents can't be added
+        /// </summary>
+        [TestMethod]
+        [ExcpectedException(typeof(ArgumentNullException))]
+        public void TestAddNullParentDocument() {
+            String name = "WFMTestAddNullDocumentNewDocument";
+	    Project p = null;
+            Document testDoc = model.AddDocument(p, name);
+        }
+
+        /// <summary>
+        /// Tests that documents with null name can't be added
+        /// </summary>
+        [TestMethod]
+        [ExcpectedException(typeof(ArgumentNullException))]
+        public void TestAddNullNameDocument() {
+            String name = null;
+            Document testDoc = model.AddDocument(proj, name);
+        }
+
+        /// <summary>
+        /// Tests that documents with null parents and name can't be added
+        /// </summary>
+        [TestMethod]
+        [ExcpectedException(typeof(ArgumentNullException))]
+        public void TestAddNullParentDocument() {
+            String name = null;
+            Project p = null;
+            Document testDoc = model.AddDocument(p, name);
         }
 
         /// <summary>
@@ -257,7 +327,7 @@ in a time of loneliness and trouble be of help.".Trim();
                 String rev2 = @"Midnight. I have had a long talk with the Count. I asked 
 him a few questions on Transylvania history, and he warmed 
 up to the subject wonderfully.".Trim();
-            Document testDoc = model.AddDocument(proj, "Test Document");
+            Document testDoc = model.AddDocument(proj, "WFMTestAddDocumentNewDocument");
 
             testDoc.CurrentRevision = rev;
             model.SaveDocument(testDoc);
@@ -289,6 +359,16 @@ up to the subject wonderfully.".Trim();
         }
 
         /// <summary>
+        /// Asserts that saving a null document throws an exception
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestSaveDocumentNullDocument() {
+            Document d = null;
+            model.SaveDocument(d);
+        }
+
+        /// <summary>
         /// Tests that documents are removed properly
         /// </summary>
         [TestMethod]
@@ -309,6 +389,16 @@ up to the subject wonderfully.".Trim();
         [ExpectedException(typeof(InvalidOperationException))]
         public void TestRemoveDocumentNonexistingDocument() {
             Document d = new Document() { Title = "WFMRemoveNonexistingDocumentDocument" };
+            model.RemoveDocument(d);
+        }
+
+        /// <summary>
+        /// Asserts that deleting a null document throws an exception
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestRemoveDocumentNullDocument() {
+            Document d = null;
             model.RemoveDocument(d);
         }
     }
