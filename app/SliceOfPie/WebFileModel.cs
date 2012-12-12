@@ -197,6 +197,7 @@ namespace SliceOfPie {
         }
 
         public override void RemoveFolder(Folder folder) {
+            if (folder == null) throw new ArgumentNullException();
             IEnumerable<Document> documents;
             IEnumerable<Folder> folders;
             using (var dbContext = new sliceofpieEntities2()) {
@@ -221,6 +222,7 @@ namespace SliceOfPie {
         }
 
         public override Document AddDocument(IItemContainer parent, string title, string revision = "", int id = 0, bool db = false) {
+            if (parent == null || title == null) throw new ArgumentNullException();
             Document d = new Document() {
                 Title = title,
                 Parent = parent,
@@ -263,6 +265,7 @@ namespace SliceOfPie {
         }
 
         public override void RemoveDocument(Document document) {
+            if (document == null) throw new ArgumentNullException();
             using (var dbContext = new sliceofpieEntities2()) {
                 IEnumerable<Revision> revisions = dbContext.Documents.First(doc => doc.Id == document.Id).Revisions.ToList();
                 foreach (Revision r in revisions) {
@@ -334,7 +337,7 @@ namespace SliceOfPie {
         }
 
         public override IEnumerable<Revision> DownloadRevisions(Document document) {
-            throw new InvalidOperationException("Not supported in web");
+            throw new NotSupportedException("Not supported in web");
         }
     }
 }
