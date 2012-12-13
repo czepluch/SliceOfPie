@@ -1,3 +1,5 @@
+The local client is mostly working offline, but some features requires an internet connection established like share project and synchronize. Changes are only applied globally, when the data is synchronized.
+
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=1\textwidth]{User_manual/graphics/local.png}
@@ -6,7 +8,6 @@
 \end{figure}
 
 \subsubsection{Projects}
-Projects are the primary container entity in the program and can contain folders or documents, but not other projects. You always have at least one project (standard project is called "default").
 
 	\paragraph{Create project}
 	To create a new project, click the Create new project button (5 in figure~\ref{fig:manual-local}) and enter the desired name in the popup window. You can now find your new project in the explorer (1 in figure~\ref{fig:manual-local}).
@@ -21,7 +22,6 @@ Projects are the primary container entity in the program and can contain folders
 	In order to synchronize your data, you need to have an internet connection established, when that requirement is fulfilled, you can synchronize your data, by clicking the synchronize button (6 in figure~\ref{fig:manual-local}) and entering your account information in the popup window. If the user does not exist, a new one will be created with the desired account information. All data will then be synchronized, which can take several moments.
 
 \subsubsection{Folders}
-Folders are a container entity in the program, which can contain folders or documents.
 
 	\paragraph{Create folder}
 	To create a new folder, click the Create folder button (4 in figure~\ref{fig:manual-local}) or right-click a project or folder in the explorer (1 in figure~\ref{fig:manual-local}) and click Create folder. Then enter the desired name in the popup window. You can now find your new folder in the explorer as a subitem under the project or folder under which it was created.
@@ -30,13 +30,12 @@ Folders are a container entity in the program, which can contain folders or docu
 	To remove a folder, right-click the folder in the explorer (1 in figure~\ref{fig:manual-local}) and click Remove folder. Be aware that all subfolders and document will also be removed.
 
 \subsubsection{Documents}
-Documents are the primary entity in the program, as it holds all textual content.
 
 	\paragraph{Create document}
 	To create a new document, click the Create document button (3 in figure~\ref{fig:manual-local}) or right-click a project or folder in the explorer (1 in figure~\ref{fig:manual-local}) and click Create document. Then enter the desired name in the popup window. You can now find your new document in the explorer as a subitem under the project or folder under which it was created.
 	
 	\paragraph{Edit document}
-	To edit a document, click on the document in the explorer (1 in figure~\ref{fig:manual-local}). This will open the document with a large editing area (1 in figure~\ref{fig:manual-local-document}). When editing the the document, you can use the \emph{HyperText markup language}\cite{w3cHTML} (HTML) to format your content. To save the document, simply click the Save document button (2 in figure~\ref{fig:manual-local-document}).
+	To edit a document, click on the document in the explorer (1 in figure~\ref{fig:manual-local}). This will open the document with a large editing area (1 in figure~\ref{fig:manual-local-document}). When editing the the document, you can use the \emph{HyperText Markup Language}\cite{w3cHTML} (HTML) to format your content. To save the document, simply click the Save document button (2 in figure~\ref{fig:manual-local-document}).
 	
 	\begin{figure}[htb]
 		\centering
@@ -45,12 +44,11 @@ Documents are the primary entity in the program, as it holds all textual content
 		\label{fig:manual-local-document}
 	\end{figure}
 	
-	
 		\subparagraph{Insert image}
+		To insert an image, click the Insert image button (3 in figure~\ref{fig:manual-local-document}) and enter the URL to the image in the popup window. This will insert an HTML image tag at the cursors position.
 		
-		
-		\subparagraph{Show revisions}
-		
+		\subparagraph{Show history}
+		To view the revisions of a document, click the Show history button (4 in figure~\ref{fig:manual-local-document}). This will open a popup window with most recent revision visible, while rest of the history is available from the list in the left side of the window. You can copy the visible revision or part of it and paste it to your editor window.
 	
 	\paragraph{Remove document}
-	
+	To remove a document, right-click the folder in the explorer (1 in figure ~\ref{fig:manual-local}) and click Remove document. Be aware that all revisions will also be removed.
