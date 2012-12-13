@@ -69,6 +69,7 @@ namespace SliceOfPie {
         /// so there is no reason for return values.
         /// </summary>
         /// <param name="parent">Container whose documents to get.</param>
+      
         private void GetDocuments(IItemContainer parent) {
             List<Document> docList = new List<Document>();
             using (var dbContext = new sliceofpieEntities2()) {
@@ -102,7 +103,7 @@ namespace SliceOfPie {
         private void GetRevisions(Document document) {
             List<Revision> revList = new List<Revision>();
             using (var dbContext = new sliceofpieEntities2()) {
-                var revisions = dbContext.Revisions.Where(rev => rev.DocumentId == document.Id);
+                var revisions = dbContext.Revisions.Where(rev => rev.DocumentId == document.Id).OrderByDescending(x => x.Timestamp);
                 foreach (Revision r in revisions) {
                     revList.Add(new Revision() {
                         Document = document,
@@ -120,6 +121,8 @@ namespace SliceOfPie {
         #endregion
 
         public override Project AddProject(string title, string userMail, int id = 0, bool db = false) {
+            if (title == null || userMail == null) throw new ArgumentNullException();
+
             Project p = new Project() {
                 Title = title
             };
@@ -146,6 +149,7 @@ namespace SliceOfPie {
         }
 
         public override void RemoveProject(Project project) {
+            if (project == null) throw new ArgumentNullException();
             IEnumerable<Document> documents;
             IEnumerable<Folder> folders;
             using (var dbContext = new sliceofpieEntities2()) {
@@ -172,6 +176,7 @@ namespace SliceOfPie {
         }
 
         public override Folder AddFolder(IItemContainer parent, string title, int id = 0, bool db = false) {
+            if (title == null || parent == null) throw new ArgumentNullException();
             Folder f = new Folder() {
                 Title = title,
                 Parent = parent
@@ -192,6 +197,7 @@ namespace SliceOfPie {
         }
 
         public override void RemoveFolder(Folder folder) {
+            if (folder == null) throw new ArgumentNullException();
             IEnumerable<Document> documents;
             IEnumerable<Folder> folders;
             using (var dbContext = new sliceofpieEntities2()) {
@@ -216,6 +222,7 @@ namespace SliceOfPie {
         }
 
         public override Document AddDocument(IItemContainer parent, string title, string revision = "", int id = 0, bool db = false) {
+            if (parent == null || title == null) throw new ArgumentNullException();
             Document d = new Document() {
                 Title = title,
                 Parent = parent,
@@ -243,11 +250,14 @@ namespace SliceOfPie {
                 else merge = document.CurrentRevision;
 
                 Document d = dbContext.Documents.First(doc => doc.Id == document.Id);
-                d.Revisions.Add(new Revision() {
+                Revision newRevision = new Revision() {
                     Content = merge,
                     ContentHash = merge.GetHashCode(),
-                    Timestamp = DateTime.Now
-                });
+                    Timestamp = DateTime.Now,
+                    DocumentId = d.Id
+                };
+                dbContext.Revisions.AddObject(newRevision);
+                d.Revisions.Add(newRevision);
                 d.CurrentRevision = merge;
                 d.CurrentHash = merge.GetHashCode();
                 dbContext.SaveChanges();
@@ -255,6 +265,7 @@ namespace SliceOfPie {
         }
 
         public override void RemoveDocument(Document document) {
+            if (document == null) throw new ArgumentNullException();
             using (var dbContext = new sliceofpieEntities2()) {
                 IEnumerable<Revision> revisions = dbContext.Documents.First(doc => doc.Id == document.Id).Revisions.ToList();
                 foreach (Revision r in revisions) {
@@ -285,12 +296,17 @@ namespace SliceOfPie {
 
         public override Folder GetFolder(int id) {
             Folder result;
-            using (var dbContext = new sliceofpieEntities2()) {
-                Folder dbFolder = dbContext.Folders.First(f => f.Id == id);
-                result = new Folder() {
-                    Id = dbFolder.Id,
-                    Title = dbFolder.Title
-                };
+            try {
+                using (var dbContext = new sliceofpieEntities2()) {
+                    Folder dbFolder = dbContext.Folders.First(f => f.Id == id);
+                    result = new Folder() {
+                        Id = dbFolder.Id,
+                        Title = dbFolder.Title
+                    };
+
+                }
+            } catch (InvalidOperationException e) {
+                return null;
             }
             GetFolders(result);
             GetDocuments(result);
@@ -299,14 +315,18 @@ namespace SliceOfPie {
 
         public override Document GetDocument(int id) {
             Document result;
-            using (var dbContext = new sliceofpieEntities2()) {
-                Document dbDoc = dbContext.Documents.First(d => d.Id == id);
-                result = new Document() {
-                    Id = dbDoc.Id,
-                    CurrentRevision = dbDoc.CurrentRevision,
-                    CurrentHash = dbDoc.CurrentRevision.GetHashCode(),
-                    Title = dbDoc.Title
-                };
+            try {
+                using (var dbContext = new sliceofpieEntities2()) {
+                    Document dbDoc = dbContext.Documents.First(d => d.Id == id);
+                    result = new Document() {
+                        Id = dbDoc.Id,
+                        CurrentRevision = dbDoc.CurrentRevision,
+                        CurrentHash = dbDoc.CurrentRevision.GetHashCode(),
+                        Title = dbDoc.Title
+                    };
+                }
+            } catch (InvalidOperationException e) {
+                return null;
             }
             GetRevisions(result);
             return result;
@@ -317,7 +337,7 @@ namespace SliceOfPie {
         }
 
         public override IEnumerable<Revision> DownloadRevisions(Document document) {
-            throw new InvalidOperationException("Not supported in web");
+            throw new NotSupportedException("Not supported in web");
         }
     }
 }
