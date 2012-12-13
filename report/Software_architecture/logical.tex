@@ -1,1 +1,41 @@
-This is for the Logical Views.
+\subsection{Logical View}
+
+The architecture is based around a reusable application logic layer, that connects to the
+local file system and a MySQL database as needed. Additionally, it can easily be used by
+both the Web-Only UI and the Local UI.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.7\textwidth]{Software_architecture/graphics/application-layers.png}
+	\caption{Layers of the application}
+	\label{fig:application-layers}
+\end{figure}
+
+Because of this structure, we have an architecture that is split in that it supports two
+parallel UI layers and two parallel data layers (see Figure \ref{fig:application-layers}).
+
+From these layers our package diagram almost directly follows (Figure \ref{fig:package-diagram}).
+To communicate with the different data layers, we have two separate models. It is important to
+note that the \emph{LocalFileModel} connects to both the file system (in most situations) and
+to the MySQL database (when this is explicitly requested).
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{Software_architecture/graphics/package-diagram.png}
+	\caption{Package Diagram showing dependencies from the UIs to the Application Logic}
+	\label{fig:package-diagram}
+\end{figure}
+
+With the overall architecture in place, the last important logical component of the architecural design
+consists of the basic classes that all packages use (Figure \ref{fig:basic-classes}): \emph{Document},
+\emph{Folder} and \emph{Project}. These are mostly defined in their implementations of \emph{IItemContainer}
+and \emph{IItem}. \emph{IItem} defines an "item"; something that can be contained in an
+\emph{IItemContainer}. This is important as Folders may both \emph{contain} and \emph{be contained},
+whereas Documents may only be contained and Projects may only contain.
+
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.9\textwidth]{Software_architecture/graphics/basic-classes.png}
+	\caption{Basic classes sent around in the application and their relative relationship.}
+	\label{fig:basic-classes}
+\end{figure}
