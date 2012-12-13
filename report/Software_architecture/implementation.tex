@@ -1,0 +1,18 @@
+\subsection{Implementation View}
+
+The source code of the project can be found on GitHub at\newline http://github.com/hypesystem/SliceOfPie/app or in
+Appendix %INSERT REFERENCE HERE
+
+The solution is built into serveral different files, reusing code as best possible.
+
+\begin{description}
+    \item[SliceOfPie.dll] This library contains the general SliceOfPie-centric code. It is built into a
+        DLL to be easily distributable between all interested clients. Apart from defining the common
+        language used in the UIs (Documents, Folders, Projects), it also defines the API for the
+        Controller, which, in effect, gives access to the data of the application.
+    \item[SliceOfPieClient.exe] This executable is simply the desktop UI. It comes bundled with
+        SliceOfPie.dll, and provides an easy interface to use the application through.
+    \item[MvcWebApp.dll] This DLL is a MVC project, that can be hosted on so-enabled Windows servers.
+        It depends on an MVC3 installation being present and comes bundled with SliceOfPie.dll.
+    \item[SliceOfPieTests.dll] This DLL is never actually released and contains tests for SliceOfPie.dll.
+\end{description}

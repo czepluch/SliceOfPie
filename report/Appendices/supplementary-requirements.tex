@@ -1,0 +1,43 @@
+\section{Supplementary Requirements}
+\label{sec:Supplementary Requirements}
+
+Following is a list of requirements for the system that cannot be defined as Use Cases %Insert reference%
+but are still important to the project.
+
+\subsection{Functionality}
+The system must keep track of user projects and project files, including revision control.
+
+The system must supply a web-interface, as well as a local interface for offline operations.
+
+The system must support merging of conflicting versions of files, such as those that would occur from simultaneous offline and online editing by different users.
+
+\subsection{Usability}
+Document creation, sharing, and other technical background operations must be performed within a time span of a couple of seconds (~2).
+
+The only operations that are allowed to take more than a couple of seconds are user operations such as editing documents and reviewing merges.
+
+Merge reviews should be easy to understand, such that a normal page of revisions can be revised in less than 2 minutes.
+
+\subsection{Reliability}
+The system must have 98\% up-time. Planned down-time not taken into account.
+
+The system should be able to reject errors in synchronization, such that document synchronization is atomic and correct.
+
+\subsection{Performance}
+The system is partly based on a web interface. Performance, therefore, is dependent on external factors such as the users internet connection.
+This makes bandwidth consumption a prime consideration for system performance.
+
+The local client must be light-weight enough to run on a five year old laptop with a dual-core processor.
+
+\subsection{Supportability}
+The system should be self contained enough to require technical assistance only during server setup.
+
+The system should have high version stability. No update is allowed to break backwards-compatibility.
+
+\subsection{Security}
+Users are authenticated via a personal login and password.
+
+Passwords may not be kept as plaintext, but are maintained as salted hashes.
+
+\subsection{Implementation Constraints}
+The system should be written in C\#. This a requirement from a very important stakeholder.
