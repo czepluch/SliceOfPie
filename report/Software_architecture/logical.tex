@@ -14,10 +14,15 @@ both the Web-Only UI and the Local UI.
 Because of this structure, we have an architecture that is split in that it supports two
 parallel UI layers and two parallel data layers (see Figure \ref{fig:application-layers}).
 
-From these layers our package diagram almost directly follows (Figure \ref{fig:package-diagram}).
+From these layers our package diagram almost directly follows (Figure \ref{fig:package-diagram}):
 To communicate with the different data layers, we have two separate models. It is important to
 note that the \emph{LocalFileModel} connects to both the file system (in most situations) and
 to the MySQL database (when this is explicitly requested).
+
+This architecture emphasises low coupling and high cohesion, focusing on extensibility and
+easy replacement of different parts without it affecting other parts of the software. This is
+useful in a proof-of-concept as more sturdy, production-level classes should be put in place
+before the system is distributed.
 
 \begin{figure}[htb]
 	\centering
@@ -31,7 +36,12 @@ consists of the basic classes that all packages use (Figure \ref{fig:basic-class
 \emph{Folder} and \emph{Project}. These are mostly defined in their implementations of \emph{IItemContainer}
 and \emph{IItem}. \emph{IItem} defines an "item"; something that can be contained in an
 \emph{IItemContainer}. This is important as Folders may both \emph{contain} and \emph{be contained},
-whereas Documents may only be contained and Projects may only contain.
+whereas Documents may only be contained and Projects may only contain
+
+This structure, with its use of \emph{composition} (in that folders may contain folders), results in a
+dynamically extensible hierachy, much like the one found in most filesystems. An additional constraint
+in the architecture is that a root element will {\bf always} be a project, and as such it is easy to
+manage bundles of files by their parent project.
 
 \begin{figure}[htb]
 	\centering
