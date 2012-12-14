@@ -1,2 +1,26 @@
 \subsection{Development View}
 
+The software has been developed with a version control system (VCS) called Git\cite{progit},
+originally developed by Linus Thorvalds.
+
+This version control system emphasises agility and the ability to concurrently work on serveral
+things at once, branching the source code by features, and joining the branches again only when
+features are done\cite{sopBranching}.
+
+Our source code is hosted at GitHub, a Git repository host.
+
+Our report is written in \LaTeX\cite{latexBook} and is part of the project as its content has been developed
+side-by-side with the application.
+
+\subsubsection{Preliminary Requirements}
+
+It is recommended to use the Visual Studio 2010 IDE and the Git VCS.
+
+Before compiling the source code of the project there are a few requirements for the setup:
+
+\begin{enumerate}
+    \item MySQL Connector/Net\footnote{Availible from MySQL: http://dev.mysql.com/downloads/connector/net/};
+        allowing the application to talk with the MySQL server.
+    \item ASP.NET MVC 3 Tools Update\footnote{Availible from Microsoft: http://www.microsoft.com/en-us/download/details.aspx?id=1491};
+        enabling the WebUI to run.
+\end{enumerate}

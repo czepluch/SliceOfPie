@@ -1,6 +1,5 @@
 \subsubsection{Asynchronous Calls}
-
-% Consider moving this under something with patterns?
+\label{sec:APM}
 
 For a desktop UI to be repsonsive, it is important that heavy loads are moved away from the UI thread. There are several possible ways of doing this: threading, abstracting to using tasks, or asynchronous methods. To reduce the amount of boilerplate code in the UI layer, the responsibility for delegating to threads was moved to the controller.
 

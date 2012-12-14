@@ -19,10 +19,11 @@ To communicate with the different data layers, we have two separate models. It i
 note that the \emph{LocalFileModel} connects to both the file system (in most situations) and
 to the MySQL database (when this is explicitly requested).
 
-This architecture emphasises low coupling and high cohesion, focusing on extensibility and
-easy replacement of different parts without it affecting other parts of the software. This is
-useful in a proof-of-concept as more sturdy, production-level classes should be put in place
-before the system is distributed.
+In using the Model-View-Controller pattern to separate to visuals (WebUI, ClientUI) from the
+data behind (LocalFileModel, WebFileModel) by communicating through the Controller, we achieve
+low coupling and high cohesion. We focus on extensibility and easy replacement of different
+parts without it affecting other parts of the software. This is useful in a proof-of-concept as
+more sturdy, production-level classes should be put in place before the system is distributed.
 
 \begin{figure}[htb]
 	\centering
