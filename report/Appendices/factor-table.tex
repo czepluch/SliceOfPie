@@ -1,0 +1,64 @@
+\section{Factor Table}
+\label{sec:factor-table}
+
+\begin{table}[htb]
+    \centering
+    \begin{tabular}{ | p{65px} | p{90px} | p{110px} | p{50px} | p{20px} | p{20px} | }
+        \hline
+        {\bf Factor} & {\bf Measures and Quality Scenarios} & {\bf Variability (flexibility and future)} & {\bf Impact on stakeholders} & {\bf Prio\-rity} & {\bf Diffi\-culty}\\
+        \hline
+        Web \& Desktop UI &
+        Same things must be possible on both versions of the system. Measured through use. &
+        Simple API in Controller makes this easy. May be extended to use a different backend without breaking functionality &
+        Accessible everywhere &
+        H &
+        M \\
+        \hline
+        Most operations < 2 sec &
+        UnitTests of these actions have timing. &
+        Optimization may be possible by swapping Entity Framework for Web Service &
+        Usability (respon\-sive\-ness) &
+        M &
+        H \\
+        \hline
+        98\% uptime &
+        - &
+        - &
+        - &
+        - &
+        - \\
+        \hline
+        Reject sync on failure &
+        Use test &
+        All database actions are in commits, will reject everything on failure. &
+        Consistent state &
+        M &
+        M \\
+        \hline
+        Bandwidth consump\-tion &
+        Network measurement &
+        Currently nothing excessive. Could be reduced by using web service for backend &
+        Usability (respon\-sive\-ness &
+        M &
+        H \\
+        \hline
+        Backwards compatibility &
+        - &
+        - &
+        - &
+        - &
+        - \\
+        \hline
+        Password security &
+        - &
+        Currently in plain-text. Easily improved upon. &
+        Security &
+        H &
+        L \\
+        \hline
+    \end{tabular}
+    \caption{Factor table. Refer to the Supplementary Requirements (Appendix \ref{sec:Supplementary Requirements}) for the requirements
+        that have been factored in here. Some of the factors can only be measured or are only relevant in production environment, and
+        have not been measured. They are here for completeness, and to be easily taken into use when the system reaches production.}
+    \label{tab:factor-table}
+\end{table}
