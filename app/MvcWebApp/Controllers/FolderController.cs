@@ -14,7 +14,7 @@ namespace MvcWebApp.Controllers {
             controller = SliceOfPie.Controller.Instance;
         }
         //
-        // GET: /Folder/
+        // GET: /Folder/Index
 
         public ActionResult Index(int id) {
             return View(controller.GetFolderDirectly(id));
@@ -22,6 +22,7 @@ namespace MvcWebApp.Controllers {
 
         //
         // GET: /Folder/CreateInFolder
+
         [HttpGet]
         public ActionResult CreateInFolder(Folder f) {
             return View(f);
@@ -42,6 +43,7 @@ namespace MvcWebApp.Controllers {
 
         //
         // GET: /Folder/CreateInProject
+
         [HttpGet]
         public ActionResult CreateInProject(Folder f) {
             return View(f);
