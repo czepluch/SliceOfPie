@@ -43,6 +43,9 @@ namespace SliceOfPie.Client {
             set { _textField.Text = value; }
         }
 
+        /// <summary>
+        /// The position of the caret in the text.
+        /// </summary>
         public int CaretIndex {
             get { return _textField.CaretIndex; }
             set { _textField.CaretIndex = value; }
@@ -57,6 +60,9 @@ namespace SliceOfPie.Client {
             controller = Controller.Instance;
         }
 
+        /// <summary>
+        /// This method makes the field of text focused.
+        /// </summary>
         public void FocusText() {
             _textField.Focus();
         }
