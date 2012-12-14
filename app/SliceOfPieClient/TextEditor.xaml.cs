@@ -23,16 +23,11 @@ namespace SliceOfPie.Client {
         private Controller controller;
 
         /// <summary>
-        /// This is the Document currently shown in the Text Editor
+        /// This is the Document currently shown in the Text Editor.
         /// Changing this will change what is shown.
         /// </summary>
         public Document Document {
-            get {
-                if (_document != null) { //if it has been set at least once
-                    _document.CurrentRevision = _textField.Text; //Update revision based on text before returning
-                }
-                return _document;
-            }
+            get { return _document; }
             set {
                 //update ui to the new document
                 _document = value;
@@ -40,6 +35,9 @@ namespace SliceOfPie.Client {
             }
         }
 
+        /// <summary>
+        /// This is the text in shown in the editor
+        /// </summary>
         public string Text {
             get { return _textField.Text; }
             set { _textField.Text = value; }

@@ -610,7 +610,9 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void SaveDocumentButton_Click(object sender, RoutedEventArgs e) {
-            controller.BeginSaveDocument(textEditor.Document, null, null);
+            Document docToSave = textEditor.Document;
+            docToSave.CurrentRevision = textEditor.Text; //Update current revision based on text before returning
+            controller.BeginSaveDocument(docToSave, null, null);
         }
     }
 }
