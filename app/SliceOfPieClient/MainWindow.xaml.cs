@@ -204,34 +204,7 @@ namespace SliceOfPie.Client {
             }
         }
 
-        #region EventHandlers
-
-        /// <summary>
-        /// A default event handler for changing the main content due to a click
-        /// </summary>
-        /// <param name="sender">The sender object.</param>
-        /// <param name="e">The RoutedEventArgs.</param>
-        private void OpenItemOnContextMenuClick(object sender, RoutedEventArgs e) {
-            Open(currentContextItem);
-        }
-
-        /// <summary>
-        /// A default event handler for changing the main content due to a click
-        /// </summary>
-        /// <param name="sender">The sender object.</param>
-        /// <param name="e">The RoutedEventArgs.</param>
-        private void RemoveItemOnContextMenuClick(object sender, RoutedEventArgs e) {
-            if (currentContextItem is Project) {
-                controller.RemoveProject(currentContextItem as Project);
-            }
-            else if (currentContextItem is Folder) {
-                controller.RemoveFolder(currentContextItem as Folder);
-            }
-            else {
-                controller.RemoveDocument(currentContextItem as Document);
-            }
-            RefreshLocalProjects();
-        }
+        #region EventHandlers        
 
         /// <summary>
         /// This event handler opens the CreateProject pop-up window
@@ -242,85 +215,6 @@ namespace SliceOfPie.Client {
             IsEnabled = false;
             createProjectPopUp.IsOpen = true;
             createProjectPopUPTextBox.Focus();
-        }
-
-        /// <summary>
-        /// This event handler opens the ShareProject pop-up window
-        /// </summary>
-        /// <param name="sender">The object that sent the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OpenShareProjectWindow(object sender, RoutedEventArgs e) {
-            //note that the textbox is cleared when the popups were last closed
-            IsEnabled = false;
-            shareProjectPopUP.IsOpen = true;
-            shareProjectPopUPTextBox.Focus();
-        }
-
-        /// <summary>
-        /// This event handler opens the CreateFolder pop-up window
-        /// </summary>
-        /// <param name="sender">The object that sent the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OpenCreateFolderWindow(object sender, RoutedEventArgs e) {
-            //note that the textbox is cleared when the popups were last closed
-            IsEnabled = false;
-            createFolderPopUP.IsOpen = true;
-            createFolderPopUPTextBox.Focus();
-        }
-
-        /// <summary>
-        /// This event handler opens the CreateDocument pop-up window
-        /// </summary>
-        /// <param name="sender">The object that sent the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OpenCreateDocumentWindow(object sender, RoutedEventArgs e) {
-            //note that the textbox is cleared when the popups were last closed
-            IsEnabled = false;
-            createDocumentPopUP.IsOpen = true;
-            createDocumentPopUPTextBox.Focus();
-        }
-
-        /// <summary>
-        /// This event handler opens the Login pop-up window
-        /// </summary>
-        /// <param name="sender">The object that sent the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OpenLoginWindow(object sender, RoutedEventArgs e) {
-            //note that the textbox is cleared when the popups were last closed
-            IsEnabled = false;
-            loginPopUpErrorLabel.Content = " "; //to prevent the lines jumping when the error label gets set and changes height
-            loginPopUp.IsOpen = true;
-            loginPopUpUserTextBox.Focus();
-        }
-
-        /// <summary>
-        /// This is the event handler for a right click (up event) in the Document Explorer
-        /// </summary>
-        /// <param name="sender">The object that send the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void DocumentExplorerItemMouseRightButtonUp(object sender, ListableItemEventArgs e) {
-            currentContextItem = e.Item;
-            documentExplorer.ShowContextMenuForSelected(GetContextMenu(e.Item));
-        }
-
-        /// <summary>
-        /// This is the event handler for a left click (up event) in the Document Explorer
-        /// </summary>
-        /// <param name="sender">The sender of the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void DocumentExplorerItemMouseLeftButtonUp(object sender, ListableItemEventArgs e) {
-            currentContextItem = e.Item;
-            Open(e.Item);
-        }
-
-        /// <summary>
-        /// This is the event handler for an enter key event in the Document Explorer
-        /// </summary>
-        /// <param name="sender">The object that sent the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void DocumentExplorerItemEnterKeyUp(object sender, ListableItemEventArgs e) {
-            currentContextItem = e.Item;
-            Open(e.Item);
         }
 
         /// <summary>
@@ -348,6 +242,18 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
+        /// This event handler opens the CreateFolder pop-up window
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OpenCreateFolderWindow(object sender, RoutedEventArgs e) {
+            //note that the textbox is cleared when the popups were last closed
+            IsEnabled = false;
+            createFolderPopUP.IsOpen = true;
+            createFolderPopUPTextBox.Focus();
+        }
+
+        /// <summary>
         /// This is the click handler for the Cancel button in the CreateFolder pop-up
         /// </summary>
         /// <param name="sender">The object that sent the event.</param>
@@ -369,6 +275,18 @@ namespace SliceOfPie.Client {
             IsEnabled = true;
             createFolderPopUPTextBox.Clear();
 
+        }
+
+        /// <summary>
+        /// This event handler opens the CreateDocument pop-up window
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OpenCreateDocumentWindow(object sender, RoutedEventArgs e) {
+            //note that the textbox is cleared when the popups were last closed
+            IsEnabled = false;
+            createDocumentPopUP.IsOpen = true;
+            createDocumentPopUPTextBox.Focus();
         }
 
         /// <summary>
@@ -395,28 +313,17 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
-        /// This is the click handler for the Cancel button in the ShareProject pop-up
+        /// This event handler opens the Login pop-up window
         /// </summary>
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void ShareProjectPopUpCancelButton_Click(object sender, RoutedEventArgs e) {
-            shareProjectPopUP.IsOpen = false;
-            IsEnabled = true;
-            shareProjectPopUPTextBox.Clear();
+        private void OpenLoginWindow(object sender, RoutedEventArgs e) {
+            //note that the textbox is cleared when the popups were last closed
+            IsEnabled = false;
+            loginPopUpErrorLabel.Content = " "; //to prevent the lines jumping when the error label gets set and changes height
+            loginPopUp.IsOpen = true;
+            loginPopUpUserTextBox.Focus();
         }
-
-        /// <summary>
-        /// This is the click handler for the Share button in the ShareProject pop-up
-        /// </summary>
-        /// <param name="sender">The object that sent the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void ShareProjectPopUpShareButton_Click(object sender, RoutedEventArgs e) {
-            controller.BeginShareProject(currentContextItem as Project, shareProjectPopUPTextBox.Text.Split(','), null, null);
-            shareProjectPopUP.IsOpen = false;
-            IsEnabled = true;
-            shareProjectPopUPTextBox.Clear();
-        }
-
 
         /// <summary>
         /// This is the click handler for the Cancel button in the Login pop-up
@@ -472,12 +379,21 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
-        /// This method is sent as a mouse event handler to the FolderContentView class.
+        /// Opens a pop-up with a message about a faulty internet connection
         /// </summary>
-        /// <param name="sender">The sender of the event.</param>
+        private void OpenNoInternetPopUp() {
+            IsEnabled = false;
+            noInternetPopUp.IsOpen = true;
+        }
+
+        /// <summary>
+        /// This is the click handler for the Close button in the No internet pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void FolderContentView_DoubleClick(object sender, ListableItemEventArgs e) {
-            documentExplorer.ExpandTo(e.Item, Open);
+        private void NoInternetPopUpOkButton_Click(object sender, RoutedEventArgs e) {
+            noInternetPopUp.IsOpen = false;
+            IsEnabled = true;
         }
 
         /// <summary>
@@ -489,7 +405,122 @@ namespace SliceOfPie.Client {
             OpenLoginWindow(sender, e);
         }
 
+        /// <summary>
+        /// This method is sent as a mouse event handler to the FolderContentView class.
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void FolderContentView_DoubleClick(object sender, ListableItemEventArgs e) {
+            documentExplorer.ExpandTo(e.Item, Open);
+        }
+
+        #region Document Explorer related
+        /// <summary>
+        /// A default event handler for changing the main content due to a click
+        /// </summary>
+        /// <param name="sender">The sender object.</param>
+        /// <param name="e">The RoutedEventArgs.</param>
+        private void OpenItemOnContextMenuClick(object sender, RoutedEventArgs e) {
+            Open(currentContextItem);
+        }
+
+        /// <summary>
+        /// A default event handler for changing the main content due to a click
+        /// </summary>
+        /// <param name="sender">The sender object.</param>
+        /// <param name="e">The RoutedEventArgs.</param>
+        private void RemoveItemOnContextMenuClick(object sender, RoutedEventArgs e) {
+            if (currentContextItem is Project) {
+                controller.RemoveProject(currentContextItem as Project);
+            }
+            else if (currentContextItem is Folder) {
+                controller.RemoveFolder(currentContextItem as Folder);
+            }
+            else {
+                controller.RemoveDocument(currentContextItem as Document);
+            }
+            RefreshLocalProjects();
+        }
+
+        /// <summary>
+        /// This event handler opens the ShareProject pop-up window
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OpenShareProjectWindow(object sender, RoutedEventArgs e) {
+            //note that the textbox is cleared when the popups were last closed
+            IsEnabled = false;
+            shareProjectPopUP.IsOpen = true;
+            shareProjectPopUPTextBox.Focus();
+        }
+
+        /// <summary>
+        /// This is the click handler for the Cancel button in the ShareProject pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void ShareProjectPopUpCancelButton_Click(object sender, RoutedEventArgs e) {
+            shareProjectPopUP.IsOpen = false;
+            IsEnabled = true;
+            shareProjectPopUPTextBox.Clear();
+        }
+
+        /// <summary>
+        /// This is the click handler for the Share button in the ShareProject pop-up
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void ShareProjectPopUpShareButton_Click(object sender, RoutedEventArgs e) {
+            controller.BeginShareProject(currentContextItem as Project, shareProjectPopUPTextBox.Text.Split(','), null, null);
+            shareProjectPopUP.IsOpen = false;
+            IsEnabled = true;
+            shareProjectPopUPTextBox.Clear();
+        }
+
+        /// <summary>
+        /// This is the event handler for a right click (up event) in the Document Explorer
+        /// </summary>
+        /// <param name="sender">The object that send the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void DocumentExplorerItemMouseRightButtonUp(object sender, ListableItemEventArgs e) {
+            currentContextItem = e.Item;
+            documentExplorer.ShowContextMenuForSelected(GetContextMenu(e.Item));
+        }
+
+        /// <summary>
+        /// This is the event handler for a left click (up event) in the Document Explorer
+        /// </summary>
+        /// <param name="sender">The sender of the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void DocumentExplorerItemMouseLeftButtonUp(object sender, ListableItemEventArgs e) {
+            currentContextItem = e.Item;
+            Open(e.Item);
+        }
+
+        /// <summary>
+        /// This is the event handler for an enter key event in the Document Explorer
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void DocumentExplorerItemEnterKeyUp(object sender, ListableItemEventArgs e) {
+            currentContextItem = e.Item;
+            Open(e.Item);
+        }
+
         #endregion
+
+        #region Text editor related
+
+        /// <summary>
+        /// Saves the current document
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void SaveDocumentButton_Click(object sender, RoutedEventArgs e) {
+            Document docToSave = textEditor.Document;
+            docToSave.CurrentRevision = textEditor.Text; //Update current revision based on text before returning
+            controller.BeginSaveDocument(docToSave, null, null);
+        }
 
         /// <summary>
         /// This event handler opens the Insert Image pop-up window
@@ -504,6 +535,51 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
+        /// This event handler opens the History pop-up window
+        /// </summary>
+        /// <param name="sender">The object that sent the event.</param>
+        /// <param name="e">The event arguments.</param>
+        private void OpenHistoryPopUp(object sender, RoutedEventArgs e) {
+            Document documentWhenClicked = textEditor.Document;
+            //setup history popup
+            syncingPopUp.IsOpen = true;
+            controller.BeginDownloadRevisions(documentWhenClicked,
+                (iar) => {
+                    CallOnUIThread(() => historyList.Items.Clear());
+                    try {
+                        IEnumerable<Revision> revisions = controller.EndDownloadRevisions(iar);
+                        foreach (Revision revision in revisions) {
+                            string revisionContent = revision.Content;
+                            DateTime? revisionTimeStamp = revision.Timestamp;
+                            CallOnUIThread(() => {
+                                ListBoxItem item = new ListBoxItem() { Content = revisionTimeStamp };
+                                item.Selected += new RoutedEventHandler((itemSelected, eventArgs) => historyPopUpTextBox.Text = revisionContent);
+                                historyList.Items.Add(item);
+                            });
+                        }
+                        //If there was any revisions - select the first
+                        if (revisions.Count() > 0) {
+                            CallOnUIThread(() => {
+                                (historyList.Items[0] as ListBoxItem).IsSelected = true;
+                            });
+                        }
+                        CallOnUIThread(() => {
+                            historyPopUpTopLabel.Content = "History for " + documentWhenClicked.Title;
+                            IsEnabled = false;
+                            syncingPopUp.IsOpen = false;
+                            historyPopUp.IsOpen = true;
+                        });
+                    }
+                    catch (Exception ex) {
+                        CallOnUIThread(() => {
+                            syncingPopUp.IsOpen = false;
+                            OpenNoInternetPopUp();
+                        });
+                    }
+                }, null);
+        }
+
+        /// <summary>
         /// This is the click handler for the Cancel button in the Insert Image pop-up
         /// </summary>
         /// <param name="sender">The object that sent the event.</param>
@@ -513,8 +589,6 @@ namespace SliceOfPie.Client {
             IsEnabled = true;
             insertImagePopUpTextBox.Clear();
         }
-
-
 
         /// <summary>
         /// This is the click handler for the Insert button in the Insert Image pop-up
@@ -533,52 +607,6 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
-        /// This event handler opens the History pop-up window
-        /// </summary>
-        /// <param name="sender">The object that sent the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void OpenHistoryPopUp(object sender, RoutedEventArgs e) {
-            Document documentWhenClicked = textEditor.Document;
-            //setup history popup
-            syncingPopUp.IsOpen = true;
-            controller.BeginDownloadRevisions(documentWhenClicked,
-                (iar) => {
-                    CallOnUIThread(()=> historyList.Items.Clear());
-                    try {
-                        IEnumerable<Revision> revisions = controller.EndDownloadRevisions(iar);
-                        foreach (Revision revision in revisions) {
-                            string revisionContent = revision.Content;
-                            DateTime? revisionTimeStamp = revision.Timestamp;
-                            CallOnUIThread(() => {
-                                ListBoxItem item = new ListBoxItem() { Content = revisionTimeStamp };
-                                item.Selected += new RoutedEventHandler((itemSelected, eventArgs) => historyPopUpTextBox.Text = revisionContent);
-                                historyList.Items.Add(item);
-                            });
-                        }
-                        //If there was any revisions - select the first
-                        if (revisions.Count() > 0) {
-                            CallOnUIThread(() => {
-                                (historyList.Items[0] as ListBoxItem).IsSelected = true;
-                            });    
-                        }
-                        CallOnUIThread(() => {
-                            historyPopUpTopLabel.Content = "History for " + documentWhenClicked.Title;
-                            IsEnabled = false;
-                            syncingPopUp.IsOpen = false;
-                            historyPopUp.IsOpen = true;
-                        });
-                    }
-                    catch (Exception ex) {
-                        CallOnUIThread(() => {
-                            syncingPopUp.IsOpen = false;
-                            OpenNoInternetPopUp();
-                        });
-                    }
-                }, null);
-        }
-
-
-        /// <summary>
         /// This is the click handler for the Close button in the History pop-up
         /// </summary>
         /// <param name="sender">The object that sent the event.</param>
@@ -588,31 +616,20 @@ namespace SliceOfPie.Client {
             IsEnabled = true;
         }
 
-        private void OpenNoInternetPopUp() {
-            IsEnabled = false;
-            noInternetPopUp.IsOpen = true;
-        }
+        #endregion
 
-        /// <summary>
-        /// This is the click handler for the Close button in the No internet pop-up
-        /// </summary>
-        /// <param name="sender">The object that sent the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void NoInternetPopUpOkButton_Click(object sender, RoutedEventArgs e) {
-            noInternetPopUp.IsOpen = false;
-            IsEnabled = true;
-        }
+        #endregion
 
 
-        /// <summary>
-        /// Saves the current document
-        /// </summary>
-        /// <param name="sender">The object that sent the event.</param>
-        /// <param name="e">The event arguments.</param>
-        private void SaveDocumentButton_Click(object sender, RoutedEventArgs e) {
-            Document docToSave = textEditor.Document;
-            docToSave.CurrentRevision = textEditor.Text; //Update current revision based on text before returning
-            controller.BeginSaveDocument(docToSave, null, null);
-        }
+        
+
+        
+
+        
+
+        
+
+
+        
     }
 }
