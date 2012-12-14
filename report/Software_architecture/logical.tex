@@ -1,4 +1,5 @@
 \subsection{Logical View}
+\label{sec:logicalview}
 
 The architecture is based around a reusable application logic layer, that connects to the
 local file system and a MySQL database as needed. Additionally, it can easily be used by
@@ -27,10 +28,13 @@ more sturdy, production-level classes should be put in place before the system i
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=0.5\textwidth]{Software_architecture/graphics/package-diagram.png}
+	\includegraphics[width=0.7\textwidth]{Software_architecture/graphics/package-diagram.png}
 	\caption{Package Diagram showing dependencies from the UIs to the Application Logic}
 	\label{fig:package-diagram}
 \end{figure}
+
+The Controller additionally depends on a UserModel being present. This model handles verification
+and creation of user accounts.
 
 With the overall architecture in place, the last important logical component of the architecural design
 consists of the basic classes that all packages use (Figure \ref{fig:basic-classes}): \emph{Document},

@@ -1,1 +1,12 @@
-This describes our strategy for testing.
+We use unit tests for white box testing of individual methods. Each non-trivial method should have its own tests and those tests focus should only lie on that particular methods functionality.
+
+The other part of our testing is black box testing performed through system tests. Whenever code have been added or changed, system testing of each affected functionality should be done.
+
+\subsubsection{Unit tests}
+All non-trivial logic code in our system has one or more unit tests, this ranges from a class constructor like the LocalFileModel to merging of two documents in the Merger. As these are white box tests each test are created explicitly from the code logic and are created with only one focus, like seen in the unit tests for UserModel, which very specifically tests whether an email and password combination validates or not.
+
+Whenever applicable we have used a test-first or test driven development approach to ensure that an existing bug does in fact exist or that specific functionality is not yet implemented and therefore fails the test. This also makes it a lot easier to test that specific functionality instead of running the complete system to only create or alter a smaller part. When mentioning applicability it is because the use of test-first is particularly useful, when writing small  or encapsulated methods or functionality like creating a document, removing a project or merging two documents, while not as useful, when for example writing UI.
+
+Our unit tests are focused on the logical code, which include the models, the controller and their subclasses.
+
+\subsubsection{System tests}
