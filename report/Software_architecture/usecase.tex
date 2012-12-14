@@ -1,1 +1,13 @@
 \subsection{Use Case View}
+
+The most interesting use case view, from an architectural standpoint, is the way threading is handled
+to allow for a smooth user-experience. The user-experience is additionally enhanced by the way the
+local ClientUI automatically updates views to represent the most current state.
+
+And example of this is detailed and explained in Appendix \ref{sec:usecasescenarios}. The technique
+is the same for all calls from the ClientUI.
+
+From the WebUI the calls are not sent through the APM system as all requests are already handled on
+separate threads before they reach the Controller. Additionally, there is no need for asynchronous calls:
+The request will not return until the data has been fully retrieved. Such is the nature of the Hyper-Text
+Transfer Protocol, HTTP, which is used on websites.
