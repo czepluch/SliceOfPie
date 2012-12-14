@@ -14,18 +14,31 @@ using System.Windows.Shapes;
 
 namespace SliceOfPie.Client {
     /// <summary>
-    /// Interaction logic for ContentWrapper.xaml
+    /// A ContentWrapper can wrap ui content and provide it with a menu bar.
     /// </summary>
     public partial class ContentWrapper : UserControl {
         
+        /// <summary>
+        /// This is the content of the ContentWrapper
+        /// </summary>
         public new object Content {
             set { _contentControl.Content = value; }
         }
 
+        /// <summary>
+        /// Creates a new ContentWrapper
+        /// </summary>
         public ContentWrapper() {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Adds a menu button to the Content Wrappers menu bar.
+        /// Note that this version of the Content Wrapper does not have room for infinite buttons. The precise amount of buttons available depends on the length of their text.
+        /// </summary>
+        /// <param name="text">The text on the button</param>
+        /// <param name="relativeImagePath">The path to the image on the button. From the root of this assembly.</param>
+        /// <param name="clickHandler">The click handler to assign to this button</param>
         public void addMenuButton(string text, string relativeImagePath, RoutedEventHandler clickHandler) {
             //Create the button and set the click handler
             Button button = new Button() { Margin = new Thickness(10, 5, 0, 5) };

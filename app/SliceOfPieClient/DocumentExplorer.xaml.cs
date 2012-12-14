@@ -59,7 +59,6 @@ namespace SliceOfPie.Client {
             InitializeComponent();
         }
 
-
         /// <summary>
         /// This is a helper method for creating a  item in the document explorer.
         /// </summary>
