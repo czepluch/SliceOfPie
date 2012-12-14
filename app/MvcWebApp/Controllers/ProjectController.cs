@@ -20,7 +20,7 @@ namespace MvcWebApp.Controllers
         }
 
         //
-        // GET: /Home(Projects)/
+        // GET: /Project/
 
         public ActionResult Overview() {
             if (Request.IsAuthenticated)
@@ -29,6 +29,8 @@ namespace MvcWebApp.Controllers
                 return RedirectToAction("LogOn", "Account");
         }
 
+        //
+        // GET: /Project/Index
         public ActionResult Index(int id)
         {
             if (Request.IsAuthenticated)
@@ -46,7 +48,7 @@ namespace MvcWebApp.Controllers
         }
 
         //
-        // POST: /Home/Create
+        // POST: /Project/Create
 
         [HttpPost]
         public ActionResult Create(Project project)
@@ -61,7 +63,7 @@ namespace MvcWebApp.Controllers
         }
 
         //
-        // GET: /Home(Projects)/Delete/1
+        // GET: /Project/Delete/1
 
         public ActionResult Delete(Project p) {
             if (p == null) {
@@ -71,7 +73,7 @@ namespace MvcWebApp.Controllers
         }
 
         //
-        // POST: /Home(Projects)/Delete/5
+        // POST: /Projects/Delete/5
 
         [HttpPost, ActionName("Delete")]
         public ActionResult DeleteConfirmed(Project p) {
@@ -82,9 +84,15 @@ namespace MvcWebApp.Controllers
             return RedirectToAction("Overview");
         }
 
+        //
+        // GET: /Project/Share/5
+
         public ActionResult Share(Project p) {
             return View(p);
         }
+
+        //
+        // POST: /Project/ShareComplete
 
         [HttpPost, ActionName("Share")]
         public ActionResult ShareComplete(Project p, string emailsAsString) {
