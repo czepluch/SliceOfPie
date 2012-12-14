@@ -22,10 +22,16 @@ namespace MvcWebApp.Controllers {
             return View(controller.GetDocumentDirectly(d.Id));
         }
 
+        //
+        // GET: /Document/Edit
+
         [ValidateInput(false)] // Allow html rendering
         public ActionResult Edit(Document d) {
             return View(controller.GetDocumentDirectly(d.Id));
         }
+
+        //
+        // POST: /Document/EditSave/
 
         [HttpPost, ActionName("Edit")]
         [ValidateInput(false)] // Allow html rendering
@@ -34,6 +40,9 @@ namespace MvcWebApp.Controllers {
             controller.SaveDocument(d);
             return RedirectToAction("Show", d);
         }
+
+        //
+        // GET /Document/Create
 
         public ActionResult Create(Document d) {
             return View(d);
