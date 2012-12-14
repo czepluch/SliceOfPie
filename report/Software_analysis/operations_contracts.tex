@@ -1,0 +1,46 @@
+\textbf{Contract CO1:} Share project \\
+
+\textbf{Operation:} UserModel.ShareProject(ProjectId:integer, email:String)
+
+\textbf{Cross References:} Use Case 2 - Share project
+
+\textbf{Preconditions:} 
+
+\begin{itemize}
+
+    \item Project must exist in central storage.
+
+    \item Email must not be blank.
+
+    \item Invited user must exist in the database, and must not already be sharing the project.
+
+\end{itemize}
+
+\textbf{Postconditions:}
+
+\begin{itemize}
+
+    \item Invited user is associated with the project.
+
+    \item Must leave system in a consistent state (I.e. Do nothing if the preconditions are not met).
+
+\end{itemize}
+
+
+\noindent \textbf{Contract CO2:} Merge \\
+
+\textbf{Operation:} Merger.Merge(our:Document, theirs:Document)
+
+\textbf{Cross References:} Use case 7 - Merge files
+
+\textbf{Preconditions:}
+
+\begin{itemize}
+    \item At least one document must exist and have an existing current revision.
+\end{itemize}
+
+\textbf{Postconditions:}
+
+\begin{itemize}
+    \item A document was created, containing a merge of the to input document revisions.
+\end{itemize}
