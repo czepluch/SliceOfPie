@@ -26,6 +26,7 @@
         </DockPanel>
 
         <!-- Everything below this line are pop ups. Since these are static in appearence they are primarily made in the XAML (click handlers defined in code-behind) -->
+        <!-- The sync popup uses an animated gifs. For this we've used the ressource http://wpfanimatedgif.codeplex.com/ -->
 
         <Popup Name="createProjectPopUp" Height="200" Width="500" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
             <DockPanel Background="#FF949494">
