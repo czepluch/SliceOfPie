@@ -1,0 +1,23 @@
+\subsubsection{General Responsibility Assignment Software Patterns/Principles (GRASP)}
+\label{sec:GRASP}
+
+Throughout the object oriented analysis and design of this project we have been following the guidelines, for assigning responsibility to objects,  known as GRASP.
+In this section we will briefly give examples of the more noteworthy GRASP principles used in our implementation. The principles will be explained in the context of the local client.
+
+\paragraph{Controller}
+This principle recommends having a non-user interface object which is responsible for dealing with system events. Ideally this should  be located in the application layer and as such function as the coordinator between the user interface and application logic.
+
+In our case this responsibility is assigned to a class called Controller in the SliceOfPie.dll. Everything in our use cases requiring application logic is sent from the user interface to the Controller, which then delegates work to underlying classes as it sees fit.
+
+\paragraph{Creator}
+This principle is focused on the creation of objects, which is very common in object-oriented systems. In general GRASP provides a list of guidelines for assigning the responsibility of creation.
+
+In our design we made the decision that the local user interface will never create underlying data objects such as Document and Folder instances. This is in line with the Controller principle in that system events, such as adding a new document to the system, should be handled through the controller.
+
+\paragraph{High Cohesion}
+High Cohesion is all about keeping the responsibilites of any class strongly focused and avoid any unrelated responsibilities. 
+
+As a basic example of this principle a Document object should not be responsible for which icon it contains in the local user interface. Such a responsibility would be convenient for the user interface, but it is unrelated in regards to the purpose of a Document (to simply represent a text document with content, not any presentation of such). Instead we provided the icon functionality through a C\# extension method placed in the SliceOfPieClient. This aproach enables reusability across several different user interfaces with different visual representations.
+
+\paragraph{Indirection}
+This principle is also about low coupling between classes and reuse potential. We've used indirection by making the user interface communicate with the underlying model through a controller and vice versa. As another example we've made the ItemExplorer in the local user interface react to double-clicks in the ContainerContentView though indirection with the MainWindow class as a mediator between them, thus making them unaware of each other and as such reusable.
