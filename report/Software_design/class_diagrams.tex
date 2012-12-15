@@ -8,7 +8,7 @@ The class diagram is made in the Unified Modeling Language (UML) to ensure commo
     \begin{center}
         \includegraphics[width=1\textwidth]{Software_design/graphics/mainClassDiagram.png}
         \caption{Overview of the simplified main class diagram for 'Slice of Pie'}
-        \label{fig:design-class_diagram}
+        \label{fig:design-class_diagram} % maybe a link for the web version for full view
     \end{center}
 \end{figure}
 
@@ -30,3 +30,9 @@ the different sites that are available at the Web UI. The methods with a [GET] t
 
 For each method in a controller there is a corresponding view that is rendered when the method is called. However if there are two methods with the same 
 name in a controller, where one is a [GET] method and the other is a [POST] method, there is only one view.
+
+The 'models' used are all located in the 'SliceOfPie' project which ensures that consistency between the Web client and the local client.
+
+\subsubsection{The MainWindow GUI}
+
+The diagram showing the raked class diagram for the MainWindow GUI is to be found in the Appendix~\ref{fig:mainwindow-diagram}.
