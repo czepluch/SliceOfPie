@@ -24,8 +24,8 @@ namespace SliceOfPie.Client {
         private static SynchronizationContext syncContext = SynchronizationContext.Current; //for callbacks to be called on the UI thread
 
         private Controller controller;
-        private ContentWrapper folderContentViewWrapper, textEditorWrapper;
-        private FolderContentView folderContentView;
+        private ContentWrapper containerContentViewWrapper, textEditorWrapper;
+        private ContainerContentView containerContentView;
         private TextEditor textEditor;
 
         private ContextMenu projectContextMenu, folderContextMenu, documentContextMenu;
@@ -42,21 +42,21 @@ namespace SliceOfPie.Client {
 
             controller = Controller.Instance;
 
-            //documentexplorer is "instantiated" in the xaml
-            documentExplorer.ItemMouseLeftButtonUp += new EventHandler<ListableItemEventArgs>(DocumentExplorerItemMouseLeftButtonUp);
-            documentExplorer.ItemMouseRightButtonUp += new EventHandler<ListableItemEventArgs>(DocumentExplorerItemMouseRightButtonUp);
-            documentExplorer.ItemEnterKeyUp += new EventHandler<ListableItemEventArgs>(DocumentExplorerItemEnterKeyUp);
+            //itemexplorer is "instantiated" in the xaml
+            itemExplorer.ItemMouseLeftButtonUp += new EventHandler<ListableItemEventArgs>(ItemExplorerItemMouseLeftButtonUp);
+            itemExplorer.ItemMouseRightButtonUp += new EventHandler<ListableItemEventArgs>(ItemExplorerItemMouseRightButtonUp);
+            itemExplorer.ItemEnterKeyUp += new EventHandler<ListableItemEventArgs>(ItemExplorerItemEnterKeyUp);
 
-            //FolderContentViewWrapper
-            folderContentViewWrapper = new ContentWrapper();
-            folderContentViewWrapper.addMenuButton("Create document", "/Images/new-document.png", new RoutedEventHandler(OpenCreateDocumentWindow));
-            folderContentViewWrapper.addMenuButton("Create folder", "/Images/new-folder.png", new RoutedEventHandler(OpenCreateFolderWindow));
+            //ContainerContentViewWrapper
+            containerContentViewWrapper = new ContentWrapper();
+            containerContentViewWrapper.addMenuButton("Create document", "/Images/new-document.png", new RoutedEventHandler(OpenCreateDocumentWindow));
+            containerContentViewWrapper.addMenuButton("Create folder", "/Images/new-folder.png", new RoutedEventHandler(OpenCreateFolderWindow));
 
-            //Create the underlying folderContentView
-            folderContentView = new FolderContentView();
-            folderContentView.ItemDoubleClicked += new EventHandler<ListableItemEventArgs>(FolderContentView_DoubleClick);
+            //Create the underlying containerContentView
+            containerContentView = new ContainerContentView();
+            containerContentView.ItemDoubleClicked += new EventHandler<ListableItemEventArgs>(ContainerContentView_DoubleClick);
             //Add to wrapper
-            folderContentViewWrapper.Content = folderContentView;
+            containerContentViewWrapper.Content = containerContentView;
 
             //TextEditorViewWrapper
             textEditorWrapper = new ContentWrapper();
@@ -77,7 +77,7 @@ namespace SliceOfPie.Client {
         /// </summary>
         /// <param name="itemToOpen">The item to open, when the projects are reloaded. If this is null, the top project will be opened.</param>
         private void RefreshLocalProjects(IListableItem itemToOpen = null) {
-            //Using controllers APM to load the projects into the Document Explorer
+            //Using controllers APM to load the projects into the Item Explorer
             controller.BeginGetProjects("local", (iar) =>
                 Refresh(controller.EndGetProjects(iar), itemToOpen)
             , null);
@@ -90,13 +90,13 @@ namespace SliceOfPie.Client {
         /// <param name="itemToOpen">The item to open, when the projects are reloaded. If this is null, the top project will be opened.</param>
         private void Refresh(IEnumerable<Project> projects, IListableItem itemToOpen = null) {
             //Callback posted in UI-context
-           CallOnUIThread(() => {
-                documentExplorer.Projects = projects;
+            CallOnUIThread(() => {
+                itemExplorer.Projects = projects;
                 if (itemToOpen != null) {
-                    documentExplorer.ExpandTo(itemToOpen, Open);
+                    itemExplorer.ExpandTo(itemToOpen, Open);
                 }
                 else {
-                    documentExplorer.CallbackSelected(Open);
+                    itemExplorer.CallbackSelected(Open);
                 }
             });
         }
@@ -117,8 +117,8 @@ namespace SliceOfPie.Client {
         private void Open(IListableItem item) {
             currentContextItem = item;
             if (item is IItemContainer) {
-                folderContentView.ItemContainer = item as IItemContainer;
-                mainContent.Content = folderContentViewWrapper;
+                containerContentView.ItemContainer = item as IItemContainer;
+                mainContent.Content = containerContentViewWrapper;
             }
             else {
                 textEditor.Document = item as Document;
@@ -127,7 +127,7 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
-        /// Sets up the DocumentExplorer's context menus
+        /// Sets up the ItemExplorer's context menus
         /// </summary>
         private void CreateContextMenus() {
             projectContextMenu = new ContextMenu();
@@ -204,7 +204,7 @@ namespace SliceOfPie.Client {
             }
         }
 
-        #region EventHandlers        
+        #region EventHandlers
 
         /// <summary>
         /// This event handler opens the CreateProject pop-up window
@@ -363,13 +363,18 @@ namespace SliceOfPie.Client {
                                 loginPopUpErrorLabel.Content = "";
                             });
                         }
-                        catch (AsyncException ex) {
-                            CallOnUIThread(() => {
-                                loginPopUpErrorLabel.Content = "Synchronization failed.";
-                                syncingPopUp.IsOpen = false;
-                                loginPopUpCancelButton.IsEnabled = true;
-                                loginPopUpLoginButton.IsEnabled = true;
-                            });
+                        catch (Exception ex) {
+                            if (ex is AsyncException) {
+                                CallOnUIThread(() => {
+                                    loginPopUpErrorLabel.Content = "Synchronization failed.";
+                                    syncingPopUp.IsOpen = false;
+                                    loginPopUpCancelButton.IsEnabled = true;
+                                    loginPopUpLoginButton.IsEnabled = true;
+                                });
+                            }
+                            else {
+                                throw;
+                            }
                         }
                     }, null);
             }
@@ -406,15 +411,15 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
-        /// This method is sent as a mouse event handler to the FolderContentView class.
+        /// This method is sent as a mouse event handler to the ContainerContentView class.
         /// </summary>
         /// <param name="sender">The sender of the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void FolderContentView_DoubleClick(object sender, ListableItemEventArgs e) {
-            documentExplorer.ExpandTo(e.Item, Open);
+        private void ContainerContentView_DoubleClick(object sender, ListableItemEventArgs e) {
+            itemExplorer.ExpandTo(e.Item, Open);
         }
 
-        #region Document Explorer related
+        #region Item Explorer related
         /// <summary>
         /// A default event handler for changing the main content due to a click
         /// </summary>
@@ -478,31 +483,31 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
-        /// This is the event handler for a right click (up event) in the Document Explorer
+        /// This is the event handler for a right click (up event) in the Item Explorer
         /// </summary>
         /// <param name="sender">The object that send the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void DocumentExplorerItemMouseRightButtonUp(object sender, ListableItemEventArgs e) {
+        private void ItemExplorerItemMouseRightButtonUp(object sender, ListableItemEventArgs e) {
             currentContextItem = e.Item;
-            documentExplorer.ShowContextMenuForSelected(GetContextMenu(e.Item));
+            itemExplorer.ShowContextMenuForSelected(GetContextMenu(e.Item));
         }
 
         /// <summary>
-        /// This is the event handler for a left click (up event) in the Document Explorer
+        /// This is the event handler for a left click (up event) in the Item Explorer
         /// </summary>
         /// <param name="sender">The sender of the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void DocumentExplorerItemMouseLeftButtonUp(object sender, ListableItemEventArgs e) {
+        private void ItemExplorerItemMouseLeftButtonUp(object sender, ListableItemEventArgs e) {
             currentContextItem = e.Item;
             Open(e.Item);
         }
 
         /// <summary>
-        /// This is the event handler for an enter key event in the Document Explorer
+        /// This is the event handler for an enter key event in the Item Explorer
         /// </summary>
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void DocumentExplorerItemEnterKeyUp(object sender, ListableItemEventArgs e) {
+        private void ItemExplorerItemEnterKeyUp(object sender, ListableItemEventArgs e) {
             currentContextItem = e.Item;
             Open(e.Item);
         }
@@ -571,10 +576,15 @@ namespace SliceOfPie.Client {
                         });
                     }
                     catch (Exception ex) {
-                        CallOnUIThread(() => {
-                            syncingPopUp.IsOpen = false;
-                            OpenNoInternetPopUp();
-                        });
+                        if (ex is AsyncException) {
+                            CallOnUIThread(() => {
+                                syncingPopUp.IsOpen = false;
+                                OpenNoInternetPopUp();
+                            });
+                        }
+                        else {
+                            throw;
+                        }
                     }
                 }, null);
         }
@@ -621,15 +631,15 @@ namespace SliceOfPie.Client {
         #endregion
 
 
-        
-
-        
-
-        
-
-        
 
 
-        
+
+
+
+
+
+
+
+
     }
 }

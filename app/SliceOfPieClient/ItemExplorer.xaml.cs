@@ -14,10 +14,10 @@ using System.Windows.Shapes;
 
 namespace SliceOfPie.Client {
     /// <summary>
-    /// Interaction logic for DocumentExplorer.xaml
+    /// Interaction logic for ItemExplorer.xaml
     /// This UserControl shows a hierarchical structure based on its Projects property.
     /// </summary>
-    public partial class DocumentExplorer : UserControl {
+    public partial class ItemExplorer : UserControl {
         private IEnumerable<Project> _projects;
 
         #region Events
@@ -41,7 +41,7 @@ namespace SliceOfPie.Client {
 
         /// <summary>
         /// This is the collection of projects which contains the currently shown content.
-        /// Changing this will change what is shown (the top project will be selected in the Document Explorer)
+        /// Changing this will change what is shown (the top project will be selected in the Item Explorer)
         /// </summary>
         public IEnumerable<Project> Projects {
             get { return _projects; }
@@ -52,15 +52,15 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
-        /// Creates a new instance of a DocumentExplorer.
+        /// Creates a new instance of a ItemExplorer.
         /// For content to be shown, the Projects property must be set.
         /// </summary>
-        public DocumentExplorer() {
+        public ItemExplorer() {
             InitializeComponent();
         }
 
         /// <summary>
-        /// This is a helper method for creating a  item in the document explorer.
+        /// This is a helper method for creating a  item in the item explorer.
         /// </summary>
         /// <param name="item">The IListableItem to associate with the TreeViewItem.</param>
         /// <returns>The created TreeViewItem.</returns>
@@ -116,7 +116,7 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
-        /// This method refreshes the document explorer.
+        /// This method refreshes the item explorer.
         /// </summary>
         /// <param name="itemToOpen">The item to open, when the projects are reloaded.</param>
         private void RefreshProjects() {
@@ -133,7 +133,7 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
-        /// This method expands the DocumentExplorers items down to a given item.
+        /// This method expands the ItemExplorers items down to a given item.
         /// </summary>
         /// <param name="item">The item to be found. This item is also expanded if found (and selected).</param>
         /// <param name="callback">This function will be called on the item if found. Null is allowed if no additional action is wanted.</param>
@@ -144,7 +144,7 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
-        /// This method expands the DocumentExplorers TreeViewItems from a start container down to a given item.
+        /// This method expands the ItemExplorers TreeViewItems from a start container down to a given item.
         /// </summary>
         /// <param name="containerItem">The starter container for the search.</param>
         /// <param name="searchItem">The item to be found. This item is also expanded if found (and selected).</param>
