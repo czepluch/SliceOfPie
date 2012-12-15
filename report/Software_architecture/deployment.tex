@@ -21,11 +21,11 @@ There are some security concerns with regards to having a remotely-accessible My
 discussed in \ref{sec:mysqlvswebservice}.
 
 {\bf The web-server} is a Windows server hosting a WebUI client. This client is accessible from all
-locations that have access to the host. This means taht a Web server may be set up anywhere to provide
+locations that have access to the host. This means that a Web server may be set up anywhere to provide
 a public interface for a great amount of users. Having the data separated from the web interface allows
-for several such hosts to be running with the same consistent state. As handling requests, user-sessions
-and HTML transfers are often a bottleneck, this can be an advantage if the system receives a great
-amount of traffic, simply sending users to different servers.
+for several such hosts to be running with the same consistent state. As handling requests, user-sessions,
+and HTML transfers are often a bottleneck, simply sending users to different servers can be an advantage if the system receives a great
+amount of traffic.
 
 {\bf The desktop client} is a single client, which accesses the data-server directly. It has the advantage
 of allowing users to work offline, without a connection to the internet, and synchronize with the global
