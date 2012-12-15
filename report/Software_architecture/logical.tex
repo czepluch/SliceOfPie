@@ -2,7 +2,7 @@
 \label{sec:logicalview}
 
 The architecture is based around a reusable application logic layer, that connects to the
-local file system and a MySQL database as needed. Additionally, it can easily be used by
+local file system and a database as needed. Additionally, it can easily be used by
 both the Web-Only UI and the Local UI.
 
 \begin{figure}[htb]
@@ -18,7 +18,7 @@ parallel UI layers and two parallel data layers (see Figure \ref{fig:application
 From these layers our package diagram almost directly follows (Figure \ref{fig:package-diagram}):
 To communicate with the different data layers, we have two separate models. It is important to
 note that the \emph{LocalFileModel} connects to both the file system (in most situations) and
-to the MySQL database (when this is explicitly requested).
+to the database (when this is explicitly requested).
 
 In using the Model-View-Controller pattern to separate to visuals (WebUI, ClientUI) from the
 data behind (LocalFileModel, WebFileModel) by communicating through the Controller, we achieve
