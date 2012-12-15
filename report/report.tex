@@ -1,4 +1,5 @@
 \documentclass[a4paper,11pt]{article}
+\usepackage{float}
 \usepackage[T1]{fontenc}
 \usepackage{inputenc}
 \usepackage{amsfonts}
@@ -12,6 +13,7 @@
 \usepackage{enumitem}
 \usepackage{newclude}
 \newcommand{\field} [1] {\mathbb{#1}}
+\newcommand{\SOP}{Slice of Pie}
 \begin{document}
 
 \begin{titlepage}
@@ -78,7 +80,6 @@ December 17, 2012 \end{flushleft}
 
 \subsection{Design patterns}
 \include*{Software_design/design_patterns}
-\input{Software_design/APM}
 
 \pagebreak
 \include*{Software_architecture/main} % includes children all by itself, cuz its'a awesome!
