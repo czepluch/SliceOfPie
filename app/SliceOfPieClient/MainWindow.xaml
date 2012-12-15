@@ -19,7 +19,7 @@
                     </Button>
                 </Grid>
                 <ScrollViewer  Width="170" Height="auto" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <local:DocumentExplorer x:Name="documentExplorer"/>
+                    <local:ItemExplorer x:Name="itemExplorer"/>
                 </ScrollViewer>
             </DockPanel>
             <ContentControl Name="mainContent"/>

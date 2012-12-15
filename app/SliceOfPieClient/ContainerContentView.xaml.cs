@@ -14,10 +14,10 @@ using System.Windows.Shapes;
 
 namespace SliceOfPie.Client {
     /// <summary>
-    /// Interaction logic for the FolderContentView User Control.
+    /// Interaction logic for the ContainerContentView User Control.
     /// This UserControl shows a list of subfolders based on its ItemContainer property.
     /// </summary>
-    public partial class FolderContentView : UserControl {
+    public partial class ContainerContentView : UserControl {
 
         private IItemContainer _container; //backing field
 
@@ -43,10 +43,10 @@ namespace SliceOfPie.Client {
         #endregion
 
         /// <summary>
-        /// Creates a new instance of a FolderContentView.
+        /// Creates a new instance of a ContainerContentView.
         /// For content to be shown, the ItemContainer property must be set.
         /// </summary>
-        public FolderContentView() {
+        public ContainerContentView() {
             InitializeComponent();
         }
 

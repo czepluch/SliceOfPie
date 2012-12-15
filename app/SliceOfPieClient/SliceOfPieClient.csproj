@@ -53,11 +53,11 @@
     <Compile Include="ContentWrapper.xaml.cs">
       <DependentUpon>ContentWrapper.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DocumentExplorer.xaml.cs">
-      <DependentUpon>DocumentExplorer.xaml</DependentUpon>
+    <Compile Include="ItemExplorer.xaml.cs">
+      <DependentUpon>ItemExplorer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FolderContentView.xaml.cs">
-      <DependentUpon>FolderContentView.xaml</DependentUpon>
+    <Compile Include="ContainerContentView.xaml.cs">
+      <DependentUpon>ContainerContentView.xaml</DependentUpon>
     </Compile>
     <Compile Include="IListableItemExtension.cs" />
     <Compile Include="ImageUtil.cs" />
@@ -71,7 +71,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="DocumentExplorer.xaml">
+    <Page Include="ItemExplorer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -79,7 +79,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="FolderContentView.xaml">
+    <Page Include="ContainerContentView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
