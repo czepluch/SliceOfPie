@@ -1,13 +1,15 @@
 Unit tests and results.
 
-\subsubsection{ApmHelpers Test}
+\subsubsection{ControllerAPM class test}
 
-\subsubsection{ControllerAPM Test}
+\subsubsection{LocalFileModel class test}
 
-\subsubsection{LocalFileModel Test}
+\subsubsection{Merger class test}
+The purpose of this test is to test whether the Merger class merges two document correctly. The test starts by running different error scenarios, where one or more values are null. These tests produce either null if both input documents are null or have null in current revision or the one existing revision.
+It then proceeds to test several scenarios, including insertion, alteration, same and both insertion and alteration. The insertion scenario takes the updated revision and outputs it, which is the same for the alteration. The identical revisions simply offers the one revision available and the last one with both insertion and alteration in two different documents gives us the newest revision. Each of the tests for this class contains two checks, one for textual input and one for Document object input.
 
-\subsubsection{Merger Test}
+The tests for the Merger class could have contained more thorough testing for different variations of textual inputs, but for this rather naive implementation of the Merger we do not feel the necessity of adding a lot of obscure tests, when the result most often is to return the latest revision.
 
-\subsubsection{UserModel Test}
+\subsubsection{UserModel class test}
 
-\subsubsection{WebFileModel Test}
+\subsubsection{WebFileModel class test}
