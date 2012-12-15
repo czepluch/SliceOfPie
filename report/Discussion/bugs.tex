@@ -1,0 +1,5 @@
+\subsection{Known bugs}
+\label{sec:bugs}
+
+\subsubsection{WPF pop ups always on top}
+Our current prototype makes use of the PopUp (WPF) class in the local client. The usage of the PopUp class is very well suited for fast sketching and prototyping in UIs, although despite the name the PopUp class is not originally intended to be shown as a modal dialog window. The implications of this issue is that any pop up window in our local client will always be the topmost window (even over a Windows taskmanager), since that behaviour is build into the class. Our reasoning behind using this class is the effiency in prototyping, which we think has a certain value in an agile development environment. The two most obvious solutions to the "bug" would be to either use a custom modification of the Window class or use C\#'s P/Invoke feature to use the Win32 API directly and remove the behaviour of the window through that (open source solutions exist for this). We think that both of these solutions are out-of-scope and a unimportant with regards to the purpose of this project (making a prototype).

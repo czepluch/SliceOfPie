@@ -16,6 +16,27 @@ namespace SliceOfPie.Tests {
         }
 
         /// <summary>
+        /// Assert that no credentials returns exception.
+        /// </summary>
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestValidateLoginFailureParams() {
+            userModel.ValidateLogin("", "");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestValidateLoginFailureEmail() {
+            userModel.ValidateLogin("", "pw");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestValidateLoginFailurePassword() {
+            userModel.ValidateLogin("common@test.mail", "");
+        }
+
+        /// <summary>
         /// Assert that a known user can login correctly.
         /// </summary>
         [TestMethod]
@@ -32,7 +53,7 @@ namespace SliceOfPie.Tests {
         }
 
         [TestMethod]
-        public void TestShareProject() {
+        public void TestShareProjectSuccess() {
             TestHelper.ClearFolder(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie"));
 
             LocalFileModel model = new LocalFileModel();
@@ -55,6 +76,45 @@ namespace SliceOfPie.Tests {
                                    select projectUser;
                 Assert.AreEqual(1, projectUsers.Count());
             }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestShareProjectFailureProject() {
+            userModel.ShareProject(0, "me@hypesystem.dk");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestShareProjectFailureEmail() {
+            userModel.ShareProject(1, "");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestShareProjectFailureEmailExist() {
+            userModel.ShareProject(1, "nonexisting@mail.dk");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestShareProjectFailureProjectUser() {
+            TestHelper.ClearFolder(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SliceOfPie"));
+
+            LocalFileModel model = new LocalFileModel();
+
+            IEnumerable<Project> projects = model.GetProjects("local");
+            Project project = projects.First();
+
+            model.UploadStructure("common@test.mail");
+            model.FindProjects();
+            projects = model.GetProjects("local");
+            project = projects.First();
+
+            Assert.AreEqual(1, projects.Count());
+
+            userModel.ShareProject(project.Id, "me@hypesystem.dk");
+            userModel.ShareProject(project.Id, "me@hypesystem.dk");
         }
 
         [TestInitialize]
