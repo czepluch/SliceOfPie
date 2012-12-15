@@ -60,7 +60,7 @@ elements.\cite[p.~622]{Griffiths2010}
     
 SynchronizationContext syncContext = SynchronizationContext.Current;
 
-controller.BeginGetProjects("dummy@email.com", (asyncResult) =>
+controller.BeginGetProjects("dummy@email.com", (asyncResult) => {
     syncContext.Post(RefreshUI(controller.EndGetProjects(asyncResult)))
 }, null);\end{verbatim}
     \caption{Correct usage of APM in a user interface-context, taking synchronization contexts into account; paraphrased over code in MainWindow.xaml.cs of the SliceOfPieClient project.}
