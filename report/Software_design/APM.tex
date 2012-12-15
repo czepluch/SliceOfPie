@@ -1,10 +1,86 @@
-\subsubsection{Asynchronous Calls}
+\subsubsection{Asynchronous Calls through APM}
 \label{sec:APM}
 
-For a desktop UI to be repsonsive, it is important that heavy loads are moved away from the UI thread. There are several possible ways of doing this: threading, abstracting to using tasks, or asynchronous methods. To reduce the amount of boilerplate code in the UI layer, the responsibility for delegating to threads was moved to the controller.
+For a desktop UI to be repsonsive, it is important that heavy loads are moved away from the UI thread.
+There are several possible ways of doing this: threading, abstracting to using tasks, or asynchronous
+methods. To reduce the amount of boilerplate code in the UI layer, the responsibility for delegating
+to threads was moved to the controller.
 
-The \emph{Asynchronous Programming Model}\cite{msdnAPMdoc} (abbrevated \emph{APM}) allows for easy, asynchronous calls to heavy-duty methods at a nice level of abstraction, substrantially simplifying UI programming. The support for callbacks lets the UI react as soon as a job finishes, without having to continuously poll the model.
+The \emph{Asynchronous Programming Model}\cite{msdnAPMdoc} (abbrevated \emph{APM}) allows for easy,
+asynchronous calls to heavy-duty methods at a nice level of abstraction, substrantially simplifying UI
+programming. The support for callbacks lets the UI react as soon as a job finishes, without having to
+continuously poll the model (although this approach is also possible through the APM).
 
-There do not seem to be any obvious building blocks for implementing the APM, however the MSDN Magazine\cite{richtermsdn0307} has an article by Jeffrey Richter guiding the process. Based on these ideas, building custom APM comes easier and this is the way we chose to go with the controller. Instead of just using Richter's classes and implementations, we built an automated factory, which quickly wraps a blokcing method in APM, making it non-blocking.
+There are no built-in building blocks for implementing the APM in C\#, however the MSDN Magazine\cite{richtermsdn0307}
+brought an article by Jeffrey Richter guiding the process. Based on these ideas, building custom APM comes easier and
+this is the way we chose to go with the controller.
 
-Another advantage with the APM pattern is that it is nicely supported by the \emph{Task Parallel Library}\cite[p.~656]{Griffiths2010} (TPL), allowing for them to be used in a simple interface with great concurrency and error-handling support.
+The Asynchronous Programming Model can be used to wrap normal, blocking methods (from here on referred to as
+the \emph{inner method}) in an asynchronous context, while still allowing the caller to react on results
+returned by the method through a callback delegate.
+
+All APM calls consist of two methods, one prefixed with \emph{Begin} and another with \emph{End} (ie.,
+when wrapping inner method \emph{GetProjects(userMail)}, the resulting methods would be \emph{BeingGetProjects}
+and \emph{EndGetProjects}). The Begin-method is passed not only the arguments required by the inner method call
+(ie. \emph{userMail}) but also a callback-delegate and a state-object.
+
+Calling the Begin-method returns almost instantaneously; under the covers, it commandeers a different thread
+on which to execute the inner method.
+
+\begin{figure}[hbt]
+    \begin{verbatim}
+    
+    
+public IAsyncResult BeginGetProjects(string userMail,
+            AsyncCallback callback, object state);\end{verbatim}
+    \caption{Method declaration for the BeginGetProjects method}
+    \label{fig:begingetprojectscode}
+\end{figure}
+
+The state object is less important for our case, as it is not actually used in our implementation. It can be used
+to pass arbitrary information to the callback.
+
+The callback is a delegate (\emph{AsyncCallback} from the \emph{System} namespace\footnote{See more details about this delegate on MSDN: http://msdn.microsoft.com/en-us/library/system.asynccallback.aspx})
+taking a single parameter of type \emph{IAsyncResult}, which will be the same object as the one
+returned by \emph{BeginGetProjects} (Figure \ref{fig:begingetprojectscode}) and a void return type.
+In the callback, the first method call should be to the End-method with the IAsyncResult
+as a parameter. This call blocks until the inner method returns and then passes the result along.
+
+Note that the End-method may also be called outside of the callback. This would result in the code
+blocking until the inner method returns, and as such would not be desireable in a User Interface.
+
+Additionally, when using this kind of asynchronous calls, it is important to note that the callback
+is executed on a different thread (in our case a thread in the ThreadPool) from the one the Begin-method
+was called on. As such, one should keep an eye out for the synchronization context when updating UI
+elements.\cite[p.~622]{Griffiths2010}
+
+\begin{figure}[hbt]
+    \begin{verbatim}
+    
+    
+SynchronizationContext syncContext = SynchronizationContext.Current;
+
+controller.BeginGetProjects("dummy@email.com", (asyncResult) =>
+    syncContext.Post(RefreshUI(controller.EndGetProjects(asyncResult)))
+}, null);\end{verbatim}
+    \caption{Correct usage of APM in a user interface-context, taking synchronization contexts into account; paraphrased over code in MainWindow.xaml.cs of the SliceOfPieClient project.}
+    \label{fig:apmuserinterfacecode}
+\end{figure}
+
+\paragraph{Implementation}
+
+The SliceOfPie implementation of APM is influenced heavily by Richter's article, having a couple of
+implementations of the IAsyncResult interface. These implementations either have a void return type
+or a generic one and take a number (0 - 3) parameters, also generically typed.
+
+As our implementation focuses on reusability, these generic classes were built to accomodate any
+unforeseeable method that we may wish to wrap in this pattern.
+
+In an additional attempt to reduce code duplication construction of a factory for automatically
+generating these wrapper-methods was begun, however it was never fully implemented.
+
+\paragraph{Task-Parallel Library}
+
+Another advantage with the APM pattern is that it is nicely supported by the \emph{Task Parallel Library}\cite[p.~656]{Griffiths2010}
+(TPL), allowing for them to be used in a simple interface with great concurrency and error-handling support, as well as chaining up
+several methods in continuation.
