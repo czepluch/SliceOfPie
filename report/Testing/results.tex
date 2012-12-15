@@ -1,6 +1,6 @@
 We test several classes in-depth through unit testing. We test the ControllerAPM, LocalFileModel, Merger, UserModel and WebFileModel classes by running different success and failure scenarios with the purpose of isolating and finding potential errors.
 
-\subsubsection{Controller APM class test}
+\subsubsection{Controller APM test}
 The purpose of this test is to test whether the asynchronous programming model implemented in the Controller class works as intended. The Controller class has the responsibility of acting between the models and the UI and therefore contains methods for manipulating projects, folders and documents, meaning adding, removing, sharing, saving, getting and synchronizing.
 
 As most of the functionality in each of the underlying methods called by the Controller class are subject to unit testing in their original classes, the primary focus of this class test is to ensure the APM functionality is working correctly.
