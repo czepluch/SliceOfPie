@@ -2,7 +2,11 @@ Unit tests and results.
 
 \subsubsection{ControllerAPM class test}
 
+
 \subsubsection{LocalFileModel class test}
+The purpose of this test is to test whether the local file models file and folder manipulating successfully does what they are supposed to. It runs a test for each of the add, rename and remove methods for projects, folders and documents (although the rename functionality is not currently used actively in the program). Further tests include testing of the method for retrieving file and folder structure as objects, testing of the GetAvailableName method and testing of the method for downloading revisions. The tests create a thorough substructure including subfolders and documents whenever necessary, which for example is relevant in testing of the RemoveFolder method. Each of these tests are positive and deeply tests whether for example the RemoveProject method actually deletes all children entities as it is supposed to.
+
+As most of the tests for the LocalFileModel class are positive and focused on success scenarios, a major improvement and probably one the highest prioritized upcoming tasks would be to add more tests for each method running through failure and exception scenarios to ensure proper error handling.
 
 \subsubsection{Merger class test}
 The purpose of this test is to test whether the Merger class merges two document correctly. The test starts by running different error scenarios, where one or more values are null. These tests produce either null if both input documents are null or have null in current revision or the one existing revision.
@@ -11,5 +15,10 @@ It then proceeds to test several scenarios, including insertion, alteration, sam
 The tests for the Merger class could have contained more thorough testing for different variations of textual inputs, but for this rather naive implementation of the Merger we do not feel the necessity of adding a lot of obscure tests, when the result most often is to return the latest revision.
 
 \subsubsection{UserModel class test}
+The purpose of this test is to test whether login validation and project sharing are functioning correctly. The first part tests the login validation for post success and failure scenarios, while the last part tests the project sharing.
+
+The login validation is first tested with incorrect input for email, password and the combination of the two, which are expected to return exceptions. Afterwards it is tested with valid account credentials and with incorrect login credentials to either return true or false respectively.
+
+Sharing of a project in the UserModel class is tested for each of the exceptional scenarios possible in the ShareProject method. The exceptional scenarios are entering of a project ID with value zero, entering an empty email string, entering an unknown email or trying to share a specific project with a user, who is already part of that project.
 
 \subsubsection{WebFileModel class test}
