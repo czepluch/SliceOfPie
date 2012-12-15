@@ -90,7 +90,7 @@ namespace SliceOfPie.Client {
         /// <param name="itemToOpen">The item to open, when the projects are reloaded. If this is null, the top project will be opened.</param>
         private void Refresh(IEnumerable<Project> projects, IListableItem itemToOpen = null) {
             //Callback posted in UI-context
-           CallOnUIThread(() => {
+            CallOnUIThread(() => {
                 itemExplorer.Projects = projects;
                 if (itemToOpen != null) {
                     itemExplorer.ExpandTo(itemToOpen, Open);
@@ -204,7 +204,7 @@ namespace SliceOfPie.Client {
             }
         }
 
-        #region EventHandlers        
+        #region EventHandlers
 
         /// <summary>
         /// This event handler opens the CreateProject pop-up window
@@ -363,13 +363,18 @@ namespace SliceOfPie.Client {
                                 loginPopUpErrorLabel.Content = "";
                             });
                         }
-                        catch (AsyncException ex) {
-                            CallOnUIThread(() => {
-                                loginPopUpErrorLabel.Content = "Synchronization failed.";
-                                syncingPopUp.IsOpen = false;
-                                loginPopUpCancelButton.IsEnabled = true;
-                                loginPopUpLoginButton.IsEnabled = true;
-                            });
+                        catch (Exception ex) {
+                            if (ex is AsyncException) {
+                                CallOnUIThread(() => {
+                                    loginPopUpErrorLabel.Content = "Synchronization failed.";
+                                    syncingPopUp.IsOpen = false;
+                                    loginPopUpCancelButton.IsEnabled = true;
+                                    loginPopUpLoginButton.IsEnabled = true;
+                                });
+                            }
+                            else {
+                                throw;
+                            }
                         }
                     }, null);
             }
@@ -571,10 +576,15 @@ namespace SliceOfPie.Client {
                         });
                     }
                     catch (Exception ex) {
-                        CallOnUIThread(() => {
-                            syncingPopUp.IsOpen = false;
-                            OpenNoInternetPopUp();
-                        });
+                        if (ex is AsyncException) {
+                            CallOnUIThread(() => {
+                                syncingPopUp.IsOpen = false;
+                                OpenNoInternetPopUp();
+                            });
+                        }
+                        else {
+                            throw;
+                        }
                     }
                 }, null);
         }
@@ -621,15 +631,15 @@ namespace SliceOfPie.Client {
         #endregion
 
 
-        
-
-        
-
-        
-
-        
 
 
-        
+
+
+
+
+
+
+
+
     }
 }
