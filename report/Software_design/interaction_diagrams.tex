@@ -1,36 +1,35 @@
 In addition to the class diagrams we picked out two of our use cases that we thought to be critical for the system. For each of these we made an interaction diagram
 to make sure that these parts of the application are implemented correctly. 
 
-The purposes of our interaction diagrams are to visualize the interactive behaviour of our system. Interaction diagrams help us capture the dynamic behaviour of 
-the system. It also describes the message flow in the system, the structural organization of the objects, and the interaction among objects.
+The purposes of our interaction diagrams is to visualize the interactive behaviour of our systemcapturing these dynamic parts of 
+the system in an easily understandable and discussable manner. It describes the message flow in the system, the structural organization
+of the objects, and the interaction between instances.
 
-Standard Unified Modeling Language (UML) has been used for the interaction diagrams in this section.
+\subsubsection{Interaction Diagram for the Share Project Use Case}
 
-\subsubsection{Interaction Diagram for Use Case 2}
+We have chosen use case 2 - 'Share Project' (see Appendix \ref{sec:use-cases}) to be one of the use cases to require an interaction diagram, since sharing a project is one of the essential
+requirements of this project and both shows some general dynamics as well as some specifics for this use.
 
-We have chosen use case 2 - 'Share Project' to be one of the use cases that we make an interaction diagram for since sharing a project is one of the essential
-requirements of this project. 
+We want the user to be able to invite more than one user at the same time. The API in the controller takes an enumerable collection of strings, each string
+representing an email. There is however also provided a method taking a string of comma separated email addresses.
 
-We want the user to be able to invite more than one user at the same time. This is done through a list of comma separated email addresses. 
+As the interaction diagram (Appendix~\ref{sec:interaction-diagram-appendix}) shows, the user chooses a project to share, and give a list of mail
+addresses of the other users to be invited. This can be done in both of the UIs. We have however in this example used the WebUI, as the Client UI
+chooses to use the APM methods (see Section \ref{sec:APM}). 
 
-As the interaction diagram in (Appendix~\ref{sec:interaction-diagram-appendix})
-shows, the user chooses a project to share, and give a list of mail addresses of the other users to be invited. This can be done through
-either one of the UIs. We have however in this example user the WebUI. 
-
-Each mail address in the list is then invited to the project. Since this only is a proof of concept, we have not put any effort into making sure that invites 
+Each mail address in the list is invited to the project. Since this only is a proof of concept, we have not put any effort into making sure that invites 
 are sent to the users being invited. Instead, when a project is being shared with another user, the project will just show up in the user's project overview.
 
 This is of course not how we would have done it in a real world application but since this is only a proof of concept, we think this suffices. In a 
 real world application we would allow the invited user to accept or reject the shared project as well as checking that the invited email address exists.
 
-\subsubsection{Interaction Diagram for Use Case 7}
+\subsubsection{Interaction Diagram for the Merge Conflicts Use Case}
 
-We have as well chosen use case 7 - 'Merge Conflicts' to be one of the use cases that will make en interaction diagram for. This is due to the fact
-that handling merge conflicts is one of the essential and required features of the project. It is also one of the more complicated features that
-the application must be able to handle.
+Handling merge conflicts is one of the essential and required features of the project, thus we have chosen to discuss UC7 (Appendix \ref{sec:use-cases})
+in more detail. It is also one of the more complicated features that the application must be able to handle.
 
-In the interaction diagram in (Appendix~\ref{sec:interaction-diagram-appendix}) for use case 7, it is shown how a merge conflict is handled. 
+In the interaction diagram Appendix~\ref{sec:interaction-diagram-appendix}) for use case 7, it is shown how a merge conflict is handled. 
 
 This interaction diagram was quite nice to have while implementing the merging class. It helped us have a nice understanding of how it should work. If
 a merge conflict does occur, an icon in the local UI, will notice the user that a conflicting merge exists. The user then is responsible for manually 
-fixing the conflict and synchronizing the project again. 
+fixing the conflict and synchronizing the project again.
