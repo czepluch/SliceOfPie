@@ -5,7 +5,7 @@ The purpose of this test is to test whether the asynchronous programming model i
 
 As most of the functionality in each of the underlying methods called by the Controller class are subject to unit testing in their original classes, the primary focus of this class test is to ensure the APM functionality is working correctly.
 
-The Controller APM test is primarily focused on positive tests, which in part makes sense due to the isolated logic (APM) it tests, but it could be improved by adding negative tests forcing the APM the handle exceptional or failure situations.
+The Controller APM test is primarily focused on positive tests, which in part makes sense due to the isolated logic (APM) it tests, but it could be improved by adding negative tests forcing the APM to handle exceptional or failure situations.
 
 \subsubsection{LocalFileModel class test}
 The purpose of this test is to test whether the local file models file and folder manipulations successfully does, what they are supposed to. It runs a test for each of the add, rename and remove methods for projects, folders and documents (although the rename functionality is not currently used actively in the program). Further tests include testing of the method for retrieving file and folder structure as objects, testing of the GetAvailableName method and testing of the method for downloading revisions. The tests create a thorough substructure including sub folders and documents whenever necessary, which for example is relevant in testing of the RemoveFolder method. Each of these tests are positive and deeply tests whether for example the RemoveProject method actually deletes all children entities as it is supposed to.
