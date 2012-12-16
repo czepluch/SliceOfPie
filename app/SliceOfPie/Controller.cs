@@ -689,7 +689,7 @@ namespace SliceOfPie {
         /// Helper for asynchronously getting projects
         /// </summary>
         /// <param name="asyncResult">AsyncResult&ltIEnumerable&lt;Project&gt;,string&gt;</param>
-        private void GetProjectsAsyncHelper(object asyncResult) { //TODO: Use AsyncResultNoResult instead (generic this!)
+        private void GetProjectsAsyncHelper(object asyncResult) {
             AsyncResult<IEnumerable<Project>, string> ar = (AsyncResult<IEnumerable<Project>, string>)asyncResult;
             try {
                 IEnumerable<Project> result = GetProjects(ar.Parameter1);
