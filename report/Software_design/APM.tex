@@ -1,13 +1,13 @@
 \subsubsection{Asynchronous Calls through APM}
 \label{sec:APM}
 
-For a desktop UI to be repsonsive, it is important that heavy loads are moved away from the UI thread.
+For a desktop UI to be responsive, it is important that heavy loads are moved away from the UI thread.
 There are several possible ways of doing this: threading, abstracting to using tasks, or asynchronous
 methods. To reduce the amount of boilerplate code in the UI layer, the responsibility for delegating
 to threads was moved to the controller.
 
 The \emph{Asynchronous Programming Model}\cite{msdnAPMdoc} (abbrevated \emph{APM}) allows for easy,
-asynchronous calls to heavy-duty methods at a nice level of abstraction, substrantially simplifying UI
+asynchronous calls to heavy-duty methods at a nice level of abstraction, substantially simplifying UI
 programming. The support for callbacks lets the UI react as soon as a job finishes, without having to
 continuously poll the model (although this approach is also possible through the APM).
 

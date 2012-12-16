@@ -1,16 +1,16 @@
-\subsection{Data View}
+\subsection{Data view}
 
 There are two perspectives on data in the system: One is the interaction with the MySQL remote database
 and the other is the interaction with the local filesystem used in \emph{LocalFileModel}.
 
-\subsubsection{Remote Database View}
-The mapping between the database and the logical classes is found in \emph{MySQLModel.edmx} in the
+\subsubsection{Remote database view}
+The mapping between the database and the logical classes is found in \\\emph{MySQLModel.edmx} in the
 \emph{SliceOfPie} project.
 
 Most of the mapping is as straight forward as it gets: Properties map to fields of the corresponding value.
 However, in the relationship of the entities there are some important details.
 
-The first point that is important to make is that users are defined in the data as a tuples of emails
+The first point that is important to make is that users are defined in the data as tuples of emails
 and passwords and that between users and projects there is a many-to-many relation. This manifests
 in the ProjectUser table, holding references to both. In effect this means that several users may 
 have access to the same projects, and that one owner may have access to several projects.
@@ -39,7 +39,7 @@ Documents have the same references a Folders, and results in the same kind of re
 Revisions have references to Documents, resulting in a one-to-many relationship where a single document
 may have several revisions tied to it.
 
-\subsubsection{Filesystem View}
+\subsubsection{Filesystem view}
 The logical classes used in the system (see Section \ref{sec:logicalview}) map almost precisely to a
 traditional filesystem hierarchy. In the filesystem they are represented as follows: Projects are
 represented as folders, found in the root of the data folder (in \emph{<userdir>/AppData/Roaming/SliceOfPie});
