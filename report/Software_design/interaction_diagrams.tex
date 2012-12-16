@@ -18,8 +18,17 @@ either one of the UIs. We have however in this example user the WebUI.
 Each mail address in the list is then invited to the project. Since this only is a proof of concept, we have not put any effort into making sure that invites 
 are sent to the users being invited. Instead, when a project is being shared with another user, the project will just show up in the user's project overview.
 
-If a user that does not exist is invited with an email not already existing in the database, the project will still be shared with that user. 
-This means that if a user with the specified email then registers with this email address, the project will already be shared with him. 
-
 This is of course not how we would have done it in a real world application but since this is only a proof of concept, we think this suffices. In a 
-real world application we would allow the invited user to accept or reject the shared project as well as checking that the invited email address exists.  
+real world application we would allow the invited user to accept or reject the shared project as well as checking that the invited email address exists.
+
+\subsubsection{Interaction Diagram for Use Case 7}
+
+We have as well chosen use case 7 - 'Merge Conflicts' to be one of the use cases that will make en interaction diagram for. This is due to the fact
+that handling merge conflicts is one of the essential and required features of the project. It is also one of the more complicated features that
+the application must be able to handle.
+
+In the interaction diagram in (Appendix~\ref{sec:interaction-diagram-appendix}) for use case 7, it is shown how a merge conflict is handled. 
+
+This interaction diagram was quite nice to have while implementing the merging class. It helped us have a nice understanding of how it should work. If
+a merge conflict does occur, an icon in the local UI, will notice the user that a conflicting merge exists. The user then is responsible for manually 
+fixing the conflict and synchronizing the project again. 
