@@ -63,13 +63,13 @@ SynchronizationContext syncContext = SynchronizationContext.Current;
 controller.BeginGetProjects("dummy@email.com", (asyncResult) => {
     syncContext.Post(RefreshUI(controller.EndGetProjects(asyncResult)))
 }, null);\end{verbatim}
-    \caption{Correct usage of APM in a user interface-context, taking synchronization contexts into account; paraphrased over code in MainWindow.xaml.cs of the SliceOfPieClient project.}
+\caption{Correct usage of APM in a user interface-context, taking synchronization contexts into account; paraphrased over code in MainWindow.xaml.cs of the \SOP{} project.}
     \label{fig:apmuserinterfacecode}
 \end{figure}
 
 \paragraph{Implementation}
 
-The SliceOfPie implementation of APM is influenced heavily by Richter's article, having a couple of
+The \SOP{} implementation of APM is influenced heavily by Richter's article, having a couple of
 implementations of the IAsyncResult interface. These implementations either have a void return type
 or a generic one and take a number (0 - 3) parameters, also generically typed.
 
