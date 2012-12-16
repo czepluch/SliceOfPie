@@ -6,20 +6,20 @@ There are several possible ways of doing this: threading, abstracting to using t
 methods. To reduce the amount of boilerplate code in the UI layer, the responsibility for delegating
 to threads was moved to the controller.
 
-The \emph{Asynchronous Programming Model}\cite{msdnAPMdoc} (abbrevated \emph{APM}) allows for easy,
+The \emph{Asynchronous Programming Model}\cite{msdnAPMdoc} (abbreviated \emph{APM}) allows for easy,
 asynchronous calls to heavy-duty methods at a nice level of abstraction, substantially simplifying UI
 programming. The support for callbacks lets the UI react as soon as a job finishes, without having to
 continuously poll the model (although this approach is also possible through the APM).
 
 There are no built-in building blocks for implementing the APM in C\#, however the MSDN Magazine\cite{richtermsdn0307}
-brought an article by Jeffrey Richter guiding the process. Based on these ideas, building custom APM comes easier and
+brought an article by Jeffrey Richter guiding the process. Based on these ideas, building custom APM becomes easier and
 this is the way we chose to go with the controller.
 
 The Asynchronous Programming Model can be used to wrap normal, blocking methods (from here on referred to as
 the \emph{inner method}) in an asynchronous context, while still allowing the caller to react on results
 returned by the method through a callback delegate.
 
-All APM calls consist of two methods, one prefixed with \emph{Begin} and another with \emph{End} (ie.,
+All APM calls consist of two methods, one prefixed with \emph{Begin} and another with \emph{End} (ie.
 when wrapping inner method \emph{GetProjects(userMail)}, the resulting methods would be \emph{BeingGetProjects}
 and \emph{EndGetProjects}). The Begin-method is passed not only the arguments required by the inner method call
 (ie. \emph{userMail}) but also a callback-delegate and a state-object.
@@ -47,7 +47,7 @@ In the callback, the first method call should be to the End-method with the IAsy
 as a parameter. This call blocks until the inner method returns and then passes the result along.
 
 Note that the End-method may also be called outside of the callback. This would result in the code
-blocking until the inner method returns, and as such would not be desireable in a User Interface.
+blocking until the inner method returns, and as such would not be desirable in a User Interface.
 
 Additionally, when using this kind of asynchronous calls, it is important to note that the callback
 is executed on a different thread (in our case a thread in the ThreadPool) from the one the Begin-method
