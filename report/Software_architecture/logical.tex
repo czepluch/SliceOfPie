@@ -36,7 +36,7 @@ more sturdy, production-level classes should be put in place before the system i
 The Controller additionally depends on a UserModel being present. This model handles verification
 and creation of user accounts.
 
-With the overall architecture in place, the last important logical component of the architecural design
+With the overall architecture in place, the last important logical component of the architectural design
 consists of the basic classes that all packages use (Figure \ref{fig:basic-classes}): \emph{Document},
 \emph{Folder} and \emph{Project}. These are mostly defined in their implementations of \emph{IItemContainer}
 and \emph{IItem}. \emph{IItem} defines an "item"; something that can be contained in an
@@ -44,7 +44,7 @@ and \emph{IItem}. \emph{IItem} defines an "item"; something that can be containe
 whereas Documents may only be contained and Projects may only contain.
 
 This structure, with its use of the \emph{Composite pattern} (in that folders may contain folders), results in a
-dynamically extensible hierachy, much like the one found in most filesystems. An additional constraint
+dynamically extensible hierarchy, much like the one found in most filesystems. An additional constraint
 in the architecture is that a root element will {\bf always} be a project, and as such it is easy to
 manage bundles of files by their parent project.
 

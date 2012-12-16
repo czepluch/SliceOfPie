@@ -18,7 +18,7 @@ thoroughly through our design. This is shown with the rake symbol on the two cla
 As the class diagram shows, we have made a single controller that is responsible for all the method calls between the views and back end models. We
 have an abstract IFileModel class, from which both the WebFileModel and LocalFileModel inherit from. These classes represent different ways of handling
 data, respectively saving directly online or saving to the local file system. Left to the abstract IFileModel class, we have
-made a simplification of the folders and documents hierachy, also discussed in Section \ref{sec:logicalview}.
+made a simplification of the folders and documents hierarchy, also discussed in Section \ref{sec:logicalview}.
 
 Furthermore do we also have a UserModel that takes care of the way users interact with the FileModels, and creating users. All that is needed
 to create a user is an email address and a password. If a user tries to sign in, but does not exist in the database, the user is created.
