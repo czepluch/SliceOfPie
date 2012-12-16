@@ -9,7 +9,7 @@ to focus on producing a report for the last sprint (during which time we discove
 Our current prototype makes use of the PopUp (WPF) class in the local client. The usage of the PopUp class is very well suited for fast sketching and prototyping in UIs, although despite the name the PopUp class is not originally intended to be shown as a modal dialog window. The implications of this issue is that any pop-up window in our local client will always be the topmost window (even over a Windows task manager), since that behavior is build into the class. Our reasoning behind using this class is the efficiency in prototyping, which we think has a certain value in an agile development environment. The two most obvious solutions to the "bug" would be to either use a custom modification of the Window class or use C\#'s P/Invoke feature to use the Win32 API directly and remove the behavior of the window through that (open source solutions exist for this). We think that both of these solutions are out-of-scope and a unimportant with regards to the purpose of this project (making a prototype).
 
 \subsubsection{Exception in web client when sharing projects}
-In web client exceptions thrown for failure situations, when sharing projects with non-existing email addresses, are not handled by the UI, which could cause program crashes.
+In web client exceptions thrown for failure situations, when sharing projects with non-existing email addresses, are not handled by the UI, which will cause the system to show an error page.
 
 \subsubsection{Multiple default projects in local client}
 In local client multiple default projects can be created, when using the local client on a new computer from an existing user. This is caused due to the LocalFileModel class creating the default project before running the synchronization. The program does not know exactly what directory in the file system is actually the default project, so it will just treat it as any other project and add it to the users account even though several projects already exist.
@@ -27,3 +27,6 @@ to change it, and the controller has already been instantiated.
 
 \subsubsection{Different users in local client}
 If a user in the local client synchronizes, all of that persons files will be stored locally. If another user then synchronizes on the same computer, all of the first users files will be added to the second user. This could be solved by adding different local user repositories or simply adding functionality to clear the local folders before switching to a new user.
+
+\subsubsection{Access to private data in web client}
+If the ID of a project, folder or document is known to a user, he or she can access the data even though the project or parent project are not shared with the active user. This could be solved by adding authentication checks before loading any content pages.
