@@ -27,3 +27,6 @@ two different controllers.
 
 IsWebController is intended to be set before instantiation of the controller, and as such should throw an exception if a client tries
 to change it, and the controller has already been instantiated.
+
+\subsubsection{Different users in local client}
+If a user in the local client synchronizes, all of that persons files will be stored locally. If another user then synchronizes on the same computer, all of the first users files will be added to the second user. This could be solved by adding different local user repositories or simply adding functionality to clear the local folders before switching to a new user.
