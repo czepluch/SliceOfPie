@@ -1,17 +1,23 @@
+\section{Introduction}
 This report covers our exam project for the mandatory \emph{Analysis, Design and Software Architecture}
 course at our third semester at the BSc in Software Development at the IT-University of Copenhagen.
 This project took place in November and December in the year 2012. 
 
-Our advisors throughout this project were been Jacob Bardram and Dario Pacino. We have also received feedback from
+Our advisors throughout this project have been Jacob Bardram and Dario Pacino. We have also received feedback from
 our teachers assistant, Simon Bang Terkildsen, who has been of great help to us.
 
 \paragraph{The Problem}
 The main purpose of this project is to document the making of a \textbf{proof-of-concept} of an interactive document
 sharing system, called Slice of Pie, which mixes some of the functionality of Google Drive and Dropbox with
 an integrated text editor.
-
-The problem is elaborated further and specified in our Software Analysis section (\ref{sec:software-analysis}).
-
+Concretely, the minimum requirements were:
+\begin{itemize}
+\item A document should include both text and images. The format of the document is up to you.
+\item Documents can be arranged into folders or projects.
+\item The history of changes on each document should be kept and be available to the users.
+\item Local synchronization and off-line work mode should be implemented.
+\item Documents can be shared and changes on the same document must be merged.
+\end{itemize}
 \paragraph{Our Slice}
 Like Google Drive, Slice of Pie allows the user to create, edit, and share documents through a web interface.
 Documents can be arranged into projects and folders. The modifications of shared documents are merged together.
@@ -20,12 +26,12 @@ It gives the user the possibility of having a local client and all files in a lo
 application is provided which can perform the same operations as the web client. With the local client, the user
 can also work offline.
 
-Unlike Dropbox, Google Drive and the likes, our application is limited to simple text files (allowing HTML syntax).
+Unlike Dropbox, Google Drive and the likes, our application is limited to simple text files.
 
 The source code for the project may be found at\newline http://github.com/hypesystem/SliceOfPie/app.
 
 \subsection{Our work}
-In a group of five members, we naturally have been splitting the tasks between us for the most part. This is however not the case with this report, because we have mostly cooperated on each part, so assigning of responsibility on any single part would be difficult.
+As a group of five members, we have been dividing work between us for the most part. This is not, however, the case with the report itself, which has largely been a collaborative process.
 
 \paragraph{SCRUM}
 In our Scrum Team the role of Product Owner was assigned to Niels Roesen Abildgaard, while the role of ScrumMaster was assigned to Niclas Benjamin Tollstorff.
