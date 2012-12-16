@@ -128,12 +128,12 @@
             </DockPanel>
         </Popup>
 
-        <Popup Name="noInternetPopUp" Height="100" Width="400" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
+        <Popup Name="messagePopUp" Height="100" Width="400" Placement="Center" AllowsTransparency="True" IsOpen="False" PlacementTarget="{Binding ElementName=SliceOfPieMainWindow}">
             <DockPanel Background="#FF949494">
-                <Button Padding="5" Margin="5,2,5,2" DockPanel.Dock="Bottom" IsDefault="True" Click="NoInternetPopUpOkButton_Click">OK</Button>
+                <Button Padding="5" Margin="5,2,5,2" DockPanel.Dock="Bottom" IsDefault="True" Click="MessagePopUpOkButton_Click">OK</Button>
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical">
-                    <Label>There was an error locating your document on the server.</Label>
-                    <Label>Make sure it is synchronized and check your internet connection.</Label>
+                    <Label Name="messagePopUpLabel1"/>
+                    <Label Name="messagePopUpLabel2"/>
                 </StackPanel>
             </DockPanel>
         </Popup>
