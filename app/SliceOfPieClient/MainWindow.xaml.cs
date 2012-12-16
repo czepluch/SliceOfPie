@@ -532,7 +532,7 @@ namespace SliceOfPie.Client {
                     catch (Exception ex) {
                         if (ex is AsyncException) {
                             CallOnUIThread(() => {
-                                OpenMessagePopUp("There was an error sharing the project.", "Please check your internet connection.");
+                                OpenMessagePopUp("There was an error locating your project on the server.", "Make sure it is synchronized and check your internet connection.");
                             });
                         }
                         else {
