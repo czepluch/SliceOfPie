@@ -234,11 +234,26 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void CreateProjectPopUpCreateButton_Click(object sender, RoutedEventArgs e) {
-            Project project = controller.CreateProject(createProjectPopUPTextBox.Text, "local");
+            controller.BeginCreateProject(createProjectPopUPTextBox.Text, "local",
+                (iar) => {
+                    try {
+                        RefreshLocalProjects(controller.EndCreateProject(iar));
+                    }
+                    catch (Exception ex) {
+                        if (ex is AsyncException) {
+                            CallOnUIThread(() => {
+                                OpenMessagePopUp("An error occured. The project was not created.");
+                            });
+                        }
+                        else {
+                            throw;
+                        }
+                    }
+                }, null);
             createProjectPopUp.IsOpen = false;
             IsEnabled = true;
             createProjectPopUPTextBox.Clear();
-            RefreshLocalProjects(project);
+            ;
         }
 
         /// <summary>
@@ -270,7 +285,22 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void CreateFolderPopUpCreateButton_Click(object sender, RoutedEventArgs e) {
-            controller.BeginCreateFolder(createFolderPopUPTextBox.Text, "local", currentContextItem as IItemContainer, (iar) => RefreshLocalProjects(controller.EndCreateFolder(iar)), null);
+            controller.BeginCreateFolder(createFolderPopUPTextBox.Text, "local", currentContextItem as IItemContainer,
+                (iar) => {
+                    try {
+                        RefreshLocalProjects(controller.EndCreateFolder(iar));
+                    }
+                    catch (Exception ex) {
+                        if (ex is AsyncException) {
+                            CallOnUIThread(() => {
+                                OpenMessagePopUp("An error occured. The folder was not created.");
+                            });
+                        }
+                        else {
+                            throw;
+                        }
+                    }
+                }, null);
             createFolderPopUP.IsOpen = false;
             IsEnabled = true;
             createFolderPopUPTextBox.Clear();
@@ -306,7 +336,22 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void CreateDocumentPopUpCreateButton_Click(object sender, RoutedEventArgs e) {
-            controller.BeginCreateDocument(createDocumentPopUPTextBox.Text, "local", currentContextItem as IItemContainer, (iar) => RefreshLocalProjects(controller.EndCreateDocument(iar)), null);
+            controller.BeginCreateDocument(createDocumentPopUPTextBox.Text, "local", currentContextItem as IItemContainer,
+                (iar) => {
+                    try {
+                        RefreshLocalProjects(controller.EndCreateDocument(iar));
+                    }
+                    catch (Exception ex) {
+                        if (ex is AsyncException) {
+                            CallOnUIThread(() => {
+                                OpenMessagePopUp("An error occured. The document was not created.");
+                            });
+                        }
+                        else {
+                            throw;
+                        }
+                    }
+                }, null);
             createDocumentPopUP.IsOpen = false;
             IsEnabled = true;
             createDocumentPopUPTextBox.Clear();
@@ -384,20 +429,23 @@ namespace SliceOfPie.Client {
         }
 
         /// <summary>
-        /// Opens a pop-up with a message about a faulty internet connection
+        /// Opens a pop-up with a message
         /// </summary>
-        private void OpenNoInternetPopUp() {
+        private void OpenMessagePopUp(string topLine = null, string bottomLine = null) {
             IsEnabled = false;
-            noInternetPopUp.IsOpen = true;
+            messagePopUpLabel1.Content = topLine ?? " ";
+            messagePopUpLabel2.Content = bottomLine ?? " ";
+            messagePopUp.IsOpen = true;
+
         }
 
         /// <summary>
-        /// This is the click handler for the Close button in the No internet pop-up
+        /// This is the click handler for the Close button in the Message pop-up
         /// </summary>
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
-        private void NoInternetPopUpOkButton_Click(object sender, RoutedEventArgs e) {
-            noInternetPopUp.IsOpen = false;
+        private void MessagePopUpOkButton_Click(object sender, RoutedEventArgs e) {
+            messagePopUp.IsOpen = false;
             IsEnabled = true;
         }
 
@@ -476,7 +524,23 @@ namespace SliceOfPie.Client {
         /// <param name="sender">The object that sent the event.</param>
         /// <param name="e">The event arguments.</param>
         private void ShareProjectPopUpShareButton_Click(object sender, RoutedEventArgs e) {
-            controller.BeginShareProject(currentContextItem as Project, shareProjectPopUPTextBox.Text.Split(','), null, null);
+            controller.BeginShareProject(currentContextItem as Project, shareProjectPopUPTextBox.Text.Split(','),
+                (iar) => {
+                    try {
+                        controller.EndShareProject(iar);
+                    }
+                    catch (Exception ex) {
+                        if (ex is AsyncException) {
+                            CallOnUIThread(() => {
+                                OpenMessagePopUp("There was an error sharing the project.", "Please check your internet connection.");
+                            });
+                        }
+                        else {
+                            throw;
+                        }
+                    }
+                }
+                , null);
             shareProjectPopUP.IsOpen = false;
             IsEnabled = true;
             shareProjectPopUPTextBox.Clear();
@@ -524,7 +588,22 @@ namespace SliceOfPie.Client {
         private void SaveDocumentButton_Click(object sender, RoutedEventArgs e) {
             Document docToSave = textEditor.Document;
             docToSave.CurrentRevision = textEditor.Text; //Update current revision based on text before returning
-            controller.BeginSaveDocument(docToSave, null, null);
+            controller.BeginSaveDocument(docToSave,
+                (iar) => {
+                    try {
+                        controller.EndSaveDocument(iar);
+                    }
+                    catch (Exception ex) {
+                        if (ex is AsyncException) {
+                            CallOnUIThread(() => {
+                                OpenMessagePopUp("The document could not be saved.");
+                            });
+                        }
+                        else {
+                            throw;
+                        }
+                    }
+                }, null);
         }
 
         /// <summary>
@@ -579,7 +658,7 @@ namespace SliceOfPie.Client {
                         if (ex is AsyncException) {
                             CallOnUIThread(() => {
                                 syncingPopUp.IsOpen = false;
-                                OpenNoInternetPopUp();
+                                OpenMessagePopUp("There was an error locating your document on the server.", "Make sure it is synchronized and check your internet connection.");
                             });
                         }
                         else {
