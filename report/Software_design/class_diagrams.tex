@@ -1,38 +1,52 @@
 Before we started coding we made a draft of the class diagrams. Throughout the following sprints we kept maintaining and updating the class diagram
-draft to make sure that the code and class diagram were in agreement. The class diagram shown and explained below is the final version for our
-system.
+draft to make sure that the code and class diagram were in agreement. The final class diagram was refined in the last sprint.
 
-The class diagram is made in the Unified Modeling Language (UML) to ensure common understanding, when describing the structure of our system.
+The class diagram is the main building block of object oriented modelling. It is used both for general conceptual modelling of the systematics 
+of an application and for translating models into code or vice versa. Class diagrams can also be used for data modeling. The class model
+shows class interfaces as well as the relationship between those classes.
 
-\begin{figure}[htb]
-    \begin{center}
-        \includegraphics[width=1\textwidth]{Software_design/graphics/mainClassDiagram.png}
-        \caption{Overview of the simplified main class diagram for 'Slice of Pie'}
-        \label{fig:design-class_diagram} % maybe a link for the web version for full view
-    \end{center}
-\end{figure}
+The class diagram (Appendix \ref{sec:class-diagrams-appendix}) is made in the Unified Modeling Language (UML) to ensure common understanding, when describing the structure of our system.
 
-In (Figure~\ref{fig:design-class_diagram}) the most critical and important classes are shown with their most important attributes and public methods.
-None of the two GUIs (MvcWebApp and MainWindow) are shown in the class diagram, but are in two separate class diagrams. This is shown with the rake
-symbol on the two classes in the main class diagram.
+Maintaining class diagrams has been of great help throughout the programming of this application, as they provide a constant and updated reference
+for what should be done.
 
-%Fill in some explanation about the diagram
+We have shown the most critical and important classes with their most important attributes and public methods. This decision can be largely attributed
+to our design process, in which we designed these interfaces and noted them down, making sure the different parts of our code fitted together.
+None of the two GUIs (MvcWebApp and SliceOfPieClient) are shown in the class diagram, but are in two separate class diagrams, as they have been separated
+thoroughly through our design. This is shown with the rake symbol on the two classes in the main class diagram.
+
+As the class diagram shows, we have made a single controller that is responsible for all the method calls between the views and back end models. We
+have an abstract IFileModel class, from which both the WebFileModel and LocalFileModel inherit from. These classes represent different ways of handling
+data, respectively saving directly online or saving to the local file system. Left to the abstract IFileModel class, we have
+made a simplification of the folders and documents hierarchy, also discussed in Section \ref{sec:logicalview}.
+
+Furthermore do we also have a UserModel that takes care of the way users interact with the FileModels, and creating users. All that is needed
+to create a user is an email address and a password. If a user tries to sign in, but does not exist in the database, the user is created.
 
 \subsubsection{The MvcWebApp GUI}
 
-The diagram showing the raked class diagram for the MvcWebApp GUI can be found in the Appendix~\ref{fig:mvcwebapp-diagram}.
+The class diagram for the MvcWebApp (represented by a rake in the main diagram; Appendix \ref{sec:class-diagrams-appendix}) shows only the controller
+classes of the project, since they are the most crucial classes for understanding how the Web UI works. Additionally, the models used in the project
+are the basic classes defined in SliceOfPie.dll. The Web UI uses the ASP.NET MVC3 Framework. We decided to use MVC since we thought it to be suitable
+for our needs, building simple pages quickly.
 
-We have chosen only to show the controller classes, since they are the most crucial classes for understanding how the Web UI works. The Web UI uses
-the ASP.NET MVC3 design pattern. We decided to use MVC since we thought it to be suitable for our needs. 
-
-The 'views' of the MVC3 structure has been omitted. This is done because they do not have any important or interesting functionality except of rendering
-the different sites that are available at the Web UI. The methods with a [GET] tag, gets a desired view and the methods with a [POST] tag, posts a HTTP request.
+The \emph{views} of the MVC3 structure have been omitted. This is done because they do not have any important or interesting functionality except for
+defining the HTML for each webpage. The controller methods with a [GET] attribute, get a desired view and those with a [POST] attribute are executed on
+POST HTTP requests.
 
 For each method in a controller there is a corresponding view that is rendered when the method is called. However if there are two methods with the same 
-name in a controller, where one is a [GET] method and the other is a [POST] method, there is only one view.
+name in a controller, they use only a single view.
 
-The 'models' used are all located in the 'SliceOfPie' project which ensures that consistency between the Web client and the local client.
+The \emph{models} used are all located in the \emph{SliceOfPie} project which ensures that consistency between the Web client and the local client.
 
-\subsubsection{The MainWindow GUI}
+The ASP.NET MVC3 Framework is based on the Model-View-Controller pattern (as it is aptry named after). It ensures a separation between data and how
+it is represented viually. It makes a web application easy to maintain and expand. The views generated by the framework follow the HTML5 standard.
 
-The diagram showing the raked class diagram for the MainWindow GUI is to be found in the Appendix~\ref{fig:mainwindow-diagram}.
+\subsubsection{The SliceOfPieClient GUI}
+
+The local client can be seen as the view in a larger-scale MVC pattern applied to the entire application.
+
+As well as with the MvcWebApp GUI class diagram we have chosen only to show the most crucial classes and methods in the SliceOfPieClient diagram.
+We have used WPF for the GUI for the local client. All GUI code is written in .xaml.cs files with some helper methods.
+% Talk to Niclas about what else there is to say about this.
+

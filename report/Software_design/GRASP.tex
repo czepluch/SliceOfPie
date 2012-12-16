@@ -1,4 +1,4 @@
-\subsubsection{General Responsibility Assignment Software Patterns/Principles (GRASP)}
+\subsubsection{General Responsibility Assignment Software Patterns}
 \label{sec:GRASP}
 
 Throughout the object oriented analysis and design of this project we have been following the guidelines, for assigning responsibility to objects,  known as GRASP.
@@ -15,7 +15,7 @@ This principle is focused on the creation of objects, which is very common in ob
 In our design we made the decision that the local user interface will never create underlying data objects such as Document and Folder instances. This is in line with the Controller principle in that system events, such as adding a new document to the system, should be handled through the controller.
 
 \paragraph{High Cohesion}
-High Cohesion is all about keeping the responsibilites of any class strongly focused and avoid any unrelated responsibilities. 
+High Cohesion is all about keeping the responsibilities of any class strongly focused and avoid any unrelated responsibilities. 
 
 As a basic example of this principle a Document object should not be responsible for which icon it contains in the local user interface. Such a responsibility would be convenient for the user interface, but it is unrelated in regards to the purpose of a Document (to simply represent a text document with content, not any presentation of such). Instead we provided the icon functionality through a C\# extension method placed in the SliceOfPieClient. This aproach enables reusability across several different user interfaces with different visual representations.
 
