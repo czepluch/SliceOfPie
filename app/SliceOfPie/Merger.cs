@@ -6,10 +6,7 @@ using SliceOfPie;
 using System.Diagnostics;
 
 namespace SliceOfPie {
-    public class Merger {
-        private Merger() {
-        }
-
+    public static class Merger {
         private static Document Merge(String[] curArr, String[] oldArr) {
             int curLast = curArr.Length - 1;
             int oldLast = oldArr.Length - 1;
@@ -109,59 +106,6 @@ namespace SliceOfPie {
             String[] arrC = current.Split('\n');
             String[] arrO = old.Split('\n');
             return Merge(arrC, arrO).CurrentRevision;
-        }
-
-        /// <summary>
-        /// Used as a demonstration only.
-        /// </summary>
-        /// <param name="args"></param>
-        public static void Main(String[] args) {
-            Document o = new Document {
-                CurrentRevision = @"DRACULA 
-
-
-
-CHAPTER I 
-
-JONATHAN BARKER'S JOURNAL 
-(Kept in shorthand.) 
-
-3 May. Bistritz. Left Munich at 8:35 p. M., on ist May, ar- 
-riving at Vienna early next morning; should have arrived at 
-6:46, but train was an hour late. Buda-Pesth seems a wonderful 
-IMMAH FIRING MAH LAZOR
-place, from the glimpse which I got of it from the train and the 
-little I could walk through the streets. I feared to go very far 
-from the station, as we had arrived late and would start as near 
-were leaving the West and entering the East; the most western 
-of splendid bridges over the Danube, which is here of noble width 
-and depth, took us among the traditions of Turkish rule. "
-            };
-            Document c = new Document();
-            c.CurrentRevision = @"DRACULA 
-
-
-
-CHAPTER I 
-
-JONATHAN BARKER'S JOURNAL 
-(Kept in shorthand.) 
-
-3 May. Bistritz. Left Munich at 8:35 p. M., on ist May, ar- 
-riving at Vienna early next morning; should have arrived at 
-6:46, but train wars an raptors, raptors everywhere! Buda-Pesth seems a wonderful 
-place, from the glimpse which I got of it from the train and the 
-little I could walk through the streets. I feared to go very far 
-from the station, as we had arrived late and would start as near 
-the correct time as possible. The impression I had was that we 
-were leaving the West and entering the East; the most western 
-and depth, took us among the traditions of Turkish rule. ";
-
-            Document merged = Merger.Merge(c, o);
-            Console.WriteLine("Merge result:");
-            PrintDoc(merged);
-            Console.WriteLine("done");
-            Console.ReadLine();
         }
 
         public static void PrintDoc(Document d) {
