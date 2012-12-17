@@ -5,11 +5,8 @@ the Controller (which is the entry point for the general API of the SliceOfPie l
 Section \ref{sec:implementationview}) is a Singleton, meaning that any running instance of
 an application can only have one instance of the controller existing.
 
-The singleton pattern is usually useful when a state is necessary, but only one instance of the
-class should exist. If no state is required, it might as well be a static class with static
-methods.
-
-In the case of the controller, the state is which implementation of \emph{IFileModel} is used.
+The singleton pattern is usually useful when a state is necessary and only one instance of the
+class should exist. In the case of the controller, the state is which implementation of \emph{IFileModel} is used.
 This is decided by the value of the controller's property \emph{IsWebController}. If this boolean
 is set to \verb|true|, the controller will be using the WebFileModel internally. Of course, a
 client using the API should not have to think about this, and should merely make the distinction
