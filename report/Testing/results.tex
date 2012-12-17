@@ -8,25 +8,25 @@ As most of the functionality in each of the underlying methods called by the Con
 The Controller APM test is primarily focused on positive tests, which in part makes sense due to the isolated logic (APM) it tests, but it could be improved by adding negative tests forcing the APM to handle exceptional or failure situations.
 
 \subsubsection{LocalFileModel class test}
-The purpose of this test is to test whether the local file models file and folder manipulations successfully does, what they are supposed to. It runs a test for each of the add, rename and remove methods for projects, folders and documents (although the rename functionality is not currently used actively in the program). Further tests include testing of the method for retrieving file and folder structure as objects, testing of the GetAvailableName method and testing of the method for downloading revisions. The tests create a thorough substructure including sub folders and documents whenever necessary, which for example is relevant in testing of the RemoveFolder method. Each of these tests are positive and deeply tests whether for example the RemoveProject method actually deletes all children entities as it is supposed to.
+The purpose of this test is to test whether the local file model's file and folder manipulations successfully does what they are supposed to. It runs a test for each of the add, rename, and remove methods for projects, folders and documents (although the rename functionality is not currently used actively in the program). Further tests include testing of the method for retrieving file and folder structure as objects, testing of the GetAvailableName method and testing of the method for downloading revisions. The tests create a thorough substructure including subfolders and documents whenever necessary, which for instance is relevant in testing of the RemoveFolder method. Each of these tests are positive and deeply tests whether for instance the RemoveProject method actually deletes all children entities as it is supposed to.
 
 As most of the tests for the LocalFileModel class are positive and focused on success scenarios, a major improvement and probably one the highest prioritized upcoming tasks would be to add more tests for each method running through failure and exception scenarios to ensure proper error handling.
 
 \subsubsection{Merger class test}
-The purpose of this test is to test whether the Merger class merges two documents correctly. The test starts by running different error scenarios, where one or more values are null. These tests produce either null if both input documents are null or have null in current revision or the one existing revision.
+The purpose of this test is to test whether the Merger class merges two documents correctly. The test starts by running different error scenarios, where one or more values are null. These tests asserts that the Merger produces null if both input documents are null or they both have null in their current revisions.
 It then proceeds to test several scenarios, including insertion, alteration, same and both insertion and alteration. The insertion scenario takes the updated revision and outputs it, which is the same for the alteration. The identical revisions simply offers the one revision available and the last one with both insertion and alteration in two different documents gives us the newest revision. Each of the tests for this class contains two checks, one for textual input and one for Document object input.
 
-The tests for the Merger class could have contained more thorough testing for different variations of textual inputs, but for this rather naive implementation of the Merger we do not feel the necessity of adding a lot of obscure tests, when the result most often is to return the latest revision.
+The tests for the Merger class could have contained more thorough testing for different variations of textual inputs, but for this rather naive implementation of the Merger we have not tested further, since the result often is to return the latest revision.
 
 \subsubsection{UserModel class test}
-The purpose of this test is to test whether login validation and project sharing are functioning correctly. The first part tests the login validation for post success and failure scenarios, while the last part tests the project sharing.
+The purpose of this test is to test whether login validation and project sharing function correctly. The first part tests the login validation for success and failure scenarios, while the last part tests the project sharing.
 
 The login validation is first tested with incorrect input for email, password and the combination of the two, which are expected to return exceptions. Afterwards it is tested with valid account credentials and with incorrect login credentials to either return true or false respectively.
 
 Sharing of a project in the UserModel class is tested for each of the exceptional scenarios possible in the ShareProject method. The exceptional scenarios are entering of a project ID with value zero, entering an empty email string, entering an unknown email or trying to share a specific project with a user, who is already part of that project.
 
 \subsubsection{WebFileModel class test}
-The purpose of this test is to test whether the web file model's document, folder and project manipulations successfully does, what they are supposed to. It creates it own test presets by adding a project, folder, document and revision before each test and cleaning it up afterwards.
+The purpose of this test is to test whether the web file model's document, folder and project manipulations successfully does, what they are supposed to. It creates it own test presets by adding a project, folder, document, and revision before each test and cleaning it up afterwards.
 
 It starts by testing the get methods necessary in the web UI, which are tested in a single method running through the hierarchy starting from project and continuing through to document revision. It proceeds to test failure scenarios for getting a project by checking negative ID, zero ID and null project.
 

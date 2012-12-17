@@ -1,13 +1,13 @@
-We use unit tests for white box testing of individual methods. Each non-trivial method should have its own tests and those tests focus should only lie on that particular methods functionality.
+We use unit tests for white box testing of individual methods. Each non-trivial method should have its own tests and the focus of those tests should only lie on that particular method's functionality.
 
 The other part of our testing is black box testing performed through system tests. Whenever code have been added or changed, system testing of each affected functionality should be done.
 
 \subsubsection{Automated tests}
-All non-trivial logic code in our system has one or more unit tests, this ranges from a class constructor like the LocalFileModel to merging of two documents in the Merger. As these are white box tests each test is created explicitly from the code logic and is created with only one focus, like seen in the unit tests for UserModel, which very specifically tests whether an email and password combination validates or not. We have in this process also added some tools to enable us to more efficiently use unit tests, which in particular are the testing framework in Visual Studio and more customized methods to effectively reset folder and database structure for our test cases.
+All non-trivial logic code in our system has one or more unit tests. This ranges from a class constructor like the LocalFileModel to merging of two documents in the Merger. As these are white box tests each test is created explicitly from the code logic and is created with only one focus, like seen in the unit tests for UserModel, which very specifically tests whether an email and password combination validates or not. In this process we have strived to make our unit tests more efficient, by using tools from the testing framework in Visual Studio and making customized methods to effectively reset folder and database structure for our test cases.
 
-Whenever applicable we have used a test-first or test driven development approach to ensure that an existing bug does in fact exist or that specific functionality is not yet implemented and therefore fails the test. This also makes it a lot easier to test that specific functionality instead of running the complete system to only create or alter a smaller part. When mentioning applicability it is because the use of test-first is particularly useful, when writing small  or encapsulated methods or functionality like creating a document, removing a project or merging two documents, while not as useful, when for example writing UI.
+Whenever applicable we have used a test-first or test driven development approach to ensure that an existing bug does in fact exist or that specific functionality is not yet implemented and therefore fails the test. This also makes it a lot easier to test that specific functionality instead of running the complete system to only create or alter a smaller part. When mentioning applicability it is because the use of test-first is particularly useful, when writing small  or encapsulated methods or functionality like creating a document, removing a project or merging two documents. It is however not as useful when writing functionality within graphical user interfaces.
 
-Our unit tests are focused on the logical code, which include the models, the controller and their subclasses. Number of unit tests per method varies a lot from method to method, mainly because some methods requires a lot more tests to ensure each path is working correctly. Methods in LocalFileModel in general have a unit test per method, because each method is relatively simple and has the responsibility of creating a document, creating a folder, removing a project or saving a document. The Merger class basically has a single method with different overloads, but there are a lot of different entries to the functionality, so a lot of unit tests have been created for that method to test different states of documents and documents with bad content like empty values.
+Our unit tests are focused on the logical code, which include the models, the controller and their subclasses. The number of unit tests per method varies a lot from method to method, mainly because some methods requires a lot more tests to ensure each path is working correctly. Methods in LocalFileModel in general have a single unit test per method, because each method is relatively simple and has the responsibility of creating a document, creating a folder, removing a project, or saving a document. The Merger class basically has a single method with different overloads, but there is some complex functionality, so a lot of unit tests have been created for that method in order to test different states of documents and documents with bad content like empty values.
 
 In general our approach to white box testing has relied on our assumption that a method only works if it has a corresponding unit test.
 
@@ -15,13 +15,13 @@ In general our approach to white box testing has relied on our assumption that a
 Every time larger parts of the system are changed or added, we go through a structured set of system tests to ensure each functionality works as expected. The scenarios we run through and test are the following:
 
 	\paragraph{Log in}
-	Only applicable in the web client. Ensure that correct login validates, incorrect login not validates and new account is created.
+	Primarily applicable in the web client (the local client has similar authentication on synchronization). Ensure that correct login validates, incorrect login does not validate, and new account is created.
 
 	\paragraph{Create project}
 	Ensure that a project is created, checking different names with small and large letters and spaces.
 
 	\paragraph{Remove project}
-	Ensure that a project and all sub folders, documents and revisions are deleted.
+	Ensure that the project and all its subitems are deleted.
 
 	\paragraph{Share project}
 	Ensure that project can be shared with one or more emails, checking both known and unknown emails.
@@ -30,7 +30,7 @@ Every time larger parts of the system are changed or added, we go through a stru
 	Ensure that a folder is created, checking different names with small and large letters and spaces.
 
 	\paragraph{Remove folder}
-	Ensure that a folder and all sub folders, documents and revisions are deleted.
+	Ensure that the folder and all its subitems are deleted.
 
 	\paragraph{View document}
 	Only applicable in the web client. Ensure that a document with HTML formatting is displayed correctly, checking especially the image-tag.
@@ -39,7 +39,7 @@ Every time larger parts of the system are changed or added, we go through a stru
 	Ensure that a document is created, checking different names with small and large letters and spaces.
 
 	\paragraph{Remove document}
-	Ensure that a document and all revisions are deleted.
+	Ensure that the document and all its revisions are deleted.
 
 	\paragraph{Edit document}
 	Ensure that edits made in a document are saved correctly, checking addition of HTML tags and addition of revision for web client.
