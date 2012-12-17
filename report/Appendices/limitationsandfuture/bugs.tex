@@ -30,3 +30,6 @@ If a user in the local client synchronizes, all of that persons files will be st
 
 \subsubsection{Access to private data in web client}
 If the ID of a project, folder or document is known to a user, he or she can access the data even though the project or parent project are not shared with the active user. This could be solved by adding authentication checks before loading any content pages.
+
+\subsubsection{Merging in web client}
+If a user opens the editing window for a document in the web client and another user then opens the editing window for the same document, the last revision to be saved will become the current revision without taking the other edit into account. This could be solved by both improving the merging algorithm and adding specific conflict handling in the web client.
