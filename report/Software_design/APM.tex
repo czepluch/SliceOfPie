@@ -20,7 +20,7 @@ the \emph{inner method}) in an asynchronous context, while still allowing the ca
 returned by the method through a callback delegate.
 
 All APM calls consist of two methods, one prefixed with \emph{Begin} and another with \emph{End} (ie.
-when wrapping inner method \emph{GetProjects(userMail)}, the resulting methods would be \emph{BeingGetProjects}
+when wrapping inner method \emph{GetProjects(userMail)}, the resulting methods would be \emph{BeginGetProjects}
 and \emph{EndGetProjects}). The Begin-method is passed not only the arguments required by the inner method call
 (ie. \emph{userMail}) but also a callback-delegate and a state-object.
 
